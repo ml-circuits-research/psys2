@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {performGesture} from './fixtures/editor-gesture.mjs';
 import {emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
-import {initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
+import {emptyDiagramState as initialDiagramState} from '../worlds/diagram.sketch/sop-diagram.mjs';
 import {createAreaHost,NATIVE_AREAS} from '../src/dialog/app-reader-context.mjs';
 
 const cases=[

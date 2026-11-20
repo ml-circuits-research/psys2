@@ -42,12 +42,15 @@ async function knowledgeEdges(knowledge,mention,policy){
  return [...edges.values()];
 }
 
-export async function groundMention(world,policy,mention,candidates,knowledge){
- if(typeof policy!=='string'||!atom.test(policy))throw Error('invalid-ground-policy');
- const term=String(mention??'').normalize('NFC').toLowerCase();
- const edges=await knowledgeEdges(knowledge,term,policyOf(world,policy));
+// The library compiles one grounding request of at most this many wires. A larger
+// candidate list is grounded in batches: every candidate the policy admits in a batch
+// (any route with a cost) is carried into the next one, under its original identity,
+// so the last request ranks exactly the admitted set one unbounded request would.
+const REQUEST_WIRES=8192;
+function groundBatch(world,policy,term,candidates,indices,edgeRows){
  const rows=[],measurements=[];
- candidates.forEach(({lemma,measures={}},index)=>{
+ for(const index of indices){
+  const {lemma,measures={}}=candidates[index];
   const refs=Object.entries(measures).map(([metric,value],j)=>{
    if(!atom.test(metric)||!Number.isFinite(value))throw Error('invalid-ground-measure');
    const id='ground.in.measure.'+index+'.'+j;
@@ -55,17 +58,39 @@ export async function groundMention(world,policy,mention,candidates,knowledge){
    return '$'+id;
   });
   rows.push({id:'ground.in.candidate.'+index,type:'std.ground.candidate',attrs:{lemma:[quote(String(lemma))],...(refs.length?{measurement:refs}:{})}});
- });
- const edgeRows=edges.map((edge,index)=>({id:'ground.in.edge.'+index,type:'std.ground.edge',
-  attrs:{from:[quote(edge.from)],to:[quote(edge.to)],relation:[edge.relation]}}));
+ }
  const request={id:'ground.in.request',type:'std.ground.request',attrs:{policy:[policy],mention:[quote(term)],
   ...(rows.length?{candidate:rows.map(row=>'$'+row.id)}:{}),...(edgeRows.length?{edge:edgeRows.map(row=>'$'+row.id)}:{})}};
  const input=serialize([request,...rows,...measurements,...edgeRows]);
  const sop=world.compileRequest(input);
- const output=parse(sop),result=output.find(row=>row.type==='std.ground.result');
+ return {input,sop,output:parse(sop)};
+}
+
+export async function groundMention(world,policy,mention,candidates,knowledge){
+ if(typeof policy!=='string'||!atom.test(policy))throw Error('invalid-ground-policy');
+ const term=String(mention??'').normalize('NFC').toLowerCase();
+ const edges=await knowledgeEdges(knowledge,term,policyOf(world,policy));
+ const edgeRows=edges.map((edge,index)=>({id:'ground.in.edge.'+index,type:'std.ground.edge',
+  attrs:{from:[quote(edge.from)],to:[quote(edge.to)],relation:[edge.relation]}}));
  const index=token=>Number(String(token).split('.').pop());
- const listed=key=>(result?.attrs[key]??[]).map(index);
- const evidence=new Map(output.filter(row=>row.type==='std.ground.evidence').map(row=>[index(row.attrs.candidate[0]),{
-  route:row.attrs.route[0],cost:row.attrs.cost?Number(row.attrs.cost[0]):undefined,path:(row.attrs.path??[]).map(str)}]));
- return {input,sop,edges,selected:listed('selected')[0],alternatives:listed('alternative'),ties:listed('tie'),evidence};
+ const size=i=>1+Object.keys(candidates[i].measures??{}).length,room=REQUEST_WIRES-1-edgeRows.length;
+ const evidence=new Map();
+ let carried=[],next=0,batch,result;
+ do{
+  budget.tick('grounding.batch');
+  const indices=[...carried];
+  let used=indices.reduce((sum,i)=>sum+size(i),0);
+  const start=next;
+  while(next<candidates.length&&used+size(next)<=room){budget.tick('grounding.batch.fill');used+=size(next);indices.push(next++);}
+  if(next===start&&next<candidates.length)break;
+  batch=groundBatch(world,policy,term,candidates,indices,edgeRows);
+  result=batch.output.find(row=>row.type==='std.ground.result');
+  if(!result)break;
+  for(const row of batch.output.filter(row=>row.type==='std.ground.evidence'))evidence.set(index(row.attrs.candidate[0]),{
+   route:row.attrs.route[0],cost:row.attrs.cost?Number(row.attrs.cost[0]):undefined,path:(row.attrs.path??[]).map(str)});
+  carried=indices.filter(i=>evidence.get(i)?.cost!==undefined);
+ }while(next<candidates.length);
+ const complete=!!result&&next>=candidates.length;
+ const listed=key=>complete?(result.attrs[key]??[]).map(index):[];
+ return {input:batch?.input??'',sop:batch?.sop??'',edges,selected:listed('selected')[0],alternatives:listed('alternative'),ties:listed('tie'),evidence};
 }

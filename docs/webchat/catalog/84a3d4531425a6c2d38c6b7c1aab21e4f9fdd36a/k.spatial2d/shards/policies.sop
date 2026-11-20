@@ -1,0 +1,30 @@
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.spatial2d.policy.peers k.spatial2d.policy relation=independent_peer metric=clearance_deficit profiled=true geometry=box_pair clearance=12 weight=1 hard=false core.source="hand-core 1"
+@k.spatial2d.policy.overlap k.spatial2d.policy relation=independent_peer metric=overlap_area clearance=0 weight=0.1 hard=false core.source="hand-core 1"
+@k.spatial2d.policy.member k.spatial2d.policy relation=member_of metric=containment clearance=0 weight=1 hard=true core.source="hand-core 1"
+@k.spatial2d.policy.endpoint k.spatial2d.policy relation=endpoint_of metric=coincident clearance=0 weight=1 hard=true core.source="hand-core 1"
+@k.spatial2d.policy.anchor k.spatial2d.policy relation=anchored_to metric=coincident clearance=0 weight=1 hard=true core.source="hand-core 1"
+@k.spatial2d.policy.near k.spatial2d.policy relation=near metric=near_distance profiled=true geometry=box_pair clearance=12 weight=1 hard=false core.source="hand-core 1"
+
+@k.spatial2d.direction.right k.spatial2d.direction relation=near name=right anchor_x=1 anchor_y=0.5 subject_x=0 subject_y=0.5 gap_x=1 gap_y=0 rank=0 core.source="hand-core 1"
+@k.spatial2d.direction.left k.spatial2d.direction relation=near name=left anchor_x=0 anchor_y=0.5 subject_x=1 subject_y=0.5 gap_x=-1 gap_y=0 rank=1 core.source="hand-core 1"
+@k.spatial2d.direction.above k.spatial2d.direction relation=near name=above anchor_x=0.5 anchor_y=0 subject_x=0.5 subject_y=1 gap_x=0 gap_y=-1 rank=2 core.source="hand-core 1"
+@k.spatial2d.direction.below k.spatial2d.direction relation=near name=below anchor_x=0.5 anchor_y=1 subject_x=0.5 subject_y=0 gap_x=0 gap_y=1 rank=3 core.source="hand-core 1"
+
+# Directional relations: the subject on one side of the anchor, at the near distance (a relation names the side).
+@k.spatial2d.policy.left_of k.spatial2d.policy relation=left metric=near_distance profiled=true geometry=box_pair clearance=12 weight=1 hard=false core.source="hand-core 1"
+@k.spatial2d.policy.right_of k.spatial2d.policy relation=right metric=near_distance profiled=true geometry=box_pair clearance=12 weight=1 hard=false core.source="hand-core 1"
+@k.spatial2d.policy.above_of k.spatial2d.policy relation=above metric=near_distance profiled=true geometry=box_pair clearance=12 weight=1 hard=false core.source="hand-core 1"
+@k.spatial2d.policy.below_of k.spatial2d.policy relation=below metric=near_distance profiled=true geometry=box_pair clearance=12 weight=1 hard=false core.source="hand-core 1"
+@k.spatial2d.direction.left_of k.spatial2d.direction relation=left name=left anchor_x=0 anchor_y=0.5 subject_x=1 subject_y=0.5 gap_x=-1 gap_y=0 rank=0 core.source="hand-core 1"
+@k.spatial2d.direction.right_of k.spatial2d.direction relation=right name=right anchor_x=1 anchor_y=0.5 subject_x=0 subject_y=0.5 gap_x=1 gap_y=0 rank=0 core.source="hand-core 1"
+@k.spatial2d.direction.above_of k.spatial2d.direction relation=above name=above anchor_x=0.5 anchor_y=0 subject_x=0.5 subject_y=1 gap_x=0 gap_y=-1 rank=0 core.source="hand-core 1"
+@k.spatial2d.direction.below_of k.spatial2d.direction relation=below name=below anchor_x=0.5 anchor_y=1 subject_x=0.5 subject_y=0 gap_x=0 gap_y=1 rank=0 core.source="hand-core 1"
+# Containment: the subject within the anchor's box, in the middle first, else towards one side.
+@k.spatial2d.policy.in k.spatial2d.policy relation=in metric=near_distance profiled=false geometry=box_pair clearance=0 weight=0 hard=false core.source="hand-core 1"
+@k.spatial2d.direction.in_middle k.spatial2d.direction relation=in name=middle anchor_x=0.5 anchor_y=0.5 subject_x=0.5 subject_y=0.5 gap_x=0 gap_y=0 rank=0 core.source="hand-core 1"
+@k.spatial2d.direction.in_left k.spatial2d.direction relation=in name=left anchor_x=0.25 anchor_y=0.5 subject_x=0.5 subject_y=0.5 gap_x=0 gap_y=0 rank=1 core.source="hand-core 1"
+@k.spatial2d.direction.in_right k.spatial2d.direction relation=in name=right anchor_x=0.75 anchor_y=0.5 subject_x=0.5 subject_y=0.5 gap_x=0 gap_y=0 rank=2 core.source="hand-core 1"

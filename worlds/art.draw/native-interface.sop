@@ -48,9 +48,8 @@
 @native.art.draw.value.46 std.capability.arg name="kindKey" value="kind"
 @native.art.draw.value.47 std.capability.arg name="xKey" value="x"
 @native.art.draw.value.48 std.capability.arg name="yKey" value="y"
-@native.art.draw.scene.profile std.capability.arg name="projection" value="scene.projection"
-@native.art.draw.scene.layout std.capability.arg name="layout" value="landscape"
-@native.art.draw.value.49 std.capability.record entry=$native.art.draw.value.45 entry=$native.art.draw.value.46 entry=$native.art.draw.value.47 entry=$native.art.draw.value.48 entry=$native.art.draw.scene.profile entry=$native.art.draw.scene.layout
+@native.art.draw.spatial.size std.capability.arg name="sizeKey" value="size"
+@native.art.draw.value.49 std.capability.record entry=$native.art.draw.value.45 entry=$native.art.draw.value.46 entry=$native.art.draw.value.47 entry=$native.art.draw.value.48 entry=$native.art.draw.spatial.size
 @native.art.draw.value.50 std.capability.arg name="spatial" value=$native.art.draw.value.49
 @native.art.draw.op.drawing.object.make.metadata app.native.metadata operation=$native.art.draw.op.drawing.object.make field=$native.art.draw.value.44 field=$native.art.draw.value.50
 @native.art.draw.op.drawing.catalog.make std.capability.operation scope=$native.art.draw.scope name="drawing.catalog.make" act=make on="art.draw.object" order=1 eligible=true

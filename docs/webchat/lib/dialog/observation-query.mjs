@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Read-only aggregation over historical selected observations. No English or effects.
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=88ae92bf04';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=78168a6b62';
 const text=v=>typeof v==='string'&&v.length>0;
 const nativeId=v=>text(v)||Number.isSafeInteger(v);
 const operations=new Set(['values','count','exists','members']);

@@ -13,8 +13,10 @@
 #     kind holds the kind (a boat on the lake's water, a bird in the crown of a tree), when the kind fits there at
 #     no less than the declared share of its size; (2) the region of the page layout (k.layouts landscape: sky, far,
 #     ground, water, foreground) whose slot holds the kind; (3) the region named by the kind's k.scenes place (the
-#     sun in the sky, a fish in the water); (4) the regions of (1) to (3) for the object made smaller, in their
-#     upper part (farther away); (5) the whole page, only for a kind with no region of (2) or (3).
+#     sun in the sky, a fish in the water); (4) the regions of (2) and (3) widened to the page's width (the same
+#     band); (5) the regions of (1) to (4) for the object made smaller, in their upper part (farther away), in the
+#     declared steps (smaller and higher at each step); (6) the whole page, only for a kind with no region of (2)
+#     or (3).
 #  3. In each region the declared grid of spots (centre first, then the edges, then between; the middle row, then
 #     the lower and the higher one), each
 #     keeping the object inside its region when it fits there and always on the page; then the spots that touch an
@@ -45,12 +47,15 @@
 @draw.target.type core.type of=ui.draw.target
 @draw.beside.type core.type of=ui.draw.beside
 @draw.homed.type core.type of=ui.draw.homed
+@draw.far.type core.type of=ui.draw.far
 
 # The page is laid out as a k.layouts landscape of its own size; objects keep a gap of 10; a contained object takes
 # at most 0.6 of its container's place and goes there only at no less than half its own size; when its own regions
-# are full it is tried there again at 0.7 of its size, in their upper 0.6 (smaller is farther away), before the
-# rest of the page.
-@draw.page ui.draw.page layout=landscape w=1000 h=700 gap=10 room=0.6 fit=0.5 shrink=0.7 far=0.6
+# and their bands are full it is tried there again at 0.7 of its size in their upper 0.6, then at 0.5 of its size
+# in their upper 0.35 (smaller is farther away, higher on the page).
+@draw.page ui.draw.page layout=landscape w=1000 h=700 gap=10 room=0.6 fit=0.5
+@draw.far.1 ui.draw.far step=1 scale=0.7 part=0.6
+@draw.far.2 ui.draw.far step=2 scale=0.5 part=0.35
 # Drawn sizes of the k.scenes size classes (a picture scale, not the real one), and of things others float in.
 @draw.scale.tiny ui.draw.scale class=tiny size=45
 @draw.scale.small ui.draw.scale class=small size=70
@@ -186,20 +191,29 @@
 @rp.key core.calc out=?key fn=concat args=place- args=?r
 @rp.out ui.draw.region key=?key tier=3 order=0 host=none x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s
 @region.place core.rule when=$rh.auto when=$rh.as when=$rp.scene when=$rh.area when=$rh.s with=$rp.key then=$rp.out
-# (4) The regions of (1) to (3) again, their upper part, for the object made smaller (farther away).
+# (4) The regions of (2) and (3) widened to the whole width of the page (the same band: still in the sky, still on
+# the ground).
+@rb.r ui.draw.region key=?rk tier=?t host=none y0=?y0 y1=?y1 size=?s
+@rb.page ui.draw.page w=?pw
+@rb.low core.check fn=lt args=?t args=4
+@rb.key core.calc out=?key fn=concat args=wide- args=?rk
+@rb.out ui.draw.region key=?key tier=4 order=?t host=none x0=0 y0=?y0 x1=?pw y1=?y1 size=?s
+@region.wide core.rule when=$rb.r when=$rb.page if=$rb.low with=$rb.key then=$rb.out
+# (5) The regions of (1) to (4) again, their upper part, for the object made smaller (farther away), one tier per step.
 @rs.r ui.draw.region key=?rk tier=?t host=?host x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s
-@rs.page ui.draw.page shrink=?f far=?far
+@rs.page ui.draw.far step=?st scale=?f part=?far
+@rs.tier core.calc out=?nt fn=add args=4 args=?st
 @rs.dh core.calc out=?dh fn=sub args=?y1 args=?y0
 @rs.fh core.calc out=?fh fn=mul args=?dh args=?far
 @rs.y1 core.calc out=?fy1 fn=add args=?y0 args=?fh
-@rs.low core.check fn=lt args=?t args=4
+@rs.low core.check fn=lt args=?t args=5
 @rs.s core.calc out=?s1 fn=mul args=?s args=?f
 @rs.s2 core.calc out=?s3 fn=div args=?s1 args=2
 @rs.s3 core.calc out=?s4 fn=round args=?s3
 @rs.s4 core.calc out=?s2 fn=mul args=?s4 args=2
-@rs.key core.calc out=?key fn=concat args=smaller- args=?rk
-@rs.out ui.draw.region key=?key tier=4 order=?t host=?host x0=?x0 y0=?y0 x1=?x1 y1=?fy1 size=?s2
-@region.smaller core.rule when=$rs.r when=$rs.page if=$rs.low with=$rs.s with=$rs.s2 with=$rs.s3 with=$rs.s4 with=$rs.dh with=$rs.fh with=$rs.y1 with=$rs.key then=$rs.out
+@rs.key core.calc out=?key fn=concat args=smaller- args=?st args=- args=?rk
+@rs.out ui.draw.region key=?key tier=?nt order=?t host=?host x0=?x0 y0=?y0 x1=?x1 y1=?fy1 size=?s2
+@region.smaller core.rule when=$rs.r when=$rs.page if=$rs.low with=$rs.tier with=$rs.s with=$rs.s2 with=$rs.s3 with=$rs.s4 with=$rs.dh with=$rs.fh with=$rs.y1 with=$rs.key then=$rs.out
 # A kind with a region of its own stays there (overlapping the fewest objects when it is full); the page is for the
 # kinds with none.
 @hm.out ui.draw.homed kind=?k
@@ -207,7 +221,7 @@
 @homed.place core.rule when=$rh.auto when=$rh.as when=$rp.scene when=$rh.area then=$hm.out
 @rw.homed ui.draw.homed kind=?k
 @rw.page ui.draw.page w=?pw h=?ph
-@rw.out ui.draw.region key=page tier=5 order=0 host=none x0=0 y0=0 x1=?pw y1=?ph size=?s
+@rw.out ui.draw.region key=page tier=7 order=0 host=none x0=0 y0=0 x1=?pw y1=?ph size=?s
 @region.page core.rule when=$rh.auto not=$rw.homed when=$rw.page when=$rh.s then=$rw.out
 
 # 3. The spots of each region: inside it when the object fits there, on the page always.
@@ -540,6 +554,24 @@
 @sp.y1 core.calc out=?y1 fn=add args=?y args=?h
 @sp.box app.observe.box id=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1 occupant=true
 @spatial.box core.rule when=$sp.o with=$sp.h with=$sp.x0 with=$sp.y0 with=$sp.x1 with=$sp.y1 then=$sp.box
+# Where other things go on each object (its k.layouts anchors: the water of a lake, the surface of a table), in page
+# units, with the kinds each holds: placement puts "a boat in the lake" into the water, "a cup on the table" on it.
+@rg.o w.drawing.object code=?id drawing=?k x=?x y=?y size=?s
+@rg.a k.layouts.anchor of=?k kind=?ak holds=?h x=?ax y=?ay w=?aw h=?ah
+@rg.sc core.calc out=?sc fn=div args=?s args=100
+@rg.half core.calc out=?hs fn=div args=?s args=2
+@rg.ox core.calc out=?ox fn=sub args=?x args=?hs
+@rg.oy core.calc out=?oy fn=sub args=?y args=?hs
+@rg.dx core.calc out=?dx fn=mul args=?ax args=?sc
+@rg.dy core.calc out=?dy fn=mul args=?ay args=?sc
+@rg.bw core.calc out=?bw fn=mul args=?aw args=?sc
+@rg.bh core.calc out=?bh fn=mul args=?ah args=?sc
+@rg.x0 core.calc out=?x0 fn=add args=?ox args=?dx
+@rg.y0 core.calc out=?y0 fn=add args=?oy args=?dy
+@rg.x1 core.calc out=?x1 fn=add args=?x0 args=?bw
+@rg.y1 core.calc out=?y1 fn=add args=?y0 args=?bh
+@rg.out app.observe.region of=?id kind=?ak holds=?h x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@spatial.region core.rule when=$rg.o when=$rg.a with=$rg.sc with=$rg.half with=$rg.ox with=$rg.oy with=$rg.dx with=$rg.dy with=$rg.bw with=$rg.bh with=$rg.x0 with=$rg.y0 with=$rg.x1 with=$rg.y1 then=$rg.out
 @op.object w.drawing.object code=?id
 @op.object.o app.observe.option id=object value=?id
 @draw.option.object core.rule when=$op.object then=$op.object.o

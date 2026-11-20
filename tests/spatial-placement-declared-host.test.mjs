@@ -7,7 +7,7 @@ import {parse,str} from '../src/vendor/sopworld/sopworld.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {performGesture} from './fixtures/editor-gesture.mjs';
 import {createDrawingArea,emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
-import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
+import {createDiagramArea as createDiagramHost,emptyDiagramState as initialDiagramState} from '../worlds/diagram.sketch/sop-diagram.mjs';
 
 const webchat=new URL('../docs/webchat/',import.meta.url);
 const deployment=JSON.parse(readFileSync(new URL('models/sop-bert/deployment.json',webchat),'utf8'));
@@ -148,7 +148,9 @@ test('Diagram projects group membership and moving rendered link endpoints with 
  assert.ok(before.boxes.find(box=>box.entity==='Group').min_x<=observedBox(host,first).min_x);
  const source=before.points.find(point=>point.entity===JSON.stringify([link,'from']));
  assert.ok(source);
- makeCall(host,'diagram.node.place',{ids:[first],x:215,y:220});
+ // A member is placed with its group (placing a member alone is refused: node-in-group-place-the-group).
+ assert.equal(makeCall(host,'diagram.node.place',{ids:[first],x:215,y:220}).reason,'node-in-group-place-the-group');
+ makeCall(host,'diagram.group.place',{id:'Group',x:515,y:420});
  const after=host.observeSpatial(),next=after.points.find(point=>point.entity===source.entity);
  assert.notEqual(next.x,source.x);
  assert.notEqual(next.revision,source.revision);

@@ -1,10 +1,10 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedField
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
 @values.name core.slot of=app.execution.values key=nameKey kind=string present=true
 @values.value core.slot of=app.execution.values key=valueKey kind=string present=true
-@values.codec core.slot of=app.execution.values key=codec kind=atom enum=lookup present=true
+@values.codec core.slot of=app.execution.values key=codec kind=atom enum=lookup enum=degree present=true
 @observed.type core.type of=app.execution.observedProperty closed=true
 @observed.concept core.slot of=app.execution.observedProperty key=concept kind=atom present=true
 @observed.on core.slot of=app.execution.observedProperty key=sourceType kind=string present=true
@@ -13,6 +13,19 @@
 @observed.format core.slot of=app.execution.observedProperty key=format kind=atom
 @observed.codec core.slot of=app.execution.observedProperty key=codec kind=atom present=true
 @observed.order core.slot of=app.execution.observedProperty key=order kind=integer min=0 present=true
+@measure.type core.type of=app.execution.observedMeasure closed=true
+@measure.concept core.slot of=app.execution.observedMeasure key=concept kind=atom present=true
+@measure.on core.slot of=app.execution.observedMeasure key=sourceType kind=string present=true
+@measure.parameter core.slot of=app.execution.observedMeasure key=parameter kind=string present=true
+@measure.binding core.slot of=app.execution.observedMeasure key=binding kind=string present=true
+@measure.order core.slot of=app.execution.observedMeasure key=order kind=integer min=0 present=true
+@preview.type core.type of=app.execution.preview closed=true
+@preview.scope core.slot of=app.execution.preview key=scope kind=ref to=std.capability.scope present=true
+@preview.operation core.slot of=app.execution.preview key=operation kind=string present=true
+@preview.kind core.slot of=app.execution.preview key=kind kind=atom present=true
+@preview.on core.slot of=app.execution.preview key=on kind=string present=true
+@preview.binding core.slot of=app.execution.preview key=binding kind=string present=true
+@preview.value core.slot of=app.execution.preview key=value kind=any present=true
 @field.type core.type of=app.execution.observedField closed=true
 @field.object core.slot of=app.execution.observedField key=object kind=ref to=std.capability.object present=true
 @field.binding core.slot of=app.execution.observedField key=binding kind=string present=true

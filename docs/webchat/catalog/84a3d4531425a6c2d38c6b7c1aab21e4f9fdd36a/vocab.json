@@ -5592,6 +5592,7 @@
   "k.words/shards/am",
   "k.words/shards/frequency-a",
   "w.chart/schema.sop",
+  "w.diagram/schema.sop",
   "w.request/schema.sop"
  ],
  "amount_about": [
@@ -15931,6 +15932,7 @@
   "k.values/shards/scales",
   "k.words/shards/bi",
   "k.words/shards/frequency-b",
+  "w.diagram/schema.sop",
   "w.face/schema.sop",
   "k.objects/shards/noto-animal-mammal-02",
   "k.objects/shards/noto-animal-mammal-03"
@@ -31190,6 +31192,7 @@
   "k.kinds/shards/relations-geo",
   "k.words/shards/co-1",
   "k.words/shards/frequency-c",
+  "w.diagram/schema.sop",
   "w.drawing/schema.sop",
   "w.meetings/schema.sop",
   "w.text/schema.sop"
@@ -31770,7 +31773,8 @@
   "k.layouts/shards/layouts",
   "k.values/schema.sop",
   "k.words/shards/co-1",
-  "k.words/shards/frequency-c"
+  "k.words/shards/frequency-c",
+  "w.diagram/schema.sop"
  ],
  "column chart": [
   "k.charts/shards/charts"
@@ -39276,6 +39280,9 @@
   "k.words/shards/da",
   "k.words/shards/frequency-d"
  ],
+ "dashed": [
+  "w.diagram/schema.sop"
+ ],
  "dasht-e kavir": [
   "k.geo/shards/asia"
  ],
@@ -43586,7 +43593,8 @@
   "k.shapes/shards/shapes"
  ],
  "dotted": [
-  "k.values/shards/fills"
+  "k.values/shards/fills",
+  "w.diagram/schema.sop"
  ],
  "douala": [
   "k.geo/shards/africa"
@@ -54712,7 +54720,8 @@
  ],
  "fixed": [
   "k.words/shards/fi",
-  "k.words/shards/frequency-f"
+  "k.words/shards/frequency-f",
+  "w.diagram/schema.sop"
  ],
  "fixing": [
   "k.words/shards/fi",
@@ -56830,6 +56839,7 @@
   "k.objects/shards/places-3"
  ],
  "framed": [
+  "w.diagram/schema.sop",
   "k.objects/shards/noto-arts-crafts-01"
  ],
  "framed picture": [
@@ -63830,7 +63840,8 @@
  "grid": [
   "k.layouts/shards/layouts",
   "k.words/shards/frequency-g",
-  "k.words/shards/gr"
+  "k.words/shards/gr",
+  "w.diagram/schema.sop"
  ],
  "grids": [
   "k.layouts/shards/layouts"
@@ -67948,6 +67959,7 @@
   "k.values/shards/scales",
   "k.words/shards/frequency-h",
   "k.words/shards/he",
+  "w.diagram/schema.sop",
   "w.drawing/schema.sop",
   "w.lang.en/shards/hand-grammar"
  ],
@@ -71909,6 +71921,7 @@
  "id": [
   "k.words/shards/frequency-i",
   "k.words/shards/id",
+  "w.diagram/schema.sop",
   "w.dialogue/schema.sop",
   "w.meetings/schema.sop",
   "k.objects/shards/noto-other-object-02"
@@ -91966,7 +91979,8 @@
  ],
  "membership": [
   "k.words/shards/frequency-m",
-  "k.words/shards/me"
+  "k.words/shards/me",
+  "w.diagram/schema.sop"
  ],
  "membrane": [
   "k.kinds/shards/wordnet-1",
@@ -103577,7 +103591,8 @@
   "k.units/shards/measures"
  ],
  "outlined": [
-  "k.values/shards/fills"
+  "k.values/shards/fills",
+  "w.diagram/schema.sop"
  ],
  "outlines": [
   "k.layouts/schema.sop"
@@ -108969,7 +108984,8 @@
  ],
  "pinned": [
   "k.attributes/shards/attributes",
-  "k.procedures/shards/from-knowledge"
+  "k.procedures/shards/from-knowledge",
+  "w.diagram/schema.sop"
  ],
  "pinniped mammal": [
   "k.kinds/shards/wordnet-2"
@@ -121522,7 +121538,8 @@
   "k.objects/shards/structures",
   "k.values/schema.sop",
   "k.words/shards/frequency-r",
-  "k.words/shards/ro"
+  "k.words/shards/ro",
+  "w.diagram/schema.sop"
  ],
  "row_line_1": [
   "k.objects/shards/places"
@@ -124290,6 +124307,7 @@
   "k.values/schema.sop",
   "k.words/shards/frequency-s",
   "k.words/shards/sc",
+  "w.diagram/schema.sop",
   "k.objects/shards/noto-tool-03"
  ],
  "scale down": [
@@ -130437,6 +130455,7 @@
   "k.values/shards/scales",
   "k.words/shards/frequency-s",
   "k.words/shards/si",
+  "w.diagram/schema.sop",
   "w.document/schema.sop",
   "w.drawing/schema.sop",
   "w.face/schema.sop",
@@ -131459,6 +131478,7 @@
   "k.values/shards/scales",
   "k.words/shards/frequency-s",
   "k.words/shards/sm",
+  "w.diagram/schema.sop",
   "w.face/schema.sop",
   "k.objects/shards/noto-animal-marine-02",
   "k.objects/shards/noto-food-vegetable-02",
@@ -132388,6 +132408,7 @@
   "k.values/shards/fills",
   "k.words/shards/frequency-s",
   "k.words/shards/so",
+  "w.diagram/schema.sop",
   "k.objects/shards/noto-place-building-01"
  ],
  "solid figure": [
@@ -137026,6 +137047,7 @@
   "k.kinds/shards/relations-motion",
   "k.words/shards/frequency-s",
   "k.words/shards/st",
+  "w.diagram/schema.sop",
   "w.document/schema.sop",
   "w.face/schema.sop"
  ],
@@ -139880,7 +139902,8 @@
   "k.people/schema.sop",
   "k.values/shards/scales",
   "k.words/shards/frequency-t",
-  "k.words/shards/ta"
+  "k.words/shards/ta",
+  "w.diagram/schema.sop"
  ],
  "taller": [
   "k.values/shards/scales"
@@ -142143,7 +142166,8 @@
   "k.values/shards/scales"
  ],
  "thickness": [
-  "k.values/shards/scales"
+  "k.values/shards/scales",
+  "w.diagram/schema.sop"
  ],
  "thief": [
   "k.kinds/shards/wordnet-2",
@@ -151219,6 +151243,7 @@
   "k.words/shards/frequency-v",
   "k.words/shards/va",
   "w.chart/schema.sop",
+  "w.diagram/schema.sop",
   "w.lang.en/schema.sop",
   "w.request/schema.sop"
  ],
@@ -156383,7 +156408,8 @@
   "k.space/schema.sop",
   "k.values/shards/scales",
   "k.words/shards/frequency-w",
-  "k.words/shards/wi"
+  "k.words/shards/wi",
+  "w.diagram/schema.sop"
  ],
  "widen": [
   "k.actions/shards/verbs-change"
@@ -156407,6 +156433,7 @@
   "k.values/shards/scales",
   "k.words/shards/frequency-w",
   "k.words/shards/wi",
+  "w.diagram/schema.sop",
   "w.drawing/schema.sop",
   "w.lang.en/shards/hand-grammar"
  ],

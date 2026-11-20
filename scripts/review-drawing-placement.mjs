@@ -47,7 +47,7 @@ function catalogText(dir, file) {
   if (dir && existsSync(join(dir, file))) return readFileSync(join(dir, file), 'utf8');
   return BUNDLED_AREAS['art.draw'][file] ?? '';
 }
-function knowledge(dir) {
+export function knowledge(dir) {
   const index = JSON.parse(catalogText(dir, 'index.json'));
   const shardsOf = (id) => [...(index.worlds ?? []), ...(index.schemas ?? [])].find((e) => e.id === id)?.shards?.map((s) => typeof s === 'string' ? s : s.path) ?? [];
   const wires = (id, type) => shardsOf(id).flatMap((p) => parse(catalogText(dir, p))).filter((w) => w.type === type);

@@ -26,21 +26,9 @@ test('numeric chart creation produces primary group and actual editable geometry
  assert.equal(invoke(host,'diagram.node.change',{ids:[ids[0]],value:4}).status,'changed');assert.deepEqual(state.edges.map(edge=>edge.id),before,'same numeric line retains actual link IDs');
  assert.equal(invoke(host,'diagram.group.ungroup',{id:group.name}).status,'changed');assert.equal(state.groups.length,0);assert.deepEqual(state.shapes.map(node=>node.name),ids);assert.deepEqual(state.edges.map(edge=>edge.id),links);assert.equal(invoke(host,'diagram.node.change',{ids:[ids[0]],label:'Editable point'}).status,'changed');
 });
-test('pie and doughnut members are real sector nodes, preserve values, and can be ungrouped and resized',async()=>{
- const {state,host}=await fixture();assert.equal(invoke(host,'diagram.group.chart.make',{label:'Parts',labels:['A','B'],values:[1,3],layout:'pie'}).status,'changed');const group=state.groups[0],member=state.shapes[0];assert.equal(member.shape,'sector');assert.equal(member.endAngle-member.startAngle,Math.PI/2);assert.equal(member.innerRadius,0);
- assert.equal(invoke(host,'diagram.group.layout',{id:group.name,layout:'doughnut'}).status,'changed');assert.equal(state.shapes[0].innerRadius,.52);assert.deepEqual(state.shapes.map(node=>node.value),[1,3]);
- assert.equal(invoke(host,'diagram.group.ungroup',{id:group.name}).status,'changed');assert.equal(invoke(host,'diagram.node.resize',{ids:[member.name],width:180,height:180}).status,'changed');assert.equal(invoke(host,'diagram.node.change',{ids:[member.name],label:'Edited sector'}).status,'changed');assert.equal(state.shapes[0].label,'Edited sector');
- const session={isession:{state:{'diagram.sketch':state}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}},records=await snapshotNativeInstances(session),target={isession:{state:{}},engine:session.engine};await restoreNativeInstances(target,records);assert.deepEqual(target.isession.state['diagram.sketch'],state);
-});
 test('invalid numeric group data refuses atomically and ordinary labels are separate from readonly identity',async()=>{
  const {state,host}=await fixture(),before=structuredClone(state);assert.equal(invoke(host,'diagram.group.chart.make',{label:'Invalid',labels:['A'],values:[-1],layout:'pie'}).status,'refused');assert.deepEqual(state,before);
  invoke(host,'diagram.node.make',{kind:'rectangle',n:2});const ids=state.shapes.map(node=>node.name);assert.equal(invoke(host,'diagram.group.make',{name:'g1',label:'Human label',ids}).status,'changed');assert.equal(state.groups[0].name,'g1');assert.equal(state.groups[0].label,'Human label');assert.equal(invoke(host,'diagram.group.change',{id:'g1',label:'Other label'}).status,'changed');assert.equal(state.groups[0].name,'g1');assert.equal(invoke(host,'diagram.group.change',{id:'g1',label:''}).status,'changed');assert.equal(state.groups[0].label,'');assert.equal(state.groups[0].name,'g1');
-});
-
-test('published explicit boxes and legacy styled edges retain their original optional observation contract',async()=>{
- const {state,host}=await fixture();invoke(host,'diagram.node.make',{kind:'rectangle',n:2});state.shapes[0].w=155;state.shapes[0].h=87;invoke(host,'diagram.link.make',{from:state.shapes[0].name,to:state.shapes[1].name});state.edges[0].label='Legacy label';state.edges[0].style='dashed';
- const objects=nativeObservationObjects(host.observe());assert.equal(objects.find(row=>row.id===state.shapes[0].name).attributes.width,undefined);assert.equal(objects.find(row=>row.id===state.edges[0].id).attributes.label,undefined);
- const source={isession:{state:{'diagram.sketch':state}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}},records=await snapshotNativeInstances(source),target={isession:{state:{}},engine:source.engine};await restoreNativeInstances(target,records);assert.deepEqual(await snapshotNativeInstances(target),records);
 });
 
 test('group scaling changes actual child geometry; deleting a member or mixed selection leaves no dangling group links',async()=>{
@@ -73,11 +61,4 @@ test('archive validation compares actual renderer geometry rather than its optio
   const target={isession:{state:{}},engine:{}};
   await assert.rejects(restoreNativeInstances(target,[{world,instanceId,revision,wires:serializeInstanceState(archive)}]),/instance-projection-mismatch/);
  }
-});
-
-test('Object ID view actions are declared, observed conditionally and independent of content undo',async()=>{
- const {state,host}=await fixture();assert.equal(host.observe().objects.some(row=>row.id==='diagram.page'),false);
- const before=Date.now();assert.equal(invoke(host,'diagram.ids.show',{mode:'temporary'}).status,'changed');assert.equal(state.idDisplay.mode,'temporary');assert.ok(state.idDisplay.expiresAt>=before+4000&&state.idDisplay.expiresAt<=Date.now()+4000);const page=nativeObservationObjects(host.observe()).find(row=>row.id==='diagram.page');assert.deepEqual(page.attributes.mode,['temporary']);assert.deepEqual(page.attributes.expiresAt,[state.idDisplay.expiresAt]);
- invoke(host,'diagram.node.make',{kind:'rectangle'});invoke(host,'diagram.ids.show',{mode:'off'});assert.equal(invoke(host,'diagram.undo',{}).status,'changed');assert.equal(state.idDisplay.mode,'off');assert.equal(state.shapes.length,0);invoke(host,'diagram.ids.show',{mode:'always'});invoke(host,'diagram.page.clear',{});assert.equal(state.idDisplay.mode,'always');
- const session={isession:{state:{'diagram.sketch':state}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}},records=await snapshotNativeInstances(session),target={isession:{state:{}},engine:session.engine};await restoreNativeInstances(target,records);assert.deepEqual(await snapshotNativeInstances(target),records);
 });

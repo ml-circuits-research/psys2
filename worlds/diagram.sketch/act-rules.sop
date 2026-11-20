@@ -1,0 +1,587 @@
+# diagram.sketch act rules (authored). Each native Diagram command compiles to std.acts calls on the w.diagram
+# instance (worlds/sop-world-host.mjs only runs them) or to an explicit refusal. Nodes, edges and groups are
+# addressed by their code. Removing a node removes its edges and memberships (std.acts removes what refers to a thing).
+# Where a node goes is not stored: render-projection.sop lays the instance out, unless a node or group was pinned.
+@dga.next.type core.type of=ui.diagram.next
+@dga.count.type core.type of=ui.diagram.count
+@dga.many.type core.type of=ui.diagram.many
+@dga.nodeop.type core.type of=ui.diagram.nodeop
+@dga.edgeop.type core.type of=ui.diagram.edgeop
+@dga.groupop.type core.type of=ui.diagram.groupop
+@dga.refusal.type core.type of=ui.diagram.refusal
+@dga.closed.type core.type of=ui.diagram.closed
+@dga.arranged.type core.type of=ui.diagram.arranged
+@dga.centre.type core.type of=ui.diagram.centre
+@dga.made.type core.type of=ui.diagram.made
+
+# How many things one command may make, one per number.
+@count.1 ui.diagram.count i=1
+@count.2 ui.diagram.count i=2
+@count.3 ui.diagram.count i=3
+@count.4 ui.diagram.count i=4
+@count.5 ui.diagram.count i=5
+@count.6 ui.diagram.count i=6
+@count.7 ui.diagram.count i=7
+@count.8 ui.diagram.count i=8
+@count.9 ui.diagram.count i=9
+@count.10 ui.diagram.count i=10
+@count.11 ui.diagram.count i=11
+@count.12 ui.diagram.count i=12
+
+# The next numbers: after the highest node, edge and group so far (codes n<k>, e<k>, g<k>).
+@a.nx.n w.diagram.node n=?z
+@a.nx.n.out ui.diagram.next of=node top=?top
+@next.node core.aggregate over=$a.nx.n max=?top args=?z default=0 then=$a.nx.n.out
+@a.nx.e w.diagram.edge n=?z
+@a.nx.e.out ui.diagram.next of=edge top=?top
+@next.edge core.aggregate over=$a.nx.e max=?top args=?z default=0 then=$a.nx.e.out
+@a.nx.g w.diagram.group n=?z
+@a.nx.g.out ui.diagram.next of=group top=?top
+@next.group core.aggregate over=$a.nx.g max=?top args=?z default=0 then=$a.nx.g.out
+
+# ---- Nodes ----
+# Make n nodes of a shape (1 when n is not given), each with the label, colour and size the command gives; at x, y
+# (pinned, the next ones 140 to the right) when it gives a place; in a row, column or grid when it gives that layout
+# (an arrangement: a group drawn without its frame). A tree or layers is the diagram's own layout; a circle or radial
+# layout is not declared here.
+@a.mn.r app.act.request operation="diagram.node.make" n=?k
+@a.mn.o ui.diagram.many k=?k
+@many.given core.rule when=$a.mn.r then=$a.mn.o
+@a.m1.r app.act.request operation="diagram.node.make"
+@a.m1.has app.act.request n=?anyn
+@a.m1.o ui.diagram.many k=1
+@many.one core.rule when=$a.m1.r not=$a.m1.has then=$a.m1.o
+@a.mk.req app.act.request operation="diagram.node.make" kind=?kind
+@a.mk.k ui.diagram.many k=?k
+@a.mk.i ui.diagram.count i=?i
+@a.mk.le core.check fn=lte args=?i args=?k
+@a.mk.nx ui.diagram.next of=node top=?top
+@a.mk.z core.calc out=?z fn=add args=?top args=?i
+@a.mk.code core.calc out=?code fn=concat args=n args=?z
+@a.mk.ref core.calc out=?ref fn=concat args="new.node." args=?i
+@a.mk.call app.act.call act=make kind=w.diagram.node code=?code shape=?kind n=?z order=1 ref=?ref
+@make.node core.rule when=$a.mk.req when=$a.mk.k when=$a.mk.i when=$a.mk.nx if=$a.mk.le with=$a.mk.z with=$a.mk.code with=$a.mk.ref then=$a.mk.call
+@a.mk.made ui.diagram.made ref=?ref i=?i
+@made.node core.rule when=$a.mk.req when=$a.mk.k when=$a.mk.i when=$a.mk.nx if=$a.mk.le with=$a.mk.z with=$a.mk.code with=$a.mk.ref then=$a.mk.made
+@a.ma.m ui.diagram.made ref=?ref i=?i
+@a.ma.label.r app.act.request operation="diagram.node.make" label=?v
+@a.ma.label.a app.act.arg call=?ref attr=label value=?v
+@make.node.label core.rule when=$a.ma.m when=$a.ma.label.r then=$a.ma.label.a
+@a.ma.colour.r app.act.request operation="diagram.node.make" colour=?v
+@a.ma.colour.a app.act.arg call=?ref attr=colour value=?v
+@make.node.colour core.rule when=$a.ma.m when=$a.ma.colour.r then=$a.ma.colour.a
+@a.ma.size.r app.act.request operation="diagram.node.make" size=?v
+@a.ma.size.a app.act.arg call=?ref attr=size value=?v
+@make.node.size core.rule when=$a.ma.m when=$a.ma.size.r then=$a.ma.size.a
+@a.ma.xy.r app.act.request operation="diagram.node.make" x=?x y=?y
+@a.ma.xy.i0 core.calc out=?i0 fn=sub args=?i args=1
+@a.ma.xy.dx core.calc out=?dx fn=mul args=?i0 args=140
+@a.ma.xy.x core.calc out=?px fn=add args=?x args=?dx
+@a.ma.xy.ax app.act.arg call=?ref attr=x value=?px
+@a.ma.xy.ay app.act.arg call=?ref attr=y value=?y
+@a.ma.xy.ap app.act.arg call=?ref attr=pinned value=true
+@make.node.x core.rule when=$a.ma.m when=$a.ma.xy.r with=$a.ma.xy.i0 with=$a.ma.xy.dx with=$a.ma.xy.x then=$a.ma.xy.ax
+@make.node.y core.rule when=$a.ma.m when=$a.ma.xy.r then=$a.ma.xy.ay
+@make.node.pinned core.rule when=$a.ma.m when=$a.ma.xy.r then=$a.ma.xy.ap
+@a.ma.lay.r app.act.request operation="diagram.node.make" layout=?l
+@a.ma.lay.a ui.diagram.arranged layout=?l
+@a.ma.g.nx ui.diagram.next of=group top=?top
+@a.ma.g.z core.calc out=?z fn=add args=?top args=1
+@a.ma.g.code core.calc out=?code fn=concat args=g args=?z
+@a.ma.g.call app.act.call act=make kind=w.diagram.group code=?code n=?z layout=?l framed=false order=2 ref=new.group
+@a.ma.mem.call app.act.call act=make kind=w.diagram.member group=new.group node=?ref order=3
+@arranged core.rule when=$a.ma.lay.r then=$a.ma.lay.a
+@a.ma.lay.ok ui.diagram.arranged layout=?l
+@a.ma.lay.set core.check fn=matches args=?l args="^(row|column|grid)$"
+@make.arrangement core.rule when=$a.mk.req when=$a.ma.lay.ok when=$a.ma.g.nx if=$a.ma.lay.set with=$a.ma.g.z with=$a.ma.g.code then=$a.ma.g.call
+@make.arrangement.member core.rule when=$a.ma.m when=$a.ma.lay.ok if=$a.ma.lay.set then=$a.ma.mem.call
+@a.ma.lay.no core.check fn=matches args=?l args="^(circle|radial)$"
+@a.ma.lay.refuse app.act.refuse reason=layout-not-declared
+@make.layout.refused core.rule when=$a.ma.lay.ok if=$a.ma.lay.no then=$a.ma.lay.refuse
+
+# The commands that name nodes by `ids`, and a refusal when one of them is not a node of the diagram.
+@nodeop.change ui.diagram.nodeop operation="diagram.node.change"
+@nodeop.select ui.diagram.nodeop operation="diagram.node.select"
+@nodeop.remove ui.diagram.nodeop operation="diagram.node.remove"
+@nodeop.place ui.diagram.nodeop operation="diagram.node.place"
+@nodeop.resize ui.diagram.nodeop operation="diagram.node.resize"
+@nodeop.layout ui.diagram.nodeop operation="diagram.node.layout"
+@nodeop.group ui.diagram.nodeop operation="diagram.group.make"
+@a.mt.r app.act.request operation=?op
+@a.mt.op ui.diagram.nodeop operation=?op
+@a.mt.i app.act.item param="ids" value=?id
+@a.mt.n w.diagram.node code=?id
+@a.mt.out app.act.refuse reason=missing-target
+@missing.node core.rule when=$a.mt.r when=$a.mt.op when=$a.mt.i not=$a.mt.n then=$a.mt.out
+@a.it.i app.act.item param="ids" value=?id
+@a.it.n w.diagram.node code=?id
+
+# Change colour, size, label or value; a change that names none of them is refused.
+@a.cn.colour.r app.act.request operation="diagram.node.change" colour=?v
+@a.cn.colour.c app.act.call act=change thing=$a.it.n attr=colour value=?v order=1
+@change.node.colour core.rule when=$a.cn.colour.r when=$a.it.i when=$a.it.n then=$a.cn.colour.c
+@a.cn.size.r app.act.request operation="diagram.node.change" size=?v
+@a.cn.size.c app.act.call act=change thing=$a.it.n attr=size value=?v order=1
+@change.node.size core.rule when=$a.cn.size.r when=$a.it.i when=$a.it.n then=$a.cn.size.c
+@a.cn.label.r app.act.request operation="diagram.node.change" label=?v
+@a.cn.label.c app.act.call act=change thing=$a.it.n attr=label value=?v order=1
+@change.node.label core.rule when=$a.cn.label.r when=$a.it.i when=$a.it.n then=$a.cn.label.c
+@a.cn.value.r app.act.request operation="diagram.node.change" value=?v
+@a.cn.value.c app.act.call act=change thing=$a.it.n attr=value value=?v order=1
+@change.node.value core.rule when=$a.cn.value.r when=$a.it.i when=$a.it.n then=$a.cn.value.c
+@a.cn.none.r app.act.request operation="diagram.node.change"
+@a.cn.none.c app.act.request colour=?a1
+@a.cn.none.s app.act.request size=?a2
+@a.cn.none.l app.act.request label=?a3
+@a.cn.none.v app.act.request value=?a4
+@a.cn.none.out app.act.refuse reason=missing-property
+@change.node.none core.rule when=$a.cn.none.r not=$a.cn.none.c not=$a.cn.none.s not=$a.cn.none.l not=$a.cn.none.v then=$a.cn.none.out
+
+# Select nodes (and edges): the view's selection.
+@a.sel.n.r app.act.request operation="diagram.node.select"
+@a.sel.n.v app.act.view key=selected value=?id
+@select.nodes core.rule when=$a.sel.n.r when=$a.it.i when=$a.it.n then=$a.sel.n.v
+@a.sel.e.i app.act.item param="edges" value=?id
+@a.sel.e.e w.diagram.edge code=?id
+@select.nodes.edges core.rule when=$a.sel.n.r when=$a.sel.e.i when=$a.sel.e.e then=$a.sel.n.v
+@a.sel.e.miss app.act.refuse reason=missing-target
+@select.nodes.edges.missing core.rule when=$a.sel.n.r when=$a.sel.e.i not=$a.sel.e.e then=$a.sel.e.miss
+
+# Remove nodes.
+@a.rm.n.r app.act.request operation="diagram.node.remove"
+@a.rm.n.c app.act.call act=remove thing=$a.it.n order=1
+@remove.nodes core.rule when=$a.rm.n.r when=$a.it.i when=$a.it.n then=$a.rm.n.c
+
+# Place nodes: one node's centre at x, y; several keep where they are from each other, their middle at x, y. A
+# placed node is pinned. A member of a group is placed with its group.
+@a.pl.r app.act.request operation="diagram.node.place" x=?x y=?y
+@a.pl.b ui.diagram.nbox node=?id cx=?cx cy=?cy
+@a.pl.sx core.aggregate over=$a.it.i over=$a.pl.b sum=?sx args=?cx then=$a.pl.sxo
+@a.pl.sxo ui.diagram.centre key=x sum=?sx
+@a.pl.sy core.aggregate over=$a.it.i over=$a.pl.b sum=?sy args=?cy then=$a.pl.syo
+@a.pl.syo ui.diagram.centre key=y sum=?sy
+@a.pl.nc core.aggregate over=$a.it.i over=$a.pl.b count=?k then=$a.pl.nco
+@a.pl.nco ui.diagram.centre key=count sum=?k
+@a.pl.cx ui.diagram.centre key=x sum=?sx
+@a.pl.cy ui.diagram.centre key=y sum=?sy
+@a.pl.ck ui.diagram.centre key=count sum=?k
+@a.pl.ax core.calc out=?ax fn=div args=?sx args=?k
+@a.pl.ay core.calc out=?ay fn=div args=?sy args=?k
+@a.pl.dx core.calc out=?dx fn=sub args=?cx args=?ax
+@a.pl.dy core.calc out=?dy fn=sub args=?cy args=?ay
+@a.pl.nx core.calc out=?nx fn=add args=?x args=?dx
+@a.pl.ny core.calc out=?ny fn=add args=?y args=?dy
+@a.pl.in ui.diagram.mpos node=?id
+@a.pl.c.x app.act.call act=change thing=$a.it.n attr=x value=?nx order=1
+@a.pl.c.y app.act.call act=change thing=$a.it.n attr=y value=?ny order=2
+@a.pl.c.p app.act.call act=change thing=$a.it.n attr=pinned value=true order=3
+@place.node.x core.rule when=$a.pl.r when=$a.it.i when=$a.it.n when=$a.pl.b when=$a.pl.cx when=$a.pl.cy when=$a.pl.ck not=$a.pl.in with=$a.pl.ax with=$a.pl.ay with=$a.pl.dx with=$a.pl.dy with=$a.pl.nx with=$a.pl.ny then=$a.pl.c.x
+@place.node.y core.rule when=$a.pl.r when=$a.it.i when=$a.it.n when=$a.pl.b when=$a.pl.cx when=$a.pl.cy when=$a.pl.ck not=$a.pl.in with=$a.pl.ax with=$a.pl.ay with=$a.pl.dx with=$a.pl.dy with=$a.pl.nx with=$a.pl.ny then=$a.pl.c.y
+@place.node.pin core.rule when=$a.pl.r when=$a.it.i when=$a.it.n when=$a.pl.b when=$a.pl.cx when=$a.pl.cy when=$a.pl.ck not=$a.pl.in with=$a.pl.ax with=$a.pl.ay with=$a.pl.dx with=$a.pl.dy with=$a.pl.nx with=$a.pl.ny then=$a.pl.c.p
+@a.pl.grp.out app.act.refuse reason=node-in-group-place-the-group
+@place.node.member core.rule when=$a.pl.r when=$a.it.i when=$a.it.n when=$a.pl.in then=$a.pl.grp.out
+
+# Resize nodes to an exact width and height.
+@a.rs.r app.act.request operation="diagram.node.resize" width=?w height=?h
+@a.rs.w app.act.call act=change thing=$a.it.n attr=width value=?w order=1
+@a.rs.h app.act.call act=change thing=$a.it.n attr=height value=?h order=2
+@resize.node.w core.rule when=$a.rs.r when=$a.it.i when=$a.it.n then=$a.rs.w
+@resize.node.h core.rule when=$a.rs.r when=$a.it.i when=$a.it.n then=$a.rs.h
+
+# Lay nodes out: a tree or layers hands them back to the diagram's layout (unpinned, out of arrangements); a row,
+# column or grid makes them an arrangement (a node already in a framed group is refused); circle and radial are
+# not declared here.
+@a.ly.r app.act.request operation="diagram.node.layout" layout=?l
+@a.ly.flow core.check fn=matches args=?l args="^(tree|layers)$"
+@a.ly.unpin app.act.call act=change thing=$a.it.n attr=pinned value=false order=1
+@layout.nodes.flow core.rule when=$a.ly.r when=$a.it.i when=$a.it.n if=$a.ly.flow then=$a.ly.unpin
+@a.ly.m w.diagram.member node=$a.it.n group=$a.ly.g
+@a.ly.g w.diagram.group code=?lyg framed=false
+@a.ly.leave app.act.call act=remove thing=$a.ly.m order=2
+@layout.nodes.leave core.rule when=$a.ly.r when=$a.it.i when=$a.it.n when=$a.ly.m when=$a.ly.g if=$a.ly.flow then=$a.ly.leave
+@a.ly.set core.check fn=matches args=?l args="^(row|column|grid)$"
+@a.ly.nx ui.diagram.next of=group top=?top
+@a.ly.z core.calc out=?z fn=add args=?top args=1
+@a.ly.code core.calc out=?code fn=concat args=g args=?z
+@a.ly.g.call app.act.call act=make kind=w.diagram.group code=?code n=?z layout=?l framed=false order=2 ref=new.group
+@layout.nodes.arrange core.rule when=$a.ly.r when=$a.ly.nx if=$a.ly.set with=$a.ly.z with=$a.ly.code then=$a.ly.g.call
+@a.ly.mem app.act.call act=make kind=w.diagram.member group=new.group node=$a.it.n order=3
+@layout.nodes.member core.rule when=$a.ly.r when=$a.it.i when=$a.it.n if=$a.ly.set then=$a.ly.mem
+@layout.nodes.leave.old core.rule when=$a.ly.r when=$a.it.i when=$a.it.n when=$a.ly.m when=$a.ly.g if=$a.ly.set then=$a.ly.leave
+@dga.framedin.type core.type of=ui.diagram.framedin
+@a.fi.m w.diagram.member node=$a.fi.n group=$a.fi.g
+@a.fi.n w.diagram.node code=?id
+@a.fi.g w.diagram.group code=?g
+@a.fi.nf w.diagram.group code=?g framed=false
+@a.fi.out ui.diagram.framedin node=?id group=?g
+@framed.in core.rule when=$a.fi.m when=$a.fi.n when=$a.fi.g not=$a.fi.nf then=$a.fi.out
+@a.ly.fin ui.diagram.framedin node=?id
+@a.ly.fin.out app.act.refuse reason=node-already-in-group
+@layout.nodes.framed core.rule when=$a.ly.r when=$a.it.i when=$a.ly.fin if=$a.ly.set then=$a.ly.fin.out
+@a.ly.no core.check fn=matches args=?l args="^(circle|radial)$"
+@a.ly.no.out app.act.refuse reason=layout-not-declared
+@layout.nodes.refused core.rule when=$a.ly.r if=$a.ly.no then=$a.ly.no.out
+
+# ---- Edges ----
+# Connect two nodes with an arrow; both must be nodes of the diagram, and the same arrow is not made twice.
+@a.lk.r app.act.request operation="diagram.link.make" from=?a to=?b
+@a.lk.a w.diagram.node code=?a
+@a.lk.b w.diagram.node code=?b
+@a.lk.nx ui.diagram.next of=edge top=?top
+@a.lk.z core.calc out=?z fn=add args=?top args=1
+@a.lk.code core.calc out=?code fn=concat args=e args=?z
+@a.lk.same w.diagram.edge from=$a.lk.a to=$a.lk.b
+@a.lk.c app.act.call act=make kind=w.diagram.edge code=?code from=$a.lk.a to=$a.lk.b n=?z direction=forward order=1
+@link.make core.rule when=$a.lk.r when=$a.lk.a when=$a.lk.b when=$a.lk.nx not=$a.lk.same with=$a.lk.z with=$a.lk.code then=$a.lk.c
+@a.lk.dup app.act.refuse reason=link-exists
+@link.make.twice core.rule when=$a.lk.r when=$a.lk.a when=$a.lk.b when=$a.lk.same then=$a.lk.dup
+@a.lk.miss app.act.refuse reason=missing-endpoint
+@a.lk.ra app.act.request operation="diagram.link.make" from=?a
+@a.lk.ma w.diagram.node code=?a
+@link.make.no.from core.rule when=$a.lk.ra not=$a.lk.ma then=$a.lk.miss
+@a.lk.rb app.act.request operation="diagram.link.make" to=?b
+@a.lk.mb w.diagram.node code=?b
+@link.make.no.to core.rule when=$a.lk.rb not=$a.lk.mb then=$a.lk.miss
+
+# The commands that name edges by `ids`.
+@edgeop.select ui.diagram.edgeop operation="diagram.link.select"
+@edgeop.change ui.diagram.edgeop operation="diagram.link.change"
+@edgeop.remove ui.diagram.edgeop operation="diagram.link.remove"
+@a.me.r app.act.request operation=?op
+@a.me.op ui.diagram.edgeop operation=?op
+@a.me.i app.act.item param="ids" value=?id
+@a.me.e w.diagram.edge code=?id
+@a.me.out app.act.refuse reason=missing-target
+@missing.edge core.rule when=$a.me.r when=$a.me.op when=$a.me.i not=$a.me.e then=$a.me.out
+@a.ie.i app.act.item param="ids" value=?id
+@a.ie.e w.diagram.edge code=?id
+
+@a.ls.r app.act.request operation="diagram.link.select"
+@a.ls.v app.act.view key=selected value=?id
+@select.links core.rule when=$a.ls.r when=$a.ie.i when=$a.ie.e then=$a.ls.v
+@a.ls.n.i app.act.item param="nodes" value=?id
+@a.ls.n.n w.diagram.node code=?id
+@a.ls.any app.act.item param="ids" value=?anye
+@select.links.nodes core.rule when=$a.ls.r when=$a.ls.n.i when=$a.ls.n.n not=$a.ls.any then=$a.ls.v
+
+# Change an edge: its ends, label, colour, style, arrowheads (the command's `arrow` is the edge's direction) and width.
+@a.lc.from.r app.act.request operation="diagram.link.change" from=?a
+@a.lc.from.n w.diagram.node code=?a
+@a.lc.from.c app.act.call act=change thing=$a.ie.e attr=from value=$a.lc.from.n order=1
+@change.link.from core.rule when=$a.lc.from.r when=$a.ie.i when=$a.ie.e when=$a.lc.from.n then=$a.lc.from.c
+@a.lc.to.r app.act.request operation="diagram.link.change" to=?b
+@a.lc.to.n w.diagram.node code=?b
+@a.lc.to.c app.act.call act=change thing=$a.ie.e attr=to value=$a.lc.to.n order=2
+@change.link.to core.rule when=$a.lc.to.r when=$a.ie.i when=$a.ie.e when=$a.lc.to.n then=$a.lc.to.c
+@a.lc.end.miss app.act.refuse reason=missing-endpoint
+@a.lc.from.rr app.act.request operation="diagram.link.change" from=?a
+@change.link.from.missing core.rule when=$a.lc.from.rr not=$a.lc.from.n then=$a.lc.end.miss
+@a.lc.to.rr app.act.request operation="diagram.link.change" to=?b
+@change.link.to.missing core.rule when=$a.lc.to.rr not=$a.lc.to.n then=$a.lc.end.miss
+@a.lc.label.r app.act.request operation="diagram.link.change" label=?v
+@a.lc.label.c app.act.call act=change thing=$a.ie.e attr=label value=?v order=3
+@change.link.label core.rule when=$a.lc.label.r when=$a.ie.i when=$a.ie.e then=$a.lc.label.c
+@a.lc.colour.r app.act.request operation="diagram.link.change" colour=?v
+@a.lc.colour.c app.act.call act=change thing=$a.ie.e attr=colour value=?v order=3
+@change.link.colour core.rule when=$a.lc.colour.r when=$a.ie.i when=$a.ie.e then=$a.lc.colour.c
+@a.lc.style.r app.act.request operation="diagram.link.change" style=?v
+@a.lc.style.c app.act.call act=change thing=$a.ie.e attr=style value=?v order=3
+@change.link.style core.rule when=$a.lc.style.r when=$a.ie.i when=$a.ie.e then=$a.lc.style.c
+@a.lc.arrow.r app.act.request operation="diagram.link.change" arrow=?v
+@a.lc.arrow.c app.act.call act=change thing=$a.ie.e attr=direction value=?v order=3
+@change.link.arrow core.rule when=$a.lc.arrow.r when=$a.ie.i when=$a.ie.e then=$a.lc.arrow.c
+@a.lc.width.r app.act.request operation="diagram.link.change" width=?v
+@a.lc.width.c app.act.call act=change thing=$a.ie.e attr=width value=?v order=3
+@change.link.width core.rule when=$a.lc.width.r when=$a.ie.i when=$a.ie.e then=$a.lc.width.c
+@a.lc.none.r app.act.request operation="diagram.link.change"
+@a.lc.none.1 app.act.request from=?b1
+@a.lc.none.2 app.act.request to=?b2
+@a.lc.none.3 app.act.request label=?b3
+@a.lc.none.4 app.act.request colour=?b4
+@a.lc.none.5 app.act.request style=?b5
+@a.lc.none.6 app.act.request arrow=?b6
+@a.lc.none.7 app.act.request width=?b7
+@a.lc.none.out app.act.refuse reason=missing-property
+@change.link.none core.rule when=$a.lc.none.r not=$a.lc.none.1 not=$a.lc.none.2 not=$a.lc.none.3 not=$a.lc.none.4 not=$a.lc.none.5 not=$a.lc.none.6 not=$a.lc.none.7 then=$a.lc.none.out
+
+@a.lr.r app.act.request operation="diagram.link.remove"
+@a.lr.c app.act.call act=remove thing=$a.ie.e order=1
+@remove.links core.rule when=$a.lr.r when=$a.ie.i when=$a.ie.e then=$a.lr.c
+
+# Remove a selection of nodes and edges; clear the page.
+@a.sr.r app.act.request operation="diagram.selection.remove"
+@a.sr.ni app.act.item param="nodes" value=?id
+@a.sr.nn w.diagram.node code=?id
+@a.sr.nc app.act.call act=remove thing=$a.sr.nn order=2
+@remove.selection.nodes core.rule when=$a.sr.r when=$a.sr.ni when=$a.sr.nn then=$a.sr.nc
+@a.sr.li app.act.item param="links" value=?id
+@a.sr.le w.diagram.edge code=?id
+@a.sr.lc app.act.call act=remove thing=$a.sr.le order=1
+@remove.selection.links core.rule when=$a.sr.r when=$a.sr.li when=$a.sr.le then=$a.sr.lc
+@a.sr.miss app.act.refuse reason=missing-target
+@remove.selection.nodes.missing core.rule when=$a.sr.r when=$a.sr.ni not=$a.sr.nn then=$a.sr.miss
+@remove.selection.links.missing core.rule when=$a.sr.r when=$a.sr.li not=$a.sr.le then=$a.sr.miss
+@a.cl.r app.act.request operation="diagram.page.clear"
+@a.cl.e w.diagram.edge code=?any
+@a.cl.ec app.act.call act=remove thing=$a.cl.e order=1
+@clear.edges core.rule when=$a.cl.r when=$a.cl.e then=$a.cl.ec
+@a.cl.g w.diagram.group code=?any
+@a.cl.gc app.act.call act=remove thing=$a.cl.g order=2
+@clear.groups core.rule when=$a.cl.r when=$a.cl.g then=$a.cl.gc
+@a.cl.n w.diagram.node code=?any
+@a.cl.nc app.act.call act=remove thing=$a.cl.n order=3
+@clear.nodes core.rule when=$a.cl.r when=$a.cl.n then=$a.cl.nc
+
+# Show or hide the codes (a view key the projection reads).
+@a.ids.r app.act.request operation="diagram.ids.show" mode=?m
+@a.ids.v app.act.view key=ids value=?m
+@ids core.rule when=$a.ids.r then=$a.ids.v
+
+# ---- Groups ----
+# Make a group of nodes named `name` (its code; it must not be a node's or another group's), labelled with its label
+# or its name, its members in a row. A member of an arrangement leaves it; a member of a framed group is refused.
+@a.gm.r app.act.request operation="diagram.group.make" name=?name
+@a.gm.nx ui.diagram.next of=group top=?top
+@a.gm.z core.calc out=?z fn=add args=?top args=1
+@a.gm.taken.n w.diagram.node code=?name
+@a.gm.taken.g w.diagram.group code=?name
+@a.gm.lab app.act.request operation="diagram.group.make" label=?anyl
+@a.gm.c app.act.call act=make kind=w.diagram.group code=?name label=?name n=?z layout=row order=2 ref=new.group
+@group.make core.rule when=$a.gm.r when=$a.gm.nx not=$a.gm.taken.n not=$a.gm.taken.g not=$a.gm.lab with=$a.gm.z then=$a.gm.c
+@a.gm.rl app.act.request operation="diagram.group.make" name=?name label=?label
+@a.gm.cl app.act.call act=make kind=w.diagram.group code=?name label=?label n=?z layout=row order=2 ref=new.group
+@group.make.labelled core.rule when=$a.gm.rl when=$a.gm.nx not=$a.gm.taken.n not=$a.gm.taken.g with=$a.gm.z then=$a.gm.cl
+@a.gm.dup app.act.refuse reason=invalid-or-duplicate-group-name
+@group.make.taken.node core.rule when=$a.gm.r when=$a.gm.taken.n then=$a.gm.dup
+@group.make.taken.group core.rule when=$a.gm.r when=$a.gm.taken.g then=$a.gm.dup
+@a.gm.mem app.act.call act=make kind=w.diagram.member group=new.group node=$a.it.n order=3
+@group.make.member core.rule when=$a.gm.r when=$a.it.i when=$a.it.n then=$a.gm.mem
+@a.gm.lm w.diagram.member node=$a.it.n group=$a.gm.lg
+@a.gm.lg w.diagram.group code=?gmg framed=false
+@a.gm.leave app.act.call act=remove thing=$a.gm.lm order=1
+@group.make.leave core.rule when=$a.gm.r when=$a.it.i when=$a.it.n when=$a.gm.lm when=$a.gm.lg then=$a.gm.leave
+@a.gm.fin ui.diagram.framedin node=?id
+@a.gm.fin.out app.act.refuse reason=node-already-in-group
+@group.make.framed core.rule when=$a.gm.r when=$a.it.i when=$a.gm.fin then=$a.gm.fin.out
+
+# The commands that name a group by `id`, and a refusal when it is not a group of the diagram.
+@groupop.select ui.diagram.groupop operation="diagram.group.select"
+@groupop.change ui.diagram.groupop operation="diagram.group.change"
+@groupop.layout ui.diagram.groupop operation="diagram.group.layout"
+@groupop.resize ui.diagram.groupop operation="diagram.group.resize"
+@groupop.place ui.diagram.groupop operation="diagram.group.place"
+@groupop.remove ui.diagram.groupop operation="diagram.group.remove"
+@groupop.ungroup ui.diagram.groupop operation="diagram.group.ungroup"
+@a.mg.r app.act.request operation=?op id=?id
+@a.mg.op ui.diagram.groupop operation=?op
+@a.mg.g w.diagram.group code=?id
+@a.mg.out app.act.refuse reason=missing-group
+@missing.group core.rule when=$a.mg.r when=$a.mg.op not=$a.mg.g then=$a.mg.out
+@a.ig.r app.act.request id=?id
+@a.ig.g w.diagram.group code=?id
+@a.ig.m w.diagram.member group=$a.ig.g node=$a.ig.n
+@a.ig.n w.diagram.node code=?mid
+
+@a.gsel.r app.act.request operation="diagram.group.select" id=?id
+@a.gsel.v app.act.view key=selected value=?id
+@group.select core.rule when=$a.gsel.r when=$a.ig.g then=$a.gsel.v
+
+# Change a group: its label; the colour and size of its members.
+@a.gc.label.r app.act.request operation="diagram.group.change" label=?v
+@a.gc.label.c app.act.call act=change thing=$a.ig.g attr=label value=?v order=1
+@group.change.label core.rule when=$a.gc.label.r when=$a.ig.r when=$a.ig.g then=$a.gc.label.c
+@a.gc.colour.r app.act.request operation="diagram.group.change" colour=?v
+@a.gc.colour.c app.act.call act=change thing=$a.ig.n attr=colour value=?v order=1
+@group.change.colour core.rule when=$a.gc.colour.r when=$a.ig.r when=$a.ig.g when=$a.ig.m when=$a.ig.n then=$a.gc.colour.c
+@a.gc.size.r app.act.request operation="diagram.group.change" size=?v
+@a.gc.size.c app.act.call act=change thing=$a.ig.n attr=size value=?v order=1
+@group.change.size core.rule when=$a.gc.size.r when=$a.ig.r when=$a.ig.g when=$a.ig.m when=$a.ig.n then=$a.gc.size.c
+@a.gc.none.r app.act.request operation="diagram.group.change"
+@a.gc.none.1 app.act.request label=?c1
+@a.gc.none.2 app.act.request colour=?c2
+@a.gc.none.3 app.act.request size=?c3
+@a.gc.none.out app.act.refuse reason=missing-property
+@group.change.none core.rule when=$a.gc.none.r not=$a.gc.none.1 not=$a.gc.none.2 not=$a.gc.none.3 then=$a.gc.none.out
+
+# Lay a group out: row, column, grid, or its members' values as a bar or line chart (every member needs a value).
+# Free, tree, layers, circle, radial, pie and doughnut layouts of a group are not declared here.
+@a.gl.r app.act.request operation="diagram.group.layout" layout=?l
+@a.gl.ok core.check fn=matches args=?l args="^(row|column|grid|bar|line)$"
+@a.gl.c app.act.call act=change thing=$a.ig.g attr=layout value=?l order=1
+@group.layout core.rule when=$a.gl.r when=$a.ig.r when=$a.ig.g if=$a.gl.ok then=$a.gl.c
+@a.gl.no core.check fn=matches args=?l args="^(free|tree|layers|circle|radial|pie|doughnut)$"
+@a.gl.no.out app.act.refuse reason=group-layout-not-declared
+@group.layout.refused core.rule when=$a.gl.r if=$a.gl.no then=$a.gl.no.out
+@a.gl.chart core.check fn=matches args=?l args="^(bar|line)$"
+@a.gl.nv w.diagram.node code=?mid value=?anyv
+@a.gl.nv.out app.act.refuse reason=explicit-numeric-values-required
+@group.layout.values core.rule when=$a.gl.r when=$a.ig.r when=$a.ig.g when=$a.ig.m when=$a.ig.n not=$a.gl.nv if=$a.gl.chart then=$a.gl.nv.out
+
+# Resize a group (its members' size, 1 as made) and place it (its centre at x, y; pinned).
+@a.gr.r app.act.request operation="diagram.group.resize" scale=?k
+@a.gr.c app.act.call act=change thing=$a.ig.g attr=scale value=?k order=1
+@group.resize core.rule when=$a.gr.r when=$a.ig.r when=$a.ig.g then=$a.gr.c
+@a.gp.r app.act.request operation="diagram.group.place" x=?x y=?y
+@a.gp.x app.act.call act=change thing=$a.ig.g attr=x value=?x order=1
+@a.gp.y app.act.call act=change thing=$a.ig.g attr=y value=?y order=2
+@a.gp.p app.act.call act=change thing=$a.ig.g attr=pinned value=true order=3
+@group.place.x core.rule when=$a.gp.r when=$a.ig.r when=$a.ig.g then=$a.gp.x
+@group.place.y core.rule when=$a.gp.r when=$a.ig.r when=$a.ig.g then=$a.gp.y
+@group.place.pin core.rule when=$a.gp.r when=$a.ig.r when=$a.ig.g then=$a.gp.p
+
+# Remove a group with its members; ungroup (the members stay).
+@a.grm.r app.act.request operation="diagram.group.remove"
+@a.grm.n app.act.call act=remove thing=$a.ig.n order=1
+@a.grm.g app.act.call act=remove thing=$a.ig.g order=2
+@group.remove.members core.rule when=$a.grm.r when=$a.ig.r when=$a.ig.g when=$a.ig.m when=$a.ig.n then=$a.grm.n
+@group.remove core.rule when=$a.grm.r when=$a.ig.r when=$a.ig.g then=$a.grm.g
+@a.gu.r app.act.request operation="diagram.group.ungroup"
+@group.ungroup core.rule when=$a.gu.r when=$a.ig.r when=$a.ig.g then=$a.grm.g
+
+# A chart group: one rectangle node per label with its value, in a framed group laid out as bars or a line. The
+# labels and values must pair up; a pie or doughnut chart is not declared here.
+@a.cg.r app.act.request operation="diagram.group.chart.make" label=?label layout=?l
+@a.cg.ok core.check fn=matches args=?l args="^(bar|line)$"
+@a.cg.gnx ui.diagram.next of=group top=?gtop
+@a.cg.gz core.calc out=?gz fn=add args=?gtop args=1
+@a.cg.gcode core.calc out=?gcode fn=concat args=g args=?gz
+@a.cg.g app.act.call act=make kind=w.diagram.group code=?gcode label=?label n=?gz layout=?l order=2 ref=new.group
+@chart.make.group core.rule when=$a.cg.r when=$a.cg.gnx if=$a.cg.ok with=$a.cg.gz with=$a.cg.gcode then=$a.cg.g
+@a.cg.li app.act.item param="labels" n=?i value=?t
+@a.cg.vi app.act.item param="values" n=?i value=?v
+@a.cg.nnx ui.diagram.next of=node top=?ntop
+@a.cg.i1 core.calc out=?i1 fn=add args=?i args=1
+@a.cg.nz core.calc out=?nz fn=add args=?ntop args=?i1
+@a.cg.ncode core.calc out=?ncode fn=concat args=n args=?nz
+@a.cg.ref core.calc out=?ref fn=concat args="new.node." args=?i1
+@a.cg.n app.act.call act=make kind=w.diagram.node code=?ncode shape=rectangle label=?t value=?v n=?nz order=1 ref=?ref
+@chart.make.node core.rule when=$a.cg.r when=$a.cg.li when=$a.cg.vi when=$a.cg.nnx if=$a.cg.ok with=$a.cg.i1 with=$a.cg.nz with=$a.cg.ncode with=$a.cg.ref then=$a.cg.n
+@a.cg.mem app.act.call act=make kind=w.diagram.member group=new.group node=?ref order=3
+@chart.make.member core.rule when=$a.cg.r when=$a.cg.li when=$a.cg.vi when=$a.cg.nnx if=$a.cg.ok with=$a.cg.i1 with=$a.cg.nz with=$a.cg.ncode with=$a.cg.ref then=$a.cg.mem
+@a.cg.lab.v app.act.item param="labels" n=?i
+@a.cg.val.v app.act.item param="values" n=?i
+@a.cg.unpaired app.act.refuse reason=invalid-chart-data
+@chart.make.unpaired.label core.rule when=$a.cg.r when=$a.cg.lab.v not=$a.cg.val.v then=$a.cg.unpaired
+@a.cg.lab.w app.act.item param="labels" n=?j
+@a.cg.val.w app.act.item param="values" n=?j
+@chart.make.unpaired.value core.rule when=$a.cg.r when=$a.cg.val.w not=$a.cg.lab.w then=$a.cg.unpaired
+@a.cg.no core.check fn=matches args=?l args="^(pie|doughnut)$"
+@a.cg.no.out app.act.refuse reason=chart-layout-not-declared
+@chart.make.refused core.rule when=$a.cg.r if=$a.cg.no then=$a.cg.no.out
+
+# Charts of the data.charts composition (diagram.group.chart, diagram.group.chart.adopt and the composed chart.*
+# commands) are not part of this area's instance: refused, never simulated.
+@a.cc.r app.act.request operation=?op
+@a.cc.chart core.check fn=matches args=?op args="^(chart[.]|diagram[.]group[.]chart$|diagram[.]group[.]chart[.]adopt$)"
+@a.cc.out app.act.refuse reason=chart-composition-not-in-area
+@chart.composition core.rule when=$a.cc.r if=$a.cc.chart then=$a.cc.out
+
+# ---- What a reader observes, and the geometry placement reads ----
+@a.ob.n w.diagram.node code=?id shape=?k
+@a.ob.b ui.diagram.nbox node=?id cx=?x cy=?y w=?w h=?h
+@a.ob.sel app.area.view key=selected value=?id
+@a.ob.out app.observe.object id=?id kind=?k sourceType=diagram.sketch.node binding=diagram.node x=?x y=?y width=?w height=?h selected=false
+@a.ob.out.sel app.observe.object id=?id kind=?k sourceType=diagram.sketch.node binding=diagram.node x=?x y=?y width=?w height=?h selected=true
+@observe.node core.rule when=$a.ob.n when=$a.ob.b not=$a.ob.sel then=$a.ob.out
+@observe.node.selected core.rule when=$a.ob.n when=$a.ob.b when=$a.ob.sel then=$a.ob.out.sel
+@a.oi.label w.diagram.node code=?id label=?v
+@a.oi.label.o app.observe.input id=?id key=label value=?v
+@observe.node.label core.rule when=$a.oi.label then=$a.oi.label.o
+@a.oi.colour w.diagram.node code=?id colour=?v
+@a.oi.colour.o app.observe.input id=?id key=colour value=?v
+@observe.node.colour core.rule when=$a.oi.colour then=$a.oi.colour.o
+@a.oi.size w.diagram.node code=?id size=?v
+@a.oi.size.o app.observe.input id=?id key=size value=?v
+@observe.node.size core.rule when=$a.oi.size then=$a.oi.size.o
+@a.oi.value w.diagram.node code=?id value=?v
+@a.oi.value.o app.observe.input id=?id key=value value=?v
+@observe.node.value core.rule when=$a.oi.value then=$a.oi.value.o
+@a.oi.group ui.diagram.inside node=?id group=?g
+@a.oi.group.o app.observe.input id=?id key=group value=?g
+@observe.node.group core.rule when=$a.oi.group then=$a.oi.group.o
+@a.oe.e w.diagram.edge code=?id from=$a.oe.a to=$a.oe.b
+@a.oe.a w.diagram.node code=?a
+@a.oe.b w.diagram.node code=?b
+@a.oe.sel app.area.view key=selected value=?id
+@a.oe.out app.observe.object id=?id kind=link sourceType=diagram.sketch.link binding=diagram.link from=?a to=?b selected=false
+@a.oe.out.sel app.observe.object id=?id kind=link sourceType=diagram.sketch.link binding=diagram.link from=?a to=?b selected=true
+@observe.link core.rule when=$a.oe.e when=$a.oe.a when=$a.oe.b not=$a.oe.sel then=$a.oe.out
+@observe.link.selected core.rule when=$a.oe.e when=$a.oe.a when=$a.oe.b when=$a.oe.sel then=$a.oe.out.sel
+@a.oe.label w.diagram.edge code=?id label=?v
+@a.oe.label.o app.observe.input id=?id key=label value=?v
+@observe.link.label core.rule when=$a.oe.label then=$a.oe.label.o
+@a.oe.colour w.diagram.edge code=?id colour=?v
+@a.oe.colour.o app.observe.input id=?id key=colour value=?v
+@observe.link.colour core.rule when=$a.oe.colour then=$a.oe.colour.o
+@a.oe.style w.diagram.edge code=?id style=?v
+@a.oe.style.o app.observe.input id=?id key=style value=?v
+@observe.link.style core.rule when=$a.oe.style then=$a.oe.style.o
+@a.oe.arrow w.diagram.edge code=?id direction=?v
+@a.oe.arrow.o app.observe.input id=?id key=arrow value=?v
+@observe.link.arrow core.rule when=$a.oe.arrow then=$a.oe.arrow.o
+@a.oe.width w.diagram.edge code=?id width=?v
+@a.oe.width.o app.observe.input id=?id key=width value=?v
+@observe.link.width core.rule when=$a.oe.width then=$a.oe.width.o
+@a.og.g w.diagram.group code=?id label=?label
+@a.og.u ui.diagram.unit unit=?id kind=group
+@a.og.sel app.area.view key=selected value=?id
+@a.og.out app.observe.object id=?id kind=group sourceType=diagram.sketch.group binding=diagram.group label=?label selected=false
+@a.og.out.sel app.observe.object id=?id kind=group sourceType=diagram.sketch.group binding=diagram.group label=?label selected=true
+@observe.group core.rule when=$a.og.g when=$a.og.u not=$a.og.sel then=$a.og.out
+@observe.group.selected core.rule when=$a.og.g when=$a.og.u when=$a.og.sel then=$a.og.out.sel
+@a.og.layout w.diagram.group code=?id layout=?v
+@a.og.layout.o app.observe.input id=?id key=layout value=?v
+@observe.group.layout core.rule when=$a.og.layout then=$a.og.layout.o
+@a.og.member ui.diagram.inside group=?id node=?v
+@a.og.member.o app.observe.input id=?id key=members value=?v
+@observe.group.members core.rule when=$a.og.member then=$a.og.member.o
+
+@a.sp.n ui.diagram.nbox node=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@a.sp.free ui.diagram.unitof node=?id unit=?id
+@a.sp.box app.observe.box id=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1 occupant=true
+@spatial.node core.rule when=$a.sp.n when=$a.sp.free then=$a.sp.box
+@a.sp.m ui.diagram.inside node=?id group=?g
+@a.sp.box.m app.observe.box id=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1 occupant=false
+@spatial.member core.rule when=$a.sp.n when=$a.sp.m then=$a.sp.box.m
+@a.sp.rel app.observe.relation subject=?id object=?g kind=member_of
+@spatial.member.of core.rule when=$a.sp.m then=$a.sp.rel
+@a.sp.g ui.diagram.unit unit=?g kind=group
+@a.sp.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy w=?gw h=?gh
+@a.sp.gx1 core.calc out=?gx1 fn=add args=?gx args=?gw
+@a.sp.gy1 core.calc out=?gy1 fn=add args=?gy args=?gh
+@a.sp.box.g app.observe.box id=?g x0=?gx y0=?gy x1=?gx1 y1=?gy1 occupant=true
+@spatial.group core.rule when=$a.sp.g when=$a.sp.gb with=$a.sp.gx1 with=$a.sp.gy1 then=$a.sp.box.g
+
+# The ends of each edge where it is drawn: a point per end (named by the edge and its role, as placement reads them)
+# and the edge's endpoint relation to each node.
+@a.ep.e w.diagram.edge code=?e from=$a.ep.a to=$a.ep.b
+@a.ep.a w.diagram.node code=?a
+@a.ep.b w.diagram.node code=?b
+@a.ep.h ui.diagram.tip edge=?e at=head x=?hx y=?hy
+@a.ep.t ui.diagram.tip edge=?e at=tail x=?tx y=?ty
+@a.ep.sf core.calc out=?sf fn=concat args="[\"" args=?e args="\",\"from\"]"
+@a.ep.st core.calc out=?st fn=concat args="[\"" args=?e args="\",\"to\"]"
+@a.ep.pf app.observe.point id=?sf x=?tx y=?ty
+@a.ep.pt app.observe.point id=?st x=?hx y=?hy
+@spatial.endpoint.from core.rule when=$a.ep.e when=$a.ep.a when=$a.ep.b when=$a.ep.t with=$a.ep.sf then=$a.ep.pf
+@spatial.endpoint.to core.rule when=$a.ep.e when=$a.ep.a when=$a.ep.b when=$a.ep.h with=$a.ep.st then=$a.ep.pt
+@a.ep.rf app.observe.relation subject=?e object=?a kind=endpoint_of
+@a.ep.rt app.observe.relation subject=?e object=?b kind=endpoint_of
+@spatial.endpoint.of.from core.rule when=$a.ep.e when=$a.ep.a when=$a.ep.b then=$a.ep.rf
+@spatial.endpoint.of.to core.rule when=$a.ep.e when=$a.ep.a when=$a.ep.b then=$a.ep.rt
+
+@a.op.n w.diagram.node code=?id
+@a.op.n.o app.observe.option id=node value=?id
+@option.node core.rule when=$a.op.n then=$a.op.n.o
+@a.op.e w.diagram.edge code=?id
+@a.op.e.o app.observe.option id=link value=?id
+@option.link core.rule when=$a.op.e then=$a.op.e.o
+@a.op.g w.diagram.group code=?id
+@a.op.g.o app.observe.option id=group value=?id
+@option.group core.rule when=$a.op.g then=$a.op.g.o
+@a.op.c ui.diagram.colour name=?c
+@a.op.c.o app.observe.option id=colour value=?c
+@option.colour core.rule when=$a.op.c then=$a.op.c.o
+@a.op.s ui.diagram.size name=?s
+@a.op.s.o app.observe.option id=size value=?s
+@option.size core.rule when=$a.op.s then=$a.op.s.o

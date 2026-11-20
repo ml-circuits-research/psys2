@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import {parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=d7baa85342';
-import {readNativeIntent} from '../lib/dialog/native-intent-reader.mjs?v=c29886ded3';
+import {parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
+import {readNativeIntent} from '../lib/dialog/native-intent-reader.mjs?v=34c53214db';
 import {copyHostData, validateNativeArguments, validHostId as text, checkOperation} from './native-tool-arguments.mjs?v=6320f46276';
 export {copyHostData, validateNativeArguments, nativeToken} from './native-tool-arguments.mjs?v=6320f46276';
 
@@ -83,9 +83,21 @@ export function createNativeToolHost({state,instanceId,scope,operations,toolInte
    boxes:geometry.boxes.map(box=>({...tag,...box})),
    points:(geometry.points??[]).map(point=>({...tag,...point})),
    relations:(geometry.relations??[]).map(relation=>({...tag,...relation})),
+   regions:(geometry.regions??[]).map(region=>({...tag,scope:geometry.scope,...region})),
   };
  };
- snapshot();return Object.freeze({observe:()=>copy(snapshot()),invoke,bindings:()=>copy(declared),
+ // The objects a call would create, observed on a staged copy of the state; the state itself is unchanged (null when refused).
+ const preview=sop=>{
+  try{
+   const {operation,args}=readNativeIntent(sop,{operations:declared}),op=byId.get(operation);if(!op)return null;
+   const admitted=validateNativeArguments(op,args,{maxBytes});if(!admitted.ok)return null;
+   const before=new Set(view(copy(state)).map(row=>row.id)),staged=copy(state);
+   const result=handlers[operation]({state:staged,request:()=>{},effect:()=>{}},admitted.args,'preview');
+   if(!result||result.status!=='supported')return null;
+   return copy(view(copy(staged)).filter(row=>!before.has(row.id)));
+  }catch(error){if(error?.name==='BudgetExceeded'||error?.name==='TurnAborted')throw error;return null;}
+ };
+ snapshot();return Object.freeze({observe:()=>copy(snapshot()),invoke,preview,bindings:()=>copy(declared),
   ...(toolInterface?{capabilityFacts:scope=>copy(toolInterface.capabilityFacts(scope))}:{}),
   ...(measure?{measureSpatial(sop){
    const {operation,args}=readNativeIntent(sop,{operations:declared});

@@ -14,10 +14,19 @@
 
 # What each relation means as one constraint of a placement problem (std.problem), for requests with several
 # relations or subjects: the library solves every relation, the observed peers and the page together.
+# Beside a thing a new one keeps its ground line (bottoms aligned), above or below it its centre line (soft terms).
+# In a thing with a water region that holds the kind (a boat in the lake), the subject goes into the water; on a
+# thing with a surface region (a cup on the table) it rests on the surface; on water it floats in it. A subject
+# larger than 0.6 of that place is drawn smaller to fit (where the tool can say a size).
 @layout.predicate.near std.placement.predicate method=$layout.method relation=near predicate=near gap=40
-@layout.predicate.left std.placement.predicate method=$layout.method relation=left predicate=left gap=80
-@layout.predicate.right std.placement.predicate method=$layout.method relation=right predicate=right gap=80
-@layout.predicate.above std.placement.predicate method=$layout.method relation=above predicate=above gap=80
-@layout.predicate.below std.placement.predicate method=$layout.method relation=below predicate=below gap=80
+@layout.predicate.left std.placement.predicate method=$layout.method relation=left predicate=left gap=80 align=y edge=1 alignWeight=0.2
+@layout.predicate.right std.placement.predicate method=$layout.method relation=right predicate=right gap=80 align=y edge=1 alignWeight=0.2
+@layout.predicate.above std.placement.predicate method=$layout.method relation=above predicate=above gap=80 align=x edge=0.5 alignWeight=0.2
+@layout.predicate.below std.placement.predicate method=$layout.method relation=below predicate=below gap=80 align=x edge=0.5 alignWeight=0.2
 @layout.predicate.peer std.placement.predicate method=$layout.method relation=independent_peer predicate=apart gap=12 strength=soft weight=100
 @layout.predicate.page std.placement.predicate method=$layout.method relation=member_of predicate=inside
+@layout.predicate.in.water std.placement.predicate method=$layout.method relation=in predicate=inside region=water held=true fit=0.6 align=x alignWeight=0.2
+@layout.predicate.in std.placement.predicate method=$layout.method relation=in predicate=inside fit=0.6 align=x alignWeight=0.2
+@layout.predicate.on.water std.placement.predicate method=$layout.method relation=on predicate=inside region=water held=true fit=0.6 align=x alignWeight=0.2
+@layout.predicate.on.surface std.placement.predicate method=$layout.method relation=on predicate=on region=surface gap=4 share=0 align=x alignWeight=0.2 fit=0.6
+@layout.predicate.on std.placement.predicate method=$layout.method relation=on predicate=on align=x alignWeight=0.2

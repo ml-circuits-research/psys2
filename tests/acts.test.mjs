@@ -336,9 +336,5 @@ test('formsFor: a frame with a role or a shared lexicon the world does not read,
   assert.ok(p.has('make') && p.has('undo') && !p.has('undo.thing') && !p.has('copy.place'));
   // the verb-group gate: `deselect` waited for its verbs; k.actions has them since catalog fea0fecb (verbs-deselect), and pick with mode none runs it; redo.thing has verbs now but no executor (NO_EXECUTOR)
   assert.ok(p.has('deselect'));
-  // a world that says it reads the role and defines the lexicons gets the frames
-  const dia = A.parseSchema(parse(readFileSync(path.join(DEFAULT_ROOT, 'diagram.sketch/schema.sop'), 'utf8')).wires);
-  const d = ids(dia);
-  for (const id of ['place.layout.go', 'place.layout.flow', 'change.label.edge', 'change.label.edge.ends', 'change.label.edge.on']) assert.ok(d.has(id), id);
-  assert.ok(!d.has('make.part'));
+  // (the diagram.sketch schema world is retired: its commands run on its SOP area, worlds/diagram.sketch/area.sop)
 });

@@ -27,6 +27,15 @@
 @lexical.explicit core.rule when=$p.explicitKind then=$o.lexical
 @lexical.role core.rule when=$p.applicable when=$p.kind.role not=$p.anyKind then=$o.lexical
 
+# A coextensive part word is the only noun when no kind word or kind entry is stated ("draw a
+# cloud" read as a part of the page): the thing to create is the thing it names, ranked by the
+# same grounding as a stated kind.
+@o.kindMention app.creation.kindMention entry=$p.applicable
+@kind.mentioned core.rule when=$p.applicable when=$p.kind.role then=$o.kindMention
+@p.kindMentioned app.creation.kindMention entry=?mentioned
+@p.part.role app.creation.role concept=?concept role=coextensive
+@lexical.coextensive core.rule when=$p.applicable when=$p.part.role not=$p.anyKind not=$p.kindMentioned then=$o.lexical
+
 @p.sameSpan app.creation.lexical start=?start end=?end
 @p.coextensive.role app.creation.role concept=?concept role=coextensive
 @o.consume app.creation.consumed entry=$p.applicable

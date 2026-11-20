@@ -24,6 +24,17 @@ The spatial request hook runs through the spatial compiler. Query and graph stru
 this capability contract retain their existing handling. The change does not alter the learned
 reader, its confidence policy or native editor undo history.
 
+A degree word on a result ("a big sun", "make the house bigger") compiles through the library's
+degree values. The capability policy derives `std.capability.degree` facts from the catalog's scale of size
+(`k.expect.scale` step and `size_factor`, declared by an `app.execution.values` row with `codec=degree`) and
+binds observed numeric properties such as Drawing's size with `app.execution.observedMeasure`. For an
+existing target the factor multiplies its observed value. For a new object the adapter first compiles
+without the unresolved degree, previews that call on a copy of the state through the host's `preview`
+(with the knowledge its arguments name loaded), and records the created object's observations as
+`app.execution.preview` facts. The policy turns those into `std.capability.base` for the parameters their
+properties bind, so the degree scales exactly the value the area would otherwise give (its knowledge size
+class). An unknown word, an ambiguous scale or a missing base leaves the condition skipped and reported.
+
 ## Authority for a native interface
 
 Each editor owns `worlds/<editor>/native-interface.sop`. It declares the same

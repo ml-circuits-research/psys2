@@ -2,7 +2,7 @@
 // only when a problem first needs it. The library core does not depend on it: this module and the Z3 files are
 // separate assets published next to the bundle (docs/smt-z3.mjs, docs/vendor/z3-solver-<version>/).
 //
-//   import { z3Provider } from './smt-z3.mjs?v=1b8b1c1205';           // next to sopworld.mjs; fetches nothing yet
+//   import { z3Provider } from './smt-z3.mjs?v=c3f6f6acff';           // next to sopworld.mjs; fetches nothing yet
 //   const provider = z3Provider();
 //   const result = await world.compileRequest(problemSop, { provider });   // the first call loads Z3
 //
@@ -15,7 +15,7 @@
 // cache keeps them. The 39 MB WebAssembly file is stored gzipped (about 9 MB) and inflated with the
 // browser's DecompressionStream. One load serves every provider made from the same base.
 
-import { solveWithZ3 } from './z3-translate.mjs?v=a000b39d19';
+import { solveWithZ3 } from './z3-translate.mjs?v=5ed3a31d76';
 
 export const z3Version = '5.4.1';
 export const z3Base = new URL(`vendor/z3-solver-${z3Version}/`, import.meta.url).href;

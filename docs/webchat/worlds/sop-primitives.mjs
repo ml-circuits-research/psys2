@@ -21,17 +21,26 @@ const arc = ({ x, y, w, h }, opens = 'up') => ({
   left: `M${f1(x)} ${f1(y)} A${f1(w)} ${f1(h / 2)} 0 0 1 ${f1(x)} ${f1(y + h)}`, right: `M${f1(x + w)} ${f1(y)} A${f1(w)} ${f1(h / 2)} 0 0 0 ${f1(x + w)} ${f1(y + h)}`,
 }[opens]);
 
-function shapeSvg(box, shape, fill, points, orient, text) {
-  const solid = `fill="${fill}"`;
-  const stroke = `fill="none" stroke="${fill}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"`;
+// Optional styling a projection may state on a draw fact: outline (a colour drawn around a solid shape), round (the
+// corner radius of a rectangle), stroke (the width of a line or outline), dash (a line's dash pattern, numbers only),
+// anchor (start, middle or end of a text) and font, weight (a text's size and weight).
+function shapeSvg(box, shape, fill, points, orient, text, style = {}) {
+  const width = Number.isFinite(style.stroke) && style.stroke > 0 ? f1(style.stroke) : 2;
+  const outline = typeof style.outline === 'string' && /^#[0-9a-fA-F]{3,8}$|^[a-z]+$/.test(style.outline) ? ` stroke="${style.outline}" stroke-width="${width === 2 ? 1.5 : width}"` : '';
+  const solid = `fill="${fill}"${outline}`;
+  const dash = typeof style.dash === 'string' && /^[\d. ]+$/.test(style.dash) ? ` stroke-dasharray="${style.dash}"` : '';
+  const stroke = `fill="none" stroke="${fill}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash}`;
+  const round = Number.isFinite(style.round) && style.round > 0 ? ` rx="${f1(style.round)}"` : '';
+  const anchor = ['start', 'middle', 'end'].includes(style.anchor) ? ` text-anchor="${style.anchor}"` : '';
+  const font = Number.isFinite(style.font) && style.font > 0 ? f1(style.font) : 14, weight = style.weight === 'bold' ? ' font-weight="600"' : '';
   switch (shape) {
-    case 'rectangle': case 'square': return `<rect x="${f1(box.x)}" y="${f1(box.y)}" width="${f1(box.w)}" height="${f1(box.h)}" ${solid}/>`;
+    case 'rectangle': case 'square': return `<rect x="${f1(box.x)}" y="${f1(box.y)}" width="${f1(box.w)}" height="${f1(box.h)}"${round} ${solid}/>`;
     case 'circle': case 'oval': return `<ellipse cx="${f1(box.x + box.w / 2)}" cy="${f1(box.y + box.h / 2)}" rx="${f1(box.w / 2)}" ry="${f1(box.h / 2)}" ${solid}/>`;
     case 'triangle': return `<polygon points="${pts(triangle(box, orient.pointing))}" ${solid}/>`;
     case 'polygon': return points.length ? `<polygon points="${pts(points)}" ${solid}/>` : '';
     case 'line': return points.length ? `<polyline points="${pts(points)}" ${stroke}/>` : '';
     case 'arc': return `<path d="${arc(box, orient.opens)}" ${stroke}/>`;
-    case 'text': return `<text x="${f1(box.x)}" y="${f1(box.y)}" font-size="14" font-family="system-ui,sans-serif" fill="${fill}">${String(text ?? '').replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c])}</text>`;
+    case 'text': return `<text x="${f1(box.x)}" y="${f1(box.y)}" font-size="${font}"${weight}${anchor} font-family="system-ui,sans-serif" fill="${fill}">${String(text ?? '').replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c])}</text>`;
     default: return '';
   }
 }
@@ -67,7 +76,8 @@ export function renderPrimitives(world, types, frame = { w: 100, h: 100 }, opts 
     const move = `translate(${f1(num(fact, 'tx'))} ${f1(num(fact, 'ty'))}) scale(${f1(num(fact, 'scale'))}) translate(${f1(-num(fact, 'cx'))} ${f1(-num(fact, 'cy'))})`;
     const flip = side === 'right' ? `matrix(-1 0 0 1 ${frame.w} 0) ` : '';
     const tag = opts.select && fact.attrs[opts.select] ? ` data-select="${String(val(fact, opts.select)).replace(/[<>&"]/g, '')}"` : '';
-    return `<g transform="${flip}${move}"${tag}>${shapeSvg(box, shape, fill, line, orients.get(source) ?? {}, val(fact, 'text'))}</g>`;
+    const style = { outline: val(fact, 'outline'), round: num(fact, 'round'), stroke: num(fact, 'stroke'), dash: val(fact, 'dash'), anchor: val(fact, 'anchor'), font: num(fact, 'font'), weight: val(fact, 'weight') };
+    return `<g transform="${flip}${move}"${tag}>${shapeSvg(box, shape, fill, line, orients.get(source) ?? {}, val(fact, 'text'), style)}</g>`;
   });
   const size = opts.size ? ` width="${opts.size}" height="${f1((opts.size * frame.h) / frame.w)}"` : '';
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${frame.w} ${frame.h}"${size}>${out.join('')}</svg>`;

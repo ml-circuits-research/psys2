@@ -3,8 +3,8 @@
 // weighted by recency and novelty; this module only (1) states a tab's world to the library (its schema and the things the session holds, as facts), (2) renders a frame as
 // a sentence, and (3) keeps a host check that a change really changes something. There is NO generator of our own: no list of examples, no placeholders to fill.
 // Browser-safe: no `node:*` imports; the library module and the world registry are passed in.
-import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=e41f2d0f6b';
-import { languageWorld } from './compose-world.mjs?v=6d920a4190';
+import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=0f40a61dde';
+import { languageWorld } from './compose-world.mjs?v=b4629dc7d1';
 import { englishOf } from '../lang/en-generate.mjs?v=84a99c355e';
 import { prefetchSensitive, sensitiveMap, dropSensitive } from '../knowledge/sensitive.mjs?v=45d6df6ec8';
 
@@ -247,7 +247,7 @@ const packs = new Map();
 /** The language pack that composes requests (Romanian: src/lang/ro.mjs, loaded lazily), or null. */
 async function packOf(lang) {
   if (lang !== 'ro') return null;
-  if (!packs.has(lang)) packs.set(lang, import('../lang/ro.mjs?v=b94cd8e97a').then((m) => m.openLangRo()).catch(() => null));
+  if (!packs.has(lang)) packs.set(lang, import('../lang/ro.mjs?v=3a28c8f5ff').then((m) => m.openLangRo()).catch(() => null));
   return packs.get(lang);
 }
 

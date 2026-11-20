@@ -1,4 +1,4 @@
-@creation.module core.module name=app.creation exports=app.creation.role exports=app.creation.input exports=app.creation.entry exports=app.creation.parameter exports=app.creation.property exports=app.creation.lexical exports=app.creation.checked exports=app.creation.disposition exports=app.creation.consumed exports=app.creation.named exports=app.creation.result exports=app.creation.targetName exports=app.creation.nameGap
+@creation.module core.module name=app.creation exports=app.creation.role exports=app.creation.input exports=app.creation.entry exports=app.creation.parameter exports=app.creation.property exports=app.creation.lexical exports=app.creation.kindMention exports=app.creation.checked exports=app.creation.disposition exports=app.creation.consumed exports=app.creation.named exports=app.creation.result exports=app.creation.targetName exports=app.creation.nameGap
 @role.type core.type of=app.creation.role closed=true
 @role.concept core.slot of=app.creation.role key=concept kind=atom present=true
 @role.role core.slot of=app.creation.role key=role enum=kind enum=coextensive enum=name present=true
@@ -37,6 +37,9 @@
 @creation.lexical.value core.slot of=app.creation.lexical key=value kind=string present=true
 @creation.lexical.start core.slot of=app.creation.lexical key=start kind=integer min=0 present=true
 @creation.lexical.end core.slot of=app.creation.lexical key=end kind=integer min=1 present=true
+
+@creation.kindMention core.type of=app.creation.kindMention closed=true
+@creation.kindMention.entry core.slot of=app.creation.kindMention key=entry type=app.creation.entry present=true
 
 @creation.checked core.type of=app.creation.checked closed=true
 @creation.checked.entry core.slot of=app.creation.checked key=entry type=app.creation.entry present=true

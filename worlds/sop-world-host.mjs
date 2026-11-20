@@ -31,8 +31,25 @@ export function initialSopWorldState(base, { kinds, make = [] } = {}) {
   return { sop: instanceFacts(world, kinds), runtime: { view: {} } };
 }
 
-/** A world holding the current state, derived facts included (projection, observation). */
+// Derived state worlds by base and state: one command reads the same state several times (observation, compile,
+// run, the changed objects), so each later read forks the world already derived instead of deriving it again.
+const derived = new WeakMap(), DERIVED = 8;
+
+/** A world holding the current state, derived facts included (projection, observation). Callers may change it. */
 export function worldOf(base, state) {
+  const key = (state.sop ?? '') + '\u0000' + JSON.stringify(state.runtime?.view ?? {});
+  const memo = derived.get(base) ?? derived.set(base, new Map()).get(base);
+  if (memo.has(key)) { const world = memo.get(key); memo.delete(key); memo.set(key, world); return world.fork(); }
+  const world = deriveState(base, state);
+  memo.set(key, world);
+  if (memo.size > DERIVED) memo.delete(memo.keys().next().value);
+  return world.fork();
+}
+
+/** Forget the derived worlds of a base whose own facts changed (knowledge told into it later). */
+export function forgetDerived(base) { derived.delete(base); }
+
+function deriveState(base, state) {
   const world = base.fork();
   if (state.sop) { const told = world.tell(state.sop, { factsOnly: true }); if (!told.ok) throw Error('invalid-state'); }
   // The view keys (selection, ID display) are facts too, so rules can observe them.
@@ -75,7 +92,8 @@ function run(base, state, kinds, calls) {
     const act = read(call, 'act'), args = {};
     for (const [key, values] of Object.entries(call.attrs)) {
       if (['act', 'order', 'ref'].includes(key)) continue;
-      const one = (raw) => raw.startsWith('$') ? (made.get(ref(raw)) ?? ref(raw)) : ['kind', 'attr'].includes(key) ? (raw.startsWith('"') ? str(raw) : raw) : raw;
+      // A value naming the ref of a thing made earlier in this command (written bare, as a rule computes it) is that thing.
+      const one = (raw) => raw.startsWith('$') ? (made.get(ref(raw)) ?? ref(raw)) : made.has(raw.startsWith('"') ? str(raw) : raw) ? made.get(raw.startsWith('"') ? str(raw) : raw) : ['kind', 'attr'].includes(key) ? (raw.startsWith('"') ? str(raw) : raw) : raw;
       args[key] = values.length > 1 ? values.map(one) : one(values[0]);
     }
     if (act === 'make' && args.thing === undefined) {
@@ -138,9 +156,16 @@ export function createSopWorldHost({ base, kinds, state, instanceId, scope, tool
     const name = read(frame, 'id'), box = (fact) => ({ entity: read(fact, 'id'), scope: name, min_x: Number(read(fact, 'x0')), min_y: Number(read(fact, 'y0')),
       max_x: Number(read(fact, 'x1')), max_y: Number(read(fact, 'y1')), evidence: read(fact, 'evidence') ?? 'bounds' });
     const boxes = [box(frame), ...world.ofType('app.observe.box').map(box)];
-    const relations = world.ofType('app.observe.relation').map((fact) => ({ subject: read(fact, 'subject'), object: read(fact, 'object'), kind: read(fact, 'kind'), scope: name }));
+    const relations = world.ofType('app.observe.relation').map((fact) => ({ subject: read(fact, 'subject'), object: read(fact, 'object'), kind: read(fact, 'kind'), scope: name,
+      ...(read(fact, 'evidence') ? { evidence: read(fact, 'evidence') } : {}) }));
     const occupants = world.ofType('app.observe.box').filter((fact) => read(fact, 'occupant') === 'true').map((fact) => read(fact, 'id'));
-    return { frame: name, scope: name, container: name, bounds: name, boxes, relations, occupants, unknown: [] };
+    // Points the rules declare (app.observe.point: an end of a link, an anchor), each by its own entity name.
+    const points = world.ofType('app.observe.point').map((fact) => ({ entity: read(fact, 'id'), scope: name, x: Number(read(fact, 'x')), y: Number(read(fact, 'y')) }));
+    // app.observe.region: a part of an observed thing where others go (of, kind, its box, the kinds it holds).
+    const regions = world.ofType('app.observe.region').map((fact) => ({ entity: read(fact, 'of'), kind: read(fact, 'kind'),
+      holds: (fact.attrs.holds ?? []).map((raw) => (raw.startsWith('"') ? str(raw) : raw)), min_x: Number(read(fact, 'x0')), min_y: Number(read(fact, 'y0')),
+      max_x: Number(read(fact, 'x1')), max_y: Number(read(fact, 'y1')) }));
+    return { frame: name, scope: name, container: name, bounds: name, viewport: name, boxes, points, relations, occupants, regions, unknown: [] };
   };
   // The extent a command would give a new object: the command run on an empty copy, measured by the declared box of
   // what it creates (null when it creates nothing or is refused).

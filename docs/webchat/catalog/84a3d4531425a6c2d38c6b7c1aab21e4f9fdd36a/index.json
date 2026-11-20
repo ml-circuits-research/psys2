@@ -1,5 +1,5 @@
 {
- "version": "8ff8384a4aee",
+ "version": "ef41a334db21",
  "sopworld": "747b51e",
  "worlds": [
   {
@@ -4703,7 +4703,7 @@
      "id": "k.attributes/shards/narration",
      "path": "k.attributes/shards/narration.sop",
      "wires": 1339,
-     "bytes": 260022,
+     "bytes": 260024,
      "keys": [
       "a",
       "about",
@@ -35164,7 +35164,7 @@
      "id": "k.kinds/shards/relations-spatial2d",
      "path": "k.kinds/shards/relations-spatial2d.sop",
      "wires": 124,
-     "bytes": 22762,
+     "bytes": 22752,
      "keys": [
       "anchor_x",
       "anchor_y",
@@ -62910,8 +62910,8 @@
     {
      "id": "k.spatial2d/shards/policies",
      "path": "k.spatial2d/shards/policies.sop",
-     "wires": 10,
-     "bytes": 1745,
+     "wires": 22,
+     "bytes": 4077,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -95885,8 +95885,8 @@
     {
      "id": "w.lang.ro/shards/words-w.diagram",
      "path": "w.lang.ro/shards/words-w.diagram.sop",
-     "wires": 5,
-     "bytes": 1009,
+     "wires": 6,
+     "bytes": 1114,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -95897,7 +95897,8 @@
       "unknown-word w.lang.ro.word.w.diagram.diagram: w.lang.ro.word.w.diagram.diagram: means=w.diagram.diagram names no action, type, key or value of the matrix",
       "unknown-word w.lang.ro.word.w.diagram.node: w.lang.ro.word.w.diagram.node: means=w.diagram.node names no action, type, key or value of the matrix",
       "unknown-word w.lang.ro.word.w.diagram.edge: w.lang.ro.word.w.diagram.edge: means=w.diagram.edge names no action, type, key or value of the matrix",
-      "unknown-word w.lang.ro.word.w.diagram.group: w.lang.ro.word.w.diagram.group: means=w.diagram.group names no action, type, key or value of the matrix"
+      "unknown-word w.lang.ro.word.w.diagram.group: w.lang.ro.word.w.diagram.group: means=w.diagram.group names no action, type, key or value of the matrix",
+      "unknown-word w.lang.ro.word.w.diagram.member: w.lang.ro.word.w.diagram.member: means=w.diagram.member names no action, type, key or value of the matrix"
      ]
     },
     {
@@ -96505,7 +96506,13 @@
       "n",
       "x",
       "y",
-      "colour"
+      "colour",
+      "code",
+      "size",
+      "width",
+      "height",
+      "value",
+      "pinned"
      ],
      "words": [
       "node",
@@ -96534,7 +96541,12 @@
       "to",
       "label",
       "direction",
-      "diagram"
+      "diagram",
+      "code",
+      "n",
+      "colour",
+      "style",
+      "width"
      ],
      "words": [
       "edge",
@@ -96562,7 +96574,16 @@
       "label",
       "diagram",
       "shape",
-      "parent"
+      "parent",
+      "code",
+      "n",
+      "colour",
+      "layout",
+      "framed",
+      "scale",
+      "x",
+      "y",
+      "pinned"
      ],
      "words": [
       "group",
@@ -96572,10 +96593,27 @@
       "cluster",
       "lane"
      ]
+    },
+    {
+     "type": "w.diagram.member",
+     "acts": [
+      "make",
+      "remove",
+      "pick",
+      "ask"
+     ],
+     "attributes": [
+      "group",
+      "node"
+     ],
+     "words": [
+      "membership",
+      "member"
+     ]
     }
    ],
-   "wires": 37,
-   "bytes": 7370,
+   "wires": 70,
+   "bytes": 12396,
    "sources": [
     "hand-core-1"
    ],

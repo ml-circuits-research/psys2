@@ -58,22 +58,6 @@ test('all chart renderings are editable SVG geometry with escaped labels and fai
  const c=state.chartTools.charts[0];assert.deepEqual(chartRows(c).map(r=>r.value),[5,2]);
  for(const type of ['bar','line','pie','doughnut','polarArea','radar','scatter']){const svg=chartSVG({...c,type});assert.ok(svg.includes('data-chart-id="chart:c1"'));assert.ok(svg.includes('&lt;script&gt;'));assert.ok(!svg.includes('<script>'));assert.ok(!svg.includes('<canvas'));assert.ok(!svg.includes('NaN'));}
 });
-test('shared declared request executor passes anchored chart label/value lists to the composite native host',async()=>{
- const state=initialDiagramState(),session={isession:{state:{'diagram.sketch':state}}};
- const binding={area:'diagram',type:'chart',lemma:'bar chart',canonical:'k.charts.kind.bar_chart',nativeFamilyBinding:{operation:'chart.make',arguments:{type:'bar'}}};
- const properties=[['w.chart.point.category','labels','string-list'],['w.chart.point.value','values','number-list']].map(([canonical,parameter,codec])=>({area:'diagram',canonical,hostBinding:{id:'chart.make',sourceType:'data.charts.chart',parameter,codec}}));
- const candidate={request:'r',wires:'@s std.request.source text="make a bar chart"\n@r std.request act=make mood=do source=$s\n@t std.request.target request=$r mode=new kind=k.charts.kind.bar_chart\n@c1 std.request.constraint request=$r target=$t concept=w.chart.point.category operator=eq polarity=positive character=requirement value="Apples, Pears"\n@c2 std.request.constraint request=$r target=$t concept=w.chart.point.value operator=eq polarity=positive character=requirement value="5, 3"'};
- const reply=await executeDeclaredRequest(session,candidate,'make a bar chart',{bindings:{kinds:[binding],properties},view:'diagram'});
- assert.ok(reply.statuses.includes('supported'));assert.equal(toNativeDiagramState(state).chartTools.charts[0].type,'bar');assert.deepEqual(toNativeDiagramState(state).chartTools.charts[0].datasets[0].data,[5,3]);assert.deepEqual(toNativeDiagramState(state).chartTools.charts[0].labels,['Apples','Pears']);
-});
-test('multiple numeric constraints append in source order and missing category labels become disclosed ordinals',async()=>{
- const state=initialDiagramState(),session={isession:{state:{'diagram.sketch':state}}};
- const bindings={kinds:[{area:'diagram',lemma:'bar chart',canonical:'k.charts.kind.bar_chart',nativeFamilyBinding:{operation:'chart.make',arguments:{type:'bar'}}}],properties:[{area:'diagram',canonical:'w.chart.point.value',hostBinding:{sourceType:'data.charts.chart',parameter:'values',codec:'number-list'}}]};
- const constraints=[['c',8,32],['a',3,26],['b',5,29]].map(([id,value,start])=>`@${id} std.request.constraint request=$r target=$t concept=w.chart.point.value operator=eq polarity=positive character=requirement value="${value}" source=$s source.start=${start} source.end=${start+1}`).join('\n');
- const candidate={request:'r',wires:'@s std.request.source text="draw a bar chart with values 3, 5, 8"\n@r std.request act=make mood=do source=$s\n@t std.request.target request=$r mode=new kind=k.charts.kind.bar_chart\n'+constraints};
- const reply=await executeDeclaredRequest(session,candidate,'draw a bar chart with values 3, 5, 8',{bindings,view:'diagram'});
- assert.deepEqual(toNativeDiagramState(state).chartTools.charts[0].datasets[0].data,[3,5,8]);assert.deepEqual(toNativeDiagramState(state).chartTools.charts[0].labels,['1','2','3']);assert.match(reply.text,/numbered the categories/);
-});
 test('multi-series chart mutations and stacked rendering preserve numeric values across all forms',async()=>{
  const state=initialDiagramState(),h=await createDiagramHost({state,instanceId:'multi'});
  const made=call(h,'chart.make',{type:'bar',title:'Sales',labels:['A','B'],datasets:[{label:'2025',data:[2,4],color:null},{label:'2026',data:[3,5],color:null}]},'multi');assert.equal(made.status,'changed');

@@ -25,7 +25,9 @@ for(const [index,type]of valueTypes.entries()){
  if(candidates.length!==1)throw Error('execution-value-owner:'+type);
  const owner=candidates[0];if(owners.includes(owner.id))continue;owners.push(owner.id);
  world.load(`@execution.schema.${index} core.use world=${owner.id}`);
- for(const shard of owner.shards??[]){const file=shard.path??shard.id+'.sop';const text=record(file,owner.id,file===owner.vocabulary?'vocabulary':'knowledge');if(text)world.load(text);}
+ // Only the shards holding facts of a declared value type (and the vocabulary) are execution context.
+ const owned=valueTypes.filter(t=>owner.exports.includes(t)),holds=text=>owned.some(t=>new RegExp('^@\\S+ '+t.replace(/\./g,'\\.')+'( |$)','m').test(text));
+ for(const shard of owner.shards??[]){const file=shard.path??shard.id+'.sop',vocabulary=file===owner.vocabulary;if(!vocabulary&&!holds(read(file)))continue;const text=record(file,owner.id,vocabulary?'vocabulary':'knowledge');if(text)world.load(text);}
  // A vocabulary is an explicit dependency even when the catalog exposes it outside the shard list.
  if(owner.vocabulary){const text=record(owner.vocabulary,owner.id,'vocabulary');if(text)world.load(text);}
 }

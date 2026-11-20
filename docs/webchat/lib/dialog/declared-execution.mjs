@@ -1,16 +1,17 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=e29fafc7ef';
-import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=02d368797c';
-import { compareNativeReadings, compileNativeCapability } from './capability-plan-adapter.mjs?v=ecd97923cb';
-import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=4534239d2c';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=bd8049ff8b';
+import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=3d6ab2d4c7';
+import { compareNativeReadings, compileNativeCapability } from './capability-plan-adapter.mjs?v=ee471c7f01';
+import { readDegreeBases } from './degree-bases.mjs?v=4bfca5084d';
+import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=ac79ca0665';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=31ca151398';
-import { executeHistoryRequest } from './history-execution.mjs?v=c9126024ec';
-import { executeNativeQuery } from './native-query-execution.mjs?v=5a35e88d0b';
-import { executeNativeCapability } from './capability-plan-execution.mjs?v=8bd1b63e62';
-import { executionValueSource } from './execution-policy.mjs?v=82534c6cdf';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=7c213d7a3b';
-import { World, str } from '../vendor/sopworld/sopworld.mjs?v=d7baa85342';
-import SOURCE from './new-engine-source.mjs?v=958dfc6231';
+import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=a950f2f4ce';
+import { executeHistoryRequest } from './history-execution.mjs?v=1984da2167';
+import { executeNativeQuery } from './native-query-execution.mjs?v=ad2ae9365f';
+import { executeNativeCapability } from './capability-plan-execution.mjs?v=df8ed6639b';
+import { executionValueSource } from './execution-policy.mjs?v=e90a29683e';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=21d295982b';
+import { World, str } from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
+import SOURCE from './new-engine-source.mjs?v=786dd29259';
 let knowledge;
 const source = () => knowledge ??= World.fromJSON(SOURCE.snapshot, { library: SOURCE.schemaModules });
 export const inspectDeclaredExecutionSourceWorld = (options) => inspectCachedExecutionSource(knowledge, options);
@@ -54,7 +55,10 @@ export async function compareDeclaredReadings(session,candidates,{view,bindings,
   if(indices.length&&state&&bindings){
     const host=await createAreaHost(area,{state:structuredClone(state),instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
     const alternatives=indices.map(index=>candidates[index]),observation=host.observe();
-    const context={area,view,bindings,host,observation,focus:session.newEngineFocus?.[view],unapplied,readKnowledge:source};
+    const declared={area,view,bindings,host,observation,focus:session.newEngineFocus?.[view],unapplied,readKnowledge:source};
+    const previews=await readDegreeBases({candidates:alternatives,preflight:candidate=>compileNativeCapability(candidate,declared),
+      prepare:args=>createAreaHost(area,{args,state:structuredClone(state),instanceId:observation.instanceId,loader:session.engine?.loader,knowledge:session.engine?.knowledge})});
+    const context=previews?{...declared,previews}:declared;
     const sceneDefaults=await readSceneDefaults({host,knowledge:session.engine?.knowledge,candidates:alternatives,
       preflight:candidate=>compileNativeCapability(candidate,context)});
     result=compare(alternatives,{...context,sceneDefaults});

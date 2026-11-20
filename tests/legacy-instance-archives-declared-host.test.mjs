@@ -39,9 +39,9 @@ test('the historical fixture contains populated, unmodified published instances 
  assert.ok(calendar.meetings.some(event=>event.participants.length&&event.room&&event.calendar&&event.duration>0));assert.equal(Object.hasOwn(calendar,'selectedEvent'),false);
 });
 
-// Avatar, Calendar and Drawing now keep SOP area instances (w.face, w.meetings, w.drawing); an archive of their retired
-// native state is refused, never adopted.
-const retired=['ui.avatar','time.calendar','art.draw'];
+// Avatar, Calendar, Drawing and Diagram now keep SOP area instances (w.face, w.meetings, w.drawing, w.diagram); an
+// archive of their retired native state is refused, never adopted.
+const retired=['ui.avatar','time.calendar','art.draw','diagram.sketch'];
 for(const world of retired)test(`a published archive of the retired native ${world} state is refused and stays readable`,async()=>{
  const record=records.find(row=>row.world===world),original=JSON.stringify(record),target=session();
  await assert.rejects(restoreNativeInstances(target,[record]));

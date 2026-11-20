@@ -12,7 +12,10 @@ async function area() {
 }
 const drawn=(svg,code)=>(svg.match(new RegExp('data-select="'+code+'"','g'))??[]).length;
 
-test('a made object draws the parts of its k.objects drawing, in a free slot, with the colour on its largest part',async()=>{
+const objectsOf=(sop)=>[...sop.matchAll(/^@\S+ w\.drawing\.object .*$/gm)].map(([line])=>Object.fromEntries(['code','drawing','x','y','size']
+ .map(key=>[key,line.match(new RegExp(' '+key+'=(\\S+)'))?.[1]]).map(([k,v])=>[k,/^-?\d/.test(v)?Number(v):v])));
+
+test('a made object draws the parts of its k.objects drawing, in a free place, with the colour on its largest part',async()=>{
  const {state,run,view}=await area();
  assert.equal(run('@c drawing.object.make kind="house" color="#0000ff"').status,'changed');
  assert.equal(run('@c drawing.object.make kind="tree"').status,'changed');
@@ -21,7 +24,10 @@ test('a made object draws the parts of its k.objects drawing, in a free slot, wi
  assert.ok(objects.some(o=>o.in==='o1'&&o.kind==='roof'),'the parts are observed under their object');
  assert.equal(drawn(svg,'o1'),6);assert.equal(drawn(svg,'o2'),2);
  assert.match(svg,/<rect x="20" y="45" width="60" height="50" fill="#0000ff"\/>/,'the walls take the house colour');
- assert.match(state.sop,/drawing=tree x=250 y=350/,'the second object goes to the next free slot');
+ const [house,tree]=objectsOf(state.sop);
+ assert.ok(house.y>350&&tree.y>350,'both stand on the ground, below the horizon of the landscape page');
+ assert.ok(Math.abs(house.x-tree.x)>=(house.size+tree.size)/2,'the second object does not overlap the first');
+ assert.ok(house.size>=120&&tree.size>=120,'both are drawn at the size of their k.scenes size class (huge)');
 });
 
 test('change, part edits, groups and removal update the instance in place',async()=>{

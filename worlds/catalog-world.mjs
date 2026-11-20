@@ -6,7 +6,7 @@ import {World} from '../src/vendor/sopworld/sopworld.mjs';
 
 const MAX_MODULES = 128;
 
-export async function catalogWorld(readText, { modules, shardsOf = () => [], use = modules } = {}) {
+export async function catalogWorld(readText, { modules, shardsOf = () => [], use = modules, options = {} } = {}) {
   const index = JSON.parse(await readText('index.json'));
   const entries = new Map([...(index.worlds ?? []), ...(index.schemas ?? [])].map((entry) => [entry.id, entry]));
   const library = {}, pending = [...modules];
@@ -19,7 +19,8 @@ export async function catalogWorld(readText, { modules, shardsOf = () => [], use
     library[id] = await readText(entry.schema);
     for (const dependency of entry.depends ?? []) if (entries.has(dependency)) pending.push(dependency);
   }
-  const world = new World({ library });
+  // options: World options a caller declares (a derivation depth budget), passed through unchanged.
+  const world = new World({ ...options, library });
   const loaded = world.load(use.map((id, n) => `@catalog.use.${n} core.use world=${id}`).join('\n'));
   if (!loaded.ok) throw Error('catalog-load-refused');
   for (const id of modules) for (const path of shardsOf(entries.get(id))) {

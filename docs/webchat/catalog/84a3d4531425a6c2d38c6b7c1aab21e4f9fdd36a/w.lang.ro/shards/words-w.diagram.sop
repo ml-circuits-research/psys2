@@ -10,3 +10,4 @@
 @w.lang.ro.word.w.diagram.node core.word text="nod" means=w.diagram.node core.source="hand-core 1"
 @w.lang.ro.word.w.diagram.edge core.word text="linie" means=w.diagram.edge core.source="hand-core 1"
 @w.lang.ro.word.w.diagram.group core.word text="grup" means=w.diagram.group core.source="hand-core 1"
+@w.lang.ro.word.w.diagram.member core.word text="parte" means=w.diagram.member core.source="hand-core 1"

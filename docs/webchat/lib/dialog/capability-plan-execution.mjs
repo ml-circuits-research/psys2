@@ -1,12 +1,13 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=e29fafc7ef';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=bd8049ff8b';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=ecd97923cb';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=4534239d2c';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=ee471c7f01';
+import { readDegreeBases } from './degree-bases.mjs?v=4bfca5084d';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=ac79ca0665';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=bf6be98c4a';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=9e87f5a7be';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=b918cc7070';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=3df4fc1be1';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=9347caf45c';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=a75c5ef272';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=a7c984f56a';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=ac17f7579b';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -51,8 +52,12 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   const host = await createAreaHost(area, { state: nativeState, instanceId: instanceIdFor(session, area.world),
     loader: session.engine?.loader, knowledge: session.engine?.knowledge });
   const before = host.observe();
-  const context = {area,view,bindings,host,observation:before,
+  const declared = {area,view,bindings,host,observation:before,
     focus:focus ?? session.newEngineFocus?.[view],targetUnique,unapplied,readKnowledge};
+  const previews = compiledPlan ? null : await readDegreeBases({candidates:[candidate],
+    preflight:current=>compileNativeCapability(current,declared),
+    prepare:args=>createAreaHost(area,{args,state:structuredClone(nativeState),instanceId:before.instanceId,loader:session.engine?.loader,knowledge:session.engine?.knowledge})});
+  const context = previews ? {...declared,previews} : declared;
   let preliminary;
   const sceneDefaults = compiledPlan ? null : await readSceneDefaults({host,knowledge:session.engine?.knowledge,candidates:[candidate],
     preflight:current=>preliminary ??= compileNativeCapability(current,context)});

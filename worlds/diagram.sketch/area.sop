@@ -1,0 +1,31 @@
+# The Diagram tab as a SOP area (read by worlds/sop-area.mjs). The instance is a w.diagram world (nodes, edges,
+# groups and memberships); render-projection.sop lays it out and draws it, act-rules.sop compiles every native
+# Diagram command into std.acts calls (or an explicit refusal) and derives what a reader observes. k.colours turns
+# colour names into RGB and says which colours are dark. The layout derives deeply (levels by graph depth, then
+# rows, then routes), so the area asks for a derivation depth of 64.
+@area.types core.type of=app.area
+@area.rules.type core.type of=app.area.rules
+@area.make.type core.type of=app.area.make
+@area.command.type core.type of=app.area.command
+@area.choice.type core.type of=app.area.choice
+@area.constant.type core.type of=app.area.constant
+@area.draw.type core.type of=app.area.draw
+@area.offline.type core.type of=app.area.offline
+@area.control.type core.type of=app.area.control
+@area.field.type core.type of=app.area.field
+@area.lookup.type core.type of=app.area.lookup
+
+@diagram.area app.area world=diagram.sketch instance=w.diagram knowledge=k.colours scope="diagram.nodes-links-and-charts" frame.w=1000 frame.h=700 spatial=true depth=64
+@diagram.rules.1 app.area.rules area=$diagram.area file="render-projection.sop" n=1
+@diagram.rules.2 app.area.rules area=$diagram.area file="act-rules.sop" n=2
+@diagram.choice.colours app.area.choice area=$diagram.area input="diagram.colours" type=ui.diagram.colour key=name
+@diagram.draw app.area.draw area=$diagram.area draw=ui.diagram.draw fill=ui.diagram.fill point=ui.diagram.point orient=ui.diagram.orient select=slot
+
+@diagram.control.select app.area.control area=$diagram.area n=1 label="Selection" operation="diagram.node.select" param=ids many=true options=node
+@diagram.control.label app.area.control area=$diagram.area n=2 label="Label" operation="diagram.node.change" target=selected list=ids when=present options=none
+@diagram.field.label app.area.field control=$diagram.control.label n=1 param=label label="Label" input=text
+@diagram.control.colour app.area.control area=$diagram.area n=3 label="Colour" operation="diagram.node.change" param=colour target=selected list=ids when=present options=colour
+@diagram.control.size app.area.control area=$diagram.area n=4 label="Size" operation="diagram.node.change" param=size target=selected list=ids when=present options=size
+@diagram.control.link app.area.control area=$diagram.area n=5 label="Connect to" operation="diagram.link.make" param=to target=selected list=from when=present options=node
+@diagram.control.remove app.area.control area=$diagram.area n=6 label="Delete" operation="diagram.node.remove" target=selected list=ids when=present
+@diagram.control.clear app.area.control area=$diagram.area n=7 label="Clear diagram" operation="diagram.page.clear"

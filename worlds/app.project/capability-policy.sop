@@ -30,6 +30,28 @@
 @observed.property std.capability.property scope=?scope concept=?concept on=?on parameter=?parameter binding=?binding codec=?codec order=?order
 @observed.install core.rule when=$observed.mapping when=$observed.scope then=$observed.property
 
+# An observed measure (a size, a width, a duration) binds like an observed property, with plain values.
+@measure.mapping app.execution.observedMeasure concept=?concept sourceType=?on parameter=?parameter binding=?binding order=?order
+@measure.scope std.capability.operation on=?on scope=?scope
+@measure.property std.capability.property scope=?scope concept=?concept on=?on parameter=?parameter binding=?binding order=?order
+@measure.install core.rule when=$measure.mapping when=$measure.scope then=$measure.property
+
+# The catalog owns the scale of size (k.expect: tiny to huge, each with its size factor). A degree word
+# ("big", "small") scales the value the tool would otherwise choose by the factor of its step.
+@degree.source app.execution.values concept=?concept valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@degree.row k.expect.scale step=?step size_factor=?factor
+@degree.label core.calc fn=matches args=?step args="^[\\s\\S]*$" out=?label
+@degree.value std.capability.degree concept=?concept label=?label factor=?factor
+@degree.install core.rule when=$degree.source when=$degree.row with=$degree.label then=$degree.value
+
+# What the tool would choose without the request's value: the measures of the object a preview of the
+# compiled call creates (app.execution.preview), for the parameter its property binds.
+@base.preview app.execution.preview scope=?scope operation=?operation kind=?kind on=?on binding=?binding value=?value
+@base.tool std.capability.operation scope=?scope name=?operation on=?on
+@base.property std.capability.property scope=?scope on=?on parameter=?parameter binding=?binding
+@base.value std.capability.base scope=?scope operation=?operation kind=?kind parameter=?parameter value=?value
+@base.install core.rule when=$base.preview when=$base.tool when=$base.property then=$base.value
+
 # The catalog owns exact colour names and RGB values. Keep uppercase observations
 # comparable to the same values after normalizing both sides.
 @colour.source app.execution.values concept=?concept valueType="k.colours.colour" nameKey="name" valueKey="rgb"

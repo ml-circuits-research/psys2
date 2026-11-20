@@ -6,7 +6,7 @@ import {World, str} from '../src/vendor/sopworld/sopworld.mjs';
 import {catalogWorld} from './catalog-world.mjs';
 import {readNativeToolInterface} from './native-tool-interface.mjs';
 import {toolInvocationContext} from './native-tool-host.mjs';
-import {createSopWorldHost, initialSopWorldState, worldOf} from './sop-world-host.mjs';
+import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs';
 import {renderPrimitives} from './sop-primitives.mjs';
 
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };
@@ -31,7 +31,9 @@ export async function areaBase({ world, loader, readCatalog }) {
     const { area, owned, declarations } = declaration(text);
     const instance = read(area, 'instance'), knowledge = all(area, 'knowledge');
     const lookups = owned('app.area.lookup'), lookupWorlds = [...new Set(lookups.map((lookup) => read(lookup, 'world')))];
-    const base = await catalogWorld(readCatalog, { modules: [instance, ...knowledge, ...lookupWorlds], use: ['std.acts', instance, ...knowledge, ...lookupWorlds],
+    // An area whose rules derive deeply declares its derivation depth (depth=); otherwise the library's default.
+    const depth = Number(read(area, 'depth')), options = Number.isSafeInteger(depth) && depth > 0 ? { maxDepth: depth } : {};
+    const base = await catalogWorld(readCatalog, { modules: [instance, ...knowledge, ...lookupWorlds], use: ['std.acts', instance, ...knowledge, ...lookupWorlds], options,
       shardsOf: (entry) => knowledge.includes(entry?.id) ? (entry.shards ?? []).map((shard) => typeof shard === 'string' ? shard : shard.path) : [] });
     const actSchema = await loader.readFile('app.project', 'act-schema.sop');
     if (!base.load(actSchema).ok) throw Error('act-schema-refused');
@@ -89,6 +91,7 @@ async function ensureLookups(declared, state, args = {}) {
       declared.loadedShards.add(path);
       const told = declared.base.tell(text, { factsOnly: true });
       if (!told.ok) throw Error('lookup-shard-refused:' + path);
+      forgetDerived(declared.base);
     }
   }
 }
@@ -105,10 +108,11 @@ function choices({ base, owned }) {
   return values;
 }
 
-export async function createSopArea({ world, loader, readCatalog, state, instanceId, identityRegistry, interfaceSource, args }) {
+export async function createSopArea({ world, loader, readCatalog, state, instanceId, identityRegistry, interfaceSource, interfaceImports = {}, args }) {
   const declared = await areaBase({ world, loader, readCatalog });
   await ensureLookups(declared, state, args);
-  const toolInterface = readNativeToolInterface(interfaceSource).realize(choices(declared));
+  // interfaceImports: the native interfaces this one composes (app.native.compose module=...), by module.
+  const toolInterface = readNativeToolInterface(interfaceSource, { imports: interfaceImports }).realize(choices(declared));
   const host = createSopWorldHost({ base: declared.base, kinds: declared.kinds, state, instanceId, scope: read(declared.area, 'scope'), toolInterface, identityRegistry, spatialObservation: read(declared.area, 'spatial') === 'true' });
   return host;
 }
@@ -125,8 +129,14 @@ export async function initialSopAreaState(options) {
 
 /** What the tab shows: the area's declared primitive facts, drawn as they are. */
 export async function renderSopArea(options, state, opts) {
-  const declared = await areaBase(options), { types, select, frame } = drawTypes(declared);
-  return renderPrimitives(worldOf(declared.base, state), types, frame, { ...opts, select });
+  const declared = await areaBase(options), { types, select, frame } = drawTypes(declared), live = worldOf(declared.base, state);
+  return renderPrimitives(live, types, frameOf(live, frame), { ...opts, select });
+}
+
+/** The page the projection derives (app.observe.frame from the origin) when it declares one, else the declared frame. */
+function frameOf(live, frame) {
+  const [derived] = live.ofType('app.observe.frame'), w = Number(read(derived, 'x1')), h = Number(read(derived, 'y1'));
+  return derived && Number(read(derived, 'x0')) === 0 && Number(read(derived, 'y0')) === 0 && w > 0 && h > 0 ? { w, h } : frame;
 }
 
 /** The area's base once loaded (synchronous readers: a state projection for the view). */
@@ -153,7 +163,7 @@ export function projectSopArea(world, state, opts = {}) {
   const view = state.runtime?.view ?? {}, selected = view.selected ?? null, present = objects.some((object) => object.id === selected);
   const controls = declared.owned('app.area.control').sort((a, b) => Number(read(a, 'n')) - Number(read(b, 'n'))).map((control) => {
     const key = read(control, 'options'), when = read(control, 'when');
-    return { label: read(control, 'label'), operation: read(control, 'operation'), param: read(control, 'param') ?? null,
+    return { label: read(control, 'label'), operation: read(control, 'operation'), param: read(control, 'param') ?? null, many: read(control, 'many') === 'true',
       options: key === undefined ? [] : key === 'selected' ? options[selected] ?? [] : options[key] ?? [],
       target: read(control, 'target') ?? null, list: read(control, 'list') ?? null,
       fields: declared.declarations.ofType('app.area.field').filter((field) => field.attrs.control?.[0] === '$' + control.id)
@@ -162,5 +172,5 @@ export function projectSopArea(world, state, opts = {}) {
       available: read(control, 'target') !== 'selected' || (selected !== null && !all(control, 'except').includes(selected) && (when === undefined || (when === 'present') === present)) };
   });
   // The state itself travels with what is derived from it, so a projection canonicalizes back to its state.
-  return { sop: state.sop, runtime: state.runtime ?? { view: {} }, svg: renderPrimitives(live, types, frame, { ...opts, select }), objects, options, controls, selected };
+  return { sop: state.sop, runtime: state.runtime ?? { view: {} }, svg: renderPrimitives(live, types, frameOf(live, frame), { ...opts, select }), objects, options, controls, selected };
 }

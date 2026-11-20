@@ -1,6 +1,7 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
 import { compileNativeCapability } from './capability-plan-adapter.mjs';
+import { readDegreeBases } from './degree-bases.mjs';
 import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs';
 import { instanceIdFor } from './instance-identity.mjs';
 import { prepareNativeControlHost } from './native-control-preparation.mjs';
@@ -51,8 +52,12 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   const host = await createAreaHost(area, { state: nativeState, instanceId: instanceIdFor(session, area.world),
     loader: session.engine?.loader, knowledge: session.engine?.knowledge });
   const before = host.observe();
-  const context = {area,view,bindings,host,observation:before,
+  const declared = {area,view,bindings,host,observation:before,
     focus:focus ?? session.newEngineFocus?.[view],targetUnique,unapplied,readKnowledge};
+  const previews = compiledPlan ? null : await readDegreeBases({candidates:[candidate],
+    preflight:current=>compileNativeCapability(current,declared),
+    prepare:args=>createAreaHost(area,{args,state:structuredClone(nativeState),instanceId:before.instanceId,loader:session.engine?.loader,knowledge:session.engine?.knowledge})});
+  const context = previews ? {...declared,previews} : declared;
   let preliminary;
   const sceneDefaults = compiledPlan ? null : await readSceneDefaults({host,knowledge:session.engine?.knowledge,candidates:[candidate],
     preflight:current=>preliminary ??= compileNativeCapability(current,context)});

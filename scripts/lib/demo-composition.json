@@ -90,13 +90,10 @@
         "legend.sop"
       ],
       "schemaWorld": "pattern.diagram.sketch",
-      "sourceFiles": [
-        "instance-schema.sop"
-      ],
       "schemaFiles": [
         {
           "file": "instance-schema.sop",
-          "role": "canonical-instance-schema",
+          "role": "authoritative-state-schema",
           "completeStateSchema": true
         },
         {
@@ -113,16 +110,19 @@
         }
       ],
       "nativeInitializer": {
-        "module": "worlds/diagram.sketch/declared-host.mjs",
-        "export": "initialCanonicalDiagramState"
+        "module": "worlds/diagram.sketch/sop-diagram.mjs",
+        "export": "emptyDiagramState"
       },
       "nativeHost": {
-        "module": "worlds/diagram.sketch/declared-host.mjs",
-        "factory": "createCanonicalDiagramHost"
+        "module": "worlds/diagram.sketch/sop-diagram.mjs",
+        "factory": "createDiagramArea"
       },
       "runtimeModules": [
-        "worlds/diagram.sketch/arrows.mjs",
-        "worlds/data.charts/vector-svg.mjs"
+        "worlds/sop-area.mjs",
+        "worlds/sop-world-host.mjs",
+        "worlds/catalog-world.mjs",
+        "worlds/sop-primitives.mjs",
+        "worlds/diagram.sketch/area-sources.mjs"
       ]
     },
     "time.calendar": {

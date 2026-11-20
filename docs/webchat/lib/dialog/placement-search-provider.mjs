@@ -7,7 +7,7 @@
 // COOP/COEP when ISOLATE is on). Elsewhere, and in Node, no provider is returned and compileRequest stays
 // synchronous with the internal search, exactly as before. If Z3 fails to load, the provider declines and the
 // internal search answers; the result's provider attribute says which one solved it.
-import {z3Provider,z3Supported,z3Version} from '../vendor/sopworld/smt-z3.mjs?v=1b8b1c1205';
+import {z3Provider,z3Supported,z3Version} from '../vendor/sopworld/smt-z3.mjs?v=c3f6f6acff';
 
 export const Z3_BASE=`https://ml-circuits-research.github.io/soplang-words-lib/vendor/z3-solver-${z3Version}/`;
 let provider,lastLoad=null;

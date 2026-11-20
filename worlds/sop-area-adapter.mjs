@@ -16,7 +16,7 @@ export function canonicalAreaState(state) {
  * world: the tab's world id. interfaceSource: its native-interface SOP. sources: its area files ({'world/file': text}).
  * offline: the generated catalog subset ({path: text}, with its own index.json). instance: the instance module id.
  */
-export function sopAreaAdapter({ world, interfaceSource, sources, offline, instance }) {
+export function sopAreaAdapter({ world, interfaceSource, interfaceImports = {}, sources, offline, instance }) {
   const loader = { readFile: async (owner, file) => sources[owner + '/' + file] ?? null };
   const readOffline = async (file) => { if (!Object.hasOwn(offline, file)) throw Error('not-bundled:' + file); return offline[file]; };
   let readCatalog = null;
@@ -26,7 +26,7 @@ export function sopAreaAdapter({ world, interfaceSource, sources, offline, insta
     // A state that is not this area's carrier is refused, never read as an empty area.
     if (state === null || typeof state !== 'object' || typeof (state.sop ?? '') !== 'string' || Object.keys(state).some((key) => !['sop', 'runtime'].includes(key))) throw Error('invalid-area-state');
     if (state.sop) stateWorld(state);
-    const options = { world, interfaceSource, loader, readCatalog: readCatalog ?? readOffline };
+    const options = { world, interfaceSource, interfaceImports, loader, readCatalog: readCatalog ?? readOffline };
     if (!state.sop) Object.assign(state, await initialSopAreaState(options));
     return createSopArea({ ...options, state, instanceId, identityRegistry, args });
   }

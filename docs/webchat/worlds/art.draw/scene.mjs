@@ -7,8 +7,8 @@
 // object color, sh: lightness shift, f: fill override, t: stroke thickness in units, r: rotation in degrees }:
 //   rect/ellipse {x,y,w,h}   poly/line/curve {pts:[[x,y]...]}   arc {x,y,w,h,a0,a1} (radians, top half = PI..2*PI)
 
-import { THINGS, THING_WORDS, KIND_THINGS } from './things.catalog.mjs?v=d66cee3b49';
-import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=e41f2d0f6b';   // the one colour reader (k.values): no colour table in this world
+import { THINGS, THING_WORDS, KIND_THINGS } from './things.catalog.mjs?v=33b87c602f';
+import { colourName, colourHex } from '../../lib/knowledge/values.mjs?v=0f40a61dde';   // the one colour reader (k.values): no colour table in this world
 
 export const W = 1000, H = 700;
 // Things the user made by taking a picture apart or putting things together (spec 07): the parts are stored on the object (`shape`) and registered here by key, so every

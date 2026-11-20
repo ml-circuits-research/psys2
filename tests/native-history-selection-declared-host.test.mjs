@@ -71,8 +71,8 @@ test('an authored history request dispatches exactly its compiled call and rejec
 test('mixed history retains ordered SOP identities across memory reload and snapshot while dispatch leases remain local', async () => {
  const {createEngine}=await import('../src/dialog/index.mjs');
  const {createFsLoader}=await import('../src/loaders/fs-loader.mjs');
- const {initialDiagramState}=await import('../worlds/diagram.sketch/declared-host.mjs');
- const {toNativeDiagramState}=await import('../worlds/diagram.sketch/canonical-state.mjs');
+ const {emptyDiagramState:initialDiagramState}=await import('../worlds/diagram.sketch/sop-diagram.mjs');
+ const {diagramNodes}=await import('./diagram-state.mjs');
  const {parse,str}=await import('../src/vendor/sopworld/sopworld.mjs');
  const {inspectExecutionWorlds}=await import('../src/dialog/execution-world-inspection.mjs');
  const engine=await createEngine({loader:createFsLoader()});
@@ -115,11 +115,11 @@ test('mixed history retains ordered SOP identities across memory reload and snap
  assert.equal(str(moved.attrs.payload[0]),str(entries.at(-1).attrs.payload[0]));
  assert.equal(drawingObjects(reload.isession.state['art.draw']).length,1);
  assert.equal(drawingObjects(source.isession.state['art.draw']).length,2);
- assert.equal(toNativeDiagramState(reload.isession.state['diagram.sketch']).shapes.length,1);
+ assert.equal(diagramNodes(reload.isession.state['diagram.sketch']).length,1);
  assert.equal((await run(reload,'diagram','ui.history.undo')).ok,true);
  assert.equal((await run(reload,'draw','ui.history.redo')).ok,true);
  assert.equal(drawingObjects(reload.isession.state['art.draw']).length,2);
- assert.equal(toNativeDiagramState(reload.isession.state['diagram.sketch']).shapes.length,0);
+ assert.equal(diagramNodes(reload.isession.state['diagram.sketch']).length,0);
  const retained=reload.memoryJSON();
  const bad=structuredClone(retained);
  bad.history.sop=bad.history.sop.replace('view="draw"','view="calendar"');

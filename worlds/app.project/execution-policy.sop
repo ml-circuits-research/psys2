@@ -7,3 +7,5 @@
 @calendar.room std.capability.seed operation="calendar.meeting.add" parameter="room" source=value value=null phase=missing order=124
 @colour app.execution.values concept=colour valueType="k.colours.colour" nameKey="name" valueKey="rgb" codec=lookup
 @drawing.colour app.execution.observedProperty concept=colour sourceType="art.draw.object" parameter="color" binding="drawing.object.color" format=rgb codec=lookup order=0
+@size app.execution.values concept=size valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@drawing.size app.execution.observedMeasure concept=size sourceType="art.draw.object" parameter="size" binding="drawing.object.size" order=1

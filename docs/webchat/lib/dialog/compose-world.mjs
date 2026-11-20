@@ -2,11 +2,11 @@
 // The knowledge side of `std.compose` (spec 26): the world the library composes from (the bundled subset of the catalog: k.genres, k.interest, k.story and what it fills from, the
 // facts about the animals and the countries, and w.lang.en's generation templates; the live catalog adds to it, see `addCatalog`), the choice of a random topic by interest, and the
 // genre of a document type. The sentences are the library's (`discourseRealiser` over the language world's templates); the host's part is src/lang/en-generate.mjs. Browser-safe: no `node:*`.
-import { BUNDLED_ANIMALS } from '../knowledge/bundled-animals.mjs?v=877ad0a870';
-import { BUNDLED_INTEREST } from '../knowledge/bundled-interest.mjs?v=1033098eb5';
-import { BUNDLED_GENRES } from '../knowledge/bundled-genres.mjs?v=cf27891815';
-import { BUNDLED_GEO } from '../knowledge/bundled-geo.mjs?v=8cd2941014';
-import { BUNDLED_COMPOSE } from '../knowledge/bundled-compose.mjs?v=8e1365e88b';
+import { BUNDLED_ANIMALS } from '../knowledge/bundled-animals.mjs?v=9d1dead74b';
+import { BUNDLED_INTEREST } from '../knowledge/bundled-interest.mjs?v=d8c9295e71';
+import { BUNDLED_GENRES } from '../knowledge/bundled-genres.mjs?v=e5480e3d0b';
+import { BUNDLED_GEO } from '../knowledge/bundled-geo.mjs?v=b64ea3dfd4';
+import { BUNDLED_COMPOSE } from '../knowledge/bundled-compose.mjs?v=7dd08dc011';
 
 const worlds = new WeakMap();
 /** The library World holding k.interest and the bundled facts (built once per library). */

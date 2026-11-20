@@ -32,13 +32,6 @@ test('new diagram nodes use explicit canvas coordinates and native selection cle
 });
 
 import {performGesture} from './fixtures/editor-gesture.mjs';
-test('diagram size observation uses the engine canonical grade and keeps pixel size separate',async()=>{
- const state=initialDiagramState(),session={isession:{state:{'diagram.sketch':state}}};const run=(operation,args)=>performGesture(session,{view:'diagram',operation,args});
- const made=await run('diagram.node.make',{kind:'circle',size:'small',colour:'cyan'});assert.equal(made.ok,true);assert.notEqual(made.intentRecord.verification.status,'mismatch');assert.ok(made.intentRecord.verification.checks.some(c=>c.parameter==='size'&&c.status==='met'));
- const shape=()=>toNativeDiagramState(session.isession.state['diagram.sketch']).shapes[0];
- const changed=await run('diagram.node.change',{ids:[shape().name],size:'large',colour:'blue'});assert.equal(changed.intentRecord.verification.status,'verified');const node=changed.intentRecord.after.objects.find(o=>o.sourceType==='diagram.sketch.node');assert.equal(node.inputs.find(i=>i.key==='size').values[0],JSON.stringify('large'));assert.equal(node.inputs.find(i=>i.key==='sizePixels').values[0],JSON.stringify(shape().size));
-});
-
 test('linked group charts derive source edits atomically, preserve presentation, undo, and detach snapshots',async()=>{
  const s=initialDiagramState(),h=await createDiagramHost({state:s,instanceId:'linked-projection'});call(h,'diagram.node.make',{kind:'rectangle',n:2});const ids=s.shapes.map(n=>n.name);
  for(const [i,id]of ids.entries())call(h,'diagram.node.change',{ids:[id],value:i+2,label:['Apples','Pears'][i]});

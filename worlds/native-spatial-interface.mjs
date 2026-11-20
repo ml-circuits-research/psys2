@@ -38,6 +38,10 @@ function nativeGeometryWires(spatial,mappings,operations) {
   }));
  }
  for(const [index,point] of points.entries())rows.push(row('native.spatial.point.'+index,'k.spatial2d.point',observationFields(point)));
+ // Regions of observed things where others go (the water of a lake, the surface of a table), as the area declares them.
+ for(const [index,{entity,kind,holds=[],min_x,min_y,max_x,max_y,instance,revision,frame,scope}] of (spatial.regions??[]).entries())
+  if(atom.test(kind)&&[min_x,min_y,max_x,max_y].every(Number.isFinite))rows.push(row('native.spatial.region.'+index,'std.placement.region',
+   {entity:quote(entity),kind,holds:holds.map(quote),min_x,min_y,max_x,max_y,instance:quote(instance),revision:quote(revision),frame:quote(frame),scope:quote(scope)}));
  for(const [index,relation] of relations.entries())rows.push(row('native.spatial.relation.'+index,'k.spatial2d.relation',observationFields(relation)));
  return {wires:rows,bounds:names.get(spatial.bounds)};
 }
@@ -48,7 +52,9 @@ function nativeCapabilityWires(host,operations,mappings,frame) {
   const capability=operation.spatial;
   if(capability?.frame!==frame||operation.requires?.length)continue;
   const {kindKey,xKey,yKey,idsKey}=capability,tool='native.spatial.tool.'+index;
-  rows.push(row(tool,'std.placement.tool',{act:operation.act,operation:operation.id,kindKey,xKey,yKey,idsKey,originX:.5,originY:.5}));
+  // sizeKey: the argument that sets the larger side of what a make command draws, when the tool declares one.
+  const sizeKey=operation.act==='make'&&atom.test(capability.sizeKey??'')?capability.sizeKey:undefined;
+  rows.push(row(tool,'std.placement.tool',{act:operation.act,operation:operation.id,kindKey,xKey,yKey,idsKey,sizeKey,originX:.5,originY:.5}));
   for(const mapping of mappings){
    const constructor=operations.find(op=>op.id===mapping.nativeFamilyBinding.operation);
    if(!constructor?.spatial||constructor.on!==operation.on||operation.act==='make'&&constructor.id!==operation.id||

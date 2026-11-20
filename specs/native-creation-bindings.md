@@ -10,6 +10,14 @@ Dispatch verifies observable effects against its concrete control intent. Its tr
 
 The reader-routing diagnostic retains the original provider candidate array before contextual or creation projection. It never synthesizes a SOP proposal from incomplete decoded fields for display.
 
+## Creation grounding over the whole catalogue
+
+When the reader's structure for a single `make` request is incomplete, `src/dialog/project-create-action.mjs` grounds the stated noun (the kind word, or a `kind`/`shape` entry, or, when neither is stated, a coextensive `part_kind` entry: `worlds/app.project/creation-policy.sop`) against every published constructor lemma of the area through the declared `std.ground` policy: exact identity costs 0 and outranks spelling repairs and longer catalogue names ("lake" before "mountain lake", "fish" before "catfish"); the reader's target type is only a later criterion. The ranked alternatives stay in the trace and the reply offers undo. `src/dialog/lexical-grounding.mjs` keeps each library grounding request inside its wire budget by grounding in batches: every candidate admitted in a batch is carried, under its original identity, into the next one, so the final request ranks exactly the admitted set one unbounded request would.
+
+## Reader context as a prior
+
+The reader sees the previous message and the observed objects. When the reading conditioned on them stays unusable after the projections above, `src/dialog/reader-routing.mjs` asks the provider for the same text read without the previous message (`proposeIndependent`), then also without the observed objects (`proposeLiteral`), and routes the first usable reading. Every attempt is kept in `readerRouting.contextRetry` and a supported reply says the message was read on its own. A turn without effect leaves the area state, undo history and last action unchanged.
+
 ## Operational execution policy
 
 `worlds/app.project/execution-policy.sop` owns omitted-argument defaults and knowledge-value lookup descriptors. `src/dialog/execution-policy.mjs` queries those actual facts; the execution adapter has no operation-to-default or concept-to-source map. Explicit arguments override defaults, including explicit null/empty values. Duplicate parameter defaults or competing sources are errors. The declared `clock.now` host primitive supplies the current timestamp only when the policy requests it for a missing argument. Default notices are facts, so the trace/reply reports the actual assumptions.

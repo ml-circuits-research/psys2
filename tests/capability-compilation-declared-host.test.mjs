@@ -1,6 +1,6 @@
 import { World } from '../src/vendor/sopworld/sopworld.mjs';
 import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
-import {toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
+import {diagramNodes} from './diagram-state.mjs';
 import {drawingObjects,drawingState} from './drawing-state.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
@@ -8,7 +8,7 @@ import { readFile } from 'node:fs/promises';
 import { executeDeclaredRequest } from '../src/dialog/declared-execution.mjs';
 import { performGesture } from './fixtures/editor-gesture.mjs';
 import { routeNewEngine } from '../src/dialog/reader-routing.mjs';
-import { createDiagramHost, initialDiagramState } from '../worlds/diagram.sketch/declared-host.mjs';
+import { createDiagramArea as createDiagramHost, emptyDiagramState as initialDiagramState } from '../worlds/diagram.sketch/sop-diagram.mjs';
 import { initialDocumentState } from '../worlds/docs.editor/declared-host.mjs';
 import {emptyCalendarArea,calendarAreaStateWorld} from '../worlds/time.calendar/sop-calendar.mjs';
 import {str as sopText} from '../src/vendor/sopworld/sopworld.mjs';
@@ -79,10 +79,10 @@ test('Diagram compiled place and remove reach real tool mutations', async () => 
     graph({ act, mode: 'existing', kind: 'canonical.rectangle', conditions }), '', { view: 'diagram', bindings });
   const moved = await run('place', { x: 260, y: 270 });
   assert.equal(moved.statuses[0], 'supported', JSON.stringify(moved.trace));
-  assert.deepEqual(toNativeDiagramState(state).shapes.map(({x,y})=>[x,y])[0], [260, 270]);
+  assert.deepEqual(diagramNodes(state).map(({x,y})=>[x,y])[0], [260, 270]);
   assert.match(moved.trace.compiledSop, /operation="diagram.node.place"/);
   assert.equal((await run('remove')).statuses[0], 'supported');
-  assert.equal(toNativeDiagramState(state).shapes.length, 0);
+  assert.equal(diagramNodes(state).length, 0);
 });
 
 test('Document overwrite and Calendar coverage policies read declared SOP guards', async () => {
@@ -146,6 +146,6 @@ test('two reader-proposed meanings for one turn compile against the observed dia
  const r=await routeNewEngine(value,phrase,{view:'diagram'});
  assert.deepEqual(r.statuses,['supported'],JSON.stringify(r.trace));
  assert.match(r.trace.readingComparison,/std.interpret.reading/);
- assert.deepEqual(toNativeDiagramState(value.isession.state['diagram.sketch']).shapes.map(n=>[n.x,n.y]),[[100,120]]);
+ assert.deepEqual(diagramNodes(value.isession.state['diagram.sketch']).map(n=>[n.x,n.y]),[[100,120]]);
  assert.equal(value.newEngineUndo.length,1);
 });

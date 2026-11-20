@@ -38,7 +38,7 @@ function factWriter() {
   return { write, value, wires };
 }
 
-function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge, sceneDefaults }, concepts) {
+function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge, sceneDefaults, previews = [] }, concepts) {
   const { write, value, wires } = factWriter();
   const scope = write(NS + 'scope', {
     instance: quote(observation.instanceId), version: quote(observation.version), population: typeof observation.scope==='string' ? quote(observation.scope) : undefined,
@@ -63,15 +63,21 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
   const executionPolicy = executionPolicyWorld();
   const valueMappings = new Map(executionPolicy.ofType('app.execution.values').map((row) => [take(row, 'concept'), row]));
   const observed = executionPolicy.ofType('app.execution.observedProperty');
+  const measures = executionPolicy.ofType('app.execution.observedMeasure');
   const normalizedBindings = new Set(observed.filter((row) => row.attrs.format).map((row) => take(row, 'binding')));
   const codecs = { 'number-list': 'number.list', 'string-list': 'string.list' };
-  let propertyOrder = Math.max(-1, ...observed.map((row) => Number(take(row, 'order')))) + 1;
+  let propertyOrder = Math.max(-1, ...[...observed, ...measures].map((row) => Number(take(row, 'order')))) + 1;
   for (const row of bindings.properties || []) {
     const binding = row.hostBinding;
     if (row.area !== readerArea || !sourceTypes.has(binding?.sourceType)) continue;
     write(NS + 'property', { scope, concept: row.canonical, on: quote(binding.sourceType), parameter: quote(binding.parameter),
       binding: binding.id ? quote(binding.id) : undefined,
-      codec: codecs[binding.codec] || take(valueMappings.get(row.canonical), 'codec'), order: String(propertyOrder++) });
+      codec: codecs[binding.codec] || (take(valueMappings.get(row.canonical), 'codec') === 'lookup' ? 'lookup' : undefined), order: String(propertyOrder++) });
+  }
+  // The single-valued observations of the objects a preview of a compiled call creates (degree-bases.mjs).
+  for (const { operation, kind, objects } of previews) for (const object of objects) for (const field of object.inputs ?? []) {
+    if (field.values?.length === 1) write('app.execution.preview', { scope, operation: quote(operation), kind, on: quote(object.sourceType),
+      binding: quote(field.binding), value: field.values[0] });
   }
 
   const knowledgeTypes = new Set([...valueMappings].filter(([concept]) => concepts.has(concept))

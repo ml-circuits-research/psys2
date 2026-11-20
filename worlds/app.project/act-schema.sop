@@ -16,3 +16,5 @@
 @observe.frame.type core.type of=app.observe.frame
 @observe.box.type core.type of=app.observe.box
 @observe.relation.type core.type of=app.observe.relation
+@observe.point.type core.type of=app.observe.point
+@observe.region.type core.type of=app.observe.region

@@ -36,7 +36,8 @@ export function createSopAreaView(container, host = null, { world, view, editor 
   }
   const argsOf = (item, value) => {
     const args = {};
-    if (item.param) args[item.param] = value;
+    // A control that names many (an id list) sends the chosen one as a list of one.
+    if (item.param) args[item.param] = item.many && value !== undefined ? [value] : value;
     if (item.target === 'selected' && state?.selected) args[item.list ?? 'id'] = item.list === 'ids' ? [state.selected] : state.selected;
     return args;
   };
@@ -98,12 +99,15 @@ export function createSopAreaView(container, host = null, { world, view, editor 
   }
   stage.addEventListener('click', (event) => {
     const id = event.target.closest?.('[data-select]')?.getAttribute('data-select');
-    const select = state?.controls?.find((item) => item.param === 'id' && item.target === null);
-    if (id && select) control(select.operation, { id });
+    const select = state?.controls?.find((item) => item.param === 'id' && item.target === null)
+      ?? state?.controls?.find((item) => item.many && item.param && item.target === null && !item.fields?.length);
+    if (id && select) control(select.operation, select.param === 'id' ? { id } : { [select.param]: [id] });
   });
   return {
     update(next) { state = next ?? state; draw(); },
     setVisible(on) { visible = !!on; draw(); },
+    // The application shows and hides a tab's view (app.mjs ui.show/ui.hide).
+    show() { visible = true; draw(); }, hide() { visible = false; },
     mirror(target, px = 36) { mirrors.push({ el: target, px, svg: null }); draw(); },
     emit() {}, setSpeaking() {}, frame: () => null, animate() {},
     destroy() { destroyed = true; root.remove(); },
