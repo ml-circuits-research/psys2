@@ -1,6 +1,6 @@
 import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=368943b3c7';
 import {isAuthoredRequest} from './authored-request-tool.mjs?v=8d8757968f';
-import { interpretationPolicy } from './interpretation-policy.mjs?v=62633c2f6c';
+import { interpretationPolicy } from './interpretation-policy.mjs?v=41e7ad7c89';
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * C2 dialog pipeline (spec 06). Browser-safe.
@@ -331,7 +331,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=d80fca9d02')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=e52cb9f995')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

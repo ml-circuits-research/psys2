@@ -1,7 +1,7 @@
 // Prove a foreign head has a grounded equivalent before trying a structural projection.
 import {World, quote, serialize} from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=935f3c3eac';
-import {comparativeSteps} from './comparative-projection.mjs?v=37284b0964';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=ce5f87d0ba';
+import {comparativeSteps} from './comparative-projection.mjs?v=9386e7bcbf';
 import SCHEMA from '../../worlds/app.project/reader-head-schema-source.mjs?v=80e042aeb5';
 import POLICY from '../../worlds/app.project/reader-head-policy-source.mjs?v=9a0b47fbc1';
 

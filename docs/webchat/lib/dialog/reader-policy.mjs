@@ -1,8 +1,8 @@
 // Send runtime evidence through the authored SOP decision rules.
 import { World, parse, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
-import SOURCE from '../../worlds/app.project/reader-admission-policy-source.mjs?v=7ea6aa9e7f';
+import SOURCE from '../../worlds/app.project/reader-admission-policy-source.mjs?v=62625c9e08';
 
-import SCHEMA from '../../worlds/app.project/reader-admission-schema-source.mjs?v=28019636d0';
+import SCHEMA from '../../worlds/app.project/reader-admission-schema-source.mjs?v=ada3db0e0c';
 
 let loaded;
 function policyWorld(source) {

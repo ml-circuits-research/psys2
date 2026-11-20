@@ -3,11 +3,11 @@ import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.
 import { en } from '../lang/en.mjs?v=fcc7af993a';
 import { quote } from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=b923f51624';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=c18b3ce31a';
 import { readDegreeBases } from './degree-bases.mjs?v=3c62959cfd';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=d38b40aa45';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=ce8695be6e';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=b6a34b95e8';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=b1de56a32e';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=cc5fd5eab3';
 import { retainPropertyEffect } from './property-effect-evidence.mjs?v=e09d8803bc';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=c67c7927c2';

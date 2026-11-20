@@ -4,8 +4,8 @@
 // confidence at which a detected input language replaces the selected one. The routing code reads these facts; it
 // holds no order, bound or threshold of its own.
 import {World,str} from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
-import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=6666ea243a';
-import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=e064816122';
+import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=e539f05841';
+import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=1ce82dfefe';
 
 const MODULE='app.interpret';
 let loaded=null,policy=null;
@@ -35,7 +35,12 @@ export function interpretationPolicy(source=POLICY){
  const detect=world.ofType(MODULE+'.language').filter(row=>one(row,'role')==='detect');
  if(detect.length!==1)throw Error('invalid-interpretation-policy: exactly one language detection rule');
  const notes=Object.fromEntries(world.ofType(MODULE+'.note').map(row=>[dropKey(all(row,'drops')),one(row,'text')]));
- const result=Object.freeze({retries,notes,compare,coordination,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))}});
+ const defaults=world.ofType(MODULE+'.default').map(row=>({field:one(row,'field'),value:one(row,'value'),...(one(row,'when')?{when:one(row,'when')}:{})}));
+ const drops=Object.fromEntries(world.ofType(MODULE+'.drop').map(row=>[one(row,'reason'),one(row,'text')]));
+ const fallbacks=world.ofType(MODULE+'.fallback').map(row=>({step:one(row,'step'),order:Number(one(row,'order')),text:one(row,'text')})).sort((a,b)=>a.order-b.order);
+ if(new Set(fallbacks.map(f=>f.order)).size!==fallbacks.length)throw Error('invalid-interpretation-policy: fallback orders must be distinct');
+ const families=world.ofType(MODULE+'.family').map(row=>({area:one(row,'area'),type:one(row,'family'),kind:one(row,'kind')}));
+ const result=Object.freeze({retries,notes,compare,coordination,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families}});
  if(source===POLICY)policy=result;
  return result;
 }

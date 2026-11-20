@@ -3,7 +3,7 @@
 import {serializeRequestGraph,parse,str,assessSelectiveCalibration} from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=48825109bb';
 import {MODEL_SELECTION_SCORE} from './model-selection-score.mjs?v=ac3ac10191';
-import {compileReaderAdmission} from './reader-policy.mjs?v=6f246bc7a3';
+import {compileReaderAdmission} from './reader-policy.mjs?v=e8b674af4e';
 export const READER_SCORE_DEFINITION=MODEL_SELECTION_SCORE;
 export const READER_RUNTIME_IDENTITY_FIELDS=Object.freeze(['appBuildSha256','readerSha256','pipelineSha256','packetAdapterSha256','graphDecoderSha256','bindingsSha256','executorSha256','backendSha256','contextSerializationSha256']);
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
@@ -60,4 +60,18 @@ export function assessReaderProposal({proposal,text,provenance,admission,area,sc
  }catch{
   return {...scored,assessment,admitted:false,uncertain:false,mode:'closed',reason:'model-admission-policy-unavailable'};
  }
+}
+/** Partial admission (specs/semantic-frame.md §5): the consistent part of a reading the strict path refused. The graph
+ * checks of the complete path still apply; the decision is the reader admission policy's partial rule (no score, no
+ * calibration), so only reversible act classes are admitted. */
+export function assessPartialProposal({proposal,text,provenance}){
+ const {unresolved,...rest}=proposal??{},scored=scoreReaderProposal({...rest,coverage:{complete:true,graphProposal:true,truncated:false},failures:[]},text);
+ if(!scored.eligible)return {...scored,admitted:false,partial:true,assessment:null};
+ const evidence=['@proposal app.reader.evidence act='+scored.act,'calibration.configured=false','calibration.admitted=false','score.available=false',
+  'model.identity.present='+hash(provenance?.modelSha256),'uncertain=true','partial=true'];
+ try{
+  const decisionSop=compileReaderAdmission(evidence.join(' '));
+  const [{attrs}]=parse(decisionSop);
+  return {...scored,assessment:null,decisionSop,partial:true,admitted:attrs.admitted[0]==='true',uncertain:true,mode:str(attrs.mode[0]),reason:str(attrs.reason[0])};
+ }catch{return {...scored,assessment:null,partial:true,admitted:false,uncertain:false,mode:'closed',reason:'model-admission-policy-unavailable'};}
 }

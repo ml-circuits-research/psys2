@@ -11,8 +11,13 @@ const keys={request:['span','trigger','mood','act','target','constraints','quest
 // references.definite: the language world's definite determiners ("the", "that"); a relation anchor phrase is a kind
 // lemma, alone or after one of them. contextTarget: {kind,declaration} — the canonical kind an earlier, observed
 // reference resolution chose for a model-declared context target (fill=context); never derived here.
-export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparatives=[],references={definite:[]},contextTarget=null,budget=200000,maxBytes=4000000,decoderBudget=200000}={}){
- let raw,table,steps=0;const diagnostics=[],projected=[];
+// partial: the declared partial-admission defaults (interpretation-policy.sop app.interpret.default, read by
+// partial-admission.mjs) or null. With it, a field the reader left out takes its declared default and a role that
+// cannot be bound is dropped from its request and returned in `disclosed` instead of failing the whole reading;
+// only what leaves a request without an action or a theme stays a diagnostic (specs/semantic-frame.md §5).
+export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparatives=[],references={definite:[]},contextTarget=null,budget=200000,maxBytes=4000000,decoderBudget=200000,partial=null}={}){
+ let raw,table,steps=0;const diagnostics=[],projected=[],disclosed=[],defaulted=[];
+ const fallback=(field,when)=>{const rows=partial?.defaults?.filter(d=>d.field===field&&(d.when===undefined||d.when===when))??[];return (rows.find(d=>d.when!==undefined)??rows[0])?.value;};
  const fail=(reason,path=[])=>{throw {reason,path};};
  const tick=(n=1)=>{steps+=n;if(steps>budget)fail('bridge-budget');};
  const issue=(reason,path)=>diagnostics.push({reason,path});
@@ -37,8 +42,10 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
   for(const row of table.families??[]){tick();if(!row||!['area','type','canonical','sourceWire','sourceWorld','moduleVersion'].every(k=>typeof row[k]==='string'&&row[k])||!hash(row.sourceSnapshotSHA)||row.alignment?.kind!=='explicit-raw-family-identity')fail('invalid-family-binding-record');}
   if(!Array.isArray(raw.requests)||raw.requests.length>32||raw.requestCount!==raw.requests.length||!Number.isSafeInteger(raw.requestCount))issue('unresolved-or-overflow-request-count',['requestCount']);
   if(!Array.isArray(raw.requests)||raw.requests.length>32)fail('request-budget');
-  if(raw.coverage?.complete!==true||raw.coverage?.truncated!==false)issue('incomplete-model-coverage',['coverage']);
-  if(raw.unresolved!==undefined&&(!Array.isArray(raw.unresolved)||raw.unresolved.length))issue('unresolved-model-output',['unresolved']);
+  // In partial mode the reader's own unresolved heads are disclosed by the caller; what they left is bridged below.
+  if(!partial&&(raw.coverage?.complete!==true||raw.coverage?.truncated!==false))issue('incomplete-model-coverage',['coverage']);
+  if(partial&&raw.coverage?.truncated!==false)issue('incomplete-model-coverage',['coverage']);
+  if(!partial&&raw.unresolved!==undefined&&(!Array.isArray(raw.unresolved)||raw.unresolved.length))issue('unresolved-model-output',['unresolved']);
   const sourceChars=Array.from(raw.source.text),ranges=new Map(),usedRanges=new Set();tick(sourceChars.length);
   for(const r of raw.ranges??[]){shape(r,['path','range'],['ranges']);if(!Array.isArray(r.path)||r.path.some(x=>typeof x!=='string')||!Array.isArray(r.range)||r.range.length!==2||!r.range.every(Number.isSafeInteger)||r.range[0]<0||r.range[1]>sourceChars.length||r.range[0]>=r.range[1])fail('invalid-predicted-range');const key=JSON.stringify(r.path);if(ranges.has(key))fail('duplicate-predicted-range');ranges.set(key,r.range);}
   const locate=(segment,literal,base,path,within)=>{
@@ -70,10 +77,16 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
     if(!range){unresolved('missing-or-ambiguous-field-anchor',path);return;}
     evidence.push({path,ranges:[range],origin:declaration?'declaration':'text',...(declaration?{declaration}:{})});
    };
-   for(const field of ['act','mood'])if(has(original,field))label[field]=original[field];else unresolved('missing-annotated-field',[field]);
-   anchor(['act'],original.trigger,null,false,['trigger']);
-   const target=original.target??{};shape(target,keys.target,[...basePath,'target']);const t={id:tid};label.targets.push(t);
-   if(['new','existing','bound'].includes(target.mode))t.mode=target.mode;else unresolved('missing-target-mode',['targets',tid,'mode']);
+   const target=original.target??{};
+   for(const field of ['act','mood']){
+    const value=has(original,field)?original[field]:fallback(field,field==='act'&&target.mode?'target.'+target.mode:undefined);
+    if(value!==undefined){label[field]=value;if(!has(original,field))defaulted.push({request:index,field,value});}else unresolved('missing-annotated-field',[field]);
+   }
+   // Partial mode: an act without its own trigger span is anchored on the whole request span (its evidence is the request).
+   anchor(['act'],original.trigger,null,!!partial&&!original.trigger,['trigger']);
+   shape(target,keys.target,[...basePath,'target']);const t={id:tid};label.targets.push(t);
+   if(['new','existing','bound'].includes(target.mode))t.mode=target.mode;
+   else{const value=fallback('mode',label.act?'act.'+label.act:undefined);if(value){t.mode=value;defaulted.push({request:index,field:'mode',value});}else unresolved('missing-target-mode',['targets',tid,'mode']);}
    const kind=lookup('kinds',{area:raw.area,type:target.type,lemma:target.kind});
    const family=target.mode!=='bound'&&!has(target,'kind')&&!has(target,'kind_span')&&typeof target.type==='string'?lookup('families',{area:raw.area,type:target.type}):null;
    const contextual=contextTarget&&target.fill==='context'&&!has(target,'kind')&&!has(target,'kind_span')&&!has(target,'name_span');
@@ -134,10 +147,12 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    for(const [ci,condition]of conditions.entries()){
     if(paired.has(ci))continue;
     tick();shape(condition,keys.constraint,[...basePath,'constraints',ci]);const cid=`c${index}_${ci}`,c={id:cid,target:tid},path=['constraints',cid];label.constraints.push(c);
-    for(const field of ['phase','operator','character','polarity'])if(has(condition,field))c[field]=condition[field];else unresolved('missing-annotated-field',[...path,field]);
+    for(const field of ['phase','operator','character','polarity']){const value=has(condition,field)?condition[field]:fallback(field);if(value!==undefined){c[field]=value;if(!has(condition,field))defaulted.push({request:index,field,value,constraint:cid});}else unresolved('missing-annotated-field',[...path,field]);}
     if(phase[c.phase])phase[c.phase].push([cid,condition]);
     const prop=lookup('properties',{area:raw.area,key:condition.key});
     if(prop){c.concept=prop.canonical;anchor([...path,'concept'],condition.value_span,prop.sourceWire,true,['constraints',String(ci),'value_span']);}else unresolved('unresolved-canonical-property-binding',[...path,'concept']);
+    // A region named by a parameter that takes region names (its declared closed list holds the value) is that parameter's value.
+    if(prop&&Array.isArray(prop.classValues)&&prop.classValues.includes(condition.value)&&c.operator==='region')c.operator='eq';
     // A comparative without a number (operator=delta step=more|less) becomes the declared factor of its step on the
     // value the target has now; the raw value word is only evidence of the step.
     const steps=prop&&condition.operator==='delta'&&typeof condition.step==='string'&&!['measure','measure_span','unit'].some(k=>has(condition,k))
@@ -167,9 +182,12 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
       }else{
        const identity=typeof literal==='string'&&literal.length>0&&literal===condition.value;
        const normalization=identity?null:lookup('valueNormalizations',{area:raw.area,key:condition.key,canonical:prop.canonical,source:literal,value:condition.value,valueKind:prop.valueKind});
+       // A property whose native parameter declares a closed value list (classValues, declared-bindings.mjs) takes the
+       // reader's class value from that list; the mention is its evidence and the parameter's declaration its proof.
+       const declaredClass=!identity&&!normalization&&Array.isArray(prop.classValues)&&prop.classValues.includes(condition.value)&&typeof literal==='string'&&literal.length>0;
        // The request graph takes a degree or region value as an unquoted vocabulary name (std.request).
        const kind=['degree','region'].includes(condition.operator)?'literal':prop.valueKind;
-       if(identity||normalization){c.value={kind,value:condition.value};anchor([...path,'value'],literal,normalization?.sourceWire??null,false,['constraints',String(ci),supplied?'value_span':'value']);}
+       if(identity||normalization||declaredClass){c.value={kind,value:condition.value};anchor([...path,'value'],literal,normalization?.sourceWire??(declaredClass?prop.sourceWire:null),false,['constraints',String(ci),supplied?'value_span':'value']);}
        else unresolved('unresolved-source-value-normalization',[...path,'value']);
       }
      }else unresolved('unresolved-value-representation',[...path,'value']);
@@ -198,11 +216,73 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
     if(!body&&and){body=`g${index}_body`; (label.groups??=[]).push({id:body,operator:'and',members});}
     if(body){const id=`collection${index}`,collection={id,mode:'existing'};for(const f of ['kind','name','determiner'])if(has(t,f)){collection[f]=t[f];delete t[f];}for(const e of evidence)if(e.path[0]==='targets'&&e.path[1]===tid)e.path[1]=id;if(!has(collection,'kind'))unresolved('unresolved-canonical-kind-binding',['targets',id,'kind']);label.targets.push(collection);const qid=`q${index}`;label.quants=[{id:qid,kind:quant,target:id,bind:tid,body}];label.root=qid;}else unresolved('quantifier-body-closure-not-projected',['quants']);
    }else if(t.mode==='bound'||quant!==undefined)unresolved('quantifier-binder-not-projected',['targets',tid]);
+   if(partial&&diagnostics.length>start){
+    const own=diagnostics.splice(start);
+    diagnostics.push(...dropUnbound(label,own,{index,original,conditions,tid,span,mentionOf:literal=>typeof literal==='string'&&literal?literal:null,disclosed}));
+   }
    if(diagnostics.length>start)label.unresolved=diagnostics.slice(start).map(({reason,path})=>({reason,path:path.slice(2)}));
   }
-  for(const key of ranges.keys())if(!usedRanges.has(key))issue('unconsumed-predicted-range',JSON.parse(key));
+  if(!partial)for(const key of ranges.keys())if(!usedRanges.has(key))issue('unconsumed-predicted-range',JSON.parse(key));
   const packet={format:'psys2.structural-predictions/1',source:raw.source,model:raw.model,coverage:{complete:diagnostics.length===0,truncated:false},hypotheses:[{requests:projected}]};
   const decoded=decodeModelGraphs(packet,{budget:decoderBudget,maxBytes});
-  return {raw,packet,decoded,diagnostics,bindingSha256,steps,executable:false};
+  return {raw,packet,decoded,diagnostics,bindingSha256,steps,executable:false,...(partial?{disclosed,defaulted}:{})};
  }catch(error){return {raw:raw??null,packet:null,decoded:null,diagnostics:[...diagnostics,{reason:error.reason??'invalid-bridge-data',path:error.path??[]}],bindingSha256:bindingSha256??null,steps,executable:false};}
+}
+
+// Partial admission of one projected request (specs/semantic-frame.md §5): every issue of the request is either a role
+// that can be dropped (a constraint, a relation and its anchor, a count, an ordinal, a name, a reference detail, a turn)
+// — removed from the label and disclosed with its source text — or one that leaves the request without an action, a
+// theme or its source, which stays a diagnostic. Returns the remaining (fatal) diagnostics.
+function dropUnbound(label,issues,{index,original,conditions,tid,disclosed}){
+ const fatal=[],dropC=new Set(),dropT=new Set();
+ // One disclosure per dropped role: the first reason found for it names why.
+ const say=(reason,role,text,extra={})=>{if(!disclosed.some(d=>d.request===index&&d.role===role&&(extra.constraint?d.constraint===extra.constraint:d.text===text)))disclosed.push({request:index,reason,role,...(text?{text}:{}),...extra});};
+ const conditionText=cid=>{const m=/^c\d+_(\d+)$/.exec(cid);const c=m?conditions[Number(m[1])]:null;return c?.value_span??c?.value??c?.key??null;};
+ for(const issue of issues){
+  const {reason,path}=issue;
+  // Range bookkeeping of the raw envelope (string request index) and fields outside the contract carry no role of their own.
+  if(path[0]==='requests'&&typeof path[1]==='string'||reason==='unsupported-raw-field')continue;
+  if(path[0]!=='requests'||path[1]!==index){fatal.push(issue);continue;}
+  const rel=path.slice(2);
+  if(rel[0]==='constraints'&&rel[1]){dropC.add(rel[1]);say(reason,'constraint',rel[1].startsWith('count')?original.target?.count_span:conditionText(rel[1]),{constraint:rel[1],key:conditions[Number(/_(\d+)$/.exec(rel[1])?.[1])]?.key});continue;}
+  if(rel[0]==='constraints'){say(reason,'relation',null);continue;}
+  if(rel[0]==='targets'&&rel[1]!==tid&&rel[1]?.startsWith('t')){dropT.add(rel[1]);continue;}
+  if(rel[0]==='targets'&&rel[1]===tid){
+   const field=rel[2];
+   if(field==='kind'||field==='mode'){fatal.push(issue);continue;}
+   if(field==='count'){say(reason,'count',original.target?.count_span??null);continue;}
+   if(field==='ordinal'){say(reason,'ordinal',original.target?.ordinal??null);continue;}
+   if(field==='name'){const t=label.targets.find(x=>x.id===tid);if(t)delete t.name;label.evidence.splice(0,label.evidence.length,...label.evidence.filter(e=>!(e.path[0]==='targets'&&e.path[1]===tid&&e.path[2]==='name')));say(reason,'name',original.target?.name_span??null);continue;}
+   if(field==='selector'){const t=label.targets.find(x=>x.id===tid),selected=label.constraints.filter(c=>c.phase==='selector');for(const c of selected.slice(1))dropC.add(c.id);if(t&&selected[0])t.selector=selected[0].id;say(reason,'selector',original.target?.description_span??null);continue;}
+   // A reference the reader could not tie (context, population, description without predicate, quantifier): the
+   // target keeps its kind and the declared default reference (the focused or most recent object) applies.
+   say(reason,'reference',original.target?.description_span??original.target?.kind_span??null);continue;
+  }
+  if(rel[0]==='after'){label.after=index>0?['r'+(index-1)]:[];continue;}
+  if(rel[0]==='turn'){delete label.turn;say(reason,'turn',null);continue;}
+  if(rel[0]==='quants'){say(reason,'quantifier',original.target?.quantifier??null);continue;}
+  if(rel[0]==='queries'&&label.mood!=='ask'&&label.act!=='answer'){say(reason,'question',null);continue;}
+  fatal.push(issue);
+ }
+ // A relation whose anchor cannot be bound is dropped with its anchor.
+ for(const aid of dropT){for(const c of label.constraints)if(c.goal===aid){dropC.add(c.id);say('unresolved-anchor-reference','constraint',conditionText(c.id),{constraint:c.id});}}
+ pruneLabel(label,dropC,dropT);
+ return fatal;
+}
+/** Remove constraints and targets from a projected request with their evidence, groups and root (partial admission). */
+export function pruneLabel(label,dropC,dropT=new Set()){
+ for(const c of label.constraints)if(c.goal&&dropC.has(c.id))dropT.add(c.goal);
+ if(dropC.size||dropT.size){
+  label.constraints=label.constraints.filter(c=>!dropC.has(c.id));
+  label.targets=label.targets.filter(t=>!dropT.has(t.id));
+  const gone=p=>p[0]==='constraints'&&dropC.has(p[1])||p[0]==='targets'&&dropT.has(p[1]);
+  label.evidence.splice(0,label.evidence.length,...label.evidence.filter(e=>!gone(e.path)));
+  for(const g of label.groups??[])g.members=g.members.filter(m=>!dropC.has(m));
+  if(label.groups){const empty=new Set(label.groups.filter(g=>!g.members.length).map(g=>g.id));label.groups=label.groups.filter(g=>g.members.length);if(!label.groups.length)delete label.groups;for(const t of label.targets)if(empty.has(t.selector)||dropC.has(t.selector))delete t.selector;}
+  for(const t of label.targets)if(dropC.has(t.selector))delete t.selector;
+  if(label.quants&&label.quants.some(q=>dropC.has(q.body)))delete label.quants;
+  if(label.root&&(dropC.has(label.root)||!label.quants&&String(label.root).startsWith('q'))){delete label.root;}
+  if(!label.root&&!label.quants){const results=label.constraints.filter(c=>c.phase==='result');const grouped=(label.groups??[]).find(g=>g.id.endsWith('_body'));if(grouped)label.root=grouped.id;else if(results.length===1)label.root=results[0].id;}
+ }
+ return label;
 }

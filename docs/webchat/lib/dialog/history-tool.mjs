@@ -1,6 +1,6 @@
 // The concrete session journal owns restoration. The compiler supplies one observed head.
 import {parse, quote, serialize, str} from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=d38b40aa45';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=ce8695be6e';
 import {historyHeads,stageHistoryMove} from './history-journal.mjs?v=368943b3c7';
 import {readToolInvocation} from '../../worlds/native-tool-host.mjs?v=48825109bb';
 import {discardPlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=3e0d29f7be';
