@@ -9,7 +9,7 @@ import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-ca
 import {invokeObservedNativeTool} from './native-tool-activity.mjs';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs';
-import {en} from '../lang/en.mjs';
+import {say,counted,andList} from './reply-sentences.mjs';
 import {placementHypotheses,placementDisclosure,reachesPlanned} from './placement-default-policy.mjs';
 import {identityConcepts} from './capability-plan-adapter.mjs';
 import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs';
@@ -73,9 +73,7 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
  budget.tick('spatial-placement.anchor-hypothesis');   // recursion: once, for the anchor hypothesis (options.anchorMade)
  const {bindings,view}=options;let anchorRule=null;
  const area=NATIVE_AREAS[view],state=area&&session.isession.state[area.world];
- const fail=(reason,details={})=>reply(reason==='stale-observation'
-  ?'The scene changed before I could apply the placement.'
-  :'I could not apply the requested placement. Nothing changed.',false,{reason,reading:candidate,...details});
+ const fail=(reason,details={})=>reply(say(reason==='stale-observation'?'placement.stale':'placement.refused'),false,{reason,reading:candidate,...details});
  if(!state||!bindings)return fail('spatial-instance-unavailable');
  const started=performance.now();
  let host,spatial,sop,proposal,hypotheses=null,solver=null;
@@ -208,13 +206,13 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
  const trace={assessment:receipt.status,receipt,reading:candidate,placement:sop,solver,effectVerification:verification,observedBounds:bounds,geometryVerified,controlIntent:result.sop,
   ...(hypotheses?{hypotheses,uncertainty:hypotheses.used?['created-absent-target']:[]}:{})};
  const changed=receipt.status==='changed',worldState={[area.world]:structuredClone(state)},effects=changed?[{operation:operation.id}]:[];
- const observedLocation=bounds?' at ('+((bounds.min_x+bounds.max_x)/2)+', '+((bounds.min_y+bounds.max_y)/2)+')':'';
+ const observedLocation=bounds?say('placement.at',{x:(bounds.min_x+bounds.max_x)/2,y:(bounds.min_y+bounds.max_y)/2}):'';
  // A kind drawn as another (a stand-in or its closest drawable relative): the reply keeps the kind asked for.
  const asked=read(parse(candidate.wires).find(wire=>wire.type==='std.request.target'&&read(wire,'mode')==='new'),'kind');
  const substituted=operation.act==='make'?lemmasOf(asked).map(kind=>drawnAs(target,kind)).find(Boolean):null;
- const effect=target?(operation.act==='make'?'Created ':'Moved ')+(substituted?.kind??target.kind)+' '+target.id+observedLocation+'. '+(substituted?substituted.note+' ':''):'';
+ const effect=target?say(operation.act==='make'?'placement.created':'placement.moved',{kind:substituted?.kind??target.kind,id:target.id,at:observedLocation})+' '+(substituted?substituted.note+' ':''):'';
  if(!target||!geometryVerified||verification.status==='mismatch'){
-  const message=effect+'The observed geometry differs from the compiled placement.'+(changed?' You can undo this change.':'');
+  const message=effect+say('placement.mismatch')+(changed?' '+say('placement.undo'):'');
   return reply(message,false,trace,worldState,effects);
  }
  session.newEngineFocus={...session.newEngineFocus,[view]:target.id};
@@ -225,10 +223,10 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
  const loose=(proposal.attrs?.relaxed??[]).map(str);
  // A fallback of the placement method (no room on the stated side within the page): its declared disclosure.
  const fallback=read(proposal,'fallback'),disclosed=fallback?placementDisclosure(fallback,{relation:read(relation,'relation'),anchor,direction:read(winner,'direction')}):'';
- const note=(participants.size>1&&anchor?' I used '+anchor+' as the anchor.':'')+(disclosed?' '+disclosed:'')+
-  (loose.length?' No place keeps it close for every relation, so I placed it as close as the scene allows ('+loose.join(', ')+').':'')+
-  (hypotheses?.used==='creating'?' There was no '+target.kind+' on the page, so I drew a new one.':'');
- const message=changed?effect.trim()+note+' You can undo this change.':target.id+' is already'+observedLocation+'.'+note;
+ const note=(participants.size>1&&anchor?' '+say('placement.anchor',{anchor}):'')+(disclosed?' '+disclosed:'')+
+  (loose.length?' '+say('placement.relaxedOne',{relations:loose.join(', ')}):'')+
+  (hypotheses?.used==='creating'?' '+say('placement.createdAbsent',{kind:target.kind}):'');
+ const message=changed?effect.trim()+note+' '+say('placement.undo'):say('placement.already',{id:target.id,at:observedLocation})+note;
  return reply(message,true,trace,worldState,effects);
 }
 
@@ -259,14 +257,14 @@ async function executeSpatialGroup(session,{area,host,sop,proposal,candidate,vie
  const asked=parse(candidate.wires).filter(wire=>wire.type==='std.request.target'&&read(wire,'mode')==='new').map(wire=>read(wire,'kind')).filter(Boolean);
  const drawnNotes=new Set(),kindOf=target=>{const substituted=asked.flatMap(lemmasOf).map(kind=>drawnAs(target,kind)).find(Boolean);if(substituted)drawnNotes.add(substituted.note);return substituted?.kind??target?.kind;};
  const kinds=new Map();for(const {target} of made){const kind=kindOf(target);kinds.set(kind,(kinds.get(kind)??0)+1);}
- const said=[...kinds].map(([kind,count])=>count===1?'a '+kind:count+' '+en.plural(kind)).join(' and ');
+ const said=andList([...kinds].map(([kind,count])=>counted(kind,count)));
  const anchor=read(options[0],'anchor'),loose=(proposal.attrs?.relaxed??[]).map(str);
  const trace={assessment:'changed',receipts,reading:candidate,placement:sop,solver,group:{made:made.map(({target,bounds,verified})=>({id:target?.id??null,kind:target?.kind,bounds,verified}))}};
  const state2={[area.world]:structuredClone(session.isession.state[area.world])},effects=receipts.map(receipt=>({operation:receipt.operation}));
- if(made.some(m=>!m.verified))return reply('Created '+said+'. The observed geometry differs from the compiled placement. You can undo this change.',false,trace,state2,effects);
+ if(made.some(m=>!m.verified))return reply(say('placement.group',{made:said})+' '+say('placement.mismatch')+' '+say('placement.undo'),false,trace,state2,effects);
  session.newEngineFocus={...session.newEngineFocus,[view]:made.at(-1).target.id};
- const note=[...drawnNotes].map(n=>' '+n).join('')+(anchor?' I used '+anchor+' as the anchor.':'')+(loose.length?' No place keeps them all close for every relation, so I placed them as close as the scene allows ('+loose.join(', ')+').':'');
- return reply('Created '+said+'.'+note+' You can undo this change.',true,trace,state2,effects);
+ const note=[...drawnNotes].map(n=>' '+n).join('')+(anchor?' '+say('placement.anchor',{anchor}):'')+(loose.length?' '+say('placement.relaxedMany',{relations:loose.join(', ')}):'');
+ return reply(say('placement.group',{made:said})+note+' '+say('placement.undo'),true,trace,state2,effects);
 }
 
 /** A declared alternative reading (app.placement.hypothesis): the request's act and its relation subjects' target mode and determiner rewritten as the rule says. */

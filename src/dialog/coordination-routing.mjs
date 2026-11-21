@@ -13,6 +13,7 @@ import {executionKnowledge} from './declared-execution.mjs';
 import {actOutcome} from './execution-policy.mjs';
 import {recordHistory} from './history-journal.mjs';
 import {quantityNote} from './quantity-projection.mjs';
+import {say,quotedList} from './reply-sentences.mjs';
 
 const reply=(text,supported,trace={})=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 const attr=(wire,key)=>wire?.attrs[key]?.[0];
@@ -64,9 +65,9 @@ export async function routeCoordination(session,text,read,{provider,project,admi
  try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library'],phase:'stage',operation:'app.reader.coordination',label:'Read each coordinated noun phrase',text,parts:readings});}catch{/* Observation cannot change the reading. */}
  if(!members.length)return null;
  const trace={coordination:{parts:readings,dropped}};
- const notes=members.map(({part,candidate})=>{const note=quantityNote(candidate);return note?note.replace(/\.$/,'')+' in '+JSON.stringify(part.said)+'.':'';}).filter(Boolean);
+ const notes=members.map(({part,candidate})=>{const note=quantityNote(candidate);return note?say('coordination.quantity',{note:note.replace(/\.$/,''),part:JSON.stringify(part.said)}):'';}).filter(Boolean);
  const finish=result=>{
-  const extra=[...notes,...(dropped.length&&!result.text.includes('could not read')?['I could not read '+dropped.map(d=>JSON.stringify(d)).join(', ')+'.']:[])];
+  const extra=[...notes,...(dropped.length&&!result.trace?.coordinationUnread?[say('coordination.unread',{parts:quotedList(dropped)})]:[])];
   if(extra.length){result.text+=' '+extra.join(' ');result.parts=[{text:result.text,translate:false}];}
   return {...result,trace:{...result.trace,...trace,partial:result.trace?.partial||dropped.length>0}};
  };
@@ -84,16 +85,16 @@ export async function routeCoordination(session,text,read,{provider,project,admi
   }
   for(const r of refused)dropped.push(r.said);
   trace.coordination.refused=refused;
-  if(!compiled.length)return finish(reply('I could not make '+refused.map(r=>JSON.stringify(r.said)).join(' or ')+'. Nothing changed.',false,{reason:'coordination-refused'}));
+  if(!compiled.length)return finish(reply(say('coordination.none',{parts:quotedList(refused.map(r=>r.said))}),false,{reason:'coordination-refused'}));
   const result=await executeNativeGroup(session,compiled,{view});
   if(!result)return null;
-  if(refused.length){result.text+=' I could not make '+refused.map(r=>JSON.stringify(r.said)).join(', ')+'.';result.parts=[{text:result.text,translate:false}];}
+  if(refused.length){result.text+=' '+say('coordination.unmade',{parts:quotedList(refused.map(r=>r.said))});result.parts=[{text:result.text,translate:false}];}
   const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
   if(changed.length&&result.statuses.includes('supported'))recordHistory(session,{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),
    after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:compiled[0].candidate,readings:compiled.map(m=>m.candidate),alternatives:[]});
   const dropOnlyUnread=dropped.filter(d=>!refused.some(r=>r.said===d));
-  if(dropOnlyUnread.length){result.text+=' I could not read '+dropOnlyUnread.map(d=>JSON.stringify(d)).join(', ')+'.';result.parts=[{text:result.text,translate:false}];}
-  return finish(result);
+  if(dropOnlyUnread.length){result.text+=' '+say('coordination.unread',{parts:quotedList(dropOnlyUnread)});result.parts=[{text:result.text,translate:false}];}
+  return finish({...result,trace:{...result.trace,coordinationUnread:true}});
  }
  // Mixed: each noun phrase on its own route, in source order.
  const results=[];

@@ -1,0 +1,50 @@
+@reply.schema core.use world=app.reply prefix=false
+
+# Reader routing (src/dialog/reader-routing.mjs): the answer when no reading could be applied, by the first evidence
+# that holds (interpretation-policy.sop app.interpret.failure gives the order).
+@reply.reader.down app.reply.sentence id=reader.down text="The reading model (SOP-BERT) is not ready: it could not load ({detail}). I cannot read requests until it loads, so nothing changed; your next message tries to load it again."
+@reply.reader.filter app.reply.sentence id=reader.filterMissing text="I could not ground a filter in the question. I have no complete answer."
+@reply.reader.target app.reply.sentence id=reader.targetMissing text="I could not ground the kind of object the question refers to. I have no complete answer."
+@reply.reader.unanswered app.reply.sentence id=reader.unanswered text="I did not understand {mentions} in this question, so I have no answer."
+@reply.reader.unknownKind app.reply.sentence id=reader.unknownKind text="I could not find a kind of object to make for {kind}. Nothing changed."
+@reply.reader.several app.reply.sentence id=reader.several text="I read {mentions} as separate things in one request and cannot apply them together yet, so nothing changed. You can ask for them one at a time."
+@reply.reader.noAction app.reply.sentence id=reader.noAction text="I could not identify an action to apply. Nothing changed."
+@reply.reader.headAlternative app.reply.sentence id=reader.headAlternative text="I used the property reading that matched this editor. The reader also suggested the same property in another editor."
+@reply.reader.authored app.reply.sentence id=reader.authoredUnread text="The SOP request could not be read ({reason})."
+# Several cut requests in one message: a step that was not applied, a step with its own answer, the steps left.
+@reply.steps.notApplied app.reply.sentence id=steps.notApplied text="I could not apply {excerpt}."
+@reply.steps.for app.reply.sentence id=steps.for text="For {excerpt}: {reply}"
+@reply.steps.stopped app.reply.sentence id=steps.stopped text="I stopped before {excerpts}."
+
+# Coordinated noun phrases (src/dialog/coordination-routing.mjs).
+@reply.coordination.unread app.reply.sentence id=coordination.unread text="I could not read {parts}."
+@reply.coordination.unmade app.reply.sentence id=coordination.unmade text="I could not make {parts}."
+@reply.coordination.none app.reply.sentence id=coordination.none text="I could not make {parts}. Nothing changed."
+@reply.coordination.quantity app.reply.sentence id=coordination.quantity text="{note} in {part}."
+
+# Placement (src/dialog/spatial-placement-execution.mjs).
+@reply.placement.stale app.reply.sentence id=placement.stale text="The scene changed before I could apply the placement."
+@reply.placement.refused app.reply.sentence id=placement.refused text="I could not apply the requested placement. Nothing changed."
+@reply.placement.created app.reply.sentence id=placement.created text="Created {kind} {id}{at}."
+@reply.placement.moved app.reply.sentence id=placement.moved text="Moved {kind} {id}{at}."
+@reply.placement.at app.reply.sentence id=placement.at text=" at ({x}, {y})"
+@reply.placement.mismatch app.reply.sentence id=placement.mismatch text="The observed geometry differs from the compiled placement."
+@reply.placement.undo app.reply.sentence id=placement.undo text="You can undo this change."
+@reply.placement.already app.reply.sentence id=placement.already text="{id} is already{at}."
+@reply.placement.anchor app.reply.sentence id=placement.anchor text="I used {anchor} as the anchor."
+@reply.placement.relaxedOne app.reply.sentence id=placement.relaxedOne text="No place keeps it close for every relation, so I placed it as close as the scene allows ({relations})."
+@reply.placement.relaxedMany app.reply.sentence id=placement.relaxedMany text="No place keeps them all close for every relation, so I placed them as close as the scene allows ({relations})."
+@reply.placement.createdAbsent app.reply.sentence id=placement.createdAbsent text="There was no {kind} on the page, so I drew a new one."
+@reply.placement.group app.reply.sentence id=placement.group text="Created {made}."
+
+# Creation grounding (src/dialog/project-create-action.mjs).
+@reply.creation.usedKind app.reply.sentence id=creation.usedKind text="I used {kind} as the kind."
+@reply.creation.took app.reply.sentence id=creation.took text="I took {mention} as {kind}{reason}."
+@reply.creation.equally app.reply.sentence id=creation.equally text="It could equally be {others}; you can correct it or undo."
+@reply.creation.spelling app.reply.sentence id=creation.spelling text=" (a close spelling)"
+@reply.creation.step app.reply.sentence id=creation.step text="{from} is {phrase} {to}"
+@reply.creation.count app.reply.sentence id=creation.count text="the requested object count"
+@reply.creation.name app.reply.sentence id=creation.name text="the name {name}"
+
+# Joining phrases of one reply: "a cat and 2 dogs".
+@reply.join.and app.reply.sentence id=join.and text="{left} and {right}"

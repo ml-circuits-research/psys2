@@ -1,0 +1,10 @@
+@reply.module core.module name=app.reply version=1 exports=app.reply.sentence
+
+# A sentence the application says in a reply, by a stable id. The text holds slots the host fills from the turn's
+# evidence: {name} the value as it is, {a name} the value after its indefinite article (w.lang.en det/onset through
+# the library's articleFor), {n name} the value counted ("a cat", "3 cats": the number in values.count_<name>, the
+# plural from w.lang.en). Every reply sentence of the routing and execution code is one of these rows; the code holds
+# no English sentence of its own.
+@reply.sentence.type core.type of=app.reply.sentence closed=true
+@reply.sentence.id core.slot of=app.reply.sentence key=id kind=atom present=true
+@reply.sentence.text core.slot of=app.reply.sentence key=text kind=string present=true

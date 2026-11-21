@@ -48,6 +48,8 @@ for (const [source, module] of [
   ['grounded-projection.sop', 'grounded-projection-source.mjs'],
   ['person-view-schema.sop', 'person-view-schema-source.mjs'],
   ['person-view.sop', 'person-view-source.mjs'],
+  ['reply-schema.sop', 'reply-schema-source.mjs'],
+  ['reply-sentences.sop', 'reply-sentences-source.mjs'],
 ]) {
   const text = readFileSync(new URL(source, folder), 'utf8');
   emit(fileURLToPath(new URL(module, folder)), '// Generated from ' + source + '.\nexport default ' + JSON.stringify(text) + ';\n');
