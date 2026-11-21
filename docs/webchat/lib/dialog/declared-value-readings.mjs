@@ -10,7 +10,7 @@
 //    family's declared position key, its value the ordinal's number (k.values ordinals; declared-bindings.mjs gives
 //    the key its normalizations).
 import {str} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
-import {executionPolicyWorld} from './execution-policy.mjs?v=b5f62f6321';
+import {executionPolicyWorld} from './execution-policy.mjs?v=2a5c4de7d0';
 import {parseNumberRun} from '../knowledge/number-run.mjs?v=efcde74940';
 import {numberInfo} from '../knowledge/values.mjs?v=b0000e82a7';
 import {budget} from './budget.mjs?v=d42dc656e7';

@@ -1,15 +1,15 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs?v=02d5853491';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=9fa61f4b8a';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=fb390a60ea';
 import { en } from '../lang/en.mjs?v=d028d63371';
 import { quote, str } from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
-import { executionPolicyWorld } from './execution-policy.mjs?v=b5f62f6321';
+import { executionPolicyWorld, actOutcome } from './execution-policy.mjs?v=2a5c4de7d0';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=c9ca45400c';
-import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=c4926972d6';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=e4edf64caa';
+import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=8bdc70f757';
 import { readDegreeBases } from './degree-bases.mjs?v=d4f277416d';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=8ed1f1339c';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=131d02aa01';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=f435bc2379';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=02bbb7f17b';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=86d64591aa';
 import { retainPropertyEffect } from './property-effect-evidence.mjs?v=aae4e9407c';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=bd00f37a4a';
@@ -33,7 +33,7 @@ function refusal(plan, candidate) {
 
 // A command with an exact bound object and recoverable session state can use reversible best effort.
 export function isScopedRemoval(plan){
- if(plan?.status!=='compiled'||plan.act!=='remove'||!plan.id||!plan.source||!plan.instance||typeof plan.version!=='string'||plan.skipped.length||Object.keys(plan.args).length!==1)return false;
+ if(plan?.status!=='compiled'||actOutcome(plan.act).outcome!=='removes'||!plan.id||!plan.source||!plan.instance||typeof plan.version!=='string'||plan.skipped.length||Object.keys(plan.args).length!==1)return false;
  const {id,ids}=plan.args;
  return id===plan.id&&ids===undefined||id===undefined&&Array.isArray(ids)&&ids.length===1&&ids[0]===plan.id;
 }
@@ -80,7 +80,7 @@ export async function executeNativeCapability(session, candidate, options = {}) 
   if (plan.status === 'not-applicable') return null;
   if (plan.status !== 'compiled') return refusal(plan, candidate);
   // A count the family declares repeatable: that many objects, placed together in one problem.
-  if (plan.act === 'make' && plan.repeat > 1) return executeNativeGroup(session, [{ candidate, plan }], { view, invocation });
+  if (actOutcome(plan.act).outcome === 'creates' && plan.repeat > 1) return executeNativeGroup(session, [{ candidate, plan }], { view, invocation });
   return runNativePlan(session, candidate, { area, nativeState, host, before, plan, view, invocation, text: options.text });
 }
 
@@ -163,23 +163,21 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
   const added = after.objects.filter(value => !old.has(value.id)), made = added.filter(value => (value.in ?? value.parent) === undefined);
   const object = made[0] ?? added[0] ?? before.objects.find((value) => String(value.id) === plan.id);
   const previousFocus = session.newEngineFocus?.[view];
-  const nextFocus = plan.act === 'remove' ? after.objects.find((item) => item.id === previousFocus)?.id : object?.id;
+  const outcome = actOutcome(plan.act);
+  const nextFocus = outcome.outcome === 'removes' ? after.objects.find((item) => item.id === previousFocus)?.id : object?.id;
   session.newEngineFocus = { ...session.newEngineFocus, [view]: nextFocus ?? null };
-  const substituted = plan.act === 'make' ? drawnAs(object, plan.kind) : null;
+  const substituted = outcome.outcome === 'creates' ? drawnAs(object, plan.kind) : null;
   const kind = substituted?.kind ?? object?.kind ?? plan.kind;
   const notes = [...plan.notes];
   if (substituted) notes.unshift(substituted.note);
   // A population target (reference=population) seeds every match into the target list: all of them were changed.
   const listed = Object.values(plan.args ?? {}).find((value) => Array.isArray(value) && value.length > 1 && value.every((id) => plan.targets.includes(id)));
   if (listed) notes.unshift(populationNote('targets', listed.length, { members: listed.join(', ') }));
-  else if (plan.targets.length > 1) notes.unshift(plan.act === 'remove'
-    ? 'More than one matched. I used ' + kind + ' ' + plan.id + '. You can undo this.'
-    : 'I used the most recent matching ' + plan.kind + '.');
+  else if (plan.targets.length > 1) notes.unshift(fill(outcome.matched, { kind, id: plan.id, planKind: plan.kind }));
   if (plan.skipped.length) notes.push('I could not apply ' + plan.skipped.join(', ') + '.');
   notes.push(...operationNotes(plan.operation));
   const addedOfKind = operation.spatial?.countKey && made.filter(value => value.sourceType === operation.on && value.kind === kind).length;
-  const created = addedOfKind>1 ? `Created ${addedOfKind} objects of kind ${kind}.` : `Created ${withArticle(kind)}.`;
-  const said = plan.act === 'make' ? created : plan.act === 'remove' ? `Removed the ${kind}.` : `Updated the ${kind}.`;
+  const said = fill(addedOfKind > 1 && outcome.many ? outcome.many : outcome.reply, { kind, count: addedOfKind });
   const measured = retainPropertyEffect(session, { candidate, text, view, plan, before: observed, after, receipt, verification, message: notes.join(' ') });
   const message = measured?.text ?? [said, ...notes].join(' ');
   return {
@@ -195,6 +193,8 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
 /** The declared reply words of an operation (app.execution.operationNote), whatever its arguments. */
 const operationNotes = (operation) => executionPolicyWorld().ofType('app.execution.operationNote').filter((r) => str(r.attrs.operation?.[0]) === operation).map((r) => str(r.attrs.text?.[0]));
 const withArticle = (noun) => (/^[aeiou]/i.test(noun) ? 'an ' : 'a ') + noun;
+// A declared reply sentence (execution-policy.sop app.execution.actOutcome) with its slots filled.
+const fill = (template, { kind, count, id, planKind }) => String(template ?? '').replace(/\{(a kind|kind|count|id|planKind)\}/g, (_, slot) => String(slot === 'a kind' ? withArticle(kind) : { kind, count, id, planKind }[slot] ?? ''));
 const declaredText = (template, values) => String(template ?? '').replace(/\{(\w+)\}/g, (all, name) => values[name] ?? all);
 /** The declared reply words for objects acted on as a population (app.execution.populationNote: one or many). */
 function populationNote(kind, count, values) {
@@ -222,7 +222,7 @@ export function drawnAs(object, requested) {
 /** The declared default placement of a make without coordinates: the solved place and the call that carries it (the plan stays as compiled). */
 async function placeByProblem(host, operation, plan) {
   const port = operation?.spatial, args = plan.args;
-  if (plan.act !== 'make' || !port?.xKey || !port?.yKey || args[port.xKey] !== undefined || args[port.yKey] !== undefined) return null;
+  if (actOutcome(plan.act).outcome !== 'creates' || !port?.xKey || !port?.yKey || args[port.xKey] !== undefined || args[port.yKey] !== undefined) return null;
   if (port.countKey && args[port.countKey] !== undefined && args[port.countKey] !== 1) return null;
   const scalar = value => typeof value === 'number' && Number.isFinite(value) || typeof value === 'boolean' || typeof value === 'string';
   if (!Object.values(args).every(scalar)) return null;
@@ -244,7 +244,7 @@ async function placeByProblem(host, operation, plan) {
  */
 export async function executeNativeGroup(session, members, { view, invocation = globalThis.crypto.randomUUID(), dropped = [] } = {}) {
   const area = NATIVE_AREAS[view], nativeState = area && session.isession.state[area.world];
-  if (!nativeState || !members.length || members.some(({ plan }) => plan.status !== 'compiled' || plan.act !== 'make')) return null;
+  if (!nativeState || !members.length || members.some(({ plan }) => plan.status !== 'compiled' || actOutcome(plan.act).outcome !== 'creates')) return null;
   const original = structuredClone(nativeState);
   const restore = (text, reason, trace = {}) => { session.isession.state[area.world] = original; return reply(text, false, { reason, ...trace }); };
   // The knowledge each tool declares for its arguments (a catalog drawing by name), loaded for every member.

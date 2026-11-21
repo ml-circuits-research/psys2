@@ -5,8 +5,8 @@
 // number-agreement rules read by its singular binds what its singular binds. This module tells the reading's words and
 // the bridged count to the rules and applies their conclusions to each candidate; it names no word.
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=8ed1f1339c';
-import {declaredQuantities} from './raw-reading-policy.mjs?v=dd142452d6';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=131d02aa01';
+import {declaredQuantities} from './raw-reading-policy.mjs?v=f25ddaae15';
 
 const attr=(wire,key)=>{const raw=wire?.attrs[key]?.[0];return raw===undefined?undefined:raw.startsWith('"')?str(raw):raw;};
 const words=text=>[...String(text).matchAll(/[\p{L}\p{N}]+/gu)].map(m=>m[0].toLowerCase());

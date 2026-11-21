@@ -1,9 +1,9 @@
 // Ground an existing-object mention in the current application's declared vocabulary.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=f6a0b10be9';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=8ed1f1339c';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=5e634e9c04';
-import {projectGroundedRequest,observeGroundedProjection,resolveGroundedMention} from './grounded-projection.mjs?v=620cc79527';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=131d02aa01';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=0186892a12';
+import {projectGroundedRequest,observeGroundedProjection,resolveGroundedMention,groundedNameShapes} from './grounded-projection.mjs?v=35a4609c0b';
 
 const read=(wire,key)=>str(wire.attrs[key]?.[0]);
 const articles=parse(LANG_EN_FACTS.determiners)
@@ -35,10 +35,13 @@ export function projectRemovalAction(proposal,session,{bindings,view}={}){
  const readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!session.isession.state[area.world]||proposal.coverage?.complete||raw?.requestCount!==1||
    raw.area!==readerArea||raw.coverage?.truncated!==false||
-   request.act!=='remove'||request.mood!=='do'||target?.mode!=='existing'||target.fill!=='written'||
-   target.determiner!=='definite'||request.constraints?.length!==0||request.turn||request.question||
+   !target||request.constraints?.length!==0||request.turn||request.question||
    Object.keys(target).some(key=>!targetKeys.has(key))||
    typeof target.name_span!=='string')return null;
+ // The request shape is a declared one (grounded-projection.sop app.grounded.nameShape).
+ const {shapes,limit}=groundedNameShapes(),said={act:request.act,mood:request.mood,mode:target.mode,fill:target.fill,determiner:target.determiner};
+ const shape=shapes.find(row=>Object.entries(row).every(([key,value])=>key==='profile'||said[key]===value));
+ if(!shape)return null;
  const noun=normalize(target.name_span);
  const nameSpan=anchored(raw,'name_span',target.name_span);
  if(!nameSpan)return null;
@@ -57,9 +60,9 @@ export function projectRemovalAction(proposal,session,{bindings,view}={}){
   });
  const matches=resolveGroundedMention({text:noun,area:readerArea,family:target.type,lexemes,evidence});
  const mappings=new Map(matches.map(mapping=>[mapping.canonical,mapping]));
- if(!mappings.size||mappings.size>16)return null;
+ if(!mappings.size||mappings.size>limit)return null;
  const candidates=[...mappings.values()].flatMap(mapping=>{
-  const graph=projectGroundedRequest({profile:'context',act:request.act,mood:request.mood,kind:mapping.canonical,text:raw.source.text,
+  const graph=projectGroundedRequest({profile:shape.profile,act:request.act,mood:request.mood,kind:mapping.canonical,text:raw.source.text,
    values:[],witness:mapping.witness});
   if(graph){
    graph.projection.input=mapping.proof+'\n'+graph.projection.input;

@@ -3,10 +3,10 @@ import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=281892343f';
 import CLOCK from '../../worlds/app.project/clock-projection-source.mjs?v=7d09f121c5';
-import { executionPolicyWorld } from './execution-policy.mjs?v=b5f62f6321';
+import { executionPolicyWorld } from './execution-policy.mjs?v=2a5c4de7d0';
 import { projectionModule } from './composition-knowledge.mjs?v=977b81b513';
 import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=02d5853491';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=5e634e9c04';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=0186892a12';
 import { observedReaderContext } from './native-reader-context.mjs?v=7c29e8acb5';
 import { budget } from './budget.mjs?v=d42dc656e7';
 import { en } from '../lang/en.mjs?v=d028d63371';
@@ -41,7 +41,7 @@ function factWriter() {
 }
 
 let identityNames;
-const identityParameters = () => identityNames ??= new Set(parse(POLICY).filter((wire) => wire.type === NS + 'seed' &&
+export const identityParameters = () => identityNames ??= new Set(parse(POLICY).filter((wire) => wire.type === NS + 'seed' &&
   ['target.list', 'target.id'].includes(take(wire, 'source'))).map((wire) => take(wire, 'parameter')));
 
 function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge, sceneDefaults, previews = [] }, concepts, said = [], selectors = new Set()) {

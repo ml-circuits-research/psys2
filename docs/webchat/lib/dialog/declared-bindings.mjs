@@ -13,10 +13,10 @@
 //  - the constructor policy's discriminator, the catalog words of catalog values, the ordinal words of k.values.
 import {parse,str,completeStructuralBindings} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=fd093a4a9b';
-import {executionPolicyWorld} from './execution-policy.mjs?v=b5f62f6321';
-import {declaredValueRows} from './declared-value-readings.mjs?v=8f771294eb';
+import {executionPolicyWorld} from './execution-policy.mjs?v=2a5c4de7d0';
+import {declaredValueRows} from './declared-value-readings.mjs?v=e37ddb09e6';
 import {numberWords,numberInfo} from '../knowledge/values.mjs?v=b0000e82a7';
-import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=38faa58bcc';
+import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=6ef6b78bb4';
 import CAPABILITY_POLICY from '../../worlds/app.project/capability-policy.mjs?v=281892343f';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=f4a3429198';
 import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=dadfdb4afd';

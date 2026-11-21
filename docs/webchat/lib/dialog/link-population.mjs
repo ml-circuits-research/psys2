@@ -8,7 +8,7 @@
 import {parse,serialize,str,quote,populationPairs,readingOrder} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=f6a0b10be9';
 import {en} from '../lang/en.mjs?v=d028d63371';
-import {executionPolicyWorld} from './execution-policy.mjs?v=b5f62f6321';
+import {executionPolicyWorld} from './execution-policy.mjs?v=2a5c4de7d0';
 import {budget} from './budget.mjs?v=d42dc656e7';
 
 const one=(row,key)=>row?.attrs[key]?.length?str(row.attrs[key][0]):undefined;

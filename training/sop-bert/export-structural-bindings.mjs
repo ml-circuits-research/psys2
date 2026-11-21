@@ -1,4 +1,4 @@
-import {CHART_KIND_PARAMETERS,CHART_PROPERTY_ALIGNMENTS} from '../../worlds/data.charts/declared-host.mjs';
+import {CHART_KIND_PARAMETERS,CHART_PROPERTY_ALIGNMENTS} from './chart-bindings.mjs';
 import {validateSemanticCatalogue,planCatalogueEnrichment} from './semantic-alignment-catalogue.mjs';
 // C1 authorial declaration alignment. Never reads messages, evaluation or owner rows.
 import {readFile,writeFile,link,chmod,lstat,statfs} from 'node:fs/promises';import {readFileSync as readFileSyncText} from 'node:fs';import {resolve,dirname,join,relative} from 'node:path';import {pathToFileURL,fileURLToPath} from 'node:url';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';

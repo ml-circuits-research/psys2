@@ -4,9 +4,10 @@
 // conclude (a target re-read as a joining line's or a container's members, the end a population phrase fills, a
 // population reference) is applied here field by field. Nothing here decides: no act, key, kind or word is named.
 import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
-import SCHEMA from '../../worlds/app.project/raw-reading-schema-source.mjs?v=82917842f0';
-import POLICY from '../../worlds/app.project/raw-reading-policy-source.mjs?v=57395fb0b1';
-import {executionPolicyWorld} from './execution-policy.mjs?v=b5f62f6321';
+import SCHEMA from '../../worlds/app.project/raw-reading-schema-source.mjs?v=859d0b7638';
+import POLICY from '../../worlds/app.project/raw-reading-policy-source.mjs?v=845f5475d3';
+import {executionPolicyWorld} from './execution-policy.mjs?v=2a5c4de7d0';
+import {identityParameters} from './capability-plan-adapter.mjs?v=e4edf64caa';
 import {en} from '../lang/en.mjs?v=d028d63371';
 import {referenceProjection} from './reference-projection.mjs?v=9e25562b87';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=f6a0b10be9';
@@ -213,12 +214,13 @@ export function pluralReference(request){
  return {plural,distributes:new Set(world.ofType('app.reading.distributes').map(row=>one(row,'key')))};
 }
 
-/** The declared identity concepts and the reader heads a code replaces (app.reading.identityConcept, app.reading.codeHead). */
+/** The reader heads a code replaces (app.reading.codeHead); a key is an identity key when its parameter (the key's last
+ * segment) is one the capability policy seeds from the target's identity (capability-policy.sop target.id / target.list). */
 let codeReference=null;
 export function codeReferencePolicy(){
  if(codeReference)return codeReference;
- const world=policyWorld(),concepts=new Set(world.ofType('app.reading.identityConcept').map(row=>one(row,'concept'))),heads=new Set(world.ofType('app.reading.codeHead').map(row=>one(row,'key')));
- return codeReference={identityKey:key=>typeof key==='string'&&concepts.has(key.split('.').at(-1)),replacedHead:key=>heads.has(key)};
+ const heads=new Set(policyWorld().ofType('app.reading.codeHead').map(row=>one(row,'key'))),identity=identityParameters();
+ return codeReference={identityKey:key=>typeof key==='string'&&identity.has(key.split('.').at(-1)),replacedHead:key=>heads.has(key)};
 }
 
 /**

@@ -7,11 +7,12 @@
 import {parse,serialize,quote} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import {writeReaderSource} from './reader-source.mjs?v=d0098b2ead';
 import {coordinationParts} from './coordination-split.mjs?v=438aa7a1af';
-import {resolveRequestRoute} from './request-routing-policy.mjs?v=e2404661d6';
-import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=16d8011b51';
-import {executionKnowledge} from './declared-execution.mjs?v=3b92cfbf58';
-import {recordHistory} from './history-journal.mjs?v=abfa3ead05';
-import {quantityNote} from './quantity-projection.mjs?v=7266a4d975';
+import {resolveRequestRoute} from './request-routing-policy.mjs?v=f5630d8eed';
+import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=71a85f525e';
+import {executionKnowledge} from './declared-execution.mjs?v=797f1a1254';
+import {actOutcome} from './execution-policy.mjs?v=2a5c4de7d0';
+import {recordHistory} from './history-journal.mjs?v=28bdd20ecc';
+import {quantityNote} from './quantity-projection.mjs?v=eda2517de9';
 
 const reply=(text,supported,trace={})=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 const attr=(wire,key)=>wire?.attrs[key]?.[0];
@@ -78,7 +79,7 @@ export async function routeCoordination(session,text,read,{provider,project,admi
   const area=view,before=structuredClone(session.isession.state),compiled=[],refused=[];
   for(const member of members){
    const plan=(await compileNativePlan(session,member.candidate,{bindings,view,readKnowledge:executionKnowledge}))?.plan;
-   if(plan?.status==='compiled'&&plan.act==='make')compiled.push({candidate:member.candidate,plan});
+   if(plan?.status==='compiled'&&actOutcome(plan.act).outcome==='creates')compiled.push({candidate:member.candidate,plan});
    else refused.push({said:member.part.said,reason:plan?.message??plan?.reason??'not-applicable'});
   }
   for(const r of refused)dropped.push(r.said);

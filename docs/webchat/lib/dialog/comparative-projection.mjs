@@ -6,7 +6,7 @@
 import { World, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import RULES from '../../worlds/app.project/comparative-projection-source.mjs?v=918ab2d391';
 import SOURCE from './new-engine-source.mjs?v=d7b7628ab6';
-import { executionPolicyWorld } from './execution-policy.mjs?v=b5f62f6321';
+import { executionPolicyWorld } from './execution-policy.mjs?v=2a5c4de7d0';
 
 let table;
 

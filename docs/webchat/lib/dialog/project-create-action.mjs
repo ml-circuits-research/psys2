@@ -1,12 +1,12 @@
 import {World,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import {groundMention} from './lexical-grounding.mjs?v=4c0e19ae28';
-import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=07639399d8';
-import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=11101d9d84';
-import {executionPolicyWorld} from './execution-policy.mjs?v=b5f62f6321';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=8ed1f1339c';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=5e634e9c04';
+import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=efc7e8aba7';
+import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=fd4288efb2';
+import {executionPolicyWorld} from './execution-policy.mjs?v=2a5c4de7d0';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=131d02aa01';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=0186892a12';
 import {budget} from './budget.mjs?v=d42dc656e7';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=620cc79527';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=35a4609c0b';
 import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=2991f3cc48';
 import {compileObservedChoice} from './observed-choice.mjs?v=ca9485e4cd';
 
@@ -20,7 +20,8 @@ function creationPolicy(source){
  // Retention limits are declared facts (creation-policy.sop app.creation.limits); a policy without exactly one is invalid.
  const limits=world.ofType('app.creation.limits');
  if(limits.length!==1)throw Error('invalid-creation-policy-limits');
- const config={world,retained:Number(field(limits[0],'alternatives')),batch:Number(field(limits[0],'batch')),lemma:Number(field(limits[0],'lemma'))};
+ const stepPhrase=Object.fromEntries(world.ofType('app.creation.stepPhrase').map(fact=>[field(fact,'relation'),field(fact,'text')]));
+ const config={world,stepPhrase,retained:Number(field(limits[0],'alternatives')),batch:Number(field(limits[0],'batch')),lemma:Number(field(limits[0],'lemma'))};
  if(source===POLICY)loaded=config;
  return config;
 }
@@ -102,14 +103,13 @@ function rankConstructors({world,retained:retainedLimit,batch:choiceBatchLimit},
 }
 // The evidence of a non-exact grounding, stated in the reply: the declared relation path the policy
 // followed or the spelling repair it admitted. An inflection step alone needs no explanation.
-const stepPhrase={lemma:'a form of',is_a:'a kind of',kind_of:'a kind of'};
 function groundingReason(mention,choice){
  if(choice.route==='spelling')return ' (a close spelling)';
  if(choice.route!=='knowledge'||!choice.path?.length)return '';
  const steps=choice.path.map(step=>{const cut=step.indexOf(':');return {relation:step.slice(0,cut),to:step.slice(cut+1)};});
  if(steps.every(step=>step.relation==='lemma'))return null;
  let from=mention;
- return ': '+steps.map(({relation,to})=>{const phrase=`${JSON.stringify(from)} is ${stepPhrase[relation.split('.')[0]]??relation} ${JSON.stringify(to)}`;from=to;return phrase;}).join(', ');
+ return ': '+steps.map(({relation,to})=>{const phrase=`${JSON.stringify(from)} is ${creationPolicy(POLICY).stepPhrase[relation.split('.')[0]]??relation} ${JSON.stringify(to)}`;from=to;return phrase;}).join(', ');
 }
 const textToken=value=>typeof value==='string'?quote(value):undefined;
 const spanTokens=range=>range?{start:String(range[0]),end:String(range[1])}:{};

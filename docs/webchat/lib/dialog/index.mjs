@@ -1,4 +1,4 @@
-import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=abfa3ead05';
+import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=28bdd20ecc';
 import {isAuthoredRequest} from './authored-request-tool.mjs?v=8ddb059cc1';
 import { interpretationPolicy } from './interpretation-policy.mjs?v=fd093a4a9b';
 // SPDX-License-Identifier: AGPL-3.0-only
@@ -243,7 +243,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=9a21722701')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=2cde85bf8c')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

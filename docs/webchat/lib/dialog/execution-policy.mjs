@@ -1,7 +1,7 @@
 // Admit owned default and value-lookup policy facts for the request compiler.
 import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
-import SOURCE from'../../worlds/app.project/execution-policy-source.mjs?v=38faa58bcc';
-import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs?v=cd13991a95';
+import SOURCE from'../../worlds/app.project/execution-policy-source.mjs?v=6ef6b78bb4';
+import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs?v=13120541f3';
 import SCENE_SCHEMA from'../../worlds/app.project/scene-default-schema-source.mjs?v=cde8a3092d';
 const schemaModule='app.execution';
 const declarations=parse(SOURCE);
@@ -42,3 +42,14 @@ export function executionValueSource(concept,world=executionPolicyWorld()){
  if(rows.length>1)throw Error('ambiguous-policy-value-source');if(!rows.length)return null;
  return Object.fromEntries(['valueType','nameKey','valueKey'].map(key=>[key,str(rows[0].attrs[key][0])]));
 }
+/** What an act does to the work and its reply sentences (app.execution.actOutcome; act=any for an act without its own row). */
+const outcomes=new Map();
+export function actOutcome(act){
+ if(outcomes.has(act))return outcomes.get(act);
+ const rows=executionPolicyWorld().ofType('app.execution.actOutcome'),pick=a=>rows.find(row=>str(row.attrs.act[0])===a);
+ const row=pick(act)??pick('any');
+ const text=key=>row?.attrs[key]?.length?str(row.attrs[key][0]):undefined;
+ const out=row?{outcome:text('outcome'),reply:text('reply'),many:text('many'),matched:text('matched')}:{outcome:'changes'};
+ outcomes.set(act,out);return out;
+}
+

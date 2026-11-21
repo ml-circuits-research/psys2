@@ -3,18 +3,18 @@ import {World,parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v
 import SOURCE from './new-engine-source.mjs?v=d7b7628ab6';
 import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=de478a8655';
 import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=0e1de960a8';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=8ed1f1339c';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=131d02aa01';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=5e634e9c04';
+import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=0186892a12';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=86d64591aa';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=bd00f37a4a';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0dd451c667';
 import {en} from '../lang/en.mjs?v=d028d63371';
-import {placementHypotheses,placementDisclosure} from './placement-default-policy.mjs?v=66a0218151';
-import {identityConcepts} from './capability-plan-adapter.mjs?v=c9ca45400c';
-import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=16d8011b51';
+import {placementHypotheses,placementDisclosure,reachesPlanned} from './placement-default-policy.mjs?v=6f482f4f71';
+import {identityConcepts} from './capability-plan-adapter.mjs?v=e4edf64caa';
+import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=71a85f525e';
 import {budget} from './budget.mjs?v=d42dc656e7';
-import {executionPolicyWorld} from './execution-policy.mjs?v=b5f62f6321';
+import {executionPolicyWorld} from './execution-policy.mjs?v=2a5c4de7d0';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {
@@ -202,7 +202,7 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
  const choices=parse(sop).filter(wire=>wire.type==='std.placement.option');
  const winner=choices.find(option=>option.id===ref(proposal,'choice'));
  const plannedBounds=winningBounds(winner),geometryVerified=!!bounds&&plannedBounds.every(([key,wanted])=>
-  Number.isFinite(wanted)&&Math.abs(wanted-bounds[key])<=1e-9*Math.max(1,Math.abs(wanted)));
+  reachesPlanned(wanted,bounds[key]));
  activity(session,area,{phase:'end',label:'Observe placement effect',status:geometryVerified?'verified':'mismatch',
   sop,receipt:{operation:receipt.operation,beforeVersion:receipt.beforeVersion,afterVersion:receipt.afterVersion},bounds,geometryVerified,verification});
  const trace={assessment:receipt.status,receipt,reading:candidate,placement:sop,solver,effectVerification:verification,observedBounds:bounds,geometryVerified,controlIntent:result.sop,
@@ -252,7 +252,7 @@ async function executeSpatialGroup(session,{area,host,sop,proposal,candidate,vie
   receipts.push(receipt);
   const observed=host.observeSpatial(),target=observed.observation.objects.find(object=>object.sourceType===operation.on&&!before.objects.some(prior=>prior.id===object.id)&&(object.in??object.parent)===undefined);
   const bounds=observed.boxes.find(box=>box.entity===target?.id),planned=winningBounds(options[i]);
-  const verified=!!bounds&&planned.every(([key,wanted])=>Number.isFinite(wanted)&&Math.abs(wanted-bounds[key])<=1e-9*Math.max(1,Math.abs(wanted)));
+  const verified=!!bounds&&planned.every(([key,wanted])=>reachesPlanned(wanted,bounds[key]));
   made.push({target,bounds,verified});
  }
  // A kind drawn as another keeps the kind asked for in the reply, and says what was drawn.

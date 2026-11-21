@@ -1,10 +1,10 @@
 import {World,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import {groundMention} from './lexical-grounding.mjs?v=4c0e19ae28';
-import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=8ed1f1339c';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=5e634e9c04';
+import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=131d02aa01';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=0186892a12';
 import POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=219c267031';
-import {detachGroundedRequest} from './grounded-projection.mjs?v=620cc79527';
-import GROUNDED_SCHEMA from '../../worlds/app.project/grounded-projection-schema-source.mjs?v=b6d275f29d';
+import {detachGroundedRequest} from './grounded-projection.mjs?v=35a4609c0b';
+import GROUNDED_SCHEMA from '../../worlds/app.project/grounded-projection-schema-source.mjs?v=2ab3452c26';
 import SCHEMA from '../../worlds/app.project/query-reading-schema-source.mjs?v=53a8805ec1';
 import {budget} from './budget.mjs?v=d42dc656e7';
 import {writeReaderSource} from './reader-source.mjs?v=d0098b2ead';
@@ -100,7 +100,8 @@ export async function projectQueryAction(proposal,session,{view,bindings}={}){
  const choices=new Map();
  for(const {mapping,operation}of nativeCreationCandidates(bindings,host.bindings(),readerArea)){
   budget.tick('query-reading.kinds');
-  if(!operation.params.kind?.enum?.includes(mapping.lemma)||mapping.lemma.length>64)continue;
+  // The constructor makes the kind when one of its declared parameters lists it (its enum, sourced from the area's kinds).
+  if(!Object.values(operation.params??{}).some(param=>param?.enum?.includes(mapping.lemma))||mapping.lemma.length>64)continue;
   choices.set(JSON.stringify([mapping.canonical,mapping.lemma]),{canonical:mapping.canonical,lemma:mapping.lemma,otherType:Number(mapping.type!==target.type)});
  }
  const candidates=[...choices.values()];
@@ -168,7 +169,7 @@ export async function recoverQueryProjection(projected,session,{view,bindings,pr
  const retain=()=>readings.length===1?projected:{...projected,interpretation:{...projected.interpretation,retry:{readings,failures}}};
  for(const profile of projected.interpretation.strategies){
   let alternate;
-  try{alternate=await provider?.[readFor[profile]]?.(writeReaderSource(projected.raw.source.text));}catch{continue;}
+  try{alternate=await provider?.[readFor[profile]]?.(writeReaderSource(projected.raw.source.text));}catch(error){failures.push([{reason:'reader-failed',profile,detail:String(error?.message??error)}]);continue;}
   if(session.isession.state[area.world]!==state)return retain();
   if(!alternate)continue;
   readings.push(alternate.raw);failures.push(alternate.failures);

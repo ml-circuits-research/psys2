@@ -1,7 +1,7 @@
 // Encode grounded evidence and detach the standard graph derived by the SOP rules.
 import { World, inspectRequest, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
-import SCHEMA from '../../worlds/app.project/grounded-projection-schema-source.mjs?v=b6d275f29d';
-import POLICY from '../../worlds/app.project/grounded-projection-source.mjs?v=a8931ac5e0';
+import SCHEMA from '../../worlds/app.project/grounded-projection-schema-source.mjs?v=2ab3452c26';
+import POLICY from '../../worlds/app.project/grounded-projection-source.mjs?v=dbf9d15881';
 
 let base;
 const first = (wire, key) => wire.attrs[key]?.[0];
@@ -91,3 +91,14 @@ export function observeGroundedProjection(session, projection) {
     // Inspection cannot change the request.
   }
 }
+
+/** The declared raw request shapes whose written name is grounded (app.grounded.nameShape) and the meaning limit. */
+let nameShapes;
+export function groundedNameShapes() {
+  if (nameShapes) return nameShapes;
+  const world = groundingWorld(), text = (row, key) => (first(row, key) === undefined ? undefined : str(first(row, key)));
+  const shapes = world.ofType('app.grounded.nameShape').map((row) => Object.fromEntries(['profile', 'act', 'mood', 'mode', 'fill', 'determiner'].map((key) => [key, text(row, key)]).filter(([, v]) => v !== undefined)));
+  const limit = Number(text(world.ofType('app.grounded.limit')[0] ?? { attrs: {} }, 'meanings') ?? 0);
+  return nameShapes = { shapes, limit };
+}
+

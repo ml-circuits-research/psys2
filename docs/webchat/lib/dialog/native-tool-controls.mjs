@@ -1,10 +1,11 @@
-import { recordHistory } from './history-journal.mjs?v=abfa3ead05';
-import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=f435bc2379';
+import { recordHistory } from './history-journal.mjs?v=28bdd20ecc';
+import {gesturePolicy} from './history-policy.mjs?v=e051f9cf0e';
+import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=02bbb7f17b';
 import {isAuthoredRequest} from './authored-request-tool.mjs?v=8ddb059cc1';
-import{runHistoryControlQuery}from'./history-execution.mjs?v=e59cb9eb0f';
+import{runHistoryControlQuery}from'./history-execution.mjs?v=003738bf26';
 import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=86d64591aa';
 // Typed UI gestures use the same declared native tools and undo history as model requests.
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=8ed1f1339c';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=131d02aa01';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=bd00f37a4a';
 import {readNativeIntent} from './native-intent-reader.mjs?v=5755975290';
 import {observePlacementCorrection,prunePlacementLinks} from '../../worlds/app.project/spatial-profile.mjs?v=de478a8655';
@@ -25,7 +26,8 @@ export async function invokeNativeControl(session,{view,sop}={}){
  const observation=host.observe();
  const declaration=host.bindings().find(op=>op.id===operation);if(!declaration)throw Error('undeclared-native-control');
  const targets=declaration.spatial?.idsKey&&args[declaration.spatial.idsKey];
- const movedId=declaration.act==='place'&&Array.isArray(targets)&&targets.length===1?targets[0]:null;
+ const gesture=gesturePolicy(declaration.act);
+ const movedId=gesture.placement&&Array.isArray(targets)&&targets.length===1?targets[0]:null;
  const observeSpatial=()=>{try{return host.observeSpatial?.();}catch{return null;}};
  const spatialBefore=movedId?observeSpatial():null;
  const intent=describeNativeControl({operation:declaration,args,before:observation});
@@ -34,7 +36,7 @@ export async function invokeNativeControl(session,{view,sop}={}){
  const changed=JSON.stringify(before)!==JSON.stringify(state),ok=['changed','unchanged','supported'].includes(receipt.status);
  if(!ok&&changed){session.isession.state[area.world]=before;throw Error('native-refusal-mutated-state');}
  let historyEntry;
- if(changed&&!['ask','pick'].includes(declaration.act)){
+ if(changed&&gesture.record){
   historyEntry={area:view,before:{[area.world]:before},after:{[area.world]:structuredClone(state)},operation};
   const object=host.observe().objects.find(o=>!observation.objects.some(b=>b.id===o.id));
   if(object)session.newEngineFocus={...session.newEngineFocus,[view]:object.id};

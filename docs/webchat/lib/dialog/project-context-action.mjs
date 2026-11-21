@@ -1,16 +1,16 @@
-import { historyHeads } from './history-journal.mjs?v=abfa3ead05';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=5e634e9c04';
+import { historyHeads } from './history-journal.mjs?v=28bdd20ecc';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=0186892a12';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=8ed1f1339c';
-import {executionPolicyWorld} from './execution-policy.mjs?v=b5f62f6321';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=131d02aa01';
+import {executionPolicyWorld} from './execution-policy.mjs?v=2a5c4de7d0';
 import {readReferenceTurn,resolveObservedReference,referencePolicyWorld} from './reference-policy.mjs?v=66f10b900d';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=620cc79527';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=35a4609c0b';
 import {flatRequestProjection} from './request-projection.mjs?v=37109280ef';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=f6c7f255fe';
-import {retargetRule,pluralReference} from './raw-reading-policy.mjs?v=dd142452d6';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=c0ac62924d';
+import {retargetRule,pluralReference} from './raw-reading-policy.mjs?v=f25ddaae15';
 import {en} from '../lang/en.mjs?v=d028d63371';
-import {comparativeSteps} from './comparative-projection.mjs?v=6b26f12061';
+import {comparativeSteps} from './comparative-projection.mjs?v=e5031ec6e5';
 import {referenceProjection} from './reference-projection.mjs?v=9e25562b87';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=fd093a4a9b';
 // What an act on the referent that says nothing more does (reference-policy.sop app.reference.bare: none | grounded).
