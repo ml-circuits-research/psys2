@@ -22,14 +22,14 @@ const NATIVE_HOSTS={
 export function loadAreaRegistry(source=AREA_REGISTRY,hosts=NATIVE_HOSTS){
  const world=new World({library:{'app.area':AREA_SCHEMA}}),told=world.tell(source);
  if(!told.ok)throw Error('invalid-area-registry: '+JSON.stringify(told.violations??told.errors??[]).slice(0,400));
- const one=(row,key)=>str(row.attrs[key][0]),paths=world.ofType('app.area.path'),words=world.ofType('app.area.word'),areas={};
+ const one=(row,key)=>str(row.attrs[key][0]),paths=world.ofType('app.area.path'),words=world.ofType('app.area.word'),verbs=world.ofType('app.area.verb'),areas={};
  for(const row of world.ofType('app.area.view')){
   const view=one(row,'view'),id=one(row,'world'),host=hosts[id];
   if(!host)throw Error('area-registry-view-without-native-host: '+view+' '+id);
   const pathsOf=role=>paths.filter(path=>one(path,'view')===view&&one(path,'role')===role).sort((a,b)=>Number(one(a,'order'))-Number(one(b,'order'))).map(path=>path.attrs.key.map(str));
   const focus=pathsOf('focus'),historyView=pathsOf('history.view');
   areas[view]={area:one(row,'area'),world:id,create:host.create,prepare:host.create,canonicalizeState:host.canonicalizeState,projectState:host.projectState,stateWorld:host.stateWorld,
-   separateRuntime:one(row,'separate.runtime')==='true',words:words.filter(word=>one(word,'view')===view).map(word=>one(word,'text')),historySelection:focus,...(historyView.length?{historyView}:{}),declaration:row.id};
+   separateRuntime:one(row,'separate.runtime')==='true',words:words.filter(word=>one(word,'view')===view).map(word=>one(word,'text')),verbs:verbs.filter(verb=>one(verb,'view')===view).map(verb=>one(verb,'text')),historySelection:focus,...(historyView.length?{historyView}:{}),declaration:row.id};
  }
  for(const path of paths)if(!areas[one(path,'view')])throw Error('area-registry-path-without-view: '+path.id);
  return areas;

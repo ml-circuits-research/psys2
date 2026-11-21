@@ -42,7 +42,9 @@ export async function resetForRelease({ storage = globalThis.localStorage, cache
 }
 
 /** The build manifest, fetched with no cache. null when it cannot be read (offline: the stored copy of the service worker keeps serving). */
-export async function loadManifest({ base, fetchFn = globalThis.fetch, timeoutMs = 8000 } = {}) {
+export async function loadManifest({ base, fetchFn = globalThis.fetch, timeoutMs = 8000, early = globalThis.window?.__psys2Early } = {}) {
+  // index.html already asked for it, with no cache (its mixed-build guard): one fetch per start
+  if (early?.buildInfo) { const pending = early.buildInfo; delete early.buildInfo; try { const m = await withTimeout(pending, timeoutMs); if (m && typeof m === 'object' && m.assets) return m; } catch { /* asked again below */ } }
   try {
     const r = await withTimeout(fetchFn(new URL('build-info.json', base), { cache: 'no-store' }), timeoutMs);
     if (!r?.ok) return null;

@@ -408,7 +408,8 @@
 @cp.word app.compose.reading word=?anyWord
 @cp.tf app.compose.typeForm area=?a type=composition form=?f
 @cp.start app.compose.start area=?a form=?f
-@start.composition core.rule when=$cp.r not=$cp.word when=$cp.tf not=$t.blocked then=$cp.start
+@cp.kaway app.compose.away kindless=true
+@start.composition core.rule when=$cp.r not=$cp.word when=$cp.tf not=$cp.kaway not=$t.blocked then=$cp.start
 @cp.rw app.compose.reading area=?a mode=new type=composition word=?w
 @cp.kf app.compose.kindForm area=?a word=?w form=?f
 @start.composition.kind core.rule when=$cp.rw when=$cp.kf not=$t.blocked then=$cp.start
@@ -420,4 +421,42 @@
 @cp.sstart app.compose.start area=drawing form=scene subject=?w
 @start.composition.scene core.rule when=$cp.rd when=$cp.scene not=$t.blocked then=$cp.sstart
 @cp.wstart app.compose.start area=drawing form=scene with=?w
-@start.composition.with core.rule when=$cp.rd not=$cp.scene not=$t.blocked then=$cp.wstart
+@cp.away app.compose.away word=?w
+@start.composition.with core.rule when=$cp.rd not=$cp.scene not=$cp.away not=$t.blocked then=$cp.wstart
+
+# ---- A composition of another editor (owner, 2026-11-21) ----------------------------------------------------------
+# The open words and the fillable diagram kinds name the editor that composes them. A reading of a new thing whose word
+# is another editor's ("draw a random picture" or "draw something" while the Diagram is shown; "make a random
+# flowchart" while the Drawing is shown) is composed in that editor (app.compose.start area= that editor), which the
+# shell then shows; the shown editor does not compose it. As in the shown editor, an open scene word needs no random
+# word and a diagram word does.
+@h.r app.compose.reading area=?a act=make mode=new word=?w
+@h.other core.check fn=neq args=?a args=?b
+@h.scene app.compose.open area=?b word=?w form=scene
+@h.opend app.compose.open area=?b word=?w form=diagram
+@h.form app.compose.form area=?b kind=?w
+@h.away app.compose.away word=?w area=?b
+@away.scene core.rule when=$h.r when=$h.scene if=$h.other then=$h.away
+@away.open core.rule when=$h.r when=$h.opend if=$h.other when=$o.asked then=$h.away
+@away.form core.rule when=$h.r when=$h.form if=$h.other when=$o.asked then=$h.away
+@h.start.scene app.compose.start area=?b form=scene
+@h.start.open app.compose.start area=?b form=diagram
+@h.start.form app.compose.start area=?b form=diagram subject=?w
+@start.away.scene core.rule when=$h.r when=$h.scene if=$h.other not=$t.blocked then=$h.start.scene
+@start.away.open core.rule when=$h.r when=$h.opend if=$h.other when=$o.asked not=$t.blocked then=$h.start.open
+@start.away.form core.rule when=$h.r when=$h.form if=$h.other when=$o.asked not=$t.blocked then=$h.start.form
+# A composition with no kind word whose request words name another editor's composition ("draw something random"
+# while the Diagram is shown: "something" is an open word of the Drawing, "draw" a verb of it) is composed there, not
+# as the shown editor's own form.
+@areaword.draw app.compose.areaWord area=drawing word=draw
+@areaword.paint app.compose.areaWord area=drawing word=paint
+@h.k app.compose.reading area=?a mode=new type=composition
+@h.kw app.compose.word word=?w
+@h.kopen app.compose.open area=?b word=?w form=scene
+@h.kverb app.compose.areaWord area=?b word=?w
+@h.kaway app.compose.away kindless=true area=?b
+@h.kstart app.compose.start area=?b form=scene
+@away.kindless.open core.rule when=$h.k not=$cp.word when=$h.kw when=$h.kopen if=$h.other then=$h.kaway
+@away.kindless.verb core.rule when=$h.k not=$cp.word when=$h.kw when=$h.kverb if=$h.other then=$h.kaway
+@start.away.kindless.open core.rule when=$h.k not=$cp.word when=$h.kw when=$h.kopen if=$h.other not=$t.blocked then=$h.kstart
+@start.away.kindless.verb core.rule when=$h.k not=$cp.word when=$h.kw when=$h.kverb if=$h.other not=$t.blocked then=$h.kstart

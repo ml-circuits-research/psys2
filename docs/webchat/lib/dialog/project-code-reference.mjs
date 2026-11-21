@@ -4,9 +4,9 @@
 // reading is re-bridged with the object's own family (a node for n2, a link for e1), its identity restatements
 // (an `ids` selector with the code) dropped, and the object as the declared context target; the reply says how the
 // code was taken. Nothing here inspects words: only the reader's name span and the observed codes.
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=ea9d685adb';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=3e86b7f558';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=48479fd48d';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=05e816ce7e';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=5eee029b6d';
 import {comparativeSteps} from './comparative-projection.mjs?v=55f3f4579e';
 import {referenceProjection} from './reference-projection.mjs?v=fb387ab994';
 

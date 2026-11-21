@@ -138,7 +138,8 @@ export async function composeStart(session, reading, { knowledge } = {}) {
   // The declared options the reading says (app.compose.option: source, variant, with), first one per option.
   const options = {};
   for (const row of world.ofType(family + 'option')) { const key = text(row, 'option'); if (['source', 'variant', 'with'].includes(key) && options[key] === undefined) options[key] = text(row, 'value'); }
-  return { area: reading.area, form: text(start, 'form'), subject: text(start, 'subject'), variant: text(start, 'variant') ?? options.variant,
+  // The editor that composes it: the start's own (a word another editor composes, compose-policy.sop app.compose.away), else the reading's.
+  return { area: text(start, 'area') ?? reading.area, form: text(start, 'form'), subject: text(start, 'subject'), variant: text(start, 'variant') ?? options.variant,
     ...(options.source ? { source: options.source } : {}), ...(text(start, 'with') ?? options.with ? { with: thingOf(text(start, 'with') ?? options.with) } : {}) };
 }
 

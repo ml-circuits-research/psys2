@@ -6,12 +6,12 @@
 // the made things placed together by the placement problem (executeNativeGroup: std.problem, Z3 where available), the
 // calls of the after phase with the ids made, everything as one undoable turn. It names no scene, kind or sentence.
 import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
-import POLICY from '../../worlds/app.project/compose-policy-source.mjs?v=03c2556471';
-import SCHEMA from '../../worlds/app.project/compose-schema-source.mjs?v=26d40ac451';
-import { NATIVE_AREAS, createAreaHost } from './app-reader-context.mjs?v=ea9d685adb';
+import POLICY from '../../worlds/app.project/compose-policy-source.mjs?v=9b24ed4625';
+import SCHEMA from '../../worlds/app.project/compose-schema-source.mjs?v=4e416104e2';
+import { NATIVE_AREAS, createAreaHost } from './app-reader-context.mjs?v=3e86b7f558';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { executeNativeGroup } from './capability-plan-execution.mjs?v=cbb83be640';
-import { describeNativeControl } from './native-control-intent.mjs?v=01d3de93b6';
+import { executeNativeGroup } from './capability-plan-execution.mjs?v=75d74875f7';
+import { describeNativeControl } from './native-control-intent.mjs?v=cfe104acdb';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=24495a868d';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=fb12a09352';
 import { budget } from './budget.mjs?v=d42dc656e7';
@@ -138,7 +138,8 @@ export async function composeStart(session, reading, { knowledge } = {}) {
   // The declared options the reading says (app.compose.option: source, variant, with), first one per option.
   const options = {};
   for (const row of world.ofType(family + 'option')) { const key = text(row, 'option'); if (['source', 'variant', 'with'].includes(key) && options[key] === undefined) options[key] = text(row, 'value'); }
-  return { area: reading.area, form: text(start, 'form'), subject: text(start, 'subject'), variant: text(start, 'variant') ?? options.variant,
+  // The editor that composes it: the start's own (a word another editor composes, compose-policy.sop app.compose.away), else the reading's.
+  return { area: text(start, 'area') ?? reading.area, form: text(start, 'form'), subject: text(start, 'subject'), variant: text(start, 'variant') ?? options.variant,
     ...(options.source ? { source: options.source } : {}), ...(text(start, 'with') ?? options.with ? { with: thingOf(text(start, 'with') ?? options.with) } : {}) };
 }
 

@@ -27,6 +27,9 @@
 @interpret.areaRetry.type core.type of=app.interpret.areaRetry closed=true
 @interpret.areaRetry.reason core.slot of=app.interpret.areaRetry key=reason kind=atom many=true present=true
 @interpret.areaRetry.label core.slot of=app.interpret.areaRetry key=label kind=string present=true
+# A reason that has the request read again in the other editors even when the active editor applied it (a weak reading
+# there): the other editor's full application replaces it, else the active editor's reading stays.
+@interpret.areaRetry.weak core.slot of=app.interpret.areaRetry key=weak kind=atom enum=kind-not-of-read-family many=true
 
 # Which readings are first tried as a coordination of noun phrases.
 @interpret.coordination.type core.type of=app.interpret.coordination closed=true

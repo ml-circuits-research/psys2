@@ -200,16 +200,27 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  }
  // After coordination (several kinds read for one target are made, never composed): a reading the declared composition policy takes (compose-policy.sop: a new drawing with no kind, an open word, a
  // scene or a diagram kind the knowledge can fill) is composed from knowledge with a recorded seed, as one undoable turn.
+ let composeShell=null;
  try{
   const reading=composeReading(proposal);
   const start=reading&&await composeStart(session,reading,{knowledge:session.engine?.knowledge});
-  if(start){
-   const request=composeRequest(session,start);
-   observe(session,{nodeIds:['component:library','execution:compose-policy'],phase:'stage',operation:'app.compose',label:'Compose from knowledge',text,request});
-   const composed=await executeCompose(session,request,{view:context.area});
-   if(composed)return {...composed,trace:{...composed.trace,readerRouting:{primary:'sop-bert',selected:'compose',rawReading:proposal?.raw?.requests??null,unresolved:proposal?.failures??[]}}};
+  // A composition another editor composes (compose-policy.sop app.compose.away) runs in that live editor, which the shell shows.
+  let view=context.area,shell=null;
+  if(start&&start.area!==reading.area){
+   const {NATIVE_AREAS}=await import('./app-reader-context.mjs');
+   view=liveViews(session,NATIVE_AREAS).find(([,area])=>area.area===start.area)?.[0]??null;
+   shell=composeShell=session.isession.state['ui.shell'];
+   if(view&&shell)session.isession.state['ui.shell']={...shell,activeTab:view};
   }
- }catch(error){observe(session,{nodeIds:['component:reader'],phase:'error',operation:'app.compose',label:'Compose from knowledge',text,error:String(error?.message??error)});}
+  if(start&&view){
+   const request=composeRequest(session,start);
+   observe(session,{nodeIds:['component:library','execution:compose-policy'],phase:'stage',operation:'app.compose',label:'Compose from knowledge',text,request,...(view!==context.area?{from:context.area,view}:{})});
+   const composed=await executeCompose(session,request,{view});
+   if(composed)return {...composed,...(view!==context.area?{state:structuredClone(session.isession.state)}:{}),trace:{...composed.trace,...(view!==context.area?{composeArea:{from:context.area,used:view}}:{}),readerRouting:{primary:'sop-bert',selected:'compose',rawReading:proposal?.raw?.requests??null,unresolved:proposal?.failures??[]}}};
+   if(shell)session.isession.state['ui.shell']=shell;
+   composeShell=null;
+  }
+ }catch(error){if(composeShell)session.isession.state['ui.shell']=composeShell;observe(session,{nodeIds:['component:reader'],phase:'error',operation:'app.compose',label:'Compose from knowledge',text,error:String(error?.message??error)});}
  let projected=await project(proposal),contextRetry=null;
  // The previous utterance and the observed objects are priors for the reader. While the reading
  // conditioned on them stays incomplete, the declared re-readings (interpretation-policy.sop
@@ -465,20 +476,41 @@ async function routeNewEngineTurn(session,text,options={}){
    if(used)return {...reply,state:structuredClone(session.isession.state),trace:{...reply.trace,editorMention:mention}};
   }
  }
+ const rule=interpretationPolicy().areaRetry;
+ const retrying=!!rule&&!options.view&&!isAuthoredRequest(text)&&!!shell?.activeTab;
+ // The state before the active editor's reading: a weak reading it applied is set aside while the others are tried.
+ const before=retrying&&rule.weak?.length?{state:structuredClone(session.isession.state),journal:captureHistory(session,false)}:null;
  const first=await routeInView(session,text,options);
  const withMention=reply=>mention?{...reply,trace:{...reply.trace,editorMention:mention}}:reply;
- const rule=interpretationPolicy().areaRetry;
- if(!rule||options.view||isAuthoredRequest(text)||!shell?.activeTab||first?.statuses?.includes('supported'))return withMention(first);
- const reasons=new Set(unboundReasons(first).filter(reason=>rule.reasons.includes(reason)));
- if(!reasons.size)return withMention(first);
+ if(!retrying)return withMention(first);
  const {NATIVE_AREAS}=await import('./app-reader-context.mjs');
+ let kinds=[];try{kinds=session.engine?.requestReader?.bindings?.()?.kinds??[];}catch{/* no bindings: the declared order alone */}
+ const active=shell.activeTab,applied=first?.statuses?.includes('supported');
+ const requests=Array.isArray(first?.trace?.readerRouting?.rawReading)?first.trace.readerRouting.rawReading:[];
+ // kind-not-of-read-family: a kind word the reading kept although the active editor declares no kind of that word for
+ // the family read (its table row is of another family). A composition is the compose policy's (compose-policy.sop).
+ const lemmas=word=>{const w=String(word).toLowerCase();return [w,String(en.singular(w,'lemma')??w).toLowerCase()];};
+ const weak=applied&&first?.trace?.readerRouting?.selected!=='compose'&&rule.weak?.includes('kind-not-of-read-family')&&requests.some(r=>{
+  const t=r?.target;if(typeof t?.kind!=='string'||typeof t.type!=='string')return false;
+  const words=lemmas(t.kind);return !kinds.some(row=>row.area===NATIVE_AREAS[active]?.area&&row.type===t.type&&words.includes(String(row.lemma).toLowerCase()));
+ });
+ if(applied&&!weak)return withMention(first);
+ const reasons=new Set(weak?['kind-not-of-read-family']:unboundReasons(first).filter(reason=>rule.reasons.includes(reason)));
+ if(!reasons.size)return withMention(first);
  // The knowledge prior: only an editor whose bindings bind a kind word the reading saw is a hypothesis (declared area order among them);
  // a word no other editor binds is not re-read there (each re-reading costs the reader passes of a whole turn).
- const said=new Set(),collect=(value,depth=0)=>{if(depth>8||!value||typeof value!=='object')return;for(const [key,item] of Object.entries(value)){if((key==='kind'||key==='kind_span')&&typeof item==='string')said.add(item.toLowerCase());else collect(item,depth+1);}};
+ const said=new Set(),collect=(value,depth=0)=>{if(depth>8||!value||typeof value!=='object')return;for(const [key,item] of Object.entries(value)){if((key==='kind'||key==='kind_span')&&typeof item==='string')lemmas(item).forEach(w=>said.add(w));else collect(item,depth+1);}};
  collect(first?.trace?.readerRouting?.rawReading);collect(first?.trace?.readerRouting?.contextRetry);
- let kinds=[];try{kinds=session.engine?.requestReader?.bindings?.()?.kinds??[];}catch{/* no bindings: the declared order alone */}
  const binds=area=>kinds.some(row=>row.area===area&&said.has(String(row.lemma).toLowerCase()));
- const active=shell.activeTab,views=liveViews(session,NATIVE_AREAS).filter(([view,area])=>view!==active&&view!==mention?.view&&binds(area.area)).map(([view])=>view).slice(0,modeLimits(session).areas);
+ // A trigger verb an editor declares (area-registry.sop app.area.verb) puts that editor first; otherwise the declared order.
+ const triggers=new Set(requests.flatMap(r=>typeof r?.trigger==='string'?lemmas(r.trigger):[]));
+ const verbPrior=area=>(area.verbs??[]).some(verb=>triggers.has(verb.toLowerCase()))?0:1;
+ const views=liveViews(session,NATIVE_AREAS).filter(([view,area])=>view!==active&&view!==mention?.view&&binds(area.area)).map(([view,area],order)=>({view,order,prior:verbPrior(area)}))
+  .sort((a,b)=>a.prior-b.prior||a.order-b.order).map(({view})=>view).slice(0,modeLimits(session).areas);
+ if(!views.length)return withMention(first);
+ // The active editor's applied reading is set aside (its state and history) while the other editors are tried.
+ const after=weak?{state:session.isession.state,journal:captureHistory(session,false)}:null;
+ if(weak){session.isession.state=structuredClone(before.state);restoreHistory(session,before.journal,{},false);}
  const attempts=[];
  for(const view of views){
   const {reply,used}=await attemptInView(session,text,options,view,shell);
@@ -486,6 +518,7 @@ async function routeNewEngineTurn(session,text,options={}){
   observe(session,{nodeIds:['component:reader'],phase:'stage',operation:'app.reader.area',label:rule.label,text,from:active,view,used});
   if(used)return withMention({...reply,state:structuredClone(session.isession.state),trace:{...reply.trace,areaRetry:{rule:rule.id,from:active,reasons:[...reasons],used:view,attempts}}});
  }
+ if(weak){session.isession.state=after.state;restoreHistory(session,after.journal,{},false);}
  return withMention({...first,trace:{...first.trace,areaRetry:{rule:rule.id,from:active,reasons:[...reasons],used:null,attempts}}});
 }
 async function routeInView(session,text,options={}){

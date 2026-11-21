@@ -1,4 +1,4 @@
-@area.registry.module core.module name=app.area version=1 exports=app.area.view exports=app.area.path exports=app.area.word
+@area.registry.module core.module name=app.area version=1 exports=app.area.view exports=app.area.path exports=app.area.word exports=app.area.verb
 
 # One editor view of the application: the tab id the page shows, the reader's area name and the world whose state it edits.
 @area.view.type core.type of=app.area.view closed=true
@@ -19,3 +19,9 @@
 @area.word.type core.type of=app.area.word closed=true
 @area.word.view core.slot of=app.area.word key=view kind=atom present=true
 @area.word.text core.slot of=app.area.word key=text kind=string present=true
+
+# A trigger verb that is a prior for the editor ("draw" for the Drawing): when a request is read again in the other
+# editors (interpretation-policy.sop app.interpret.areaRetry), an editor that declares the request's trigger is tried first.
+@area.verb.type core.type of=app.area.verb closed=true
+@area.verb.view core.slot of=app.area.verb key=view kind=atom present=true
+@area.verb.text core.slot of=app.area.verb key=text kind=string present=true

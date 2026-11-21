@@ -10,7 +10,7 @@
 //    "draw a women") binds what its singular binds, like a counted kind.
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
 import {en} from '../lang/en.mjs?v=d028d63371';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=ea9d685adb';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=3e86b7f558';
 import {readsBySingular} from './raw-reading-policy.mjs?v=7d611bb87a';
 
 const attr=(wire,key)=>{const raw=wire?.attrs[key]?.[0];return raw===undefined?undefined:raw.startsWith('"')?str(raw):raw;};

@@ -15,6 +15,11 @@
 @area.editor.word.document app.area.word view=editor text="document"
 @area.calendar.word.calendar app.area.word view=calendar text="calendar"
 
+# Trigger verbs that are a prior for an editor when a request is read again in the other editors.
+@area.draw.verb.draw app.area.verb view=draw text="draw"
+@area.draw.verb.paint app.area.verb view=draw text="paint"
+@area.draw.verb.sketch app.area.verb view=draw text="sketch"
+
 # Reader focus: the selection paths of each view's projected state.
 @area.avatar.focus.selected app.area.path view=avatar role=focus order=0 key=runtime key=view key=selected
 @area.draw.focus.selected app.area.path view=draw role=focus order=0 key=runtime key=view key=selected

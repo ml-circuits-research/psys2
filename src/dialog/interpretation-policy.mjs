@@ -31,7 +31,7 @@ export function interpretationPolicy(source=POLICY){
  if(new Set(retries.map(retry=>retry.order)).size!==retries.length)throw Error('invalid-interpretation-policy: retry orders must be distinct');
  const compare=Object.fromEntries(world.ofType(MODULE+'.compare').map(row=>[one(row,'mode'),{id:row.id,min:Number(one(row,'min')),max:Number(one(row,'max'))}]));
  for(const [mode,bounds] of Object.entries(compare))if(bounds.min>bounds.max)throw Error('invalid-interpretation-policy: compare '+mode+' min > max');
- const areaRetry=world.ofType(MODULE+'.areaRetry').map(row=>({id:row.id,reasons:all(row,'reason'),label:one(row,'label')}))[0]??null;
+ const areaRetry=world.ofType(MODULE+'.areaRetry').map(row=>({id:row.id,reasons:all(row,'reason'),weak:all(row,'weak'),label:one(row,'label')}))[0]??null;
  const coordination=world.ofType(MODULE+'.coordination').map(row=>({id:row.id,act:one(row,'act'),requests:Number(one(row,'requests'))}));
  const detect=world.ofType(MODULE+'.language').filter(row=>one(row,'role')==='detect');
  if(detect.length!==1)throw Error('invalid-interpretation-policy: exactly one language detection rule');

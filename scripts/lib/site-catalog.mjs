@@ -38,6 +38,21 @@ export async function copySiteCatalog({ outDir, dir, commit }) {
     await writeFile(dst, b);
     written++;
   }
+  // The vocabulary buckets the page asks for first (src/knowledge/facts.mjs vocab/index.json): a pinned folder that does not publish them gets them cut
+  // here from its own vocab.json (scripts/build-catalog-vocab.mjs), so every catalog file the page asks the site for exists (no 404 for vocab/index.json).
+  if (!existsSync(path.join(dir, 'vocab')) && existsSync(path.join(dir, 'vocab.json'))) {
+    const { bucketVocab } = await import('../build-catalog-vocab.mjs');
+    const index = JSON.parse(await readFile(path.join(dir, 'index.json'), 'utf8')), buckets = bucketVocab(JSON.parse(await readFile(path.join(dir, 'vocab.json'), 'utf8')));
+    const cut = { ...Object.fromEntries(Object.entries(buckets).map(([b, e]) => [`vocab/${b}.json`, JSON.stringify(e)])),
+      'vocab/index.json': JSON.stringify({ version: index.version ?? null, buckets: Object.fromEntries(Object.entries(buckets).map(([b, e]) => [b, Object.keys(e).length])) }) };
+    await mkdir(path.join(to, 'vocab'), { recursive: true });
+    for (const [f, text] of Object.entries(cut)) {
+      const dst = path.join(to, f), b = Buffer.from(text);
+      bytes += b.length; files.push(f);
+      if (existsSync(dst) && Buffer.compare(await readFile(dst), b) === 0) continue;
+      await writeFile(dst, b); written++;
+    }
+  }
   const removed = [];
   for (const e of await readdir(base, { withFileTypes: true })) if (e.name !== commit) { await rm(path.join(base, e.name), { recursive: true, force: true }); removed.push(e.name); }
   return { files: files.length, bytes, written, removed };

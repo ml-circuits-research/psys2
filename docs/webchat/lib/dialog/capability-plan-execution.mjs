@@ -7,12 +7,12 @@ import { executionPolicyWorld } from './execution-policy.mjs?v=3dd93446cd';
 import { compileNativeCapability } from './capability-plan-adapter.mjs?v=2d839ae029';
 import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=0971a22734';
 import { readDegreeBases } from './degree-bases.mjs?v=9de2e160f1';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=ea9d685adb';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=3e86b7f558';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=abf4f307c4';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=b4acbfc1c6';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=24495a868d';
 import { retainPropertyEffect } from './property-effect-evidence.mjs?v=0938683588';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=01d3de93b6';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=cfe104acdb';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],

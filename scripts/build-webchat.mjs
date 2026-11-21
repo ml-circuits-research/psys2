@@ -230,7 +230,9 @@ async function writeEarlyLoad({ outDir, tabFiles, ids, graph, build, assets = {}
     ...mods.filter((m) => ver[m]).map((m) => `<link rel="modulepreload" href="${m}?v=${ver[m]}">`),
     // ONE fetch of the model's meta file per start: findDispatcherModel (ui/dispatcher-host.mjs) takes it from here. The worlds are not fetched here: the engine worker reads the small
     // routing index (worlds/index.json) and loads a world's bundle when the world is needed (LAZY LOADING).
-    `<script>window.__psys2Early = { dispatcherMeta: fetch('models/dispatcher/meta.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null), () => undefined) };</script>`,
+    // The build manifest is asked for here too, with no cache (ui/assets.mjs loadManifest takes it from here): the page's module script compares its version with this page's
+    // build before it loads app.mjs, so a stale index.html (Pages caches it ten minutes) reloads once to the new build instead of running a mix of old and new files.
+    `<script>window.__psys2Early = { dispatcherMeta: fetch('models/dispatcher/meta.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null), () => undefined), buildInfo: fetch('build-info.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null), () => null) };</script>`,
     EARLY_END].join('\n  ');
   const a = html.indexOf(EARLY_BEGIN), b = html.indexOf(EARLY_END);
   // idempotent: when only the build time would change (same commit, same files), keep the previous block and its time

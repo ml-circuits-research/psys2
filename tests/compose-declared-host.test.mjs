@@ -187,3 +187,15 @@ test('reader v12 preference key compose.detail: the stated detail preference is 
   assert.match(iface, /op\.diagram\.preference\.state\.param\.key[^\n]*enum="compose\.detail"/);
   assert.match(prefs, /w\.preferences\.default key=compose\.detail/);
 });
+
+test('a composition word of another editor is composed in that editor (compose-policy.sop app.compose.away)', async () => {
+  const random = [{ key: 'composition.source', value: 'random' }];
+  const start = async (area, word, words) => { const s = await composeStart(session('diagram'), { area, act: 'make', mode: 'new', type: 'composition', ...(word ? { word } : {}), constraints: random, words, parts: 1 }, { knowledge }); return JSON.parse(JSON.stringify(s)); };
+  assert.deepEqual(await start('diagram', 'picture', ['draw', 'a', 'random', 'picture']), { area: 'drawing', form: 'scene', source: 'random' });
+  assert.deepEqual(await start('diagram', 'landscape', ['draw', 'a', 'random', 'landscape']), { area: 'drawing', form: 'scene', source: 'random' });
+  assert.deepEqual(await start('diagram', undefined, ['draw', 'something', 'random']), { area: 'drawing', form: 'scene', source: 'random' });
+  assert.deepEqual(await start('diagram', 'flowchart', ['make', 'a', 'random', 'flowchart']), { area: 'diagram', form: 'diagram', subject: 'flowchart', source: 'random' });
+  assert.deepEqual(await start('diagram', undefined, ['make', 'a', 'random', 'one']), { area: 'diagram', form: 'diagram', source: 'random' });
+  assert.deepEqual(await start('drawing', 'flowchart', ['make', 'a', 'random', 'flowchart']), { area: 'diagram', form: 'diagram', subject: 'flowchart', source: 'random' });
+  assert.deepEqual(await start('drawing', undefined, ['draw', 'something', 'random']), { area: 'drawing', form: 'scene', source: 'random' });
+});

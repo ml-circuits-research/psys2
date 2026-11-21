@@ -1,6 +1,6 @@
 import { parse,str,nearestName } from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
 import { compileNativeQuery } from './capability-plan-adapter.mjs?v=2d839ae029';
-import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs?v=ea9d685adb';
+import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs?v=3e86b7f558';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
 import { namedColourCodes } from '../knowledge/values.mjs?v=b0000e82a7';
 import { executionPolicyWorld } from './execution-policy.mjs?v=3dd93446cd';

@@ -1,11 +1,11 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
 import {readReaderSource} from './reader-source.mjs?v=a41a7be6a2';
 import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=646e795567';
-import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=05e816ce7e';
+import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=5eee029b6d';
 import {comparativeSteps} from './comparative-projection.mjs?v=55f3f4579e';
 import {referenceProjection} from './reference-projection.mjs?v=fb387ab994';
-import {completeBindings} from './declared-bindings.mjs?v=3e9b75e479';
-import {declaredRawReadings} from './partial-admission.mjs?v=d8fce8f8d2';
+import {completeBindings} from './declared-bindings.mjs?v=95b8eef1a7';
+import {declaredRawReadings} from './partial-admission.mjs?v=279c6908d8';
 import {declaredValueReadings} from './declared-value-readings.mjs?v=97dfd03d0f';
 import {en} from '../lang/en.mjs?v=d028d63371';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
