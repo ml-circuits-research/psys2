@@ -1,5 +1,5 @@
 {
- "version": "47188df4355d",
+ "version": "530ea91da078",
  "sopworld": "747b51e",
  "worlds": [
   {
@@ -97964,6 +97964,7 @@
       "text_colour",
       "font_size",
       "font_weight",
+      "font_style",
       "effect",
       "opacity",
       "corner",
@@ -98189,8 +98190,8 @@
      ]
     }
    ],
-   "wires": 163,
-   "bytes": 29456,
+   "wires": 164,
+   "bytes": 29625,
    "sources": [
     "hand-core-1"
    ],

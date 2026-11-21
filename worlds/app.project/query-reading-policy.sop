@@ -10,6 +10,9 @@
 @what app.query.read.head head=what operation=values property=true
 @which.property app.query.read.head head=which operation=values property=true
 @list.property app.query.read.head head=list operation=values property=true
+# "What values does Uptime show?", "list Uptime": a question that asks no property of one named object asks the property
+# its family lists (src/dialog/raw-structural-bridge.mjs reads these for a target with a name and no asked key).
+@listed.chart app.query.read.listed family=chart key="chart.values"
 @claimed app.query.read.question act=answer mood=ask head=?head
 @claimed.population app.query.read.question act=answer mood=ask head=?head targetCue=true core.absent=concept
 @claimed.property app.query.read.question act=answer mood=ask head=?head concept=?concept

@@ -276,12 +276,15 @@
 @native.diagram.sketch.op.diagram.node.make.param.textColour std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="textColour" kind=string
 @native.diagram.sketch.op.diagram.node.make.param.textColour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.node.make.param.textColour field=enum input=$native.diagram.sketch.input.diagram.colours
 @native.diagram.sketch.op.diagram.node.make.param.role std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="role" kind=string enum="start" enum="end" enum="process" enum="decision" enum="data" enum="document" enum="subprocess" enum="connector" enum="database" enum="actor" enum="note" enum="external" enumClosed=true
+@native.diagram.sketch.op.diagram.node.make.param.fontWeight std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="fontWeight" kind=string enum="normal" enum="bold" enumClosed=true
+@native.diagram.sketch.op.diagram.node.make.param.fontStyle std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="fontStyle" kind=string enum="normal" enum="italic" enumClosed=true
 @native.diagram.sketch.op.diagram.node.change.param.outline std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="outline" kind=string
 @native.diagram.sketch.op.diagram.node.change.param.outline.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.node.change.param.outline field=enum input=$native.diagram.sketch.input.diagram.colours
 @native.diagram.sketch.op.diagram.node.change.param.textColour std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="textColour" kind=string
 @native.diagram.sketch.op.diagram.node.change.param.textColour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.node.change.param.textColour field=enum input=$native.diagram.sketch.input.diagram.colours
 @native.diagram.sketch.op.diagram.node.change.param.fontSize std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="fontSize" kind=number min=8 max=48
 @native.diagram.sketch.op.diagram.node.change.param.fontWeight std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="fontWeight" kind=string enum="normal" enum="bold" enumClosed=true
+@native.diagram.sketch.op.diagram.node.change.param.fontStyle std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="fontStyle" kind=string enum="normal" enum="italic" enumClosed=true
 @native.diagram.sketch.op.diagram.node.change.param.role std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="role" kind=string enum="start" enum="end" enum="process" enum="decision" enum="data" enum="document" enum="subprocess" enum="connector" enum="database" enum="actor" enum="note" enum="external" enumClosed=true
 @native.diagram.sketch.op.diagram.node.change.param.effect std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="effect" kind=string enum="none" enum="shadow" enum="glow" enumClosed=true
 @native.diagram.sketch.op.diagram.node.change.param.opacity std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="opacity" kind=number min=0.1 max=1
@@ -732,3 +735,7 @@
 @native.diagram.sketch.linkintent.142 std.capability.record entry=$native.diagram.sketch.linkintent.136 entry=$native.diagram.sketch.linkintent.141
 @native.diagram.sketch.linkintent.143 std.capability.arg name="intent" value=$native.diagram.sketch.linkintent.142
 @native.diagram.sketch.op.diagram.link.bend.remove.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.link.bend.remove field=$native.diagram.sketch.linkintent.143
+# A new, empty page (act-rules.sop page.new): the page's nodes, links and groups go and it takes the title said; the
+# history keeps the old page, so undo brings it back.
+@native.diagram.sketch.op.diagram.page.new std.capability.operation scope=$native.diagram.sketch.scope name="diagram.page.new" act=make on="diagram.sketch.page" order=66 eligible=true
+@native.diagram.sketch.op.diagram.page.new.param.title std.capability.parameter operation=$native.diagram.sketch.op.diagram.page.new name="title" kind=string

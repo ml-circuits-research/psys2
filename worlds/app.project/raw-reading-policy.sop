@@ -36,6 +36,74 @@
 @sr.out app.reading.drop request=?r index=?j
 @rule.span.one.role core.rule when=$sr.a when=$sr.b if=$sr.diff when=$sr.ev not=$sr.ev2 then=$sr.out
 
+# ---- A value word of another key (2026-11-21) ------------------------------------------------------------------------
+# A constraint whose value span says a declared value word of another key of the same family ("in italics": the font
+# style italic) and neither its own value nor a word of its own key is that key and value: the reader had no head for
+# the key and gave the nearest one it knew ("italic" read as the font weight bold). A constraint that only repeats a
+# re-keyed one (same key and value) and says nothing of its own is dropped; one that says its own value stays, so
+# "bold and italic" sets both.
+@vw.style.italic app.reading.valueWord key="node.fontStyle" keyType="node" value="italic" text="italic"
+@vw.style.slant app.reading.valueWord key="node.fontStyle" keyType="node" value="italic" text="slant"
+@vw.style.oblique app.reading.valueWord key="node.fontStyle" keyType="node" value="italic" text="oblique"
+@oe.s app.reading.span request=?r index=?i key=?k value=?v
+@oe.says app.reading.spanSays request=?r index=?i text=?v
+@oe.out app.reading.spanEvidence request=?r index=?i
+@rule.span.evidence.value core.rule when=$oe.s when=$oe.says then=$oe.out
+@oe.w app.reading.word key=?k text=?t
+@oe.wsays app.reading.spanSays request=?r index=?i text=?t
+@rule.span.evidence.word core.rule when=$oe.s when=$oe.w when=$oe.wsays then=$oe.out
+@rk.s app.reading.span request=?r index=?i key=?k keyType=?kt
+@rk.w app.reading.valueWord key=?k2 keyType=?kt value=?v2 text=?t
+@rk.says app.reading.spanSays request=?r index=?i text=?t
+@rk.diff core.check fn=neq args=?k args=?k2
+@rk.out app.reading.rekey request=?r index=?i key=?k2 value=?v2
+@rule.span.rekey core.rule when=$rk.s when=$rk.w when=$rk.says if=$rk.diff not=$oe.out then=$rk.out
+@dd.a app.reading.span request=?r index=?i key=?k value=?v
+@dd.b app.reading.span request=?r index=?j key=?k value=?v
+@dd.ne core.check fn=neq args=?i args=?j
+@dd.rk app.reading.rekey request=?r index=?i
+@dd.rkj app.reading.rekey request=?r index=?j
+@dd.evj app.reading.spanEvidence request=?r index=?j
+@dd.out app.reading.drop request=?r index=?j
+@rule.span.repeat core.rule when=$dd.a when=$dd.b if=$dd.ne when=$dd.rk not=$dd.rkj not=$dd.evj then=$dd.out
+
+# ---- A family named by a kindless make (2026-11-21) -----------------------------------------------------------------
+# A make whose target has no kind ("a new page": the reader gave a node and no kind word) and whose request says the
+# word of another family of the area, not after a definite determiner ("on this page" names the page there), makes
+# that family: "start a new page" is the page's make (diagram.page.new), not a box.
+@fm.req app.reading.request request=?r act="make"
+@fm.t app.reading.target request=?r mode="new" type=?tt
+@fm.kind app.reading.target request=?r kind=?k
+@fm.ks app.reading.target request=?r kindSpan=?s
+@fm.m app.reading.mention request=?r type=?ft definite="no"
+@fm.f app.reading.family type=?ft canonical=?c
+@fm.diff core.check fn=neq args=?ft args=?tt
+@fm.out app.reading.retarget request=?r rule=family type=?ft mode="new" determiner="indefinite"
+@rule.family.named core.rule when=$fm.req when=$fm.t not=$fm.kind not=$fm.ks when=$fm.m when=$fm.f if=$fm.diff then=$fm.out
+# The name said for the object the reader took ("the title Ward Census" read as a node's label) names the family made:
+# a page's name is its title.
+@name.node app.reading.nameKey type="node" key="node.label"
+@name.chart app.reading.nameKey type="chart" key="chart.title"
+@name.page app.reading.nameKey type="page" key="page.title"
+@fn.c app.reading.constraint request=?r index=?i key=?k
+@fn.from app.reading.nameKey type=?other key=?k
+@fn.to app.reading.nameKey type=?ft key=?k2
+@fn.diff core.check fn=neq args=?k args=?k2
+@fn.out app.reading.renamed request=?r index=?i key=?k2
+@rule.family.name core.rule when=$fm.out when=$fn.c when=$fn.from when=$fn.to if=$fn.diff then=$fn.out
+
+# ---- A name restated by another family's key (2026-11-21) -----------------------------------------------------------
+# A selector whose value is the target's own name, by a key whose objects are of another source type than the target's
+# family ("what values does Mailer show?": the chart Mailer, with node.ids Mailer beside it), says the name again and
+# is dropped; the target's name picks the object.
+@rs.c app.reading.constraint request=?r index=?i key=?k phase="selector" valueSpan=?n
+@rs.t app.reading.target request=?r type=?tt nameSpan=?n
+@rs.p app.reading.property key=?k host=?h
+@rs.f app.reading.family type=?tt sourceType=?ts
+@rs.diff core.check fn=neq args=?h args=?ts
+@rs.out app.reading.restated request=?r index=?i
+@rule.name.restated core.rule when=$rs.c when=$rs.t when=$rs.p when=$rs.f if=$rs.diff then=$rs.out
+
 # ---- A joined population (cdf4aed4d, 954017902) ----------------------------------------------------------------------
 # A joining act read with the joined population as its theme ("connect all the circles", "connect C to all circles")
 # is the joining line made between them: the act's declared form (actForm as=make of=<line kind>) names the line's

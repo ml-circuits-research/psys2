@@ -37,8 +37,8 @@ background, numbered, layout, flow): the target of the page-wide operations (lay
 
 | Operation | Parameters | Does | Human ways to ask |
 | --- | --- | --- | --- |
-| `diagram.node.make` | `kind` (shape, below), `label`, `n` (1-12), `colour`, `outline`, `textColour`, `size`, `role`, `layout` (row, column, grid, circle, radial: an arrangement of the new nodes), `x`, `y`; a picture's `source` and `caption`, a table's `rows` (1-40), `columns` (1-20) and `cells` (texts in reading order) | make nodes; a `role` without a `kind` takes the role's flowchart shape from `k.diagrams.shape` | "draw a rectangle called Api", "add three red circles in a row", "add a decision node Is it hot?", "put a database called Users", "add five nodes in a circle", "add a start node" |
-| `diagram.node.change` | `ids`, `colour` (fill), `outline`, `textColour`, `fontSize` (8-48), `fontWeight` (normal, bold), `size`, `label`, `value`, `kind`, `role`, `effect` (none, shadow, glow), `opacity` (0.1-1), `corner` (0-40), `rotation` (-360-360, degrees clockwise), `source`, `caption`, `rows`, `columns`, `cells` | change what is given; nothing given [missing-property] | "make Api blue", "give it a red border", "white text on the decision", "make the labels bigger / font size 18", "bold label", "turn it into a diamond", "make Db a cylinder", "mark it as the start", "add a shadow to Api", "make it glow", "make it half transparent", "round the corners more", "rotate it 45 degrees", "tilt the label box a little" |
+| `diagram.node.make` | `kind` (shape, below), `label`, `n` (1-12), `colour`, `outline`, `textColour`, `fontWeight`, `fontStyle`, `size`, `role`, `layout` (row, column, grid, circle, radial: an arrangement of the new nodes), `x`, `y`; a picture's `source` and `caption`, a table's `rows` (1-40), `columns` (1-20) and `cells` (texts in reading order) | make nodes; a `role` without a `kind` takes the role's flowchart shape from `k.diagrams.shape` | "draw a rectangle called Api", "add three red circles in a row", "add a decision node Is it hot?", "put a database called Users", "add five nodes in a circle", "add a start node" |
+| `diagram.node.change` | `ids`, `colour` (fill), `outline`, `textColour`, `fontSize` (8-48), `fontWeight` (normal, bold), `fontStyle` (normal, italic), `size`, `label`, `value`, `kind`, `role`, `effect` (none, shadow, glow), `opacity` (0.1-1), `corner` (0-40), `rotation` (-360-360, degrees clockwise), `source`, `caption`, `rows`, `columns`, `cells` | change what is given; nothing given [missing-property] | "make Api blue", "give it a red border", "white text on the decision", "make the labels bigger / font size 18", "bold label", "italic title", "bold and italic", "turn it into a diamond", "make Db a cylinder", "mark it as the start", "add a shadow to Api", "make it glow", "make it half transparent", "round the corners more", "rotate it 45 degrees", "tilt the label box a little" |
 | `diagram.node.select` | `ids`, `edges` | the view's selection | "select Api and Db", "select nothing" |
 | `diagram.node.remove` | `ids` | remove nodes with their links | "delete Api", "remove these" |
 | `diagram.node.place` | `ids`, `x`, `y` | move (pin) nodes; a group member moves with its group [node-in-group-place-the-group] | "move Api to 200, 300", "drag it down" |
@@ -269,7 +269,8 @@ corner, rotation).
 
 ## Page and history
 
-`diagram.page.clear`, `diagram.ids.show {mode}`, `diagram.observe`, `diagram.undo`, `diagram.redo`, `diagram.selection.remove`.
+`diagram.page.clear`, `diagram.page.new {title}` (a new, empty page: nodes, links and groups go, the page takes the title
+said or none; the history keeps the old page, so undo brings it back, and the reply says so), `diagram.ids.show {mode}`, `diagram.observe`, `diagram.undo`, `diagram.redo`, `diagram.selection.remove`.
 
 ## Visual tools (Diagram tab)
 
@@ -285,7 +286,7 @@ are shared; each is a UI case in `training/sop-bert/data/ui-coverage-v2/cases.py
 | Number steps toggle | `diagram.steps.number {mode}` |
 | Shape palette (inspector, chooser) | `diagram.node.change {ids, kind}` / `diagram.node.make {kind,x,y}` |
 | Fill, outline, text swatches (inspector) | `diagram.node.change {ids, colour|outline|textColour}` |
-| Font size, bold (inspector) | `diagram.node.change {ids, fontSize|fontWeight}` |
+| Font size, bold, italic (inspector) | `diagram.node.change {ids, fontSize|fontWeight|fontStyle}` |
 | Align left/centre/right/top/middle/bottom, distribute (2+ nodes) | `diagram.nodes.align {ids, edge}`, `diagram.nodes.distribute {ids, axis}` |
 | Connect in order / to the first / all (2+ nodes) | `diagram.links.connect {ids, pattern}` |
 | Duplicate, merge, split (nodes) | `diagram.node.duplicate {ids}`, `diagram.node.merge {ids}`, `diagram.node.split {id}` |

@@ -136,6 +136,10 @@ test('changes, selection, placement and removal update the instance in place',as
  ok('@c diagram.ids.show mode="always"');assert.match(view().svg,/>n1</);
  ok('@c diagram.ids.show mode="off"');assert.doesNotMatch(view().svg,/>n1</);
  ok('@c diagram.page.clear');assert.equal(state.sop,'');assert.deepEqual(view().objects.map(o=>o.id),['page'],'only the page is left');
+ // A new page: nodes and links go, the page takes the title said; a new page without a title has none.
+ ok('@c diagram.node.make kind="rectangle" label="A"');ok('@c diagram.node.make kind="rectangle" label="B"');ok('@c diagram.link.make from="n1" to="n2"');
+ ok('@c diagram.page.new title="Ward Census"');assert.deepEqual(view().objects.map(o=>o.id),['page']);assert.match(state.sop,/title="Ward Census"/);
+ ok('@c diagram.node.make kind="rectangle" label="C"');ok('@c diagram.page.new');assert.deepEqual(view().objects.map(o=>o.id),['page']);assert.doesNotMatch(state.sop,/Ward Census/);
 });
 
 test('charts: bars and points from the members\' values; what is not declared is refused',async()=>{
@@ -170,7 +174,7 @@ test('every declared operation is compiled or refused with its reason, never sim
   const result=run('@c '+op.id+' '+args);assert.equal(result.status,'refused',op.id);assert.ok(result.reason,op.id+' has a reason');}
  // Undo and redo belong to the application's journal; observe reads the view.
  const own=host.bindings().map(op=>op.id).filter(id=>id.startsWith('diagram.'));
- assert.deepEqual(own.length,65);
+ assert.deepEqual(own.length,66);
 });
 
 test('the area declares its geometry and measures a command for placement',async()=>{

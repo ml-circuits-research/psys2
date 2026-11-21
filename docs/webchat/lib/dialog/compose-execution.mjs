@@ -8,9 +8,9 @@
 import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import POLICY from '../../worlds/app.project/compose-policy-source.mjs?v=bae0f7d0d6';
 import SCHEMA from '../../worlds/app.project/compose-schema-source.mjs?v=30f85bca4d';
-import { NATIVE_AREAS, createAreaHost } from './app-reader-context.mjs?v=5b4805a7a9';
+import { NATIVE_AREAS, createAreaHost } from './app-reader-context.mjs?v=cfc87f8ce5';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { executeNativeGroup } from './capability-plan-execution.mjs?v=dd9b517a02';
+import { executeNativeGroup } from './capability-plan-execution.mjs?v=beb95559d2';
 import { describeNativeControl } from './native-control-intent.mjs?v=76d588c853';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=59baa93d85';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=0d3803bc7e';

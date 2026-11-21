@@ -10,9 +10,9 @@
 //    family's declared position key, its value the ordinal's number (k.values ordinals; declared-bindings.mjs gives
 //    the key its normalizations).
 import {str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import {executionPolicyWorld} from './execution-policy.mjs?v=17cd89337e';
-import {parseNumberRun} from '../knowledge/number-run.mjs?v=b83c9698e8';
-import {numberInfo} from '../knowledge/values.mjs?v=75ef016e50';
+import {executionPolicyWorld} from './execution-policy.mjs?v=88bdf143f7';
+import {parseNumberRun} from '../knowledge/number-run.mjs?v=2ab4498fd2';
+import {numberInfo} from '../knowledge/values.mjs?v=b0000e82a7';
 import {budget} from './budget.mjs?v=00bce6e369';
 
 const one=(row,key)=>row.attrs[key]?.length?str(row.attrs[key][0]):undefined;

@@ -1,27 +1,27 @@
-import {en} from '../lang/en.mjs?v=6a69000b47';
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=dd9b517a02';
-import {projectRemovalAction} from './project-removal-action.mjs?v=f9c83121ef';
+import {en} from '../lang/en.mjs?v=911f0ab5a1';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=beb95559d2';
+import {projectRemovalAction} from './project-removal-action.mjs?v=5507741984';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=0d3803bc7e';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=322c48a7e6';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=4cf16ee300';
 import {parse} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {writeReaderSource} from './reader-source.mjs?v=1baaf5ba91';
 import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=0c4b78f098';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=fc8dc8891b';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=38b9357734';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=ffa4949844';
-import {projectContextAction} from './project-context-action.mjs?v=62de87ccec';
-import {projectCodeReference} from './project-code-reference.mjs?v=1fecde7ad6';
-import {projectCreateAction} from './project-create-action.mjs?v=e1f7c7d4ee';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=e9a0573f13';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=867f3db415';
+import {projectContextAction} from './project-context-action.mjs?v=5d60893194';
+import {projectCodeReference} from './project-code-reference.mjs?v=3e547f05a9';
+import {projectCreateAction} from './project-create-action.mjs?v=1f7a74daa6';
 import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=98c3823184';
-import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=9de9fb5e41';
-import {completeBindings} from './declared-bindings.mjs?v=bfb97a7f6e';
-import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=9169c1504e';
-import {routeCoordination} from './coordination-routing.mjs?v=dae75d1f85';
-import {declaredKnowledge} from './declared-execution.mjs?v=38b9357734';
+import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=fadf4fc918';
+import {completeBindings} from './declared-bindings.mjs?v=7b35f75998';
+import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=ea81998615';
+import {routeCoordination} from './coordination-routing.mjs?v=b1ff4972ba';
+import {declaredKnowledge} from './declared-execution.mjs?v=e9a0573f13';
 import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=79c1776d10';
-import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs?v=51cc3de257';
+import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs?v=8b82b6fdf6';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.
 const knownAmounts=()=>amounts??=amountsOf(declaredKnowledge('k.expect.amount'));
@@ -393,7 +393,7 @@ const liveViews=(session,NATIVE_AREAS)=>Object.entries(NATIVE_AREAS).filter(([,a
 // ("add a box to the diagram", "in the drawing") is read in that editor first; when it does not apply fully there it is
 // read as usual. The words are the registry's; the request's words are compared by their singular (w.lang.en).
 async function mentionedView(session,text,active){
- const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=5b4805a7a9');
+ const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=cfc87f8ce5');
  const said=new Set([...String(text).toLowerCase().matchAll(/[\p{L}\p{N}]+/gu)].flatMap(m=>[m[0],en.singular(m[0],'lemma')]));
  const named=liveViews(session,NATIVE_AREAS).filter(([view,area])=>view!==active&&(area.words??[]).some(word=>word.split(/\s+/).every(part=>said.has(part.toLowerCase())))).map(([view])=>view);
  return named.length===1?named[0]:null;
@@ -416,7 +416,7 @@ async function routeNewEngineTurn(session,text,options={}){
  if(!rule||options.view||isAuthoredRequest(text)||!shell?.activeTab||first?.statuses?.includes('supported'))return withMention(first);
  const reasons=new Set(unboundReasons(first).filter(reason=>rule.reasons.includes(reason)));
  if(!reasons.size)return withMention(first);
- const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=5b4805a7a9');
+ const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=cfc87f8ce5');
  // The knowledge prior: only an editor whose bindings bind a kind word the reading saw is a hypothesis (declared area order among them);
  // a word no other editor binds is not re-read there (each re-reading costs the reader passes of a whole turn).
  const said=new Set(),collect=(value,depth=0)=>{if(depth>8||!value||typeof value!=='object')return;for(const [key,item] of Object.entries(value)){if((key==='kind'||key==='kind_span')&&typeof item==='string')said.add(item.toLowerCase());else collect(item,depth+1);}};

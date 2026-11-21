@@ -4,10 +4,11 @@
 // conclude (a target re-read as a joining line's or a container's members, the end a population phrase fills, a
 // population reference) is applied here field by field. Nothing here decides: no act, key, kind or word is named.
 import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import SCHEMA from '../../worlds/app.project/raw-reading-schema-source.mjs?v=b770b9a20d';
-import POLICY from '../../worlds/app.project/raw-reading-policy-source.mjs?v=ae8ba9beda';
-import {executionPolicyWorld} from './execution-policy.mjs?v=17cd89337e';
-import {en} from '../lang/en.mjs?v=6a69000b47';
+import SCHEMA from '../../worlds/app.project/raw-reading-schema-source.mjs?v=b9e7f81b1a';
+import POLICY from '../../worlds/app.project/raw-reading-policy-source.mjs?v=f8f63a546e';
+import {executionPolicyWorld} from './execution-policy.mjs?v=88bdf143f7';
+import {en} from '../lang/en.mjs?v=911f0ab5a1';
+import {referenceProjection} from './reference-projection.mjs?v=cfb59bc4a2';
 
 let base=null;
 function policyWorld(){
@@ -46,7 +47,7 @@ function readingFacts(raw,bindings){
   for(const [ci,c] of (request?.constraints??[]).entries()){
    // The binding table's key is <type>.<parameter>: the type it belongs to is its first segment.
    const key=typeof c?.key==='string'?c.key:undefined;if(key)keys.add(key);
-   facts.push(record(`c${index}_${ci}`,'constraint',{request:index,index:ci,key,keyType:key?.split('.')[0]}));
+   facts.push(record(`c${index}_${ci}`,'constraint',{request:index,index:ci,key,keyType:key?.split('.')[0],phase:c?.phase,valueSpan:typeof c?.value_span==='string'?c.value_span:undefined}));
   }
  }
  const pol=executionPolicyWorld();
@@ -61,6 +62,15 @@ function readingFacts(raw,bindings){
  for(const key of keys)tellProperty(props.find(p=>p.key===key));
  for(const concept of concepts)tellProperty(props.find(p=>p.canonical===concept));
  for(const f of bindings.families??[])if(f.area===area)facts.push(record(`f${facts.length}`,'family',{type:f.type,canonical:f.canonical,sourceType:f.nativeFamilyBinding?.sourceType}));
+ // A family's own word said in a request (by its forms), and whether a definite determiner says it just before.
+ const definite=new Set(referenceProjection().definite.map(w=>String(w).toLowerCase())),types=new Set((bindings.families??[]).filter(f=>f.area===area).map(f=>f.type));
+ for(const [index,request] of raw.requests.entries()){
+  const words=wordsOf(request?.span??raw.source?.text);
+  for(const type of types){
+   const forms=new Set([type,en.plural(type)].map(w=>String(w).toLowerCase()));
+   for(const [i,w] of words.entries())if(forms.has(w))facts.push(record(`m${facts.length}`,'mention',{request:index,type,definite:definite.has(words[i-1])?'yes':'no'}));
+  }
+ }
  for(const c of bindings.containment??[])if(c.area===area)facts.push(record(`k${facts.length}`,'containment',{type:c.type,container:c.containerType}));
  return facts;
 }
@@ -82,7 +92,8 @@ export function retargetRule(raw,bindings,index=0){
 export function declaredRetargets(raw,bindings){
  if(!raw||!bindings||!Array.isArray(raw.requests)||!raw.requests.length)return raw;
  const {world,retargets}=concludedRetargets(raw,bindings);
- if(!retargets.size)return raw;
+ const restated=world.ofType('app.reading.restated').map(row=>[num(row,'request'),num(row,'index')]);
+ if(!retargets.size&&!restated.length)return raw;
  const ends=world.ofType('app.reading.addEnd');
  const out=structuredClone(raw);
  for(const [index,row] of retargets){
@@ -96,8 +107,11 @@ export function declaredRetargets(raw,bindings){
    if(span)for(const field of ['value','value_span'])out.ranges.push({path:['requests',at,'constraints',String(ci),field],range:[...span.range]});
   }else out.ranges=(out.ranges??[]).filter(x=>!(x.path[0]==='requests'&&x.path[1]===at&&x.path[2]==='target'));
   r.target={type:one(row,'type'),mode:one(row,'mode'),determiner:one(row,'determiner'),...(one(row,'fill')?{fill:one(row,'fill')}:{})};
+  // A constraint that names the object takes the naming key of the family re-read (app.reading.renamed).
+  for(const renamed of world.ofType('app.reading.renamed').filter(x=>num(x,'request')===index)){const c=r.constraints?.[num(renamed,'index')];if(c)c.key=one(renamed,'key');}
  }
- return out;
+ // A selector that restates the target's name by a key of another family's objects is dropped (app.reading.restated).
+ return dropConstraints(out,restated);
 }
 
 /** Whether the rules read request `index`'s kind by the singular of its kind phrase (app.reading.bySingular). */
@@ -108,28 +122,56 @@ export function readsBySingular(raw,index=0){
  return world.tell(serialize(requestFacts(0,request)),{factsOnly:true}).ok&&world.ofType('app.reading.bySingular').length>0;
 }
 
-/** The declared one-value-one-role rule (app.reading.drop) applied to a raw reading: the constraints it drops are removed. */
+// The words of a text, lower-cased.
+const wordsOf=text=>[...String(text??'').toLowerCase().matchAll(/[\p{L}]+/gu)].map(m=>m[0]);
+// Whether `words` say `text` (every word of it): one of its forms (w.lang.en plural and verb forms), or a word of four
+// letters or more with two neighbouring letters swapped ("blod", "italci").
+function says(words,text){
+ const swapped=w=>{const out=[];for(let i=1;i<w.length;i++)out.push(w.slice(0,i-1)+w[i]+w[i-1]+w.slice(i+1));return out;};
+ const heard=new Set(words);for(const w of words)if(w.length>=4)for(const t of swapped(w))heard.add(t);
+ return wordsOf(text).every(word=>[word,en.plural(word),...en.verbForms(word)].some(form=>heard.has(String(form).toLowerCase())));
+}
+
+/** The declared span rules applied to a raw reading: one value, one role (app.reading.drop) and a value word of another
+ * key (app.reading.rekey); the constraints they drop are removed, the ones they re-key take the declared key and value. */
 export function declaredSpanRoles(raw,bindings){
  if(!raw||!bindings||!Array.isArray(raw.requests)||!raw.requests.length)return raw;
  const source=String(raw.source?.text??''),scalars=Array.from(source).join('').toLowerCase();
- const words=new Set([...scalars.matchAll(/[\p{L}]+/gu)].map(m=>m[0]));
+ const words=new Set(wordsOf(scalars));
  const said=word=>[word,en.plural(word),...en.verbForms(word)].some(form=>words.has(String(form).toLowerCase()));
  const concept=key=>(bindings.properties??[]).find(p=>p.area===raw.area&&p.key===key)?.rawDescriptor?.concept;
+ const policy=policyWorld(),declaredTexts=[...new Set([...policy.ofType('app.reading.word'),...policy.ofType('app.reading.valueWord')].map(row=>one(row,'text')))];
  const facts=[];
  for(const [index,request] of raw.requests.entries())for(const [ci,c] of (request?.constraints??[]).entries()){
   const range=(raw.ranges??[]).find(x=>x.path?.join('.')===['requests',index,'constraints',ci,'value_span'].join('.'))?.range;
   if(!text(c?.key)||!Array.isArray(range))continue;
-  facts.push(record(`s${index}_${ci}`,'span',{request:index,index:ci,key:c.key,start:range[0],end:range[1]}));
+  const value=c.value===undefined||c.value===null?undefined:String(c.value);
+  facts.push(record(`s${index}_${ci}`,'span',{request:index,index:ci,key:c.key,keyType:c.key.split('.')[0],start:range[0],end:range[1],value}));
   const word=concept(c.key);
-  const declared=policyWorld().ofType('app.reading.word').filter(row=>one(row,'key')===c.key).map(row=>one(row,'text'));
+  const declared=policy.ofType('app.reading.word').filter(row=>one(row,'key')===c.key).map(row=>one(row,'text'));
   if(text(word)&&String(word).split(/[._\s]+/).filter(Boolean).every(said)||declared.some(said))facts.push(record(`e${index}_${ci}`,'evidence',{request:index,key:c.key}));
+  // The declared words (and the constraint's own value) its value span says.
+  const spanWords=wordsOf(source.slice(range[0],range[1])||c.value_span);
+  for(const t of new Set([...declaredTexts,...(text(value)?[value]:[])]))if(says(spanWords,t))facts.push(record(`w${facts.length}`,'spanSays',{request:index,index:ci,text:t}));
  }
- if(facts.length<2)return raw;
- const world=policyWorld().fork();
+ if(!facts.length)return raw;
+ const world=policy.fork();
  if(!world.tell(serialize(facts),{factsOnly:true}).ok)return raw;
  const drops=world.ofType('app.reading.drop').map(row=>[num(row,'request'),num(row,'index')]);
- if(!drops.length)return raw;
+ const rekeys=world.ofType('app.reading.rekey').map(row=>[num(row,'request'),num(row,'index'),one(row,'key'),one(row,'value')]);
+ if(!drops.length&&!rekeys.length)return raw;
  const out=structuredClone(raw);
+ for(const [index,ci,key,value] of rekeys){
+  const c=out.requests[index]?.constraints?.[ci];if(!c||c.__rekeyed)continue;
+  Object.assign(c,{key,value,__rekeyed:true});
+  out.ranges=(out.ranges??[]).filter(x=>!(String(x.path?.[0])==='requests'&&Number(x.path[1])===index&&x.path[2]==='constraints'&&Number(x.path[3])===ci&&x.path[4]==='value'));
+ }
+ for(const request of out.requests)for(const c of request?.constraints??[])delete c.__rekeyed;
+ return dropConstraints(out,drops);
+}
+
+/** The constraints [request, index] removed from a raw reading (in place), the ranges renumbered. */
+function dropConstraints(out,drops){
  for(const [index,request] of out.requests.entries()){
   const gone=new Set(drops.filter(([r])=>r===index).map(([,ci])=>ci));
   if(!gone.size)continue;

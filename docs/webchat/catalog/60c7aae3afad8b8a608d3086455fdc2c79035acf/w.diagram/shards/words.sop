@@ -66,6 +66,7 @@
 @w.diagram.word.node.text_colour core.word text="text colour" text="text color" text="label colour" text="font colour" text="font color" means=w.diagram.node.text_colour core.source="hand-core 1"
 @w.diagram.word.node.font_size core.word text="font size" text="text size" text="label size" text=bigger text=smaller means=w.diagram.node.font_size core.source="hand-core 1"
 @w.diagram.word.node.font_weight core.word text=bold text=weight text="font weight" text=heavy means=w.diagram.node.font_weight core.source="hand-core 1"
+@w.diagram.word.node.font_style core.word text="font style" text="text style" text=italic text=italics text=slanted text=slanting means=w.diagram.node.font_style core.source="hand-core 1"
 @w.diagram.word.edge.route core.word text=route text=routing text=curved text=straight text=orthogonal text=elbow means=w.diagram.edge.route core.source="hand-core 1"
 @w.diagram.word.node.effect core.word text=effect text=shadow text=glow text="drop shadow" means=w.diagram.node.effect core.source="hand-core 1"
 @w.diagram.word.node.opacity core.word text=opacity text=transparent text=transparency text=faded text=faint means=w.diagram.node.opacity core.source="hand-core 1"
@@ -137,3 +138,4 @@
 @w.diagram.word.value.shape.picture core.word text=picture text=pictures text=image text=images text=photo text=photos text=photograph text=illustration text="image placeholder" means=picture of=w.diagram.node.shape core.source="hand-core 1"
 @w.diagram.word.value.shape.table core.word text=table text=tables text="data table" means=table of=w.diagram.node.shape core.source="hand-core 1"
 @w.diagram.word.value.layout.treemap core.word text=treemap text=treemaps text="tree map" text="tree-map" means=treemap of=w.diagram.group.layout core.source="hand-core 1"
+@w.diagram.word.value.font_style.italic core.word text=italic text=italics text=slanted text=slanting text=oblique means=italic of=w.diagram.node.font_style core.source="hand-core 1"

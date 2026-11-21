@@ -7,7 +7,7 @@ import {budget} from '../src/dialog/budget.mjs';
 import {catalogWorld} from './catalog-world.mjs';
 import {readNativeToolInterface} from './native-tool-interface.mjs';
 import {toolInvocationContext} from './native-tool-host.mjs';
-import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs';
+import {createSopWorldHost, forgetDerived, initialSopWorldState, orderedInputs, worldOf} from './sop-world-host.mjs';
 import {renderPrimitives} from './sop-primitives.mjs';
 
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };
@@ -340,7 +340,7 @@ export function projectSopArea(world, state, opts = {}) {
   // when the key repeats, as the label, colour or members of a group) and the box it occupies on the page
   // (app.observe.box, in frame units). Numbers stay numbers.
   const inputs = {}, boxes = {};
-  for (const fact of live.ofType('app.observe.input')) {
+  for (const fact of orderedInputs(live.ofType('app.observe.input'))) {
     const id = read(fact, 'id'), key = read(fact, 'key'), raw = fact.attrs.value?.[0];
     if (id === undefined || key === undefined || raw === undefined) continue;
     const value = typedValue(raw), entry = (inputs[id] ??= {});

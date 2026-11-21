@@ -23,6 +23,8 @@ export function referenceProjection(){
  const listMarks=parse(LANG_EN_FACTS.clauses??'').filter(wire=>wire.type==='w.lang.en.joiner'&&String(str(wire.attrs.kind?.[0])).startsWith('list')).map(wire=>str(wire.attrs.text?.[0])).filter(Boolean);
  // The place deictics (w.lang.en.pron deictic=place: "there", "here"): "the tree there" is the tree.
  const deictics=parse(LANG_EN_FACTS.pronouns??'').filter(wire=>str(wire.attrs.deictic?.[0])==='place').map(wire=>str(wire.attrs.text?.[0])).filter(Boolean);
- table=Object.freeze({definite:Object.freeze([...new Set(definite)]),indefinite:Object.freeze([...new Set(indefinite)]),coordinators:Object.freeze(coordinators),listMarks:Object.freeze(listMarks),deictics:Object.freeze([...new Set(deictics)]),queries:Object.freeze(queries)});
+ // The property a question about one named object of a family lists when it asks none (app.query.read.listed).
+ const listed=parse(QUERY_POLICY).filter(wire=>wire.type==='app.query.read.listed').map(wire=>Object.freeze({family:str(wire.attrs.family[0]),key:str(wire.attrs.key[0]),declaration:wire.id}));
+ table=Object.freeze({definite:Object.freeze([...new Set(definite)]),indefinite:Object.freeze([...new Set(indefinite)]),coordinators:Object.freeze(coordinators),listMarks:Object.freeze(listMarks),deictics:Object.freeze([...new Set(deictics)]),queries:Object.freeze(queries),listed:Object.freeze(listed)});
  return table;
 }

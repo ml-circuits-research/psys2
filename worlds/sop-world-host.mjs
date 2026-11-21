@@ -14,6 +14,12 @@ const atom = /^[A-Za-z_][A-Za-z0-9_.-]*$/;
 const token = (value) => typeof value === 'number' && Number.isFinite(value) ? String(value)
   : typeof value === 'boolean' ? String(value) : typeof value === 'string' && atom.test(value) ? value : quote(String(value));
 const read = (fact, key) => { const raw = fact.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };
+/** Observed inputs in their declared order: an app.observe.input with a numeric `order` (a chart member's place) comes
+ * by it among the facts of its id and key; the others keep the order they were derived in. */
+export function orderedInputs(facts) {
+  const rank = (fact) => { const n = Number(fact.attrs.order?.[0]); return Number.isFinite(n) ? n : Infinity; };
+  return facts.map((fact, index) => ({ fact, index })).sort((a, b) => (rank(a.fact) - rank(b.fact)) || a.index - b.index).map(({ fact }) => fact);
+}
 // A fact value as a typed value: quoted text stays text; true/false and numbers keep their type.
 const typed = (raw) => raw.startsWith('"') ? str(raw) : raw === 'true' ? true : raw === 'false' ? false : /^-?\d+(\.\d+)?$/.test(raw) ? Number(raw) : raw;
 const ref = (raw) => typeof raw === 'string' && raw.startsWith('$') ? raw.slice(1) : raw;
@@ -178,7 +184,7 @@ export function createSopWorldHost({ base, callBase = null, kinds, state, instan
   // Observed objects: each app.observe.object, with the optional app.observe.input facts of the same id merged in.
   const view = (data) => {
     const world = worldOf(base, data), extra = new Map();
-    for (const fact of world.ofType('app.observe.input')) (extra.get(read(fact, 'id')) ?? extra.set(read(fact, 'id'), []).get(read(fact, 'id'))).push(fact);
+    for (const fact of orderedInputs(world.ofType('app.observe.input'))) (extra.get(read(fact, 'id')) ?? extra.set(read(fact, 'id'), []).get(read(fact, 'id'))).push(fact);
     return world.ofType('app.observe.object').map((fact) => {
       const binding = read(fact, 'binding'), input = (key, raw) => ({ binding: binding + '.' + key, key, values: [nativeToken(typed(raw))] });
       const inputs = Object.keys(fact.attrs).filter((key) => !['id', 'kind', 'sourceType', 'binding', 'in', 'role'].includes(key)).map((key) => input(key, fact.attrs[key][0]));

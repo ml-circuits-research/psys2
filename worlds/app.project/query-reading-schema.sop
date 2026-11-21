@@ -1,8 +1,12 @@
-@query.schema core.module name=app.query.read imports=app.grounded exports=app.query.read.ground exports=app.query.read.head exports=app.query.read.question exports=app.query.read.condition exports=app.query.read.operation exports=app.query.read.selector exports=app.query.read.phase exports=app.query.read.scope exports=app.query.read.coverage exports=app.query.read.headObservation exports=app.query.read.limitation exports=app.query.read.reconsider exports=app.query.read.recoveryReading exports=app.query.read.recovery exports=app.query.read.readingPair
+@query.schema core.module name=app.query.read imports=app.grounded exports=app.query.read.ground exports=app.query.read.head exports=app.query.read.listed exports=app.query.read.question exports=app.query.read.condition exports=app.query.read.operation exports=app.query.read.selector exports=app.query.read.phase exports=app.query.read.scope exports=app.query.read.coverage exports=app.query.read.headObservation exports=app.query.read.limitation exports=app.query.read.reconsider exports=app.query.read.recoveryReading exports=app.query.read.recovery exports=app.query.read.readingPair
 @query.head core.type of=app.query.read.head closed=true
 @query.head.kind core.slot of=app.query.read.head key=head kind=atom present=true
 @query.head.operation core.slot of=app.query.read.head key=operation kind=atom present=true
 @query.head.property core.slot of=app.query.read.head key=property kind=boolean present=true
+# The property a question about one named object of a family lists when it asks none (a chart: its values).
+@query.listed core.type of=app.query.read.listed closed=true
+@query.listed.family core.slot of=app.query.read.listed key=family kind=atom present=true
+@query.listed.key core.slot of=app.query.read.listed key=key kind=string present=true
 @query.question core.type of=app.query.read.question closed=true
 @query.question.act core.slot of=app.query.read.question key=act kind=atom present=true
 @query.question.mood core.slot of=app.query.read.question key=mood kind=atom present=true

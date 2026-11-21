@@ -6,7 +6,7 @@
 // trigger) and the shared tail (a relation or region after the last noun, when no earlier noun phrase has words
 // after its noun). A noun phrase whose reading is not usable is reported as dropped, never silently. Nothing here
 // names a word: the coordinators are facts, the readings are the reader's.
-import {en} from '../lang/en.mjs?v=6a69000b47';
+import {en} from '../lang/en.mjs?v=911f0ab5a1';
 
 /** The kind mentions a reading could not hold for its one target (absolute source ranges), in source order. */
 export function kindMentions(read){

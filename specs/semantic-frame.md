@@ -106,6 +106,16 @@ only tells the facts and applies the conclusions); kind words, spelled numbers, 
 anchors and colour names of codes are read by sopworld 0.245.0 span reading (`readLexicalPhrase` with the declared
 `app.interpret.spelling` tolerance, `readNumberSpan` with `app.interpret.numberJoiner`, `unitConversion`, `stripPhrase`,
 `splitPhrase`, `nearestName` with `app.execution.codeName`).)
+(Reading, 2026-11-21: four more declared re-readings in `raw-reading-policy.sop`. A constraint whose value span says
+a declared value word of another key of its family and nothing of its own key or value is re-keyed
+(`app.reading.valueWord`, `app.reading.rekey`: "in italics" read as font weight bold is the font style italic), and a
+repeat of it that says nothing of its own is dropped, so "bold and italic" sets both; span words match by their
+w.lang.en forms or with two neighbouring letters swapped ("blod"). A kindless make whose request says another family's
+own word, not after a definite determiner, makes that family (`app.reading.mention`, retarget `rule=family`: "a new
+page" is `diagram.page.new`), and a naming key takes that family's naming key (`app.reading.nameKey`: a node's label is
+a page's title). A selector restating the target's name by a key of another source type is dropped
+(`app.reading.restated`). A question that asks no property of one named object asks its family's listed property
+(`query-reading-policy.sop` `app.query.read.listed`: a chart lists its values); observed inputs may carry `order`.)
 (Placement, same day: "between A and B" is `std.placement.predicate relation=between pair=sides` (sopworld 0.246.0) and
 "after"/"before" are `flow=` predicates of `spatial-placement.sop` with the container's observed flow as
 `std.placement.context flow=` (sopworld 0.247.0; `app.execution.flow` names the observed field); the reply of an anchor

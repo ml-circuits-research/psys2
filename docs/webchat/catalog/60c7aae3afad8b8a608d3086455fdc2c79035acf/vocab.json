@@ -56703,6 +56703,9 @@
  "font sizes": [
   "w.diagram/schema.sop"
  ],
+ "font style": [
+  "w.diagram/schema.sop"
+ ],
  "font weight": [
   "w.diagram/schema.sop"
  ],
@@ -75926,11 +75929,13 @@
  "italic": [
   "k.words/shards/frequency-i",
   "k.words/shards/it",
+  "w.diagram/schema.sop",
   "w.document/schema.sop",
   "w.drawing/schema.sop",
   "w.text/schema.sop"
  ],
  "italics": [
+  "w.diagram/schema.sop",
   "w.drawing/schema.sop"
  ],
  "italy": [
@@ -103014,6 +103019,9 @@
  "oblige": [
   "k.words/shards/frequency-o",
   "k.words/shards/ob"
+ ],
+ "oblique": [
+  "w.diagram/schema.sop"
  ],
  "oblivion": [
   "k.words/shards/frequency-o",
@@ -133398,10 +133406,14 @@
   "w.drawing/schema.sop"
  ],
  "slanted": [
+  "w.diagram/schema.sop",
   "w.drawing/schema.sop"
  ],
  "slanted rectangle": [
   "k.shapes/shards/shapes"
+ ],
+ "slanting": [
+  "w.diagram/schema.sop"
  ],
  "slap": [
   "k.words/shards/frequency-s",
@@ -144432,6 +144444,9 @@
  ],
  "text source": [
   "w.text/schema.sop"
+ ],
+ "text style": [
+  "w.diagram/schema.sop"
  ],
  "text_1": [
   "k.objects/shards/places-3",

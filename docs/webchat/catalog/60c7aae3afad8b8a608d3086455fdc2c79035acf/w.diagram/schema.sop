@@ -65,13 +65,14 @@
 @w.diagram.node.pinned core.slot of=w.diagram.node key=pinned kind=boolean core.source="hand-core 1"
 
 # Its style, for an editor: `outline` the colour of its border, `text_colour` the colour of its label, `font_size` the
-# label's size in pixels, `font_weight` normal or bold. Roles for software and business diagrams: database (drawn as a
+# label's size in pixels, `font_weight` normal or bold, `font_style` normal or italic (slanted letters). Roles for software and business diagrams: database (drawn as a
 # cylinder), actor (a person), note (a comment), external (a system outside: a cloud). Shapes: cylinder, cloud, actor
 # (a stick figure), note (a sheet with a folded corner).
 @w.diagram.node.outline core.slot of=w.diagram.node key=outline kind=atom kind=string core.source="hand-core 1"
 @w.diagram.node.text_colour core.slot of=w.diagram.node key=text_colour kind=atom kind=string core.source="hand-core 1"
 @w.diagram.node.font_size core.slot of=w.diagram.node key=font_size kind=number min=6 max=72 core.source="hand-core 1"
 @w.diagram.node.font_weight core.slot of=w.diagram.node key=font_weight enum=normal enum=bold core.source="hand-core 1"
+@w.diagram.node.font_style core.slot of=w.diagram.node key=font_style enum=normal enum=italic core.source="hand-core 1"
 # Effects, for an editor: `effect` a shadow under the shape or a glow round it (none: neither), `opacity` from 0.1 (faint)
 # to 1, `corner` the radius of a box's corners in pixels.
 @w.diagram.node.effect core.slot of=w.diagram.node key=effect enum=none enum=shadow enum=glow core.source="hand-core 1"

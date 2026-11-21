@@ -1,7 +1,7 @@
 // Admit owned default and value-lookup policy facts for the request compiler.
 import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import SOURCE from'../../worlds/app.project/execution-policy-source.mjs?v=7a772b3c7d';
-import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs?v=2ae53d31d6';
+import SOURCE from'../../worlds/app.project/execution-policy-source.mjs?v=38faa58bcc';
+import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs?v=cd13991a95';
 import SCENE_SCHEMA from'../../worlds/app.project/scene-default-schema-source.mjs?v=cde8a3092d';
 const schemaModule='app.execution';
 const declarations=parse(SOURCE);

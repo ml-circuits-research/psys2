@@ -1,17 +1,17 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs?v=03af9b7ec4';
 import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=f2cd0b65ce';
-import { en } from '../lang/en.mjs?v=6a69000b47';
+import { en } from '../lang/en.mjs?v=911f0ab5a1';
 import { quote, str } from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import { executionPolicyWorld } from './execution-policy.mjs?v=17cd89337e';
+import { executionPolicyWorld } from './execution-policy.mjs?v=88bdf143f7';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=16499b12a4';
-import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=185e9e26be';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=cfcc812978';
+import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=075ab1db6d';
 import { readDegreeBases } from './degree-bases.mjs?v=947db12471';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=5b4805a7a9';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=cfc87f8ce5';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=a46cbf5524';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=bcf54aff71';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=59baa93d85';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=44311f592e';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=1d571dbe35';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=76d588c853';
 
 function reply(text, supported, trace = {}) {
@@ -176,6 +176,7 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
     ? 'More than one matched. I used ' + kind + ' ' + plan.id + '. You can undo this.'
     : 'I used the most recent matching ' + plan.kind + '.');
   if (plan.skipped.length) notes.push('I could not apply ' + plan.skipped.join(', ') + '.');
+  notes.push(...operationNotes(plan.operation));
   const addedOfKind = operation.spatial?.countKey && made.filter(value => value.sourceType === operation.on && value.kind === kind).length;
   const created = addedOfKind>1 ? `Created ${addedOfKind} objects of kind ${kind}.` : `Created ${withArticle(kind)}.`;
   const said = plan.act === 'make' ? created : plan.act === 'remove' ? `Removed the ${kind}.` : `Updated the ${kind}.`;
@@ -191,6 +192,8 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
   };
 }
 
+/** The declared reply words of an operation (app.execution.operationNote), whatever its arguments. */
+const operationNotes = (operation) => executionPolicyWorld().ofType('app.execution.operationNote').filter((r) => str(r.attrs.operation?.[0]) === operation).map((r) => str(r.attrs.text?.[0]));
 const withArticle = (noun) => (/^[aeiou]/i.test(noun) ? 'an ' : 'a ') + noun;
 const declaredText = (template, values) => String(template ?? '').replace(/\{(\w+)\}/g, (all, name) => values[name] ?? all);
 /** The declared reply words for objects acted on as a population (app.execution.populationNote: one or many). */

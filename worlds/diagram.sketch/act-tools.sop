@@ -462,6 +462,7 @@
 @t.du.v.height w.diagram.node code=?id height=?v
 @t.du.v.font_size w.diagram.node code=?id font_size=?v
 @t.du.v.font_weight w.diagram.node code=?id font_weight=?v
+@t.du.v.font_style w.diagram.node code=?id font_style=?v
 @t.du.v.value w.diagram.node code=?id value=?v
 @t.du.a.label app.act.arg call=?ref attr=label value=?v
 @tool.duplicate.label core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.label with=$t.du.i1 with=$t.du.ref then=$t.du.a.label
@@ -483,6 +484,8 @@
 @tool.duplicate.font_size core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.font_size with=$t.du.i1 with=$t.du.ref then=$t.du.a.font_size
 @t.du.a.font_weight app.act.arg call=?ref attr=font_weight value=?v
 @tool.duplicate.font_weight core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.font_weight with=$t.du.i1 with=$t.du.ref then=$t.du.a.font_weight
+@t.du.a.font_style app.act.arg call=?ref attr=font_style value=?v
+@tool.duplicate.font_style core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.font_style with=$t.du.i1 with=$t.du.ref then=$t.du.a.font_style
 @t.du.a.value app.act.arg call=?ref attr=value value=?v
 @tool.duplicate.value core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.value with=$t.du.i1 with=$t.du.ref then=$t.du.a.value
 @t.du.pn w.diagram.node code=?id pinned=true x=?px y=?py
@@ -575,6 +578,9 @@
 @t.sp.v.font_weight w.diagram.node code=?c font_weight=?v
 @t.sp.a.font_weight app.act.arg call=split.node attr=font_weight value=?v
 @tool.split.font_weight core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.font_weight then=$t.sp.a.font_weight
+@t.sp.v.font_style w.diagram.node code=?c font_style=?v
+@t.sp.a.font_style app.act.arg call=split.node attr=font_style value=?v
+@tool.split.font_style core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.font_style then=$t.sp.a.font_style
 @t.sp.v.value w.diagram.node code=?c value=?v
 @t.sp.a.value app.act.arg call=split.node attr=value value=?v
 @tool.split.value core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.value then=$t.sp.a.value
@@ -600,6 +606,9 @@
 @t.ob.fw w.diagram.node code=?id font_weight=?v
 @t.ob.fwo app.observe.input id=?id key=fontWeight value=?v
 @observe.node.fontweight core.rule when=$t.ob.fw then=$t.ob.fwo
+@t.ob.fst w.diagram.node code=?id font_style=?v
+@t.ob.fsto app.observe.input id=?id key=fontStyle value=?v
+@observe.node.fontstyle core.rule when=$t.ob.fst then=$t.ob.fsto
 @t.ob.r w.diagram.node code=?id role=?v
 @t.ob.ro app.observe.input id=?id key=role value=?v
 @observe.node.role core.rule when=$t.ob.r then=$t.ob.ro

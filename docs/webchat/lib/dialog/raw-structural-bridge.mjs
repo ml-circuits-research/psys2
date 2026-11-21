@@ -1,10 +1,10 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
 import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=c6ea65e776';
-import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=7a260d62b3';
+import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=c2daa0dec3';
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=5153ca8dfa';
 import {unitConversion,stripPhrase,splitPhrase} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import {en} from '../lang/en.mjs?v=6a69000b47';
-import {populationReference} from './raw-reading-policy.mjs?v=099fd35c86';
+import {en} from '../lang/en.mjs?v=911f0ab5a1';
+import {populationReference} from './raw-reading-policy.mjs?v=9d230b899f';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 // The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
 export const BINDING_NODES=250000;
@@ -282,12 +282,16 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    // An annotated question projects through its declared head (references.queries): the asked property, when the head
    // asks one, binds like a constraint key; the query asks it of the request's target.
    if(has(original,'question')){
-    const q=original.question,askedKey=q&&typeof q==='object'?q.asked_key:undefined,heads=questionHeads.filter(h=>h.head===q?.ask&&h.property===(askedKey!==undefined));
+    // A question that asks no property of one named object asks its family's listed property (references.listed,
+    // query-reading-policy.sop app.query.read.listed: "what values does Uptime show?" lists the chart's values).
+    const q=original.question,said=q&&typeof q==='object'?q.asked_key:undefined;
+    const listed=said===undefined&&typeof target.name_span==='string'&&target.name_span?(references?.listed??[]).find(l=>l.family===target.type&&questionHeads.some(h=>h.head===q?.ask&&h.property)):undefined;
+    const askedKey=said??listed?.key,heads=questionHeads.filter(h=>h.head===q?.ask&&h.property===(askedKey!==undefined));
     const qprop=askedKey!==undefined?lookup('properties',{area:raw.area,key:askedKey}):null;
     // A query projection asks (std.request: queries require ask mood); a yes/no check stays unprojected.
     if(label.mood!=='ask'||heads.length!==1||askedKey!==undefined&&!qprop)unresolved('requires-declared-query-projection',['queries']);
     else{const qid=`q${index}`,query={id:qid,target:tid,operation:heads[0].operation};
-     if(qprop){query.concept=qprop.canonical;anchor(['queries',qid,'concept'],q.asked_key_span,qprop.sourceWire,true,['question','asked_key_span']);}
+     if(qprop){query.concept=qprop.canonical;anchor(['queries',qid,'concept'],listed?target.name_span:q.asked_key_span,listed?listed.declaration:qprop.sourceWire,true,listed?['target','name_span']:['question','asked_key_span']);}
      label.queries=[query];}
    }
    if(has(original,'turn')){label.turn=original.turn;unresolved('turn-contract-not-projected',['turn']);}

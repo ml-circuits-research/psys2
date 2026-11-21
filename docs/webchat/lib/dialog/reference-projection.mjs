@@ -5,9 +5,9 @@
 // (query-reading-policy.sop app.query.read.head: "what" asks the values of a property, "how many" a count) that
 // project an annotated question into a std.request.query.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=ec6a2d71ba';
-import QUERY_POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=cf7b2d9297';
-import {en} from '../lang/en.mjs?v=6a69000b47';
+import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=f6a0b10be9';
+import QUERY_POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=219c267031';
+import {en} from '../lang/en.mjs?v=911f0ab5a1';
 let table;
 export function referenceProjection(){
  if(table)return table;
@@ -23,6 +23,8 @@ export function referenceProjection(){
  const listMarks=parse(LANG_EN_FACTS.clauses??'').filter(wire=>wire.type==='w.lang.en.joiner'&&String(str(wire.attrs.kind?.[0])).startsWith('list')).map(wire=>str(wire.attrs.text?.[0])).filter(Boolean);
  // The place deictics (w.lang.en.pron deictic=place: "there", "here"): "the tree there" is the tree.
  const deictics=parse(LANG_EN_FACTS.pronouns??'').filter(wire=>str(wire.attrs.deictic?.[0])==='place').map(wire=>str(wire.attrs.text?.[0])).filter(Boolean);
- table=Object.freeze({definite:Object.freeze([...new Set(definite)]),indefinite:Object.freeze([...new Set(indefinite)]),coordinators:Object.freeze(coordinators),listMarks:Object.freeze(listMarks),deictics:Object.freeze([...new Set(deictics)]),queries:Object.freeze(queries)});
+ // The property a question about one named object of a family lists when it asks none (app.query.read.listed).
+ const listed=parse(QUERY_POLICY).filter(wire=>wire.type==='app.query.read.listed').map(wire=>Object.freeze({family:str(wire.attrs.family[0]),key:str(wire.attrs.key[0]),declaration:wire.id}));
+ table=Object.freeze({definite:Object.freeze([...new Set(definite)]),indefinite:Object.freeze([...new Set(indefinite)]),coordinators:Object.freeze(coordinators),listMarks:Object.freeze(listMarks),deictics:Object.freeze([...new Set(deictics)]),queries:Object.freeze(queries),listed:Object.freeze(listed)});
  return table;
 }

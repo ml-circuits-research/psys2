@@ -58,6 +58,19 @@ test('styles: fill, outline, text colour, font size and weight; link arrowheads 
  ok('diagram.link.reverse ids="e1"');assert.deepEqual(ends(state).e1,['n2','n1']);
 });
 
+test('font style: italic alone, bold and italic together, on a new node and on a change; observed and drawn',async()=>{
+ const {state,ok,run,view}=await area();
+ ok('diagram.node.make kind="rectangle" label="Title" fontStyle="italic"');ok('diagram.node.make kind="rectangle" label="Crush"');
+ assert.equal(attr(state,'n1','font_style'),'italic');
+ ok('diagram.node.change ids="n2" fontWeight="bold" fontStyle="italic"');
+ const svg=view().svg;
+ assert.match(svg,/font-style="italic"[^>]*>Title</);assert.match(svg,/font-weight="600" font-style="italic"[^>]*>Crush</);
+ assert.equal(view().inputs.n2.fontStyle,'italic');assert.equal(view().inputs.n2.fontWeight,'bold');
+ assert.doesNotMatch(svg.replace(/>Title<|>Crush</g,''),/font-style="italic"[^>]*>[A-Za-z]/,'other labels stay upright');
+ assert.equal(run('diagram.node.change ids="n2" fontStyle="oblique"').status==='changed',false,'outside the declared values');
+ ok('diagram.node.change ids="n2" fontStyle="normal"');assert.doesNotMatch(view().svg,/font-style="italic"[^>]*>Crush</);
+});
+
 test('themes: a whole page, one role, a palette by level; later nodes follow the page theme',async()=>{
  const {state,ok,run,view}=await area();
  ok('diagram.node.make role="start" label="Go"');ok('diagram.node.make role="decision" label="Ok?"');ok('diagram.node.make kind="rectangle" label="Do"');

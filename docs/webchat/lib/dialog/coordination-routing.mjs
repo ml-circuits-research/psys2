@@ -6,12 +6,12 @@
 // or made is named in the reply.
 import {parse,serialize,quote} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {writeReaderSource} from './reader-source.mjs?v=1baaf5ba91';
-import {coordinationParts} from './coordination-split.mjs?v=d945210dfe';
+import {coordinationParts} from './coordination-split.mjs?v=912695a94b';
 import {resolveRequestRoute} from './request-routing-policy.mjs?v=6c36727506';
-import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=dd9b517a02';
-import {executionKnowledge} from './declared-execution.mjs?v=38b9357734';
+import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=beb95559d2';
+import {executionKnowledge} from './declared-execution.mjs?v=e9a0573f13';
 import {recordHistory} from './history-journal.mjs?v=0d3803bc7e';
-import {quantityNote} from './quantity-projection.mjs?v=9169c1504e';
+import {quantityNote} from './quantity-projection.mjs?v=ea81998615';
 
 const reply=(text,supported,trace={})=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 const attr=(wire,key)=>wire?.attrs[key]?.[0];

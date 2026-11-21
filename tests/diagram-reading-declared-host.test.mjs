@@ -15,6 +15,7 @@ import {createHash} from 'node:crypto';
 import {parse} from '../src/vendor/sopworld/sopworld.mjs';
 import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT} from '../src/dialog/raw-structural-bridge.mjs';
 import {comparativeSteps} from '../src/dialog/comparative-projection.mjs';
+import {referenceProjection} from '../src/dialog/reference-projection.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {createFacts} from '../src/knowledge/facts.mjs';
 import {createKnowledgeSource} from '../src/loaders/knowledge-source.mjs';
@@ -36,15 +37,19 @@ function session(){
   propose:async()=>read.raw&&!read.coverage?.complete?read:({coverage:{complete:true,graphProposal:true},candidates:[read],failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:.85}}),
  }}};
  const facts=type=>parse(s.isession.state['diagram.sketch'].sop??'').filter(w=>w.type===type);
- const bridge=(text,request)=>bridgeRawStructure({format:RAW_STRUCTURAL_FORMAT,source:{text,unit:'unicode-scalar'},area:'diagram',model:{kind:'structural-graph',sha256:'0'.repeat(64),decoderVersion:1},
-  requestCount:1,requests:[{span:text,trigger:text.split(' ')[0],mood:'do',...request}],ranges:[],coverage:{complete:true,truncated:false}},{bindings,bindingSha256,comparatives:comparativeSteps()});
+ // ranged: the source ranges of the request's spans (as the reader gives them) and the declared reference projection.
+ const spanRanges=(text,request)=>{const at=(path,literal)=>{const i=typeof literal==='string'&&literal?text.indexOf(literal):-1;return i<0?[]:[{path:['requests','0',...path],range:[i,i+literal.length]}];};
+  return [...at(['span'],text),...at(['trigger'],request.trigger??text.split(' ')[0]),...at(['target','name_span'],request.target?.name_span),...at(['target','kind_span'],request.target?.kind_span),
+   ...(request.constraints??[]).flatMap((c,ci)=>at(['constraints',String(ci),'value_span'],c.value_span))];};
+ const bridge=(text,request,ranged=false)=>bridgeRawStructure({format:RAW_STRUCTURAL_FORMAT,source:{text,unit:'unicode-scalar'},area:'diagram',model:{kind:'structural-graph',sha256:'0'.repeat(64),decoderVersion:1},
+  requestCount:1,requests:[{span:text,trigger:text.split(' ')[0],mood:'do',...request}],ranges:ranged?spanRanges(text,request):[],coverage:{complete:true,truncated:false}},{bindings,bindingSha256,comparatives:comparativeSteps(),...(ranged?{references:referenceProjection()}:{})});
  return {s,nodes:()=>facts('w.diagram.node'),edges:()=>facts('w.diagram.edge'),
   node:(args)=>performGesture(s,{view:'diagram',operation:'diagram.node.make',args}),
   link:(args)=>performGesture(s,{view:'diagram',operation:'diagram.link.make',args}),
   // A complete reading: the bridge must accept it as it is.
-  say:async(text,request)=>{const out=bridge(text,request);assert.deepEqual(out.diagnostics,[],text);read=out.decoded.candidates[0];return routeNewEngine(s,text,{view:'diagram'});},
+  say:async(text,request,ranged=false)=>{const out=bridge(text,request,ranged);assert.deepEqual(out.diagnostics,[],text);read=out.decoded.candidates[0];return routeNewEngine(s,text,{view:'diagram'});},
   // An incomplete reading, with the unresolved heads the reader reported.
-  sayIncomplete:async(text,request,unresolved)=>{const out=bridge(text,request);
+  sayIncomplete:async(text,request,unresolved,ranged=false)=>{const out=bridge(text,request,ranged);
    read={raw:{...out.raw,coverage:{complete:false,truncated:false},unresolved},candidates:[],coverage:{complete:false},failures:[...unresolved,...out.diagnostics],provenance:{bindingsSha256:bindingSha256},selectionScore:{definition:'psys2.model-minimum/1',value:.85}};
    return routeNewEngine(s,text,{view:'diagram'});}};
 }
@@ -119,4 +124,11 @@ test('"make the circle red": a parameter with declared colour names takes the na
  await t.node({kind:'circle',label:'A'});
  supported(await t.say('make the circle red',{act:'change',target:{type:'node',mode:'existing',determiner:'definite',fill:'written',kind:'circle',kind_span:'circle'},constraints:[eq('node.colour','red')]}));
  assert.equal(attr(t.nodes()[0],'colour'),'red');
+});
+
+test('"what values does Uptime show?": a list question of one named chart lists its values (app.query.read.listed)',async()=>{
+ const t=session();
+ await performGesture(t.s,{view:'diagram',operation:'diagram.group.chart.make',args:{label:'Uptime',labels:['Mon','Tue','Wed'],values:[99,97,98],layout:'bar'}});
+ const reply=await t.say('what values does Uptime show?',{act:'answer',mood:'ask',trigger:'what',question:{ask:'list'},target:{type:'chart',mode:'existing',determiner:'definite',fill:'written',name_span:'Uptime'},constraints:[]},true);
+ supported(reply);assert.match(reply.text,/Uptime: 99, 97, 98/);
 });

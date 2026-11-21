@@ -9,7 +9,7 @@
  */
 export const CATALOG_PIN = Object.freeze({
   repo: 'https://github.com/ml-circuits-research/sop-knowledge-worlds',
-  commit: '7d9f76406f2fc8e2e07694cbd1427bf7afb5b64a',   // k.charts measures with plausible ranges for invented chart values (7d9f7640), after the -f plurals in -ves in w.lang.en (7e599721), after w.diagram pictures, tables and table cells, the treemap layout and the k.charts treemap kind (186915bd, 4e3e1b44), after colour-first names in k.colours (first=true) and number misspellings in w.lang.en (misspelled=true) (3b5ea526), after w.diagram edges with free ends and named ports (71d6260d)
+  commit: '60c7aae3afad8b8a608d3086455fdc2c79035acf',   // w.diagram.node.font_style, italic (60c7aae3), after k.charts measures with plausible ranges for invented chart values (7d9f7640), k.charts measures with plausible ranges for invented chart values (7d9f7640), after the -f plurals in -ves in w.lang.en (7e599721), after w.diagram pictures, tables and table cells, the treemap layout and the k.charts treemap kind (186915bd, 4e3e1b44), after colour-first names in k.colours (first=true) and number misspellings in w.lang.en (misspelled=true) (3b5ea526), after w.diagram edges with free ends and named ports (71d6260d)
   path: 'docs/worlds',
 });
 

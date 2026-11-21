@@ -97,6 +97,13 @@
 @a.ma.role.r app.act.request operation="diagram.node.make" role=?v
 @a.ma.role.a app.act.arg call=?ref attr=role value=?v
 @make.node.role core.rule when=$a.ma.m when=$a.ma.role.r then=$a.ma.role.a
+# The label's weight and style (catalog w.diagram.node font_weight, font_style): bold, italic, or both.
+@a.ma.fweight.r app.act.request operation="diagram.node.make" fontWeight=?v
+@a.ma.fweight.a app.act.arg call=?ref attr=font_weight value=?v
+@make.node.fontweight core.rule when=$a.ma.m when=$a.ma.fweight.r then=$a.ma.fweight.a
+@a.ma.fstyle.r app.act.request operation="diagram.node.make" fontStyle=?v
+@a.ma.fstyle.a app.act.arg call=?ref attr=font_style value=?v
+@make.node.fontstyle core.rule when=$a.ma.m when=$a.ma.fstyle.r then=$a.ma.fstyle.a
 # A picture's image and caption, a table's rows and columns (catalog w.diagram.node source, caption, rows, columns).
 @a.ma.source.r app.act.request operation="diagram.node.make" source=?v
 @a.ma.source.a app.act.arg call=?ref attr=source value=?v
@@ -210,6 +217,9 @@
 @a.cn.fweight.r app.act.request operation="diagram.node.change" fontWeight=?v
 @a.cn.fweight.c app.act.call act=change thing=$a.it.n attr=font_weight value=?v order=1
 @change.node.fontweight core.rule when=$a.cn.fweight.r when=$a.it.i when=$a.it.n then=$a.cn.fweight.c
+@a.cn.fstyle.r app.act.request operation="diagram.node.change" fontStyle=?v
+@a.cn.fstyle.c app.act.call act=change thing=$a.it.n attr=font_style value=?v order=1
+@change.node.fontstyle core.rule when=$a.cn.fstyle.r when=$a.it.i when=$a.it.n then=$a.cn.fstyle.c
 @a.cn.role.r app.act.request operation="diagram.node.change" role=?v
 @a.cn.role.c app.act.call act=change thing=$a.it.n attr=role value=?v order=1
 @change.node.role core.rule when=$a.cn.role.r when=$a.it.i when=$a.it.n then=$a.cn.role.c
@@ -267,6 +277,7 @@
 @a.cn.none.t app.act.request textColour=?a7
 @a.cn.none.fs app.act.request fontSize=?a8
 @a.cn.none.fw app.act.request fontWeight=?a9
+@a.cn.none.fst app.act.request fontStyle=?a19
 @a.cn.none.ro app.act.request role=?a10
 @a.cn.none.ef app.act.request effect=?a11
 @a.cn.none.op app.act.request opacity=?a12
@@ -283,7 +294,7 @@
 @a.cn.none.cls app.act.request columns=?a18
 @a.cn.none.cel app.act.item param="cells"
 @a.cn.none.out app.act.refuse reason=missing-property
-@change.node.none core.rule when=$a.cn.none.r not=$a.cn.none.c not=$a.cn.none.s not=$a.cn.none.l not=$a.cn.none.v not=$a.cn.none.k not=$a.cn.none.o not=$a.cn.none.t not=$a.cn.none.fs not=$a.cn.none.fw not=$a.cn.none.ro not=$a.cn.none.ef not=$a.cn.none.op not=$a.cn.none.cr not=$a.cn.none.rt not=$a.cn.none.src not=$a.cn.none.cap not=$a.cn.none.rws not=$a.cn.none.cls not=$a.cn.none.cel then=$a.cn.none.out
+@change.node.none core.rule when=$a.cn.none.r not=$a.cn.none.c not=$a.cn.none.s not=$a.cn.none.l not=$a.cn.none.v not=$a.cn.none.k not=$a.cn.none.o not=$a.cn.none.t not=$a.cn.none.fs not=$a.cn.none.fw not=$a.cn.none.fst not=$a.cn.none.ro not=$a.cn.none.ef not=$a.cn.none.op not=$a.cn.none.cr not=$a.cn.none.rt not=$a.cn.none.src not=$a.cn.none.cap not=$a.cn.none.rws not=$a.cn.none.cls not=$a.cn.none.cel then=$a.cn.none.out
 
 # Select nodes (and edges): the view's selection.
 @a.sel.n.r app.act.request operation="diagram.node.select"
@@ -562,6 +573,26 @@
 @a.cl.n w.diagram.node code=?any
 @a.cl.nc app.act.call act=remove thing=$a.cl.n order=3
 @clear.nodes core.rule when=$a.cl.r when=$a.cl.n then=$a.cl.nc
+
+# A new page: every link, group and node of the page goes and the page takes the title said, or none. The history
+# keeps the old page, so undo brings it back (execution-policy.sop app.execution.operationNote).
+@a.np.r app.act.request operation="diagram.page.new"
+@a.np.e w.diagram.edge code=?any
+@a.np.ec app.act.call act=remove thing=$a.np.e order=1
+@page.new.edges core.rule when=$a.np.r when=$a.np.e then=$a.np.ec
+@a.np.g w.diagram.group code=?any
+@a.np.gc app.act.call act=remove thing=$a.np.g order=2
+@page.new.groups core.rule when=$a.np.r when=$a.np.g then=$a.np.gc
+@a.np.n w.diagram.node code=?any
+@a.np.nc app.act.call act=remove thing=$a.np.n order=3
+@page.new.nodes core.rule when=$a.np.r when=$a.np.n then=$a.np.nc
+@a.np.t app.act.request operation="diagram.page.new" title=?t
+@a.np.to ui.diagram.pageset key=title value=?t
+@page.new.title core.rule when=$a.np.t then=$a.np.to
+@a.np.anyt app.act.request title=?anyt
+@a.np.old w.diagram.diagram code=?pc title=?old
+@a.np.untitled app.act.call act=change thing=$a.np.old attr=title value="" order=4
+@page.new.untitled core.rule when=$a.np.r when=$a.np.old not=$a.np.anyt then=$a.np.untitled
 
 # Show or hide the codes (a view key the projection reads).
 @a.ids.r app.act.request operation="diagram.ids.show" mode=?m
@@ -1034,11 +1065,14 @@
 @a.og.member ui.diagram.inside group=?id node=?v
 @a.og.member.o app.observe.input id=?id key=members value=?v
 @observe.group.members core.rule when=$a.og.member then=$a.og.member.o
-# A chart group is observed with the values of its members ("what values does Revenue show?").
+# A chart group is observed with the values of its members ("what values does Revenue show?"), in the members' order.
 @a.og.vn w.diagram.node code=?mv value=?vv
 @a.og.vm ui.diagram.inside group=?id node=?mv
 @a.og.vo app.observe.input id=?id key=values value=?vv
-@observe.group.values core.rule when=$a.og.vm when=$a.og.vn then=$a.og.vo
+@a.og.vnn w.diagram.node code=?mv value=?vv n=?vn
+@a.og.vno app.observe.input id=?id key=values value=?vv order=?vn
+@observe.group.values core.rule when=$a.og.vm when=$a.og.vn not=$a.og.vnn then=$a.og.vo
+@observe.group.values.ordered core.rule when=$a.og.vm when=$a.og.vnn then=$a.og.vno
 
 @a.sp.n ui.diagram.nbox node=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1
 @a.sp.free ui.diagram.unitof node=?id unit=?id

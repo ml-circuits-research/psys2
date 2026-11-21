@@ -92,6 +92,12 @@
 @st.weight.theme core.rule when=$sn.n when=$sn.t when=$sn.th then=$sn.w3
 @sn.w9 ui.diagram.scand node=?c key=weight p=9 v=normal
 @st.weight.default core.rule when=$sn.n then=$sn.w9
+# The label's style: italic (slanted) when the node says so, upright otherwise.
+@sn.sl1n w.diagram.node code=?c font_style=?fst
+@sn.sl1 ui.diagram.scand node=?c key=slant p=1 v=?fst
+@st.slant.own core.rule when=$sn.sl1n then=$sn.sl1
+@sn.sl9 ui.diagram.scand node=?c key=slant p=9 v=normal
+@st.slant.default core.rule when=$sn.n then=$sn.sl9
 @sn.s1n w.diagram.node code=?c font_size=?fs
 @sn.s1 ui.diagram.scand node=?c key=font p=1 v=?fs
 @st.font.own core.rule when=$sn.s1n then=$sn.s1
@@ -401,33 +407,34 @@
 @sl.tc ui.diagram.nst node=?c key=text v=?ink
 @sl.fs ui.diagram.nst node=?c key=font v=?fs
 @sl.fw ui.diagram.nst node=?c key=weight v=?fw
+@sl.sl ui.diagram.nst node=?c key=slant v=?sl
 @sl.ro ui.diagram.nst node=?c key=rotation v=?rot
 @sl.src core.calc out=?src fn=concat args=?c args=".label"
 @sl.d1 core.calc out=?d1 fn=mul args=?fs args=0.36
 @sl.y core.calc out=?ty fn=add args=?cy args=?d1
 @sl.mid core.check fn=matches args=?s args="^(?!actor$|cylinder$|picture$|table$)"
-@sl.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw rotate=?rot rx=?cx ry=?cy
+@sl.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw slant=?sl rotate=?rot rx=?cx ry=?cy
 @sl.fill ui.diagram.fill source=?src part=?c fill=?ink
-@st.draw.label core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw when=$sl.ro if=$sl.mid with=$sl.src with=$sl.d1 with=$sl.y then=$sl.out
+@st.draw.label core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw when=$sl.sl when=$sl.ro if=$sl.mid with=$sl.src with=$sl.d1 with=$sl.y then=$sl.out
 @sl.notactor core.check fn=matches args=?s args="^(?!actor$|picture$|table$)"
 @st.fill.label core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.tc if=$sl.notactor with=$sl.src then=$sl.fill
 @sl.cy core.check fn=eq args=?s args=cylinder
 @sl.cy1 core.calc out=?cyo fn=mul args=?h args=0.08
 @sl.cy2 core.calc out=?cyy fn=add args=?ty args=?cyo
-@sl.cout ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?cyy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw
-@st.draw.label.cylinder core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw if=$sl.cy with=$sl.src with=$sl.d1 with=$sl.y with=$sl.cy1 with=$sl.cy2 then=$sl.cout
+@sl.cout ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?cyy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw slant=?sl
+@st.draw.label.cylinder core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw when=$sl.sl if=$sl.cy with=$sl.src with=$sl.d1 with=$sl.y with=$sl.cy1 with=$sl.cy2 then=$sl.cout
 @sl.ac core.check fn=eq args=?s args=actor
 @sl.ay core.calc out=?ayy fn=add args=?y1 args=?fs
 @sl.ot ui.diagram.pagecol key=label rgb=?pl
-@sl.aout ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ayy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw
+@sl.aout ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ayy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw slant=?sl
 @sl.afill ui.diagram.fill source=?src part=?c fill=?pl
-@st.draw.label.actor core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw if=$sl.ac with=$sl.src with=$sl.ay then=$sl.aout
+@st.draw.label.actor core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw when=$sl.sl if=$sl.ac with=$sl.src with=$sl.ay then=$sl.aout
 @st.fill.label.actor.fix core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.ot if=$sl.outside with=$sl.src then=$sl.afill
 @sl.outside core.check fn=matches args=?s args="^(actor|picture|table)$"
 # A picture's label under its frame (its caption, when it has one, under that, smaller and in italics); a table's label
 # over its grid.
 @sl.pic core.check fn=eq args=?s args=picture
-@st.draw.label.picture core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw if=$sl.pic with=$sl.src with=$sl.ay then=$sl.aout
+@st.draw.label.picture core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw when=$sl.sl if=$sl.pic with=$sl.src with=$sl.ay then=$sl.aout
 @slc.n w.diagram.node code=?c shape=picture caption=?t
 @slc.b ui.diagram.nbox node=?c cx=?cx y1=?y1
 @slc.fs ui.diagram.nst node=?c key=font v=?fs
@@ -448,8 +455,8 @@
 @sl.tab core.check fn=eq args=?s args=table
 @slt.b ui.diagram.nbox node=?c cx=?cx y0=?y0
 @slt.y core.calc out=?ty fn=sub args=?y0 args=6
-@slt.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw
-@st.draw.label.table core.rule when=$sl.n when=$sl.own when=$slt.b when=$sl.fs when=$sl.fw if=$sl.tab with=$sl.src with=$slt.y then=$slt.out
+@slt.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw slant=?sl
+@st.draw.label.table core.rule when=$sl.n when=$sl.own when=$slt.b when=$sl.fs when=$sl.fw when=$sl.sl if=$sl.tab with=$sl.src with=$slt.y then=$slt.out
 
 # ---- Pictures and tables ----
 # A picture is an image frame (drawn as a box) with a placeholder picture in it: hills and a sun, polygons of fractions

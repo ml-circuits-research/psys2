@@ -176,6 +176,7 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
     ? 'More than one matched. I used ' + kind + ' ' + plan.id + '. You can undo this.'
     : 'I used the most recent matching ' + plan.kind + '.');
   if (plan.skipped.length) notes.push('I could not apply ' + plan.skipped.join(', ') + '.');
+  notes.push(...operationNotes(plan.operation));
   const addedOfKind = operation.spatial?.countKey && made.filter(value => value.sourceType === operation.on && value.kind === kind).length;
   const created = addedOfKind>1 ? `Created ${addedOfKind} objects of kind ${kind}.` : `Created ${withArticle(kind)}.`;
   const said = plan.act === 'make' ? created : plan.act === 'remove' ? `Removed the ${kind}.` : `Updated the ${kind}.`;
@@ -191,6 +192,8 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
   };
 }
 
+/** The declared reply words of an operation (app.execution.operationNote), whatever its arguments. */
+const operationNotes = (operation) => executionPolicyWorld().ofType('app.execution.operationNote').filter((r) => str(r.attrs.operation?.[0]) === operation).map((r) => str(r.attrs.text?.[0]));
 const withArticle = (noun) => (/^[aeiou]/i.test(noun) ? 'an ' : 'a ') + noun;
 const declaredText = (template, values) => String(template ?? '').replace(/\{(\w+)\}/g, (all, name) => values[name] ?? all);
 /** The declared reply words for objects acted on as a population (app.execution.populationNote: one or many). */

@@ -1,4 +1,4 @@
-@reading.module core.module name=app.reading version=1 exports=app.reading.request exports=app.reading.form exports=app.reading.span exports=app.reading.word exports=app.reading.evidence exports=app.reading.drop exports=app.reading.bySingular exports=app.reading.target exports=app.reading.constraint exports=app.reading.property exports=app.reading.family exports=app.reading.containment exports=app.reading.actForm exports=app.reading.linkPattern exports=app.reading.joining exports=app.reading.allowed exports=app.reading.foreign exports=app.reading.freeEnd exports=app.reading.saidEnd exports=app.reading.populous exports=app.reading.phrase exports=app.reading.eligible exports=app.reading.containerKey exports=app.reading.mixed exports=app.reading.member exports=app.reading.keepsMember exports=app.reading.retarget exports=app.reading.addEnd exports=app.reading.population exports=app.reading.joined
+@reading.module core.module name=app.reading version=1 exports=app.reading.request exports=app.reading.form exports=app.reading.span exports=app.reading.word exports=app.reading.evidence exports=app.reading.drop exports=app.reading.mention exports=app.reading.restated exports=app.reading.nameKey exports=app.reading.renamed exports=app.reading.valueWord exports=app.reading.spanSays exports=app.reading.spanEvidence exports=app.reading.rekey exports=app.reading.bySingular exports=app.reading.target exports=app.reading.constraint exports=app.reading.property exports=app.reading.family exports=app.reading.containment exports=app.reading.actForm exports=app.reading.linkPattern exports=app.reading.joining exports=app.reading.allowed exports=app.reading.foreign exports=app.reading.freeEnd exports=app.reading.saidEnd exports=app.reading.populous exports=app.reading.phrase exports=app.reading.eligible exports=app.reading.containerKey exports=app.reading.mixed exports=app.reading.member exports=app.reading.keepsMember exports=app.reading.retarget exports=app.reading.addEnd exports=app.reading.population exports=app.reading.joined
 
 # The facts a raw reading gives (src/dialog/raw-reading-policy.mjs feeds them; nothing is decided there): one request
 # of the reading, its target's fields as the reader wrote them, each constraint's key and the type its key belongs to.
@@ -28,6 +28,12 @@
 @reading.constraint.index core.slot of=app.reading.constraint key=index kind=integer present=true
 @reading.constraint.key core.slot of=app.reading.constraint key=key kind=string
 @reading.constraint.keyType core.slot of=app.reading.constraint key=keyType kind=string
+@reading.constraint.phase core.slot of=app.reading.constraint key=phase kind=string
+@reading.constraint.valueSpan core.slot of=app.reading.constraint key=valueSpan kind=string
+# Conclusion: a selector constraint restates the target's name by another family's key and is dropped.
+@reading.restated.type core.type of=app.reading.restated closed=true
+@reading.restated.request core.slot of=app.reading.restated key=request kind=integer present=true
+@reading.restated.index core.slot of=app.reading.restated key=index kind=integer present=true
 
 # The deployed binding table's rows the rules read (area-scoped by the feeder): a property key, its canonical concept
 # and the native source type its host binding operates on; a family's type, canonical class and native source type;
@@ -40,6 +46,21 @@
 @reading.family.family core.slot of=app.reading.family key=type kind=string present=true
 @reading.family.canonical core.slot of=app.reading.family key=canonical kind=string present=true
 @reading.family.source core.slot of=app.reading.family key=sourceType kind=string
+# A family's own word (its type, by its forms) said in a request, and whether a definite determiner (w.lang.en det
+# definite=yes: "the", "this") says it just before ("on this page" names the page already there).
+@reading.mention.type core.type of=app.reading.mention closed=true
+@reading.mention.request core.slot of=app.reading.mention key=request kind=integer present=true
+@reading.mention.family core.slot of=app.reading.mention key=type kind=string present=true
+# The key that names an object of a family (a node's label, a page's title), and the conclusion that a constraint
+# takes the naming key of the family its request was re-read as.
+@reading.nameKey.type core.type of=app.reading.nameKey closed=true
+@reading.nameKey.family core.slot of=app.reading.nameKey key=type kind=string present=true
+@reading.nameKey.key core.slot of=app.reading.nameKey key=key kind=string present=true
+@reading.renamed.type core.type of=app.reading.renamed closed=true
+@reading.renamed.request core.slot of=app.reading.renamed key=request kind=integer present=true
+@reading.renamed.index core.slot of=app.reading.renamed key=index kind=integer present=true
+@reading.renamed.key core.slot of=app.reading.renamed key=key kind=string present=true
+@reading.mention.definite core.slot of=app.reading.mention key=definite kind=string present=true
 @reading.containment.type core.type of=app.reading.containment closed=true
 @reading.containment.member core.slot of=app.reading.containment key=type kind=string present=true
 @reading.containment.container core.slot of=app.reading.containment key=container kind=string present=true
@@ -95,7 +116,7 @@
 @reading.keepsMember.request core.slot of=app.reading.keepsMember key=request kind=integer present=true
 @reading.retarget.type core.type of=app.reading.retarget closed=true
 @reading.retarget.request core.slot of=app.reading.retarget key=request kind=integer present=true
-@reading.retarget.rule core.slot of=app.reading.retarget key=rule kind=atom enum=population enum=container present=true
+@reading.retarget.rule core.slot of=app.reading.retarget key=rule kind=atom enum=population enum=container enum=family present=true
 @reading.retarget.family core.slot of=app.reading.retarget key=type kind=string present=true
 @reading.retarget.mode core.slot of=app.reading.retarget key=mode kind=string present=true
 @reading.retarget.determiner core.slot of=app.reading.retarget key=determiner kind=string present=true
@@ -119,6 +140,8 @@
 @reading.span.key core.slot of=app.reading.span key=key kind=string present=true
 @reading.span.start core.slot of=app.reading.span key=start kind=integer present=true
 @reading.span.end core.slot of=app.reading.span key=end kind=integer present=true
+@reading.span.value core.slot of=app.reading.span key=value kind=string
+@reading.span.keyType core.slot of=app.reading.span key=keyType kind=string
 @reading.evidence.type core.type of=app.reading.evidence closed=true
 @reading.evidence.request core.slot of=app.reading.evidence key=request kind=integer present=true
 @reading.evidence.key core.slot of=app.reading.evidence key=key kind=string present=true
@@ -129,3 +152,23 @@
 @reading.word.type core.type of=app.reading.word closed=true
 @reading.word.key core.slot of=app.reading.word key=key kind=string present=true
 @reading.word.text core.slot of=app.reading.word key=text kind=string present=true
+# A word that says one value of a key ("italic", "slant": the font style italic of a node), the declared words (and a
+# constraint's own value) a constraint's value span says (by their forms, w.lang.en, or with two neighbouring letters
+# swapped), the constraint whose span says its own key or value, and the conclusion that a constraint is re-keyed.
+@reading.valueWord.type core.type of=app.reading.valueWord closed=true
+@reading.valueWord.key core.slot of=app.reading.valueWord key=key kind=string present=true
+@reading.valueWord.keyType core.slot of=app.reading.valueWord key=keyType kind=string present=true
+@reading.valueWord.value core.slot of=app.reading.valueWord key=value kind=string present=true
+@reading.valueWord.text core.slot of=app.reading.valueWord key=text kind=string present=true
+@reading.spanSays.type core.type of=app.reading.spanSays closed=true
+@reading.spanSays.request core.slot of=app.reading.spanSays key=request kind=integer present=true
+@reading.spanSays.index core.slot of=app.reading.spanSays key=index kind=integer present=true
+@reading.spanSays.text core.slot of=app.reading.spanSays key=text kind=string present=true
+@reading.spanEvidence.type core.type of=app.reading.spanEvidence closed=true
+@reading.spanEvidence.request core.slot of=app.reading.spanEvidence key=request kind=integer present=true
+@reading.spanEvidence.index core.slot of=app.reading.spanEvidence key=index kind=integer present=true
+@reading.rekey.type core.type of=app.reading.rekey closed=true
+@reading.rekey.request core.slot of=app.reading.rekey key=request kind=integer present=true
+@reading.rekey.index core.slot of=app.reading.rekey key=index kind=integer present=true
+@reading.rekey.key core.slot of=app.reading.rekey key=key kind=string present=true
+@reading.rekey.value core.slot of=app.reading.rekey key=value kind=string present=true

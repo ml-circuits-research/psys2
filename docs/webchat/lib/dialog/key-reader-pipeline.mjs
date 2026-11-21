@@ -1,12 +1,12 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
 import {readReaderSource} from './reader-source.mjs?v=1baaf5ba91';
 import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=c6ea65e776';
-import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=2a7d8c61cb';
-import {comparativeSteps} from './comparative-projection.mjs?v=1fcefe54e3';
-import {referenceProjection} from './reference-projection.mjs?v=e42aaa1abf';
-import {completeBindings} from './declared-bindings.mjs?v=bfb97a7f6e';
-import {declaredRawReadings} from './partial-admission.mjs?v=9de9fb5e41';
-import {declaredValueReadings} from './declared-value-readings.mjs?v=c45cf325f6';
+import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=a101603524';
+import {comparativeSteps} from './comparative-projection.mjs?v=e13afbcbfb';
+import {referenceProjection} from './reference-projection.mjs?v=cfb59bc4a2';
+import {completeBindings} from './declared-bindings.mjs?v=7b35f75998';
+import {declaredRawReadings} from './partial-admission.mjs?v=fadf4fc918';
+import {declaredValueReadings} from './declared-value-readings.mjs?v=919730b453';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
