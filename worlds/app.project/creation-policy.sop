@@ -88,3 +88,9 @@
 @o.nameGap app.creation.nameGap value=?explicit
 @apply.explicitName core.rule when=$p.explicitName when=$p.nameParameter when=$p.textParameter then=$o.explicitName
 @disclose.explicitName core.rule when=$p.explicitName not=$p.admittedName then=$o.nameGap
+
+# The reply states the declared relation path of a non-exact grounding, one step at a time.
+@stepPhrase.lemma app.creation.stepPhrase relation=lemma text="a form of"
+@stepPhrase.is_a app.creation.stepPhrase relation=is_a text="a kind of"
+@stepPhrase.kind_of app.creation.stepPhrase relation=kind_of text="a kind of"
+

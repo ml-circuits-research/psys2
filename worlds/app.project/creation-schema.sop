@@ -1,4 +1,4 @@
-@creation.module core.module name=app.creation exports=app.creation.role exports=app.creation.input exports=app.creation.entry exports=app.creation.parameter exports=app.creation.property exports=app.creation.lexical exports=app.creation.kindMention exports=app.creation.checked exports=app.creation.disposition exports=app.creation.consumed exports=app.creation.named exports=app.creation.result exports=app.creation.targetName exports=app.creation.nameGap exports=app.creation.limits
+@creation.module core.module name=app.creation exports=app.creation.role exports=app.creation.stepPhrase exports=app.creation.input exports=app.creation.entry exports=app.creation.parameter exports=app.creation.property exports=app.creation.lexical exports=app.creation.kindMention exports=app.creation.checked exports=app.creation.disposition exports=app.creation.consumed exports=app.creation.named exports=app.creation.result exports=app.creation.targetName exports=app.creation.nameGap exports=app.creation.limits
 @role.type core.type of=app.creation.role closed=true
 @role.concept core.slot of=app.creation.role key=concept kind=atom present=true
 @role.role core.slot of=app.creation.role key=role enum=kind enum=coextensive enum=name present=true
@@ -68,3 +68,9 @@
 @creation.limits.alternatives core.slot of=app.creation.limits key=alternatives kind=integer min=1 present=true
 @creation.limits.batch core.slot of=app.creation.limits key=batch kind=integer min=2 present=true
 @creation.limits.lemma core.slot of=app.creation.limits key=lemma kind=integer min=1 present=true
+# How the reply states one step of a non-exact grounding path ("tabby" is a kind of "cat"): the relation of the step
+# (its first segment) and the words said between the two names.
+@stepPhrase.type core.type of=app.creation.stepPhrase closed=true
+@stepPhrase.relation core.slot of=app.creation.stepPhrase key=relation kind=atom present=true
+@stepPhrase.text core.slot of=app.creation.stepPhrase key=text kind=string present=true
+
