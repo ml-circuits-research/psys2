@@ -212,3 +212,12 @@ export function pluralReference(request){
  const plural=facts.length>0&&world.tell(serialize(facts),{factsOnly:true}).ok&&world.ofType('app.reading.plural').length>0;
  return {plural,distributes:new Set(world.ofType('app.reading.distributes').map(row=>one(row,'key')))};
 }
+
+/** The declared identity concepts and the reader heads a code replaces (app.reading.identityConcept, app.reading.codeHead). */
+let codeReference=null;
+export function codeReferencePolicy(){
+ if(codeReference)return codeReference;
+ const world=policyWorld(),concepts=new Set(world.ofType('app.reading.identityConcept').map(row=>one(row,'concept'))),heads=new Set(world.ofType('app.reading.codeHead').map(row=>one(row,'key')));
+ return codeReference={identityKey:key=>typeof key==='string'&&concepts.has(key.split('.').at(-1)),replacedHead:key=>heads.has(key)};
+}
+

@@ -248,3 +248,12 @@
 @distributes.node.label app.reading.distributes key="node.label"
 @distributes.drawn.colour app.reading.distributes key="drawn.colour"
 @distributes.node.colour app.reading.distributes key="node.colour"
+
+# ---- A code names its object (2026-11-21) ----------------------------------------------------------------------------
+# "make e1 dashed", "delete n2": a code names an observed object whatever family the reader gave it. Its identity
+# restatements (a selector by an identity key whose value starts the code) are the same reference and are dropped, and
+# the reader's kind head is replaced by the object's observed kind (src/dialog/project-code-reference.mjs reads these).
+@identity.id app.reading.identityConcept concept="id"
+@identity.ids app.reading.identityConcept concept="ids"
+@codeHead.kind app.reading.codeHead key="request.target.kind"
+
