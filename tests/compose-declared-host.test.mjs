@@ -199,3 +199,14 @@ test('a composition word of another editor is composed in that editor (compose-p
   assert.deepEqual(await start('drawing', 'flowchart', ['make', 'a', 'random', 'flowchart']), { area: 'diagram', form: 'diagram', subject: 'flowchart', source: 'random' });
   assert.deepEqual(await start('drawing', undefined, ['draw', 'something', 'random']), { area: 'drawing', form: 'scene', source: 'random' });
 });
+
+test('a kindless new thing whose constraints say composition.source is a composition, not the family\'s default shape (compose-policy.sop app.compose.kindless)', async () => {
+  const start = async (area, type, constraints, words) => JSON.parse(JSON.stringify(await composeStart(session(area), { area, act: 'make', mode: 'new', type, constraints, words, parts: 1 }, { knowledge })));
+  const random = [{ key: 'composition.source', value: 'random' }];
+  // "draw something random" read in the Diagram as a new node with composition.source random: a scene of the Drawing.
+  assert.deepEqual(await start('diagram', 'node', random, ['draw', 'something', 'random']), { area: 'drawing', form: 'scene', source: 'random' });
+  assert.deepEqual(await start('diagram', 'node', random, ['make', 'a', 'random', 'one']), { area: 'diagram', form: 'diagram', source: 'random' });
+  assert.deepEqual(await start('drawing', 'drawn', random, ['something', 'random']), { area: 'drawing', form: 'scene', source: 'random' });
+  // A kindless node with an ordinary property stays a node.
+  assert.equal(await start('diagram', 'node', [{ key: 'node.colour', value: 'red' }], ['add', 'a', 'red', 'one']), null);
+});

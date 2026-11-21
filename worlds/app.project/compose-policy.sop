@@ -384,6 +384,17 @@
 @option.closed core.rule when=$op.c when=$op.k when=$op.v then=$op.out
 @op.ko app.compose.optionKey key=?k option=?o open=true
 @option.open core.rule when=$op.c when=$op.ko then=$op.out
+# A composition target with no kind word (app.compose.kindless): a new composition the reader typed as one, or a
+# kindless new thing of any family whose constraints say where its content comes from (composition.source random or
+# conversation: "draw something random" read as a new node with that key). The key leaves the content open, so the
+# reading is the area's composition, never an empty default shape of the family (owner, 2026-11-21).
+@kc.c app.compose.reading area=?a mode=new type=composition
+@kc.word app.compose.reading word=?anyWord
+@kc.out app.compose.kindless area=?a
+@kindless.typed core.rule when=$kc.c not=$kc.word then=$kc.out
+@kc.r app.compose.reading area=?a act=make mode=new
+@kc.opt app.compose.option option=source value=?v
+@kindless.source core.rule when=$kc.r not=$kc.word when=$kc.opt then=$kc.out
 # A chart's values said as random or plausible leave its content open and compose a chart of invented values.
 @openval.random app.compose.openValue key="chart.values" value=random
 @openval.plausible app.compose.openValue key="chart.values" value=plausible
@@ -404,12 +415,11 @@
 @kf.chart app.compose.kindForm area=diagram word=chart form=chart
 @kf.charts app.compose.kindForm area=diagram word=charts form=chart
 @kf.graph app.compose.kindForm area=diagram word=graph form=chart
-@cp.r app.compose.reading area=?a mode=new type=composition
-@cp.word app.compose.reading word=?anyWord
+@cp.r app.compose.kindless area=?a
 @cp.tf app.compose.typeForm area=?a type=composition form=?f
 @cp.start app.compose.start area=?a form=?f
 @cp.kaway app.compose.away kindless=true
-@start.composition core.rule when=$cp.r not=$cp.word when=$cp.tf not=$cp.kaway not=$t.blocked then=$cp.start
+@start.composition core.rule when=$cp.r when=$cp.tf not=$cp.kaway not=$t.blocked then=$cp.start
 @cp.rw app.compose.reading area=?a mode=new type=composition word=?w
 @cp.kf app.compose.kindForm area=?a word=?w form=?f
 @start.composition.kind core.rule when=$cp.rw when=$cp.kf not=$t.blocked then=$cp.start
@@ -450,13 +460,13 @@
 # as the shown editor's own form.
 @areaword.draw app.compose.areaWord area=drawing word=draw
 @areaword.paint app.compose.areaWord area=drawing word=paint
-@h.k app.compose.reading area=?a mode=new type=composition
+@h.k app.compose.kindless area=?a
 @h.kw app.compose.word word=?w
 @h.kopen app.compose.open area=?b word=?w form=scene
 @h.kverb app.compose.areaWord area=?b word=?w
 @h.kaway app.compose.away kindless=true area=?b
 @h.kstart app.compose.start area=?b form=scene
-@away.kindless.open core.rule when=$h.k not=$cp.word when=$h.kw when=$h.kopen if=$h.other then=$h.kaway
-@away.kindless.verb core.rule when=$h.k not=$cp.word when=$h.kw when=$h.kverb if=$h.other then=$h.kaway
-@start.away.kindless.open core.rule when=$h.k not=$cp.word when=$h.kw when=$h.kopen if=$h.other not=$t.blocked then=$h.kstart
-@start.away.kindless.verb core.rule when=$h.k not=$cp.word when=$h.kw when=$h.kverb if=$h.other not=$t.blocked then=$h.kstart
+@away.kindless.open core.rule when=$h.k when=$h.kw when=$h.kopen if=$h.other then=$h.kaway
+@away.kindless.verb core.rule when=$h.k when=$h.kw when=$h.kverb if=$h.other then=$h.kaway
+@start.away.kindless.open core.rule when=$h.k when=$h.kw when=$h.kopen if=$h.other not=$t.blocked then=$h.kstart
+@start.away.kindless.verb core.rule when=$h.k when=$h.kw when=$h.kverb if=$h.other not=$t.blocked then=$h.kstart
