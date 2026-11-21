@@ -6,7 +6,7 @@
 // code was taken. Nothing here inspects words: only the reader's name span and the observed codes.
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=cfc87f8ce5';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=0f46640ed0';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=a101603524';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=5f0a2fa41e';
 import {comparativeSteps} from './comparative-projection.mjs?v=e13afbcbfb';
 import {referenceProjection} from './reference-projection.mjs?v=cfb59bc4a2';
 

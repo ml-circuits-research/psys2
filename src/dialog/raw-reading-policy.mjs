@@ -9,6 +9,8 @@ import POLICY from '../../worlds/app.project/raw-reading-policy-source.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
 import {en} from '../lang/en.mjs';
 import {referenceProjection} from './reference-projection.mjs';
+import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs';
+import {parse} from '../vendor/sopworld/sopworld.mjs';
 
 let base=null;
 function policyWorld(){
@@ -195,4 +197,18 @@ export function populationReference(request){
  const answer=world.tell(serialize(requestFacts(0,probe)),{factsOnly:true}).ok&&world.ofType('app.reading.population').length>0;
  if(populations.size<256)populations.set(key,answer);
  return answer;
+}
+
+// The pronouns of w.lang.en (text, number, what they refer to: thing or any), read once from the language facts.
+let pronouns=null;
+const pronounRows=()=>pronouns??=parse(LANG_EN_FACTS.pronouns??'').filter(w=>w.type==='w.lang.en.pron').map(w=>{const refers=(w.attrs.refers??[]).map(str);
+ return {text:String(str(w.attrs.text?.[0])??'').toLowerCase(),number:w.attrs.number?.length?str(w.attrs.number[0]):undefined,refers:refers.includes('thing')?'thing':refers.includes('any')?'any':refers[0]};}).filter(p=>p.text);
+/** Whether a request refers to several things by a plural pronoun (app.reading.plural), and the keys whose said
+ * lists are distributed over them (app.reading.distributes). */
+export function pluralReference(request){
+ const words=new Set(wordsOf(request?.span));
+ const facts=pronounRows().filter(p=>words.has(p.text)).map((p,i)=>record(`pron${i}`,'pronoun',{request:0,text:p.text,number:p.number,refers:p.refers}));
+ const world=policyWorld().fork();
+ const plural=facts.length>0&&world.tell(serialize(facts),{factsOnly:true}).ok&&world.ofType('app.reading.plural').length>0;
+ return {plural,distributes:new Set(world.ofType('app.reading.distributes').map(row=>one(row,'key')))};
 }

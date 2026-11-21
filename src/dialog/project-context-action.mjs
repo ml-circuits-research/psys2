@@ -8,7 +8,8 @@ import {readReferenceTurn,resolveObservedReference,referencePolicyWorld} from '.
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs';
 import {flatRequestProjection} from './request-projection.mjs';
 import {bridgeRawStructure} from './raw-structural-bridge.mjs';
-import {retargetRule} from './raw-reading-policy.mjs';
+import {retargetRule,pluralReference} from './raw-reading-policy.mjs';
+import {en} from '../lang/en.mjs';
 import {comparativeSteps} from './comparative-projection.mjs';
 import {referenceProjection} from './reference-projection.mjs';
 import {interpretationPolicy} from './interpretation-policy.mjs';
@@ -39,6 +40,9 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
   inherited=prior.results;rewind=last.before;
  }else if(!Array.isArray(r.constraints)||!r.constraints.length&&bareUse(r.act)==='none')return null;   // an act on the referent may say nothing more ("improve the layout", "trash it", "copy this one")
  const canonical=selected.canonical,values=[];
+ // A plural reference with a said list ("call them Tom and Jerry") names the things the last action of this view made,
+ // each taking its value of the list in order (raw-reading-policy.sop app.reading.plural / app.reading.distributes).
+ if(!other){const distributed=await distributedProjection({proposal,raw,r,session,area,host,options,selected,bindings,readerArea,registry,view});if(distributed)return distributed;}
  // A reading beyond plain stated values (a comparative step, several results, a class value its span only evidences:
  // legend "hide" said as "get rid of the legend"; a selector that picks among the family: "the May value", "the third
  // bar") is projected by the same bridge as any other reading, with the context target bound to the kind the observed
@@ -72,4 +76,45 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
  const note=other?'I applied the previous change to the other '+selected.object.kind+'.':'I took the reference as the '+selected.object.kind+'.';
  return {proposal:{...proposal,candidates:[graph],coverage:{complete:true,graphProposal:true,executable:false},failures:[],
   interpretation:{profile:'native-context/1',note,projection:graph.projection,chosen:{id:selected.object.id,kind:selected.object.kind,canonical},alternatives:options.map(o=>({id:o.object.id,kind:o.object.kind,canonical:o.canonical})),unresolved:proposal.failures}},focus:selected.object.id,rewind};
+}
+
+// The things the last undoable action of this view made, in the order observed, among the reference's options of the
+// selected canonical kind.
+async function lastMade(session,view,area,host,options,canonical){
+ const last=historyHeads(session,view).find(row=>row.direction==='undo')?.entry;
+ const before=last?.before?.[area.world];if(!before)return [];
+ const earlier=new Set((await area.create({state:before,instanceId:'context-'+globalThis.crypto.randomUUID()})).observe().objects.map(o=>o.id));
+ const ofKind=new Map(options.filter(o=>o.canonical===canonical).map(o=>[o.object.id,o]));
+ return host.observe().objects.filter(o=>!earlier.has(o.id)&&ofKind.has(o.id)).map(o=>ofKind.get(o.id));
+}
+async function distributedProjection({proposal,raw,r,session,area,host,options,selected,bindings,readerArea,registry,view}){
+ const {plural,distributes}=pluralReference(r);
+ if(!plural||!Array.isArray(r.constraints)||!r.constraints.length)return null;
+ // The list said for a distributed key: its constraints' values in order (the reader may give one per item or one
+ // coordinated span), each cut at the w.lang.en coordinators.
+ if(r.constraints.some(c=>c.phase!=='result'||c.operator!=='eq'||c.polarity!=='positive'||c.character!=='requirement'||typeof c.value!=='string'))return null;
+ const keys=[...new Set(r.constraints.map(c=>c.key))];
+ const said=keys.map(key=>{const values=r.constraints.filter(c=>c.key===key).map(c=>c.value);return {key,parts:distributes.has(key)?values.flatMap(v=>en.splitList(v)):values};});
+ const lists=said.filter(x=>distributes.has(x.key)&&x.parts.length>1);
+ if(!lists.length||said.some(x=>!distributes.has(x.key)&&x.parts.length>1))return null;
+ const group=await lastMade(session,view,area,host,options,selected.canonical);
+ if(group.length<2||lists.some(x=>x.parts.length!==group.length))return null;
+ const members=[];
+ for(const [i,member] of group.entries()){
+  const values=[];
+  for(const {key,parts} of said){
+   let concept=bindings.properties.find(p=>p.area===readerArea&&p.key===key)?.canonical;
+   if(!concept){const spec=registry[readerArea+'.'+key];const row=executionPolicyWorld().ofType('app.execution.observedProperty').find(p=>str(p.attrs.sourceType?.[0])===member.object.sourceType&&str(p.attrs.concept?.[0])===spec?.concept);concept=row&&str(row.attrs.concept[0]);}
+   if(!concept)return null;
+   values.push({concept,token:quote(parts.length===group.length?parts[i]:parts[0]),witness:key});
+  }
+  const graph=projectGroundedRequest({profile:'context',act:r.act,mood:r.mood,kind:member.canonical,text:raw.source.text,values,witness:member.object.source});
+  if(!graph)return null;
+  members.push({candidate:graph,focus:member.object.id});
+ }
+ observeGroundedProjection(session,members[0].candidate.projection);
+ const kind=selected.object.kind,note='I took the reference as the '+group.length+' '+(en.plural(kind)??kind)+' just made, in order.';
+ return {proposal:{...proposal,candidates:[members[0].candidate],coverage:{complete:true,graphProposal:true,executable:false},failures:[],
+  interpretation:{profile:'native-context/1',note,distributed:members.map(m=>m.focus),chosen:{id:members[0].focus,kind,canonical:selected.canonical},alternatives:options.map(o=>({id:o.object.id,kind:o.object.kind,canonical:o.canonical})),unresolved:proposal.failures}},
+  focus:members[0].focus,members,rewind:null};
 }

@@ -31,6 +31,7 @@ const INTERFACES=[['art.draw',DRAW],['diagram.sketch',DIAGRAM],['data.charts',CH
 const digest=async text=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
 const one=(row,key)=>row.attrs[key]?.length?str(row.attrs[key][0]):undefined;
 const EXECUTION_PATH='worlds/app.project/execution-policy.sop';
+const NUMERIC_KINDS=new Set(['integer','number','quantity']);
 
 let interfaces=null;
 /** Every std.capability parameter of the native interfaces, and the coordinate keys of their spatial ports. */
@@ -58,7 +59,14 @@ async function nativeInterfaces(){
    rows.push({world,sourceSha256:sha,wire:w.id,operation:op.name,act:op.act,sourceType:op.on,parameter:one(w,'name'),kind:one(w,'kind'),unit:op.unit,enum:one(w,'enumClosed')==='true'&&values.length?values:null});
   }
  }
- return interfaces={parameters:rows,coordinates:[...coordinates]};
+ // The concepts the interfaces count with: a family's repeat concept (std.capability.repeat: the call made N times)
+ // and a concept an interface binds to a numeric parameter (std.capability.property concept on parameter).
+ const counted=new Set();
+ for(const [,source] of INTERFACES)for(const w of parse(source)){
+  if(w.type==='std.capability.repeat'&&one(w,'concept'))counted.add(one(w,'concept'));
+  if(w.type==='std.capability.property'&&one(w,'concept')&&rows.some(r=>r.sourceType===one(w,'on')&&r.parameter===one(w,'parameter')&&NUMERIC_KINDS.has(r.kind)))counted.add(one(w,'concept'));
+ }
+ return interfaces={parameters:rows,coordinates:[...coordinates],counted:[...counted]};
 }
 
 // The constructor policy's discriminator of a make operation's kinds (constructor-policy.sop: discriminator="kind").
@@ -110,7 +118,11 @@ const completed=new WeakMap();
 export async function completeBindings(bindings){
  if(!bindings||typeof bindings!=='object')return bindings;
  if(completed.has(bindings))return completed.get(bindings);
- const table=completeStructuralBindings(bindings,await declarations());
+ const completedTable=completeStructuralBindings(bindings,await declarations());
+ // A property whose concept the interfaces count with (nativeInterfaces: counted) takes the one number its span spells
+ // ("two cats", "a dozen boxes"), like a property bound to a numeric parameter.
+ const {counted}=await nativeInterfaces(),countedSet=new Set(counted);
+ const table=countedSet.size?{...completedTable,properties:(completedTable.properties??[]).map(row=>countedSet.has(row.canonical)&&row.numeric===undefined&&!row.classValues?{...row,numeric:true}:row)}:completedTable;
  completed.set(bindings,table);
  return table;
 }

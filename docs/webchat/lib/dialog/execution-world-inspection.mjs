@@ -9,10 +9,10 @@ import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=88bdf143f7';
 import{sceneDefaultInspection}from'./scene-placement-defaults.mjs?v=03af9b7ec4';
 import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=cfcc812978';
 import{inspectQueryPolicy}from'./project-query-action.mjs?v=867f3db415';
-import{inspectCreationPolicy}from'./project-create-action.mjs?v=1f7a74daa6';
+import{inspectCreationPolicy}from'./project-create-action.mjs?v=f52019053e';
 import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=0f46640ed0';
 import{inspectGroundedProjection}from'./grounded-projection.mjs?v=5dca2227e3';
-import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=4cf16ee300';
+import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=02b963fd88';
 import{inspectReferencePolicy}from'./reference-policy.mjs?v=35a0db82fe';
 import{inspectSchemaSource}from'./worlds-inspection.mjs?v=7ecbf6b3bc';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=fc8dc8891b';
@@ -28,7 +28,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=e9a0573f13'),import('./spatial-placement-execution.mjs?v=8f2a49b027'),
+  import('./declared-execution.mjs?v=97a095bf31'),import('./spatial-placement-execution.mjs?v=8f2a49b027'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});

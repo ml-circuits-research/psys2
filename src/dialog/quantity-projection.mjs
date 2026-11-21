@@ -50,9 +50,13 @@ export function projectQuantities(read,{amounts=[],bindings,view}={}){
   const nodes=parse(candidate.wires),root=nodes.find(w=>w.type==='std.request'&&w.id===candidate.request);
   const target=nodes.find(w=>w.type==='std.request.target'&&w.attrs.request?.[0]==='$'+root?.id&&attr(w,'mode')==='new');
   if(!target)return candidate;
-  const counted=nodes.some(w=>w.type==='std.request.constraint'&&attr(w,'concept')==='count'&&w.attrs.target?.[0]==='$'+target.id);
+  const countRow=nodes.find(w=>w.type==='std.request.constraint'&&attr(w,'concept')==='count'&&w.attrs.target?.[0]==='$'+target.id);
+  // A count the reader gave as a vague amount's name ("several", "a few") is that amount's typical number.
+  const named=countRow&&!/^\d+$/.test(String(attr(countRow,'value')??''))?amounts.find(a=>words(attr(countRow,'value')??'').join(' ')===a.name||words(attr(countRow,'value')??'').includes(a.name)):undefined;
+  const counted=!!countRow;
   if(!counted&&!amount&&!single)return candidate;
   const quantities={};
+  if(named){quantities.amount={said:named.name,count:named.typical,knowledge:named.id};countRow.attrs.value=[String(named.typical)];}
   if(singularKind&&singularKind!==attr(target,'kind')){
    quantities.kind={said:noun,as:singularKind,instead:attr(target,'kind')};
    target.attrs.kind=[singularKind];

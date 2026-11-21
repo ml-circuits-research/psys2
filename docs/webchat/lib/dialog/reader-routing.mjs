@@ -2,24 +2,24 @@ import {en} from '../lang/en.mjs?v=911f0ab5a1';
 import {isScopedRemoval} from './capability-plan-execution.mjs?v=beb95559d2';
 import {projectRemovalAction} from './project-removal-action.mjs?v=5507741984';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=0d3803bc7e';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=4cf16ee300';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=02b963fd88';
 import {parse} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {writeReaderSource} from './reader-source.mjs?v=1baaf5ba91';
 import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=0c4b78f098';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=fc8dc8891b';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=e9a0573f13';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=97a095bf31';
 import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=867f3db415';
-import {projectContextAction} from './project-context-action.mjs?v=5d60893194';
-import {projectCodeReference} from './project-code-reference.mjs?v=3e547f05a9';
-import {projectCreateAction} from './project-create-action.mjs?v=1f7a74daa6';
+import {projectContextAction} from './project-context-action.mjs?v=eb06bfe9c0';
+import {projectCodeReference} from './project-code-reference.mjs?v=6d7f23354c';
+import {projectCreateAction} from './project-create-action.mjs?v=f52019053e';
 import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=98c3823184';
-import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=fadf4fc918';
-import {completeBindings} from './declared-bindings.mjs?v=7b35f75998';
-import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=ea81998615';
-import {routeCoordination} from './coordination-routing.mjs?v=6039b58a68';
-import {declaredKnowledge} from './declared-execution.mjs?v=e9a0573f13';
+import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=1a5d5e168b';
+import {completeBindings} from './declared-bindings.mjs?v=b700b257d8';
+import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=9e0a655367';
+import {routeCoordination} from './coordination-routing.mjs?v=29f9d1b10e';
+import {declaredKnowledge} from './declared-execution.mjs?v=97a095bf31';
 import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=79c1776d10';
 import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs?v=44de98c980';
 let amounts;
@@ -59,6 +59,23 @@ function droppedMentions(text,used,others){
 }
 const quoted=list=>list.map(item=>JSON.stringify(item)).join(list.length===2?' and ':', ');
 const asksQuestion=read=>(read?.raw?.requests??[]).some(request=>request.mood==='ask'||request.act==='answer');
+async function dispatchMembers(session,contextProjection,text,options,bindings,interpretation){
+ const area=options.view??session.isession.state['ui.shell']?.activeTab,before=structuredClone(session.isession.state),journal=captureHistory(session,false),replies=[];
+ for(const member of contextProjection.members){
+  const reply=await dispatchRequest(session,member.candidate,text,options,bindings,{...contextProjection,focus:member.focus,members:undefined},{...interpretation,note:''});
+  replies.push(reply);if(!reply.statuses?.includes('supported'))break;
+ }
+ const ok=replies.length===contextProjection.members.length&&replies.every(r=>r.statuses?.includes('supported'));
+ const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
+ if(changed.length){
+  const after=Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])]));
+  if(!restoreHistory(session,journal,{},false))throw Error('invalid-group-history-checkpoint');
+  Object.assign(session.isession.state,after);
+  recordHistory(session,{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after,reading:contextProjection.members[0].candidate,readings:contextProjection.members.map(m=>m.candidate)});
+ }
+ const message=replies.map(r=>r.text.trim()).join(' ')+(interpretation?.note?' '+interpretation.note:'');
+ return {...replies.at(-1),text:message,parts:[{text:message,translate:false}],statuses:ok?['supported']:replies.flatMap(r=>r.statuses??[]),effects:replies.flatMap(r=>r.effects??[]),trace:{...replies.at(-1).trace,interpretation,distributed:replies.map(r=>r.statuses)}};
+}
 async function dispatchRequest(session,candidate,text,options,bindings,contextProjection,interpretation,alternatives=[],compiledPlan) {
  let result;
  const area=options.view??session.isession.state['ui.shell']?.activeTab;
@@ -292,7 +309,10 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   'I could not identify an action to apply. Nothing changed.';
  let result;
  if(eligible){
-  result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives,comparison?.plan);
+  // A distributed context projection (project-context-action.mjs: a plural reference with a said list) runs one change
+  // per thing, in order, as one undoable turn.
+  if(contextProjection?.members?.length>1)result=await dispatchMembers(session,contextProjection,text,options,bindings,proposal.interpretation);
+  else result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives,comparison?.plan);
   if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-creation/1'){
    const {requestedName}=proposal.interpretation,notes=[];
    const note=candidate.creationNote??proposal.interpretation.note;

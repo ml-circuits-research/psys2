@@ -59,6 +59,23 @@ function droppedMentions(text,used,others){
 }
 const quoted=list=>list.map(item=>JSON.stringify(item)).join(list.length===2?' and ':', ');
 const asksQuestion=read=>(read?.raw?.requests??[]).some(request=>request.mood==='ask'||request.act==='answer');
+async function dispatchMembers(session,contextProjection,text,options,bindings,interpretation){
+ const area=options.view??session.isession.state['ui.shell']?.activeTab,before=structuredClone(session.isession.state),journal=captureHistory(session,false),replies=[];
+ for(const member of contextProjection.members){
+  const reply=await dispatchRequest(session,member.candidate,text,options,bindings,{...contextProjection,focus:member.focus,members:undefined},{...interpretation,note:''});
+  replies.push(reply);if(!reply.statuses?.includes('supported'))break;
+ }
+ const ok=replies.length===contextProjection.members.length&&replies.every(r=>r.statuses?.includes('supported'));
+ const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
+ if(changed.length){
+  const after=Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])]));
+  if(!restoreHistory(session,journal,{},false))throw Error('invalid-group-history-checkpoint');
+  Object.assign(session.isession.state,after);
+  recordHistory(session,{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after,reading:contextProjection.members[0].candidate,readings:contextProjection.members.map(m=>m.candidate)});
+ }
+ const message=replies.map(r=>r.text.trim()).join(' ')+(interpretation?.note?' '+interpretation.note:'');
+ return {...replies.at(-1),text:message,parts:[{text:message,translate:false}],statuses:ok?['supported']:replies.flatMap(r=>r.statuses??[]),effects:replies.flatMap(r=>r.effects??[]),trace:{...replies.at(-1).trace,interpretation,distributed:replies.map(r=>r.statuses)}};
+}
 async function dispatchRequest(session,candidate,text,options,bindings,contextProjection,interpretation,alternatives=[],compiledPlan) {
  let result;
  const area=options.view??session.isession.state['ui.shell']?.activeTab;
@@ -292,7 +309,10 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   'I could not identify an action to apply. Nothing changed.';
  let result;
  if(eligible){
-  result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives,comparison?.plan);
+  // A distributed context projection (project-context-action.mjs: a plural reference with a said list) runs one change
+  // per thing, in order, as one undoable turn.
+  if(contextProjection?.members?.length>1)result=await dispatchMembers(session,contextProjection,text,options,bindings,proposal.interpretation);
+  else result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives,comparison?.plan);
   if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-creation/1'){
    const {requestedName}=proposal.interpretation,notes=[];
    const note=candidate.creationNote??proposal.interpretation.note;

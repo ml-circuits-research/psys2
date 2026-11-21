@@ -33,10 +33,11 @@ export function positiveCardinalProof(literal){
 
 /**
  * The one number a value span spells for a numeric property ("size 45" -> 45, "two hundred sixty" -> 260, "2 cm"):
- * sopworld readNumberSpan over the declared number words (k.values) and number joiners (app.interpret.numberJoiner);
+ * sopworld readNumberSpan over the declared number words (k.values cardinals and groups) and number joiners (app.interpret.numberJoiner);
  * unit(word): null for no unit, true for a unit that cannot be converted, {factor} for one that can. Null otherwise.
  */
 export function spelledNumberProof(literal,unit=()=>null){
- const read=readNumberSpan(literal,{number:cardinalValue,joiners:interpretationPolicy().partial.numberJoiners,unit:w=>unit(w)||null,tick:()=>budget.tick('value-proof.spelled')});
+ // A group word of k.values ("a dozen", "a couple of", "a pair of") counts as its number too.
+ const read=readNumberSpan(literal,{number:w=>cardinalValue(w)??numberValue(w,'group'),joiners:interpretationPolicy().partial.numberJoiners,unit:w=>unit(w)||null,tick:()=>budget.tick('value-proof.spelled')});
  return read?{kind:'spelled-number',value:read.value,literal,...(read.factor?{factor:read.factor}:{})}:null;
 }

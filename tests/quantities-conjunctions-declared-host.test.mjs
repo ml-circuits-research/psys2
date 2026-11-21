@@ -15,6 +15,7 @@ import {comparativeSteps} from '../src/dialog/comparative-projection.mjs';
 import {referenceProjection} from '../src/dialog/reference-projection.mjs';
 import {readReaderSource} from '../src/dialog/reader-source.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
+import {completeBindings} from '../src/dialog/declared-bindings.mjs';
 import {createFacts} from '../src/knowledge/facts.mjs';
 import {createKnowledgeSource} from '../src/loaders/knowledge-source.mjs';
 import {emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
@@ -26,6 +27,8 @@ const deployment=JSON.parse(readFileSync(new URL('models/sop-bert/deployment.jso
 const bindingsText=readFileSync(new URL(deployment.artifactBase+deployment.bindingsArtifact.path,webchat),'utf8');
 const bindings=JSON.parse(bindingsText),bindingSha256=createHash('sha256').update(bindingsText).digest('hex');
 const catalogRoot=new URL('catalog/',webchat).pathname,catalogCommit=readdirSync(catalogRoot).find(name=>/^[0-9a-f]{40}$/.test(name));
+// The bridge reads the deployed table completed from the live declarations, as the reader pipeline does.
+const live=await completeBindings(bindings);
 const knowledge=createFacts({source:createKnowledgeSource(catalogRoot+catalogCommit)});
 
 // A raw reading as the reader gives it, with the source ranges of its trigger, kind and count, bridged to candidates.
@@ -37,7 +40,7 @@ function reading(area,text,request,failures=[]){
  ranges.push({path:['requests','0','span'],range:[0,chars.length]});
  const raw={format:RAW_STRUCTURAL_FORMAT,source:{text,unit:'unicode-scalar'},area,model:{kind:'structural-graph',sha256:'0'.repeat(64),decoderVersion:1},requestCount:1,requests:[req],ranges,coverage:{complete:!failures.length,truncated:false},unresolved:failures};
  if(failures.length)return {raw,candidates:[],coverage:{complete:false,graphProposal:false,executable:false},failures,sourceCut:{spans:[[0,chars.length]]},selectionScore:{definition:'psys2.model-minimum/1',value:.85}};
- const out=bridgeRawStructure({...raw,ranges:[]},{bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection()});
+ const out=bridgeRawStructure({...raw,ranges:[]},{bindings:live,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection()});
  const issues=[...out.diagnostics,...(out.decoded?.issues??[])];
  assert.deepEqual(issues,[],'the bridge reads '+JSON.stringify(text));
  return {raw,candidates:out.decoded.candidates,coverage:{complete:true,graphProposal:true,executable:false},failures:[],sourceCut:{spans:[[0,chars.length]]},selectionScore:{definition:'psys2.model-minimum/1',value:.85}};
@@ -49,7 +52,7 @@ const anchor=(span,relation,relationSpan)=>[{key:'drawn.anchor',value_span:span,
 
 function drawing(reads){
  const s={isession:{state:{'art.draw':emptyDrawingState(),'ui.shell':{activeTab:'draw'}}},engine:{knowledge,onWorldActivity:()=>{},requestReader:{
-  bindings:()=>bindings,provenance:()=>({modelSha256:'a'.repeat(64),decoderVersion:1,bindingsSha256:bindingSha256}),
+  bindings:()=>bindings,registry:()=>({}),provenance:()=>({modelSha256:'a'.repeat(64),decoderVersion:1,bindingsSha256:bindingSha256}),
   propose:async sop=>{const text=readReaderSource(sop);assert.ok(reads[text],'a reading for '+JSON.stringify(text));return reads[text]();}}}};
  const objects=()=>parse(s.isession.state['art.draw'].sop).filter(w=>w.type==='w.drawing.object').map(w=>{
   const v=k=>{const raw=w.attrs[k]?.[0];return raw===undefined?undefined:raw.startsWith('"')?str(raw):raw;};
@@ -104,6 +107,23 @@ test('"sketch a red fish and call it cat": a clause naming what was made is not 
  const made=objects();
  assert.deepEqual(made.map(o=>o.kind),['fish']);
  assert.equal(str(parse(s.isession.state['art.draw'].sop).find(w=>w.type==='w.drawing.object')?.attrs.name?.[0]??'""'),'cat');
+});
+
+test('"draw two cats" then "call them Tom and Jerry": a spelled count makes two; a plural reference names the two made, in order',async()=>{
+ const said=(key,value,phase='result')=>({key,value,value_span:value,character:'requirement',operator:'eq',phase,polarity:'positive'});
+ const call='call them Tom and Jerry';
+ const {s,objects,say}=drawing({
+  'draw two cats':()=>reading('drawing','draw two cats',{act:'make',trigger:'draw',target:target('cats',{determiner:'definite'}),constraints:[said('drawn.count','two')]}),
+  [call]:()=>{const r=reading('drawing',call,{act:'change',trigger:'call',target:{determiner:'definite',fill:'context',mode:'existing',type:'drawn'},constraints:[said('drawn.name','Tom and Jerry')]},
+   [{reason:'context-reference-not-bound',path:['requests',0,'targets','t0']}]);
+   r.raw.ranges.push({path:['requests','0','constraints','0','value_span'],range:[10,23]});return r;}});
+ const made=await say('draw two cats');
+ assert.ok(made.statuses.includes('supported'),made.text);
+ assert.equal(ofKind(objects(),'cat').length,2,'"two" is the count 2: '+made.text);
+ const named=await say(call);
+ assert.ok(named.statuses.includes('supported'),named.text);
+ const names=parse(s.isession.state['art.draw'].sop).filter(w=>w.type==='w.drawing.object').map(w=>w.attrs.name?.[0]?str(w.attrs.name[0]):undefined);
+ assert.deepEqual(names,['Tom','Jerry'],named.text);
 });
 
 test('"draw some clouds": the typical number of k.expect.amount some, in the sky, apart',async()=>{

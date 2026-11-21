@@ -109,3 +109,20 @@ test('voice admission holds no word list: the reader decides, only the wake-word
  assert.equal((await classifyVoice('robot draw a house',{wake:true})).ignore,false);
  assert.equal((await classifyVoice('   ',{})).ignore,true);
 });
+
+test('a counted concept is numeric; spelled counts and group words are numbers; a plural pronoun is a plural reference', async () => {
+ const {readFileSync}=await import('node:fs');
+ const {completeBindings}=await import('../src/dialog/declared-bindings.mjs');
+ const {spelledNumberProof}=await import('../src/dialog/key-reader-value-proof.mjs');
+ const {pluralReference}=await import('../src/dialog/raw-reading-policy.mjs');
+ const web=new URL('../docs/webchat/',import.meta.url),dep=JSON.parse(readFileSync(new URL('models/sop-bert/deployment.json',web),'utf8'));
+ const live=await completeBindings(JSON.parse(readFileSync(new URL(dep.artifactBase+dep.bindingsArtifact.path,web),'utf8')));
+ // std.capability.repeat concept=count (Drawing) and std.capability.property concept=count on an integer parameter (Diagram n).
+ for(const key of ['drawn.count','node.n'])assert.equal(live.properties.find(p=>p.key===key)?.numeric,true,key);
+ assert.equal(spelledNumberProof('two')?.value,2);
+ assert.equal(spelledNumberProof('a dozen')?.value,12);
+ assert.equal(spelledNumberProof('a couple of')?.value,2);
+ assert.equal(pluralReference({span:'call them Tom and Jerry'}).plural,true);
+ assert.equal(pluralReference({span:'call it cat'}).plural,false);
+ assert.ok(pluralReference({span:'x'}).distributes.has('drawn.name'));
+});

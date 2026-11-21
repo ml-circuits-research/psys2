@@ -233,3 +233,18 @@
 @pr.make app.reading.request request=?r act="make"
 @pr.out app.reading.population request=?r
 @rule.population.reference core.rule when=$pr.existing when=$po.all not=$pr.make then=$pr.out
+
+# ---- A plural reference and a distributed list (2026-11-21) -------------------------------------------------------
+# A request that says a plural pronoun of w.lang.en referring to things ("call them Tom and Jerry", "paint them red and
+# blue") refers to several things. A naming key (and a colour) said as a coordinated list of as many values as the
+# things referred to gives each thing its value in order (project-context-action.mjs reads app.reading.distributes;
+# the list is cut at the w.lang.en coordinators).
+@pl.p app.reading.pronoun request=?r number="pl" refers="thing"
+@pl.out app.reading.plural request=?r
+@rule.plural.pronoun core.rule when=$pl.p then=$pl.out
+@pl.pa app.reading.pronoun request=?r number="pl" refers="any"
+@rule.plural.pronoun.any core.rule when=$pl.pa then=$pl.out
+@distributes.drawn.name app.reading.distributes key="drawn.name"
+@distributes.node.label app.reading.distributes key="node.label"
+@distributes.drawn.colour app.reading.distributes key="drawn.colour"
+@distributes.node.colour app.reading.distributes key="node.colour"

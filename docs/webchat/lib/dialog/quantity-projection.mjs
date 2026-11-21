@@ -11,7 +11,7 @@
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {en} from '../lang/en.mjs?v=911f0ab5a1';
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=cfc87f8ce5';
-import {readsBySingular} from './raw-reading-policy.mjs?v=9d230b899f';
+import {readsBySingular} from './raw-reading-policy.mjs?v=ccbbb332c0';
 
 const attr=(wire,key)=>{const raw=wire?.attrs[key]?.[0];return raw===undefined?undefined:raw.startsWith('"')?str(raw):raw;};
 const words=text=>[...String(text).matchAll(/[\p{L}\p{N}]+/gu)].map(m=>m[0].toLowerCase());
@@ -50,9 +50,13 @@ export function projectQuantities(read,{amounts=[],bindings,view}={}){
   const nodes=parse(candidate.wires),root=nodes.find(w=>w.type==='std.request'&&w.id===candidate.request);
   const target=nodes.find(w=>w.type==='std.request.target'&&w.attrs.request?.[0]==='$'+root?.id&&attr(w,'mode')==='new');
   if(!target)return candidate;
-  const counted=nodes.some(w=>w.type==='std.request.constraint'&&attr(w,'concept')==='count'&&w.attrs.target?.[0]==='$'+target.id);
+  const countRow=nodes.find(w=>w.type==='std.request.constraint'&&attr(w,'concept')==='count'&&w.attrs.target?.[0]==='$'+target.id);
+  // A count the reader gave as a vague amount's name ("several", "a few") is that amount's typical number.
+  const named=countRow&&!/^\d+$/.test(String(attr(countRow,'value')??''))?amounts.find(a=>words(attr(countRow,'value')??'').join(' ')===a.name||words(attr(countRow,'value')??'').includes(a.name)):undefined;
+  const counted=!!countRow;
   if(!counted&&!amount&&!single)return candidate;
   const quantities={};
+  if(named){quantities.amount={said:named.name,count:named.typical,knowledge:named.id};countRow.attrs.value=[String(named.typical)];}
   if(singularKind&&singularKind!==attr(target,'kind')){
    quantities.kind={said:noun,as:singularKind,instead:attr(target,'kind')};
    target.attrs.kind=[singularKind];
