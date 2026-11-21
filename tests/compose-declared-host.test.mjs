@@ -134,7 +134,17 @@ test('which readings start a composition is declared: a kindless drawing, an ope
   assert.equal((await start({ area: 'drawing', act: 'make', mode: 'new', type: 'drawn', word: 'something', bound: false }))?.form, 'scene');
   assert.deepEqual(await start({ area: 'drawing', act: 'make', mode: 'new', type: 'drawn', word: 'farm', bound: false }), { area: 'drawing', form: 'scene', subject: 'farm', variant: undefined });
   assert.equal(await start({ area: 'drawing', act: 'make', mode: 'new', type: 'drawn', word: 'beach', bound: true, canonical: 'k.objects.beach' }), null, 'a kind the tab draws is drawn, not composed');
-  assert.deepEqual(await start({ area: 'diagram', act: 'make', mode: 'new', type: 'node', word: 'flowchart', bound: false }), { area: 'diagram', form: 'diagram', subject: 'flowchart', variant: undefined });
+  assert.deepEqual(await start({ area: 'diagram', act: 'make', mode: 'new', type: 'node', word: 'flowchart', bound: false, words: ['make', 'a', 'random', 'flowchart'] }), { area: 'diagram', form: 'diagram', subject: 'flowchart', variant: undefined });
+  // A reading that specifies what to build is built from the request (real-use run e1a9e8d5): a diagram of a named
+  // process or a bare diagram, a text on a thing, a placed thing, one of several things the turn names.
+  assert.equal(await start({ area: 'diagram', act: 'make', mode: 'new', type: 'diagram', word: 'diagram', canonical: 'k.diagrams.kind.flowchart', constraints: ['diagram.kind'], words: ['show', 'diagram', 'of', 'sap', 'atp', 'flow'] }), null);
+  assert.equal(await start({ area: 'diagram', act: 'make', mode: 'new', type: 'node', word: 'flowchart', bound: false, words: ['make', 'a', 'flowchart'] }), null);
+  assert.equal(await start({ area: 'drawing', act: 'make', mode: 'new', type: 'drawn', constraints: ['drawn.text'], words: ['add', 'the', 'word', 'open', 'on', 'the', 'fence'] }), null);
+  assert.equal(await start({ area: 'drawing', act: 'make', mode: 'new', type: 'drawn', word: 'mountains', bound: false, constraints: ['drawn.at'] }), null);
+  assert.equal(await start({ area: 'drawing', act: 'make', mode: 'new', type: 'drawn', word: 'pond', bound: false, parts: 3 }), null);
+  assert.equal(await start({ area: 'drawing', act: 'make', mode: 'new', type: 'drawn', word: 'picture', bound: false, constraints: ['drawn.relation'] }), null);
+  assert.equal((await start({ area: 'drawing', act: 'make', mode: 'new', type: 'page', words: ['draw', 'something', 'random'] }))?.form, 'scene', 'a new page asked for at random is a random scene');
+  assert.equal(await start({ area: 'drawing', act: 'make', mode: 'new', type: 'page', words: ['new', 'page'] }), null);
   assert.equal(await start({ area: 'diagram', act: 'make', mode: 'new', type: 'node', word: 'box', bound: true, canonical: 'w.diagram.node' }), null);
   assert.equal(await start({ area: 'diagram', act: 'make', mode: 'new', type: 'node' }), null, 'a node with no kind is a plain node, not a composition');
 });

@@ -3,7 +3,7 @@
 # (sopworld rand, rand_between, sample_key). The host (src/dialog/compose-execution.mjs) states the reading, the
 # request, the preferences, what the conversation mentioned and the knowledge the policy declares to load; it executes
 # the calls the rules conclude, through the area's own declared operations, as one undoable turn.
-@compose.module core.module name=app.compose exports=app.compose.reading exports=app.compose.last exports=app.compose.open exports=app.compose.trigger exports=app.compose.start exports=app.compose.request exports=app.compose.preference exports=app.compose.variantLevel exports=app.compose.levelByVariant exports=app.compose.level exports=app.compose.detail exports=app.compose.load exports=app.compose.weight exports=app.compose.form exports=app.compose.candidate exports=app.compose.eligible exports=app.compose.keyed exports=app.compose.chosen exports=app.compose.step exports=app.compose.topic exports=app.compose.call exports=app.compose.list exports=app.compose.mention exports=app.compose.number exports=app.compose.said exports=app.compose.reply exports=app.compose.fallback exports=app.compose.limit exports=app.compose.measure exports=app.compose.notice exports=app.compose.found
+@compose.module core.module name=app.compose exports=app.compose.reading exports=app.compose.constraint exports=app.compose.word exports=app.compose.free exports=app.compose.random exports=app.compose.blocked exports=app.compose.asked exports=app.compose.last exports=app.compose.open exports=app.compose.trigger exports=app.compose.start exports=app.compose.request exports=app.compose.preference exports=app.compose.variantLevel exports=app.compose.levelByVariant exports=app.compose.level exports=app.compose.detail exports=app.compose.load exports=app.compose.weight exports=app.compose.form exports=app.compose.candidate exports=app.compose.eligible exports=app.compose.keyed exports=app.compose.chosen exports=app.compose.step exports=app.compose.topic exports=app.compose.call exports=app.compose.list exports=app.compose.mention exports=app.compose.number exports=app.compose.said exports=app.compose.reply exports=app.compose.fallback exports=app.compose.limit exports=app.compose.measure exports=app.compose.notice exports=app.compose.found
 
 # What the reader read (one request of the turn) and what the area last composed.
 @compose.reading.type core.type of=app.compose.reading
@@ -14,6 +14,16 @@
 @compose.reading.word core.slot of=app.compose.reading key=word kind=string
 @compose.reading.bound core.slot of=app.compose.reading key=bound kind=boolean
 @compose.reading.canonical core.slot of=app.compose.reading key=canonical kind=string
+@compose.reading.parts core.slot of=app.compose.reading key=parts kind=integer
+# What the reading specifies about the result (a constraint key), the words of its request span, the declared keys
+# that leave the content open and the declared words that ask for random content; derived: a reading that specifies
+# its content (blocked) and one that asks for random content (asked).
+@compose.constraint.type core.type of=app.compose.constraint
+@compose.word.type core.type of=app.compose.word
+@compose.free.type core.type of=app.compose.free
+@compose.random.type core.type of=app.compose.random
+@compose.blocked.type core.type of=app.compose.blocked
+@compose.asked.type core.type of=app.compose.asked
 @compose.last.type core.type of=app.compose.last
 @compose.open.type core.type of=app.compose.open
 @compose.trigger.type core.type of=app.compose.trigger

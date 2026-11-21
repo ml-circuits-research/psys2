@@ -6,8 +6,8 @@
 // the made things placed together by the placement problem (executeNativeGroup: std.problem, Z3 where available), the
 // calls of the after phase with the ids made, everything as one undoable turn. It names no scene, kind or sentence.
 import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import POLICY from '../../worlds/app.project/compose-policy-source.mjs?v=bae0f7d0d6';
-import SCHEMA from '../../worlds/app.project/compose-schema-source.mjs?v=30f85bca4d';
+import POLICY from '../../worlds/app.project/compose-policy-source.mjs?v=05c7610f7e';
+import SCHEMA from '../../worlds/app.project/compose-schema-source.mjs?v=787a119ad1';
 import { NATIVE_AREAS, createAreaHost } from './app-reader-context.mjs?v=cfc87f8ce5';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
 import { executeNativeGroup } from './capability-plan-execution.mjs?v=beb95559d2';
@@ -100,7 +100,13 @@ export function composeReading(proposal) {
   for (const candidate of proposal.candidates ?? []) {
     try { const kind = parse(candidate.wires).find((w) => w.type === 'std.request.target' && first(w, 'mode') === 'new')?.attrs.kind?.[0]; if (kind) { canonical = str(kind); break; } } catch { /* An unreadable candidate names no kind. */ }
   }
-  return { area: raw.area, act: r.act, mode: target.mode, type: target.type, word: typeof word === 'string' && word ? word.toLowerCase() : undefined, bound: word ? !unbound && !!canonical : undefined, canonical };
+  // What else the reading says, for the declared trigger conditions: how many requests the turn has (the reader's
+  // source cuts), the keys of what it specifies about the result, and the words of its own request span.
+  const parts = Array.isArray(proposal.composition?.sourceCuts) ? proposal.composition.sourceCuts.length : raw.requests.length;
+  const constraints = [...new Set((r.constraints ?? []).filter((c) => typeof c?.key === 'string' && c.phase !== 'selector').map((c) => c.key))];
+  const words = [...new Set([...String(r.span ?? raw.source?.text ?? '').toLowerCase().matchAll(/\p{L}+/gu)].map((m) => m[0]))];
+  return { area: raw.area, act: r.act, mode: target.mode, type: target.type, word: typeof word === 'string' && word ? word.toLowerCase() : undefined, bound: word ? !unbound && !!canonical : undefined, canonical,
+    parts, constraints, words };
 }
 
 /** Does this reading start a composition? The declared trigger rules decide; the result names form, subject, variant. */
@@ -109,7 +115,9 @@ export async function composeStart(session, reading, { knowledge } = {}) {
   const world = policyWorld();
   if (reading.word) await loadKnowledge(world, knowledge, (load) => first(load, 'trigger') === 'true');
   const last = session.composeLast?.[reading.area];
-  const facts = [fact('reading', 'reading', reading), ...(last ? [fact('last', 'last', { area: reading.area, form: last.form })] : [])];
+  const { constraints = [], words = [], ...said } = reading;
+  const facts = [fact('reading', 'reading', said), ...(last ? [fact('last', 'last', { area: reading.area, form: last.form })] : []),
+    ...constraints.map((key, i) => fact('constraint.' + i, 'constraint', { key })), ...words.map((word, i) => fact('word.' + i, 'word', { word }))];
   if (!world.tell(serialize(facts), { factsOnly: true }).ok) return null;
   const starts = world.ofType(family + 'start');
   if (!starts.length) return null;

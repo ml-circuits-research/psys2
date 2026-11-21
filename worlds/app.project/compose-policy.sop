@@ -275,16 +275,46 @@
 @reply.none.conversation app.compose.reply form=any source=none text="I could not find anything to use in what we said so far, so nothing changed. Say \"draw something random\" or \"make a random flowchart\" and I will make a random one."
 
 # ================================================================== WHEN A READING IS A COMPOSITION
-# The reading of a turn (app.compose.reading: area, act, mode, type, the kind word the reader read, whether it bound to
-# a kind of the tab, its canonical kind) starts a composition (app.compose.start) when:
+# A composition draws content the request leaves open. The reading of a turn (app.compose.reading: area, act, mode,
+# type, the kind word the reader read, whether it bound to a kind of the tab, its canonical kind, how many requests the
+# turn has; app.compose.constraint: each key it specifies about the result; app.compose.word: the words of its own
+# request span) is never composed when it specifies what to build (app.compose.blocked):
+# - the turn has several requests (the things it names are made, each from the request: "a farm with a barn, two cows
+#   and a pond", "a garden on the left, then a watering can by it");
+# - it specifies something of the result other than a key that leaves the content open (app.compose.free): a text, a
+#   place, a size, a colour ("add the word OPEN on the fence", "make the background a range of mountains").
+# Otherwise it starts a composition (app.compose.start) when:
 # - it makes a new thing of a family that has no default thing of its own (a drawing with no kind: "draw something
 #   nice", "another one" read as a new drawn thing with no kind); right after a composition of the tab it is the next
 #   one of the same subject (variant another);
+# - it makes a new page with no kind and its words ask for random content (app.compose.random);
 # - its kind word is an open word of the tab (app.compose.open: words that name no kind, only a picture or "something");
 # - its kind word, bound to no kind of the tab, names a scene the knowledge has ("draw a farm");
-# - its kind (bound or not) is a diagram kind the knowledge can fill (app.compose.form).
-# The open words are a stopgap until the reader carries a composition key (worker-log: request.compose, request.source,
-# request.variant); they are listed here, never in code.
+# - its kind (bound or not) is a diagram kind the knowledge can fill (app.compose.form) and its words ask for random
+#   content (app.compose.random: "make a random flowchart"); a diagram of a named process ("show a diagram of the SAP
+#   ATP flow") or a bare "a diagram" is built from the request, not from an unrelated topic.
+# The open and random words are a stopgap until the reader carries a composition key (worker-log: request.compose,
+# request.source, request.variant); they are listed here, never in code.
+@free.diagram.kind app.compose.free key="diagram.kind"
+@random.random app.compose.random word=random
+@random.randomly app.compose.random word=randomly
+@random.surprise app.compose.random word=surprise
+@random.anything app.compose.random word=anything
+@random.something app.compose.random word=something
+@random.whatever app.compose.random word=whatever
+@b.r app.compose.reading parts=?p
+@b.many core.check fn=gt args=?p args=1
+@b.out app.compose.blocked why=parts
+@blocked.parts core.rule when=$b.r if=$b.many then=$b.out
+@b.c app.compose.constraint key=?key
+@b.free app.compose.free key=?key
+@b.c.out app.compose.blocked why=specified key=?key
+@blocked.specified core.rule when=$b.c not=$b.free then=$b.c.out
+@a.w app.compose.word word=?w
+@a.rand app.compose.random word=?w
+@a.out app.compose.asked word=?w
+@asked.random core.rule when=$a.w when=$a.rand then=$a.out
+@t.blocked app.compose.blocked why=?anyWhy
 @trigger.drawing app.compose.trigger area=drawing type=drawn form=scene empty=true
 @open.something app.compose.open area=drawing word=something form=scene
 @open.anything app.compose.open area=drawing word=anything form=scene
@@ -300,21 +330,30 @@
 @t.anylast app.compose.last area=?a
 @t.start.new app.compose.start area=?a form=?f
 @t.start.next app.compose.start area=?a form=?f variant=another
-@start.empty core.rule when=$t.r not=$t.word when=$t.tr not=$t.anylast then=$t.start.new
-@start.next core.rule when=$t.r not=$t.word when=$t.tr when=$t.last then=$t.start.next
+@start.empty core.rule when=$t.r not=$t.word not=$t.blocked when=$t.tr not=$t.anylast then=$t.start.new
+@start.next core.rule when=$t.r not=$t.word not=$t.blocked when=$t.tr when=$t.last then=$t.start.next
+# A new page with no kind whose words ask for random content ("draw something random", read by the reader as a new
+# page) is a random scene; without such a word a new page is the tab's own page.
+@trigger.page app.compose.trigger area=drawing type=page form=scene asked=true
+@t.tra app.compose.trigger area=?a type=?ty form=?f asked=true
+@start.asked core.rule when=$t.r not=$t.word not=$t.blocked when=$t.tra when=$o.asked then=$t.start.new
 @o.r app.compose.reading area=?a act=make mode=new word=?w
-@o.open app.compose.open area=?a word=?w form=?f
-@o.start app.compose.start area=?a form=?f
-@start.open core.rule when=$o.r when=$o.open then=$o.start
+@o.scene app.compose.open area=?a word=?w form=scene
+@o.diagram app.compose.open area=?a word=?w form=diagram
+@o.asked app.compose.asked word=?anyAsked
+@o.start.scene app.compose.start area=?a form=scene
+@o.start.diagram app.compose.start area=?a form=diagram
+@start.open.scene core.rule when=$o.r when=$o.scene not=$t.blocked then=$o.start.scene
+@start.open.diagram core.rule when=$o.r when=$o.diagram not=$t.blocked when=$o.asked then=$o.start.diagram
 @n.r app.compose.reading area=drawing act=make mode=new word=?w bound=false
 @n.scene k.scenes.scene name=?w
 @n.start app.compose.start area=drawing form=scene subject=?w
-@start.scene core.rule when=$n.r when=$n.scene then=$n.start
+@start.scene core.rule when=$n.r when=$n.scene not=$t.blocked then=$n.start
 @k.r app.compose.reading area=?a act=make mode=new word=?w
 @k.form app.compose.form area=?a kind=?w
 @k.start app.compose.start area=?a form=diagram subject=?w
-@start.diagram.word core.rule when=$k.r when=$k.form then=$k.start
+@start.diagram.word core.rule when=$k.r when=$k.form not=$t.blocked when=$o.asked then=$k.start
 @k.rc app.compose.reading area=?a act=make mode=new canonical=?c
 @k.formc app.compose.form area=?a kind=?k canonical=?c
 @k.startc app.compose.start area=?a form=diagram subject=?k
-@start.diagram.kind core.rule when=$k.rc when=$k.formc then=$k.startc
+@start.diagram.kind core.rule when=$k.rc when=$k.formc not=$t.blocked when=$o.asked then=$k.startc
