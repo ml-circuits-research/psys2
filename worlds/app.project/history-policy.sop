@@ -35,3 +35,10 @@
 @history.position.b app.history.entry position=?position
 @history.position.distinct core.check fn=neq args=$history.position.a args=$history.position.b
 @history.position.unique core.deny when=$history.position.a when=$history.position.b if=$history.position.distinct why="A journal position has one entry."
+
+# Typed UI gestures (native-tool-controls.mjs): asking and picking record no undo step; a placing gesture of one object
+# is observed as a placement correction (the session's spatial profile learns from it).
+@history.gesture.ask app.history.gesture act=ask record=no
+@history.gesture.pick app.history.gesture act=pick record=no
+@history.gesture.place app.history.gesture act=place placement=yes
+

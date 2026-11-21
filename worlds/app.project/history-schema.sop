@@ -1,4 +1,4 @@
-@history.module core.module name=app.history exports=app.history.advance exports=app.history.head exports=app.history.restore exports=app.history.terminal exports=app.history.result exports=app.history.reader exports=app.history.journal exports=app.history.entry exports=app.history.stack exports=app.history.stackHead exports=app.history.displaced
+@history.module core.module name=app.history exports=app.history.advance exports=app.history.gesture exports=app.history.head exports=app.history.restore exports=app.history.terminal exports=app.history.result exports=app.history.reader exports=app.history.journal exports=app.history.entry exports=app.history.stack exports=app.history.stackHead exports=app.history.displaced
 @history.compile core.use world=std.compile
 @history.head.type core.type of=app.history.head closed=true
 @history.head.direction core.slot of=app.history.head key=direction kind=atom enum=undo enum=redo present=true
@@ -45,3 +45,10 @@
 @history.advance.payload core.slot of=app.history.advance key=arg.payload kind=string present=true
 @history.advance.position core.slot of=app.history.advance key=arg.position kind=integer min=1 present=true
 @history.advance.revision core.slot of=app.history.advance key=arg.revision kind=string present=true
+# What a typed UI gesture of a declared act does to the journal (native-tool-controls.mjs): record=no leaves the
+# journal as it is (a question or a pick changes no work); placement=yes observes the move as a placement correction.
+@history.gesture.type core.type of=app.history.gesture closed=true
+@history.gesture.act core.slot of=app.history.gesture key=act kind=atom present=true
+@history.gesture.record core.slot of=app.history.gesture key=record kind=atom enum=yes enum=no
+@history.gesture.placement core.slot of=app.history.gesture key=placement kind=atom enum=yes enum=no
+
