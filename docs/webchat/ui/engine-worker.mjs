@@ -70,7 +70,7 @@ const absModule = (path, id, kind) => new URL(path, ROOT).href + (ver[`worlds/${
 const snaps = new Map();             // undo id -> engine snapshot (a ring: the last SNAP_KEEP)
 const SNAP_KEEP = 24;
 let lastTurnEnd = 0;
-let readerPrevious=null,readerStatus={state:'unavailable'},readerObservation=null,readerDiagnostics=[],readerReady=null;
+let readerImp=null,readerPrevious=null,readerStatus={state:'unavailable'},readerObservation=null,readerDiagnostics=[],readerReady=null;
 // Inspection records of the translation boundary and the suggestion sampler (Worlds map; specs/worlds-inspector.md).
 let readerDeployment=null;
 const translationRecord={calls:0,failures:0,last:null,lastFailure:null},samplerRecord={runs:0,last:null};
@@ -244,7 +244,7 @@ async function init(m) {
   canonicalizeSessionStates();
   // Editor hosts and inspection do not depend on neural session construction.
   mods.isAuthoredRequest=(await imp('lib/dialog/authored-request-tool.mjs')).isAuthoredRequest;
-  readerReady=installSopReader(imp);
+  readerImp=imp;readerReady=installSopReader(imp);
   mark('session');
   return { bootMarks, stateInputTabs: [...enabledTabs], retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget, reader: readerStatus };
 }
@@ -435,7 +435,11 @@ const handlers = {
           const bytes=await fetchBrowserReaderBytes(abs(deployment.artifactBase+artifact.path),{...artifact,maxBytes:artifact.bytes});
           engine.nativeBindings=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
         }
-      } else await waitForSopReader(ctl.signal);
+      } else {
+        // A reader that could not start is loaded again by the next turn, which waits for it (never a turn read without the reader).
+        if(readerStatus.state==='unavailable'&&readerImp)readerReady=installSopReader(readerImp);
+        await waitForSopReader(ctl.signal);
+      }
       const translator = engine.translator; translator.resetUsage?.();
       let reply;
       const read = async () => {

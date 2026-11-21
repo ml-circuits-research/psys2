@@ -312,7 +312,9 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  const limitations=proposal?.interpretation?.limitation??[];
  const scalars=Array.from(typeof text==='string'?text:''),unreadQuestion=[...new Set(readMentions(proposal).filter(mention=>!mention.trigger).map(({range})=>scalars.slice(...range).join('').trim()).filter(Boolean))],unknownKind=(proposal?.raw?.requests?.length===1&&proposal.raw.requests[0].act==='make'&&proposal.raw.requests[0].target?.mode==='new'&&
   proposal.failures?.some(failure=>failure.reason==='unresolved-canonical-kind-binding'))?proposal.raw.requests[0].target.kind_span:undefined,several=[...new Set(severalMentions(proposal).map(range=>scalars.slice(...range).join('').trim()).filter(Boolean))];
- const message=limitations.includes('filter-span-missing')?'I could not ground a filter in the question. I have no complete answer.':
+ const readerDown=proposal?.failures?.find(failure=>failure.reason==='model-load-failed');
+ const message=readerDown?'The reading model (SOP-BERT) is not ready: it could not load ('+String(readerDown.detail??'unknown error')+'). I cannot read requests until it loads, so nothing changed; your next message tries to load it again.':
+  limitations.includes('filter-span-missing')?'I could not ground a filter in the question. I have no complete answer.':
   limitations.includes('target-span-missing')?'I could not ground the kind of object the question refers to. I have no complete answer.':
   contextRetry?.unanswered?.length?'I did not understand '+quoted(contextRetry.unanswered)+' in this question, so I have no answer.':
   asksQuestion(proposal)&&unreadQuestion.length?'I did not understand '+quoted(unreadQuestion)+' in this question, so I have no answer.':

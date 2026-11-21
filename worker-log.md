@@ -437,3 +437,8 @@ Gate: npm test 766/0; webchat rebuilt with no REFUSED/stale lines.
 Run (browser, local): 40 slowest Drawing rows Fast p50 7.0 s / p90 11.8 s, Thinking 7.3 / 12.3 (before: 12.6 / 20.7); 150 Drawing+Diagram rows Fast Drawing 1.0 / 1.4 s, Diagram 0.5 / 0.8 s (before Drawing 2.0 / 3.0). Fast vs Thinking by grade: 150 rows 0 worse, 40 slow rows 0 worse; 0 objects in the top-left corner (cmp2-v12 regression). Dirs: management/real-use/browser-speed3-*.
 Open: the slow rows stay ~7 s (composition of up to 16 objects: per-object invokes, knowledge shards loaded mid-turn force a full re-derivation, reader passes per cut); 1-2 s not reached there.
 Gate: npm test 770 pass, 0 fail (registry entry added after the run), 3 skipped, 5 todo; webchat rebuilt.
+
+2026-11-21 — Start-up robustness (owner: live page stuck at "Preparing the editors (4 of 5)" on the Avatar; turns answered "No SOP query recorded").
+Each editor area has LIMITS.areaMs (30 s) at start; a late or failed area no longer holds start-up: tab marked unavailable, startup.parts.areas `unavailable: <ids>`, turns skip its tab wait, it is re-prepared in the background (fresh attempt for a stuck one). A reader that could not load is reloaded by the next turn, which waits; if it still fails the reply says the reading model is not ready and why.
+Live Pages (7c07cf816e and eb16d07b49) fresh and warm profiles were not stuck headless; Avatar is consistently the slowest, last area (1.5-5 s). The owner's stall is unreproduced; a deploy landed mid-session (index.html cached 10 min vs no-cache build-info).
+Gate: npm test 770 pass, 0 fail, 3 skipped, 5 todo; new tests/startup-area-unavailable-browser.test.mjs + startup-all-areas pass; webchat rebuilt.

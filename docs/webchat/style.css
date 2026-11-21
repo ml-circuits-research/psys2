@@ -348,6 +348,7 @@
 /* PROGRESS: the one panel of every wait (ui/progress.mjs): a bar, the current step, a details fold; no part draws a spinner of its own */
 .p2-progress { margin: 0 .75rem .25rem; padding: .35rem .6rem; border-radius: .5rem; font-size: .85rem; background: color-mix(in srgb, var(--accent) 10%, var(--surface)); border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--line)); }
 .p2-progress[hidden] { display: none; }
+.p2-tab[data-unavailable] { opacity: .55; }
 .p2-progress.is-failed { background: color-mix(in srgb, #c0392b 10%, var(--surface)); border-color: color-mix(in srgb, #c0392b 35%, var(--line)); }
 .p2-pg-row { display: flex; align-items: baseline; gap: .5rem; }
 .p2-pg-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }

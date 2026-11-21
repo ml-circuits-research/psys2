@@ -227,7 +227,7 @@ export async function mountPsys2(element, options = {}) {
       if (t.file && !t.make) { const m = (await import(new URL(`ui/tabs/${t.file}`, base).href)).default; Object.assign(t, m); }   // the tab's module loads now (with its world modules); vendor assets load when it makes its UI
       await Promise.all([uiDefaultsReady, englishReady]);
       if (destroyed) return null;
-      if (kept) { await tabPaint(); createEditor(kept); }
+      if (kept && !panelUI[t.id]) { await tabPaint(); createEditor(kept); }
       if (!options.renderAllTabs && engineClient) { try {
         timing.timeline.stage('Ensure instance world');const seq = stateSeq.get(t.world) ?? 0;
         const r = await engineClient.call('ensure', { worlds: [t.world], why: 'tab',tab:t.id });timing.worker=r?.timings??[]; for (const id of r?.added ?? []) loadedWorlds.add(id);
@@ -2433,16 +2433,61 @@ export async function mountPsys2(element, options = {}) {
   };
   (async () => {
     const editors = tabDefs.filter((t) => tabKnown.has(t.id) && t.world);
-    const part = (id, p) => Promise.resolve(p).then((v) => { startup.parts[id] = 'ready'; return v; }, (e) => { startup.parts[id] = `failed: ${e?.message ?? e}`; console.warn('start-up step failed', id, e); });
+    const part = (id, p) => Promise.resolve(p).then((v) => { startup.parts[id] = typeof v === 'string' && v.startsWith('unavailable') ? v : 'ready'; return v; }, (e) => { startup.parts[id] = `failed: ${e?.message ?? e}`; console.warn('start-up step failed', id, e); });
     progress.start('areas', `Preparing the editors (0 of ${editors.length})`, { total: editors.length });
+    // One editor never holds start-up or the other editors: each area has LIMITS.areaMs to prepare; past it (or on an error) start-up goes on, the tab is
+    // marked unavailable, and the area keeps preparing in the background (a failed one is asked again after a pause) until it is ready.
+    const unavailable = new Map();   // tab id -> reason
+    const AREA_PAUSES = [5000, 15000, 60000];
+    const markArea = (t, reason) => {
+      const btn = tabBtns[t.id]?.btn; if (!btn) return;
+      if (reason) { btn.dataset.unavailable = 'true'; btn.title = `${t.label ?? t.id}: not ready yet (${reason}); it keeps preparing`; }
+      else { delete btn.dataset.unavailable; btn.removeAttribute('title'); }
+    };
+    const areaRecovered = (t) => {
+      if (!unavailable.delete(t.id)) return;
+      markArea(t, null); progress.resolve('areas');
+      startup.parts.areas = unavailable.size ? `unavailable: ${[...unavailable.keys()].join(', ')}` : 'ready';
+      console.info('editor ready after start-up', t.id);
+    };
+    const keepPreparing = (t, pending, attempt = 0) => {
+      // a turn never waits for an editor that is late (makingTabs): it is made in the background
+      makingTabs.delete(pending);
+      const pause = AREA_PAUSES[Math.min(attempt, AREA_PAUSES.length - 1)];
+      let timer = 0;
+      Promise.race([pending.then(() => 'ok', (e) => { unavailable.set(t.id, e?.message ?? String(e)); markArea(t, unavailable.get(t.id)); return 'failed'; }), new Promise((r) => { timer = setTimeout(() => r('late'), pause); })]).then((r) => {
+        clearTimeout(timer);
+        if (destroyed) return;
+        if (r === 'ok') { areaRecovered(t); return; }
+        if (r === 'late') { pending.then(() => areaRecovered(t), () => {}); tabMade.delete(t.id); }   // a lost or stuck attempt: a fresh one is started (the first to finish makes the editor once)
+        if (r === 'late') keepPreparing(t, makeTab(t), attempt + 1);
+        else sleep(pause).then(() => { if (!destroyed) keepPreparing(t, makeTab(t), attempt + 1); });
+      });
+    };
+    const prepareArea = (t) => {
+      const pending = makeTab(t);
+      let timer = 0;
+      const limit = new Promise((resolve) => { timer = setTimeout(() => resolve({ late: true }), LIMITS.areaMs); });
+      return Promise.race([pending.then(() => ({ ok: true }), (e) => ({ error: e })), limit]).then((r) => {
+        clearTimeout(timer);
+        if (r.ok) return;
+        const reason = r.late ? `still preparing after ${Math.round(LIMITS.areaMs / 1000)} s` : (r.error?.message ?? String(r.error));
+        unavailable.set(t.id, reason); markArea(t, reason);
+        console.warn('could not prepare the editor at start', t.id, reason);
+        keepPreparing(t, pending);
+      });
+    };
     const areas = (async () => {   // one at a time: the engine loads one world at a time anyway, and the visible tab comes first
       let done = 0;
       for (const t of [...editors.filter((t) => t.id === view), ...editors.filter((t) => t.id !== view)]) {
         if (destroyed) return;
-        await makeTab(t).catch((e) => console.warn('could not prepare the editor', t.id, e));
+        await prepareArea(t);
         done++; progress.step('areas', `Preparing the editors (${done} of ${editors.length})`, done, editors.length);
       }
-      progress.end('areas', { label: `${editors.length} editors ready` });
+      if (!unavailable.size) { progress.end('areas', { label: `${editors.length} editors ready` }); return 'ready'; }
+      const names = editors.filter((t) => unavailable.has(t.id)).map((t) => t.label ?? t.id);
+      progress.fail('areas', `The ${names.join(', ')} editor${names.length > 1 ? 's are' : ' is'} not ready yet`, 'the other editors work; it keeps preparing in the background', { label: `${editors.length - names.length} of ${editors.length} editors ready` });
+      return `unavailable: ${[...unavailable.keys()].join(', ')}`;
     })();
     const reader = engineClient.call('prepare');   // resolves when SOP-BERT (model, tokenizer, bindings, cutter) is ready or known unavailable
     progress.start('solver', 'Loading the placement solver');
@@ -2452,7 +2497,7 @@ export async function mountPsys2(element, options = {}) {
       else progress.fail('solver', 'The placement solver could not load', 'placement uses the internal search');
       return st;
     });
-    await Promise.all([part('areas', areas), part('reader', reader), part('solver', solver), part('catalog', warm())]);
+    await Promise.all([part('areas', areas), part('reader', reader.then((r) => (r?.available === false ? `unavailable: ${r.reader?.reason ?? 'the reading model could not load'}` : r))), part('solver', solver), part('catalog', warm())]);
     startup.ready = true; mark('startup-ready'); startupDone(startup.parts);
   })();
   return handle;

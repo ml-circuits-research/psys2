@@ -5,6 +5,7 @@
 export const TIME_LIMIT_SPECS = Object.freeze({
   watchdogMs:   { def: 60000, min: 2000, max: 300000, label: 'Turn limit', note: 'automatic limit from Enter to the answer; it cancels the turn only (the Stop button does the same at any time)' },
   startMs:      { def: 60000, min: 10000, max: 300000, label: 'Engine start limit', note: 'how long a (re)started engine worker may take to become ready; the turn clock starts when it is ready' },
+  areaMs:       { def: 30000, min: 2000, max: 300000, label: 'Editor preparation limit', note: 'how long one editor area may take to prepare at start; past it start-up completes without that editor, which is marked unavailable and keeps preparing (and is retried) in the background' },
   dispatcherMs: { def: 2500, min: 500, max: 30000, label: 'Dispatcher call deadline', note: 'one model call of the dispatcher' },
   normalizerMs: { def: 3000, min: 500, max: 30000, label: 'Normalizer call deadline', note: 'one model call of the phrasing normalizer' },
   runawayMs:    { def: 0, min: 0, max: 600000, label: 'Engine runaway limit', note: '0 (default): a stopped turn is never ended by restarting the engine worker; otherwise how long it may keep computing before the worker (and the reader loaded in it) is restarted' },
