@@ -1,0 +1,20 @@
+{
+  "format": "sop.key-reader-run/1",
+  "configSha256": "8187c80cc66cc85ea0edc1bb6f27ec7d656c187f32453dcdf487f0301296fe67",
+  "trainerSha256": "ae9a1a6fb681435b7f3fade82139d84ae89f5c0f984f83941828413ba6f35fa1",
+  "steps": 13182,
+  "checkpointSha256": "f19043d3040a2ac5de030be6f342c63f3371fae56f6fabb2f8f6e186e1430c53",
+  "bestDecodedMentionF1": 0.9508646206574233,
+  "bestPositiveBioGlobalExact": 0.7871429993034132,
+  "epochsCompleted": 2,
+  "trainingPolicy": {
+    "maxEpochs": 2,
+    "minEpochs": 2,
+    "patience": 1,
+    "learningRate": 6e-05,
+    "selection": "positive supervised BIO/global exact, then mention F1"
+  },
+  "scope": "conditional gold-cut; not full pipeline or calibrated graph confidence",
+  "trainingConfigSha256": "8a861dc5806bea34e3ec7688b7089702ff543afd75dff7456c153413a7c664ba",
+  "exportConfigChange": "inputPadding dynamic -> max_length for the browser offset authority; weights unchanged"
+}

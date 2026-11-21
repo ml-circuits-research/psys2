@@ -1,9 +1,9 @@
 {
   "format": "sop.semantic-alignment-catalogue/1",
-  "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+  "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
   "inventory": {
     "path": "official-dataset/inventory.json",
-    "sha256": "7e3a41aeafd524375c7e21208e0b0fa595daf71c48f42aea3e26a92a4b2be8dd"
+    "sha256": "173a41a4076bab66b7b510c27377c27105ff3718e0d8d5e571e8ffb289791dee"
   },
   "prompt": {
     "path": "training/sop-bert/data/haiku-v2/INSTRUCTIONS-v2.md",
@@ -20,7 +20,7 @@
       "sourceWire": "w.drawing.object",
       "authority": "A drawn thing aligns the declared drawing object: a placed k.objects object or basic shape with size, colour and label.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object",
@@ -38,7 +38,7 @@
       "sourceWire": "w.drawing.group",
       "authority": "A drawing group aligns the declared group of drawing objects.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.group",
@@ -56,7 +56,7 @@
       "sourceWire": "w.picture.picture",
       "authority": "Raw drawing-as-a-whole aligns the depicted picture container, not physical-page lexical meaning.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.picture/schema.sop",
         "sha256": "d7c6978141d9b1261130af60395efd0cad83a902cee6216ba5e35f648f7f4f21",
         "sourceWire": "w.picture.picture",
@@ -74,7 +74,7 @@
       "sourceWire": "w.drawing.part",
       "authority": "A part of a drawn thing aligns the declared edited part of a drawing object.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.part",
@@ -82,6 +82,13 @@
         "moduleVersion": "1",
         "declaration": "@w.drawing.part core.type of=w.drawing.part extends=std.schema.thing closed=true core.source=\"hand-core 1\""
       }
+    },
+    {
+      "area": "drawing",
+      "type": "preference",
+      "rawMeaning": "native drawing preference (declared operations)",
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
     },
     {
       "area": "diagram",
@@ -92,7 +99,7 @@
       "sourceWire": "w.chart.chart",
       "authority": "Raw chart data/display aligns chart as a whole, not a series or point.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.chart/schema.sop",
         "sha256": "bf422ce083f316f99c57802f76b6dbb6fa99793e192b73d88a5f25b4de05661a",
         "sourceWire": "w.chart.chart",
@@ -110,9 +117,9 @@
       "sourceWire": "w.diagram.diagram",
       "authority": "Owner-authorized (2026-11-20): the Diagram tab observes its one page (id page, kind diagram) as the diagram; page operations (layout, improve, step numbers) act on it.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.diagram",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -128,9 +135,9 @@
       "sourceWire": "w.diagram.group",
       "authority": "The native group of nodes aligns the declared node grouping.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.group",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -146,9 +153,9 @@
       "sourceWire": "w.diagram.edge",
       "authority": "Raw arrow between nodes aligns declared edge from/to nodes.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.edge",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -171,9 +178,9 @@
       "sourceWire": "w.diagram.diagram",
       "authority": "Owner-authorized (2026-11-20): the Diagram tab observes its one page (id page, kind diagram) as the diagram; page operations (layout, improve, step numbers) act on it.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.diagram",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -245,7 +252,7 @@
       "sourceWire": "w.document.document",
       "authority": "Raw document-as-a-whole aligns mutable document, not immutable text source/revision.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document",
@@ -270,7 +277,7 @@
       "sourceWire": "w.calendar.event",
       "authority": "Raw meeting is the event family; source word.event explicitly names meeting.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.calendar/schema.sop",
         "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
         "sourceWire": "w.calendar.event",
@@ -288,7 +295,7 @@
       "sourceWire": "w.person.person",
       "authority": "Raw participant aligns person identity; participation requires a separate relation.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.person/schema.sop",
         "sha256": "173aec25063dc3a6f31b934e5c6bab97c81595cf034e6d45d0b0ced6654b1c5e",
         "sourceWire": "w.person.person",
@@ -306,7 +313,7 @@
       "sourceWire": "w.room.room",
       "authority": "Raw room aligns room identity; booking availability is not implied.",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.room/schema.sop",
         "sha256": "eebff2f6d36c3aec724184282704aa05e42ede66b4c4014ea7e7226442314ca9",
         "sourceWire": "w.room.room",
@@ -324,7 +331,7 @@
       "sourceWire": "w.face.face",
       "authority": "The avatar face aligns the declared face instance, not its individual parts (was drawing.face).",
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.face/schema.sop",
         "sha256": "71378ec01f20ceec47f2f7c5f006dce05918284fe6f434d93416943530216f97",
         "sourceWire": "w.face.face",
@@ -382,7 +389,7 @@
         "parameter": "align"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.align",
@@ -417,7 +424,7 @@
         }
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/k.spatial2d/schema.sop",
         "sha256": "2717173818f598c8f6bd4c703843f7bff5723563839dbb56bf00221e8faa6798",
         "sourceWire": "k.spatial2d.relation.object",
@@ -515,7 +522,7 @@
         "parameter": "color"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.colour",
@@ -547,7 +554,7 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.request/schema.sop",
         "sha256": "b752137dadac9c6163fcfba6d40fc28a048010cdf7411e2a5b6ccd7e13b7bc25",
         "sourceWire": "w.request.constraint.number",
@@ -667,7 +674,7 @@
         "parameter": "effect"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.effect",
@@ -756,7 +763,7 @@
         "parameter": "fill"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.fill",
@@ -801,7 +808,7 @@
         "parameter": "font"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.font",
@@ -843,7 +850,7 @@
         "parameter": "frame"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.frame",
@@ -899,7 +906,7 @@
         "parameter": "gradient"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.gradient",
@@ -934,7 +941,7 @@
         "parameter": "height"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.height",
@@ -1029,7 +1036,7 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.label",
@@ -1064,7 +1071,7 @@
         "parameter": "material"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.material",
@@ -1104,7 +1111,7 @@
         "parameter": "mirror"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.mirror",
@@ -1175,7 +1182,7 @@
         "parameter": "opacity"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.opacity",
@@ -1210,7 +1217,7 @@
         "parameter": "outline"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.outline",
@@ -1303,7 +1310,7 @@
         }
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/k.spatial2d/schema.sop",
         "sha256": "2717173818f598c8f6bd4c703843f7bff5723563839dbb56bf00221e8faa6798",
         "sourceWire": "k.spatial2d.relation.kind",
@@ -1338,7 +1345,7 @@
         "parameter": "rotation"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.rotation",
@@ -1404,7 +1411,7 @@
         "parameter": "size"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.size",
@@ -1439,7 +1446,7 @@
         "parameter": "skew"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.skew",
@@ -1478,7 +1485,7 @@
         "parameter": "slant"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.slant",
@@ -1513,7 +1520,7 @@
         "parameter": "stroke"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.stroke",
@@ -1548,7 +1555,7 @@
         "parameter": "text"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.text",
@@ -1681,7 +1688,7 @@
         "parameter": "weight"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.weight",
@@ -1716,7 +1723,7 @@
         "parameter": "width"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.object.width",
@@ -1863,7 +1870,7 @@
         "parameter": "color"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.colour",
@@ -1907,7 +1914,7 @@
         "parameter": "effect"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.part.effect",
@@ -1983,7 +1990,7 @@
         "parameter": "mirror"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.part.mirror",
@@ -2018,7 +2025,7 @@
         "parameter": "opacity"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.part.opacity",
@@ -2065,7 +2072,7 @@
         "parameter": "rotation"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.drawing/schema.sop",
         "sha256": "145fa7eca56e886d5c60e514bb81104ade6f9b8e37c790f1263349c24eba5e74",
         "sourceWire": "w.drawing.part.rotation",
@@ -2136,6 +2143,66 @@
       },
       "status": "unresolved",
       "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "preference",
+      "key": "preference.about",
+      "descriptor": {
+        "concept": "about",
+        "head": "span",
+        "src": "drawing.preference.state/reset {about} (standing preferences)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "preference",
+      "key": "preference.field",
+      "descriptor": {
+        "concept": "field",
+        "head": "span",
+        "src": "drawing.preference.state/reset {field} (standing preferences)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "preference",
+      "key": "preference.key",
+      "descriptor": {
+        "concept": "key",
+        "head": "span",
+        "src": "drawing.preference.state/reset {key} (standing preferences)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "preference",
+      "key": "preference.scope",
+      "descriptor": {
+        "concept": "scope",
+        "head": "span",
+        "src": "drawing.preference.state/reset {scope} (standing preferences)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "preference",
+      "key": "preference.value",
+      "descriptor": {
+        "concept": "value",
+        "head": "span",
+        "src": "drawing.preference.state/reset {value} (standing preferences)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
     },
     {
       "area": "diagram",
@@ -3210,9 +3277,9 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.diagram.background",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -3488,9 +3555,9 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.group.label",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -3658,9 +3725,9 @@
         "parameter": "arrow"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.edge.direction",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -3777,9 +3844,9 @@
         "parameter": "from"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.edge.from",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -3899,9 +3966,9 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.edge.label",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -4059,9 +4126,9 @@
         "parameter": "style"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.edge.style",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -4113,9 +4180,9 @@
         "parameter": "to"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.edge.to",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -4204,9 +4271,9 @@
         "parameter": "width"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.edge.width",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -4318,7 +4385,7 @@
         "parameter": "colour"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.colour",
@@ -4482,9 +4549,9 @@
         "parameter": "kind"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.node.shape",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -4517,9 +4584,9 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.node.label",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -4570,7 +4637,7 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.request/schema.sop",
         "sha256": "b752137dadac9c6163fcfba6d40fc28a048010cdf7411e2a5b6ccd7e13b7bc25",
         "sourceWire": "w.request.constraint.number",
@@ -4731,9 +4798,9 @@
         "parameter": "kind"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.node.shape",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -4773,7 +4840,7 @@
         "parameter": "size"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.size",
@@ -4820,9 +4887,9 @@
         "parameter": "value"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.node.value",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -4888,9 +4955,9 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.diagram.background",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -4949,9 +5016,9 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8",
+        "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981",
         "sourceWire": "w.diagram.diagram.title",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -5026,6 +5093,18 @@
     {
       "area": "diagram",
       "type": "preference",
+      "key": "preference.field",
+      "descriptor": {
+        "concept": "field",
+        "head": "span",
+        "src": "diagram.preference.state/reset {field} (standing preferences)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "preference",
       "key": "preference.key",
       "descriptor": {
         "concept": "key",
@@ -5037,6 +5116,18 @@
           "ids",
           "placement.side"
         ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "preference",
+      "key": "preference.scope",
+      "descriptor": {
+        "concept": "scope",
+        "head": "span",
+        "src": "diagram.preference.state/reset {scope} (standing preferences)"
       },
       "status": "unresolved",
       "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
@@ -5992,7 +6083,7 @@
         "parameter": "topic"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.topic",
@@ -6078,7 +6169,7 @@
         "parameter": "genre"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.genre",
@@ -6156,7 +6247,7 @@
         "parameter": "title"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.title",
@@ -6219,7 +6310,7 @@
         "parameter": "words"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.words",
@@ -6520,7 +6611,7 @@
         "parameter": "start"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.calendar/schema.sop",
         "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
         "sourceWire": "w.calendar.event.start",
@@ -6567,7 +6658,7 @@
         "parameter": "title"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.calendar/schema.sop",
         "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
         "sourceWire": "w.calendar.event.title",
@@ -6626,7 +6717,7 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.person/schema.sop",
         "sha256": "173aec25063dc3a6f31b934e5c6bab97c81595cf034e6d45d0b0ced6654b1c5e",
         "sourceWire": "w.person.person.name",
@@ -6706,7 +6797,7 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.room/schema.sop",
         "sha256": "eebff2f6d36c3aec724184282704aa05e42ede66b4c4014ea7e7226442314ca9",
         "sourceWire": "w.room.room.name",
@@ -6860,7 +6951,7 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/w.face/schema.sop",
         "sha256": "71378ec01f20ceec47f2f7c5f006dce05918284fe6f434d93416943530216f97",
         "sourceWire": "w.face.face.name",
@@ -7129,7 +7220,7 @@
         "parameter": "length"
       },
       "evidence": {
-        "knowledgePin": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
+        "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
         "path": "docs/worlds/k.faces/schema.sop",
         "sha256": "82d579433aaf692e61e4e933fe17cc781e1c4c28473367adc5356f2d70dd841c",
         "sourceWire": "k.faces.variant.length",
@@ -7577,6 +7668,18 @@
     {
       "area": "avatar",
       "type": "preference",
+      "key": "preference.scope",
+      "descriptor": {
+        "concept": "scope",
+        "head": "span",
+        "src": "avatar.preference.state/reset {scope} (standing preferences)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "avatar",
+      "type": "preference",
       "key": "preference.value",
       "descriptor": {
         "concept": "value",
@@ -7610,7 +7713,7 @@
     },
     {
       "path": "docs/worlds/w.diagram/schema.sop",
-      "sha256": "bf2419117bd333c4efb1a8ad75b9efa4bca82dd770846b4b50c07ca4b7f0d2c8"
+      "sha256": "043bf566b45add0cdeb84d842a0fd259b82b2b87646b27ef3c15f50a19d5a981"
     },
     {
       "path": "docs/worlds/w.document/schema.sop",
@@ -7646,9 +7749,9 @@
     }
   ],
   "coverage": {
-    "families": 27,
+    "families": 28,
     "alignedFamilies": 14,
-    "properties": 383,
+    "properties": 391,
     "alignedProperties": 56
   }
 }

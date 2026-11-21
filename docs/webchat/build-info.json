@@ -1,5 +1,5 @@
 {
-  "version": "4ebb743cb2",
+  "version": "4797d8f694",
   "worlds": [
     "core",
     "ui.shell",
@@ -271,8 +271,8 @@
     "worlds/ui.shell/bundle.json": "cd254bfac04c9c0d",
     "worlds/ui.shell/ops.mjs": "12898fb719c270c1"
   },
-  "builtAt": "2026-11-21T00:33:22.963Z",
-  "commit": "5f7f7c002-dirty",
+  "builtAt": "2026-11-21T04:35:24.003Z",
+  "commit": "b0334abbd-dirty",
   "catalog": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
   "assets": {
     "app.mjs": "dda989c018",
@@ -619,7 +619,19 @@
     "models/sop-bert/b8b1a4dd32a13c44555225fe894e8357766d95071a86f9a5e32a93fc39fda28a/tokenizer_config.json": "a025160ef0",
     "models/sop-bert/b8b1a4dd32a13c44555225fe894e8357766d95071a86f9a5e32a93fc39fda28a/tokenizer.json": "ce64fce797",
     "models/sop-bert/b8b1a4dd32a13c44555225fe894e8357766d95071a86f9a5e32a93fc39fda28a/vocab.txt": "07eced375c",
-    "models/sop-bert/deployment.json": "af062e0e0d",
+    "models/sop-bert/deployment.json": "cf8d0a0c48",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/bindings.json": "19a22dd64b",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/cutter-config.json": "3dc004607e",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/cutter-proof.json": "95afc18dc7",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/cutter.q8.onnx": "fdd9179778",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/encoder.q8.onnx": "ab0c61f37f",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/heads.q8.onnx": "bc36477803",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/key-run.json": "bd95c1c2a3",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/manifest.json": "e1a9e8d56b",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/model-config.json": "8187c80cc6",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/tokenizer_config.json": "a025160ef0",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/tokenizer.json": "ce64fce797",
+    "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/vocab.txt": "07eced375c",
     "models-mt/ro/fromEn/lex.50.50.enro.s2t.bin.gz": "a64099f219",
     "models-mt/ro/fromEn/model.enro.intgemm.alphas.bin.gz": "3596ee3bc1",
     "models-mt/ro/fromEn/vocab.enro.spm.gz": "61a75f040f",
