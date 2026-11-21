@@ -31,3 +31,7 @@
 @place.word.above app.placement.relationWord relation=above text="above"
 @place.word.below app.placement.relationWord relation=below text="below"
 @place.word.near app.placement.relationWord relation=near text="near"
+
+# A placement is verified when every planned bound is reached to a relative 1e-9 (floating-point equality).
+@place.verification app.placement.verification tolerance=0.000000001
+

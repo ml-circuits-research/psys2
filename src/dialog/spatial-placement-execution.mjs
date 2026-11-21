@@ -10,7 +10,7 @@ import {invokeObservedNativeTool} from './native-tool-activity.mjs';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs';
 import {en} from '../lang/en.mjs';
-import {placementHypotheses,placementDisclosure} from './placement-default-policy.mjs';
+import {placementHypotheses,placementDisclosure,reachesPlanned} from './placement-default-policy.mjs';
 import {identityConcepts} from './capability-plan-adapter.mjs';
 import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs';
 import {budget} from './budget.mjs';
@@ -202,7 +202,7 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
  const choices=parse(sop).filter(wire=>wire.type==='std.placement.option');
  const winner=choices.find(option=>option.id===ref(proposal,'choice'));
  const plannedBounds=winningBounds(winner),geometryVerified=!!bounds&&plannedBounds.every(([key,wanted])=>
-  Number.isFinite(wanted)&&Math.abs(wanted-bounds[key])<=1e-9*Math.max(1,Math.abs(wanted)));
+  reachesPlanned(wanted,bounds[key]));
  activity(session,area,{phase:'end',label:'Observe placement effect',status:geometryVerified?'verified':'mismatch',
   sop,receipt:{operation:receipt.operation,beforeVersion:receipt.beforeVersion,afterVersion:receipt.afterVersion},bounds,geometryVerified,verification});
  const trace={assessment:receipt.status,receipt,reading:candidate,placement:sop,solver,effectVerification:verification,observedBounds:bounds,geometryVerified,controlIntent:result.sop,
@@ -252,7 +252,7 @@ async function executeSpatialGroup(session,{area,host,sop,proposal,candidate,vie
   receipts.push(receipt);
   const observed=host.observeSpatial(),target=observed.observation.objects.find(object=>object.sourceType===operation.on&&!before.objects.some(prior=>prior.id===object.id)&&(object.in??object.parent)===undefined);
   const bounds=observed.boxes.find(box=>box.entity===target?.id),planned=winningBounds(options[i]);
-  const verified=!!bounds&&planned.every(([key,wanted])=>Number.isFinite(wanted)&&Math.abs(wanted-bounds[key])<=1e-9*Math.max(1,Math.abs(wanted)));
+  const verified=!!bounds&&planned.every(([key,wanted])=>reachesPlanned(wanted,bounds[key]));
   made.push({target,bounds,verified});
  }
  // A kind drawn as another keeps the kind asked for in the reply, and says what was drawn.

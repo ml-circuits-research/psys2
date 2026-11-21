@@ -20,7 +20,10 @@ function policy(){
  const stopAtNoOverlap=!!first&&str(first.attrs.measure[0])==='overlaps'&&str(first.attrs.dir[0])==='min';
  const hypotheses=world.ofType('app.placement.hypothesis').map(row=>Object.fromEntries([['id',row.id],...Object.entries(row.attrs).map(([key,values])=>[key,str(values[0])])])).map(h=>({...h,rank:Number(h.rank)})).sort((a,b)=>a.rank-b.rank);
  const texts=type=>Object.fromEntries(world.ofType(type).map(row=>[str(row.attrs[type==='app.placement.disclosure'?'stage':'relation'][0]),str(row.attrs.text[0])]));
- return loaded={world,defaults,stopAtNoOverlap,hypotheses,disclosures:texts('app.placement.disclosure'),relationWords:texts('app.placement.relationWord')};
+ const verification=world.ofType('app.placement.verification');
+ if(verification.length!==1)throw Error('invalid-placement-default-policy: exactly one app.placement.verification');
+ const tolerance=Number(str(verification[0].attrs.tolerance[0]));
+ return loaded={world,defaults,tolerance,stopAtNoOverlap,hypotheses,disclosures:texts('app.placement.disclosure'),relationWords:texts('app.placement.relationWord')};
 }
 
 /** The objective with every missing key filled from the declared defaults, and the list of keys that were filled. */
@@ -40,6 +43,8 @@ export function chooseRegion(candidates){
 
 /** The declared alternative readings of a failed relation placement, by rank. */
 export const placementHypotheses=()=>policy().hypotheses;
+/** Whether an observed bound reaches the planned one (app.placement.verification tolerance). */
+export const reachesPlanned=(wanted,observed)=>Number.isFinite(wanted)&&Math.abs(wanted-observed)<=policy().tolerance*Math.max(1,Math.abs(wanted));
 
 /** The declared reply text of a placement stage (a method fallback, an anchor drawn first), its {relation}, {anchor}, {direction} and {rule} filled in; '' when none is declared. */
 export function placementDisclosure(stage,{relation,anchor,direction,rule}={}){

@@ -1,4 +1,4 @@
-@place.default.module core.module name=app.placement version=1 exports=app.placement.default exports=app.placement.hypothesis exports=app.placement.disclosure exports=app.placement.relationWord
+@place.default.module core.module name=app.placement version=1 exports=app.placement.default exports=app.placement.verification exports=app.placement.hypothesis exports=app.placement.disclosure exports=app.placement.relationWord
 
 # Application defaults for the default-placement problem: used only for an objective key the area's own
 # app.place.objective does not declare; every key taken from here is reported with the solution (trace: defaulted).
@@ -40,3 +40,8 @@
 @place.relation.word.type core.type of=app.placement.relationWord closed=true
 @place.relation.word.relation core.slot of=app.placement.relationWord key=relation kind=atom id=true present=true
 @place.relation.word.text core.slot of=app.placement.relationWord key=text kind=string present=true
+# How exactly an executed placement must reach its planned geometry to count as verified: the relative tolerance
+# (|wanted - observed| <= tolerance * max(1, |wanted|)).
+@place.verification.type core.type of=app.placement.verification closed=true
+@place.verification.tolerance core.slot of=app.placement.verification key=tolerance kind=number present=true
+
