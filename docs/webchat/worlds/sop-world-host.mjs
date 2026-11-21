@@ -5,8 +5,8 @@
 //  3. this interpreter runs the calls through the library's generic acts (World.act) and keeps the resulting
 //     instance facts and the view keys as the tool state. Undo and redo belong to the application's journal.
 // The objects a reader observes come from app.observe.object facts the same rules derive.
-import {parse, quote, serialize, str} from '../lib/vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import {createNativeToolHost, nativeToken} from './native-tool-host.mjs?v=c6ea65e776';
+import {parse, quote, serialize, str, format} from '../lib/vendor/sopworld/sopworld.mjs?v=d86f897e0e';
+import {createNativeToolHost, nativeToken} from './native-tool-host.mjs?v=812ac605aa';
 import {budget} from '../lib/dialog/budget.mjs?v=d42dc656e7';
 
 const CALLS = 512;
@@ -39,7 +39,10 @@ export function initialSopWorldState(base, { kinds, make = [] } = {}) {
 }
 
 // Derived state worlds by base and state: one command reads the same state several times (observation, compile,
-// run, the changed objects), so each later read forks the world already derived instead of deriving it again.
+// run, the changed objects), so each later read forks the world already derived instead of deriving it again. A state
+// not derived yet is derived incrementally (sopworld World.syncState): the most recent derived world of the same base is
+// brought to it by the difference of their told facts (new facts told, changed ones replaced in place, gone ones
+// retracted), which gives the same facts in the same (state-determined) order as deriving it from the bare base.
 const derived = new WeakMap(), DERIVED = 8;
 
 /** A world holding the current state, derived facts included (projection, observation). Callers may change it. */
@@ -47,7 +50,13 @@ export function worldOf(base, state) {
   const key = (state.sop ?? '') + '\u0000' + JSON.stringify(state.runtime?.view ?? {});
   const memo = derived.get(base) ?? derived.set(base, new Map()).get(base);
   if (memo.has(key)) { const world = memo.get(key); memo.delete(key); memo.set(key, world); return world.fork(); }
-  const world = deriveState(base, state);
+  const wires = stateWires(state);
+  // Start from the derived world (or the bare base) whose told facts differ least from this state's.
+  const told = new Map(wires.map((w) => [w.id, format(w, { canonical: true })]));
+  const distance = (world) => { const had = world._syncTold; if (!had) return told.size; let d = 0; for (const [id, text] of told) if (had.get(id) !== text) d++; for (const id of had.keys()) if (!told.has(id)) d++; return d; };
+  let from = base, best = told.size;
+  for (const world of memo.values()) { const d = distance(world); if (d < best) { best = d; from = world; } }
+  const world = deriveState(from, wires);
   memo.set(key, world);
   if (memo.size > DERIVED) memo.delete(memo.keys().next().value);
   return world.fork();
@@ -56,13 +65,16 @@ export function worldOf(base, state) {
 /** Forget the derived worlds of a base whose own facts changed (knowledge told into it later). */
 export function forgetDerived(base) { derived.delete(base); }
 
-function deriveState(base, state) {
-  const world = base.fork();
-  if (state.sop) { const told = world.tell(state.sop, { factsOnly: true }); if (!told.ok) throw Error('invalid-state'); }
-  // The view keys (selection, ID display) are facts too, so rules can observe them.
+/** The told facts of a state: its instance facts, then the view keys (selection, ID display) as facts rules observe. */
+function stateWires(state) {
   const view = Object.entries(state.runtime?.view ?? {}).filter(([, value]) => value !== null && value !== undefined)
     .map(([key, value], n) => ({ id: 'area.view.' + n, type: 'app.area.view', attrs: { key: [token(key)], value: [token(value)] } }));
-  if (view.length && !world.tell(serialize(view), { factsOnly: true }).ok) throw Error('invalid-view');
+  return [...(state.sop ? parse(state.sop) : []), ...view];
+}
+
+function deriveState(from, wires) {
+  const world = from.fork();
+  if (!world.syncState(wires, { factsOnly: true }).ok) throw Error('invalid-state');
   return world;
 }
 

@@ -1,18 +1,18 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=03af9b7ec4';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=cee1939ca4';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=54b89822cc';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=d62a257d7c';
 import { en } from '../lang/en.mjs?v=d028d63371';
-import { quote, str } from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import { executionPolicyWorld } from './execution-policy.mjs?v=88bdf143f7';
+import { quote, str } from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
+import { executionPolicyWorld } from './execution-policy.mjs?v=a5aac38038';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=188646900d';
-import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=5f18653abe';
-import { readDegreeBases } from './degree-bases.mjs?v=947db12471';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=ad9d1579e4';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=46c009d759';
+import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=9253643e7e';
+import { readDegreeBases } from './degree-bases.mjs?v=d56eb1afba';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=4afe6eb1e8';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=9663347525';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=59baa93d85';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=8e88510aca';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=4ec2d94fba';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=a5b09cf66a';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=a8b0e1d688';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=916df024e7';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=94cc7d01b8';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -280,8 +280,10 @@ export async function executeNativeGroup(session, members, { view, invocation = 
     } catch { /* Inspection does not affect dispatch. */ }
   }
   const made = [], receipts = [], verifications = [], refused = [], executed = [];   // executed: the tool inputs actually invoked (the reply's executable circuit)
+  // One observation per state: what a call leaves is what the next call starts from.
+  let observed = host.observe();
   for (const subject of subjects) {
-    const args = subject.args ?? subject.plan.args, observed = host.observe(), toolInput = call(subject.operation, args);
+    const args = subject.args ?? subject.plan.args, toolInput = call(subject.operation, args);
     const intent = describeNativeControl({ operation: subject.operation, args, before: observed });
     const receipt = await invokeObservedNativeTool(session, { area, host, invocation: globalThis.crypto.randomUUID(), expectedVersion: observed.version, sop: toolInput });
     // The area's rules may refuse one thing (a kind it cannot draw) and accept the others: it is named, not made.
@@ -290,6 +292,7 @@ export async function executeNativeGroup(session, members, { view, invocation = 
     verifications.push(verifyNativeControlEffect({ intent, before: observed, after, receipt }));
     receipts.push(receipt); executed.push(toolInput);
     const old = new Set(observed.objects.map((object) => object.id));
+    observed = after;
     const object = after.objects.find((value) => !old.has(value.id) && (value.in ?? value.parent) === undefined);
     const substituted = drawnAs(object, subject.plan.kind);
     made.push({ subject, object, kind: substituted?.kind ?? object?.kind ?? subject.plan.kind, substituted });

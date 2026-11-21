@@ -123,6 +123,8 @@ export async function completeBindings(bindings){
  // ("two cats", "a dozen boxes"), like a property bound to a numeric parameter.
  const {counted}=await nativeInterfaces(),countedSet=new Set(counted);
  const table=countedSet.size?{...completedTable,properties:(completedTable.properties??[]).map(row=>countedSet.has(row.canonical)&&row.numeric===undefined&&!row.classValues?{...row,numeric:true}:row)}:completedTable;
+ // Frozen: a derived table never changes, so what is derived from it (constructor pairs) is reused for it.
+ Object.freeze(table);
  completed.set(bindings,table);
  return table;
 }

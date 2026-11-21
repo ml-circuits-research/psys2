@@ -280,8 +280,10 @@ export async function executeNativeGroup(session, members, { view, invocation = 
     } catch { /* Inspection does not affect dispatch. */ }
   }
   const made = [], receipts = [], verifications = [], refused = [], executed = [];   // executed: the tool inputs actually invoked (the reply's executable circuit)
+  // One observation per state: what a call leaves is what the next call starts from.
+  let observed = host.observe();
   for (const subject of subjects) {
-    const args = subject.args ?? subject.plan.args, observed = host.observe(), toolInput = call(subject.operation, args);
+    const args = subject.args ?? subject.plan.args, toolInput = call(subject.operation, args);
     const intent = describeNativeControl({ operation: subject.operation, args, before: observed });
     const receipt = await invokeObservedNativeTool(session, { area, host, invocation: globalThis.crypto.randomUUID(), expectedVersion: observed.version, sop: toolInput });
     // The area's rules may refuse one thing (a kind it cannot draw) and accept the others: it is named, not made.
@@ -290,6 +292,7 @@ export async function executeNativeGroup(session, members, { view, invocation = 
     verifications.push(verifyNativeControlEffect({ intent, before: observed, after, receipt }));
     receipts.push(receipt); executed.push(toolInput);
     const old = new Set(observed.objects.map((object) => object.id));
+    observed = after;
     const object = after.objects.find((value) => !old.has(value.id) && (value.in ?? value.parent) === undefined);
     const substituted = drawnAs(object, subject.plan.kind);
     made.push({ subject, object, kind: substituted?.kind ?? object?.kind ?? subject.plan.kind, substituted });

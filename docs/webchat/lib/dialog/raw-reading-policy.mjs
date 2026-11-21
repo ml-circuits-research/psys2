@@ -3,14 +3,14 @@
 // a raw reader proposal and the deployed binding table's rows are told to the policy world as facts; what its rules
 // conclude (a target re-read as a joining line's or a container's members, the end a population phrase fills, a
 // population reference) is applied here field by field. Nothing here decides: no act, key, kind or word is named.
-import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
+import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
 import SCHEMA from '../../worlds/app.project/raw-reading-schema-source.mjs?v=ee5969da8c';
 import POLICY from '../../worlds/app.project/raw-reading-policy-source.mjs?v=1b7d7972d9';
-import {executionPolicyWorld} from './execution-policy.mjs?v=88bdf143f7';
+import {executionPolicyWorld} from './execution-policy.mjs?v=a5aac38038';
 import {en} from '../lang/en.mjs?v=d028d63371';
-import {referenceProjection} from './reference-projection.mjs?v=b0734ecbb8';
+import {referenceProjection} from './reference-projection.mjs?v=ea9b35dda0';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=f6a0b10be9';
-import {parse} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
+import {parse} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
 
 let base=null;
 function policyWorld(){

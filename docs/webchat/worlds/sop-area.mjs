@@ -2,12 +2,12 @@
 // A tab defined by its area.sop: which catalog modules form its instance and knowledge, which rule files
 // compile its commands and project its drawing, the things it starts with and the open choices of its native
 // interface. This module only reads that declaration; it holds no knowledge of any tab.
-import {World, parse, quote, serialize, str, nearestRelative} from '../lib/vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
+import {World, parse, quote, serialize, str, nearestRelative} from '../lib/vendor/sopworld/sopworld.mjs?v=d86f897e0e';
 import {budget} from '../lib/dialog/budget.mjs?v=d42dc656e7';
-import {catalogWorld} from './catalog-world.mjs?v=4f1c9b590e';
-import {readNativeToolInterface} from './native-tool-interface.mjs?v=59ae4399a8';
-import {toolInvocationContext} from './native-tool-host.mjs?v=c6ea65e776';
-import {createSopWorldHost, forgetDerived, initialSopWorldState, orderedInputs, worldOf} from './sop-world-host.mjs?v=1c1c1bd8e4';
+import {catalogWorld} from './catalog-world.mjs?v=4bb4b36797';
+import {readNativeToolInterface} from './native-tool-interface.mjs?v=84ab381cde';
+import {toolInvocationContext} from './native-tool-host.mjs?v=812ac605aa';
+import {createSopWorldHost, forgetDerived, initialSopWorldState, orderedInputs, worldOf} from './sop-world-host.mjs?v=9ddb9001bf';
 import {renderPrimitives} from './sop-primitives.mjs?v=2fc551236d';
 
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };

@@ -27,6 +27,15 @@
 # A browser-detected input language replaces the selected one at or above this confidence.
 @interpret.language.detect app.interpret.language role=detect min.confidence=0.8
 
+# Answer mode (owner, 2026-11-21): the standing preference interaction.mode (interaction-preferences.sop, a w.preferences
+# key; the chat's Fast | Thinking toggle and "think harder" / "be quick" state it). Each mode bounds the hypotheses a
+# turn may try: the context re-readings (retries, in the order above), the admitted readings compared (compare; 1 routes
+# the first admitted one), the fallback ladder steps after a refused reading (fallbacks), the other live editors read
+# again (areas), and how a placement problem is solved (placement: first = the first feasible model, optimise = the best
+# one). Fast takes the first acceptable path; Thinking keeps the thorough one.
+@interpret.mode.fast app.interpret.mode mode=fast retries=1 compare=1 fallbacks=1 areas=1 placement=first label="Fast"
+@interpret.mode.thinking app.interpret.mode mode=thinking retries=2 compare=16 fallbacks=3 areas=8 placement=optimise label="Thinking"
+
 # Partial admission is the default (owner, Review29; specs/semantic-frame.md §5). A reading whose roles cannot all be
 # bound executes its consistent part when its act class is reversible (reader-admission-policy.sop
 # reader.permit.partial); the reply names each dropped role and why, and undo covers the whole message.

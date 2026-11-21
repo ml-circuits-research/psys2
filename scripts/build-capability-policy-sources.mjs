@@ -29,6 +29,7 @@ for (const [source, module] of [
   ['query-reading-policy.sop', 'query-reading-policy-source.mjs'],
   ['interpretation-schema.sop', 'interpretation-schema-source.mjs'],
   ['interpretation-policy.sop', 'interpretation-policy-source.mjs'],
+  ['interaction-preferences.sop', 'interaction-preferences-source.mjs'],
   ['raw-reading-schema.sop', 'raw-reading-schema-source.mjs'],
   ['raw-reading-policy.sop', 'raw-reading-policy-source.mjs'],
   ['area-registry-schema.sop', 'area-registry-schema-source.mjs'],

@@ -84,7 +84,7 @@ export async function createRealUseRunner({runtimeRoot=DEFAULT_RUNTIME_ROOT,z3=t
   // A follow-up row: the previous turn is what the reader sees as "previous" (as in the dataset's context).
   context=observedReaderContext(row.world,before,row.context?.previous??null,{compact:true,text:row.text});
   let reply,error=null;const t0=performance.now();
-  try{reply=await routeNewEngine(session,row.text,{language:'en'});}catch(e){error=String(e?.message??e).slice(0,300);}
+  try{reply=await routeNewEngine(session,row.text,{language:'en',interactionMode:process.env.REAL_USE_MODE??'fast'});}catch(e){error=String(e?.message??e).slice(0,300);}
   finally{context=null;}
   const ms=performance.now()-t0;
   const afterArea=session.isession.state[area.world];

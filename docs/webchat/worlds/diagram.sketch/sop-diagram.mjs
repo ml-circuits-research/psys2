@@ -4,8 +4,8 @@
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=dadfdb4afd';
 import AREA_SOURCES from './area-sources.mjs?v=55098223a8';
 import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=62a24b2870';
-import {chartToolInterface} from '../data.charts/declared-host.mjs?v=36b931ef4c';
-import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=25bccf8716';
+import {chartToolInterface} from '../data.charts/declared-host.mjs?v=85d48921dd';
+import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=90a8f4224c';
 
 const area = sopAreaAdapter({ world: 'diagram.sketch', instance: ['w.diagram', 'w.preferences'], interfaceSource: NATIVE_INTERFACE, interfaceImports: { 'data.charts': chartToolInterface },
   sources: AREA_SOURCES, offline: BUNDLED_AREAS['diagram.sketch'] });

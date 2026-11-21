@@ -372,6 +372,7 @@ let initReceived = false;
 // placements are answered by the library's internal search) and the failure is reported as world activity. Other uncaught errors
 // keep the crash path.
 let placementSearch = null;
+let lastToggle = null;   // the toggle value last stated as the interaction.mode preference
 addEventListener('error', (ev) => {
   const nested = typeof Event === 'function' && ev.error instanceof Event;   // a rethrown event of a nested worker
   const wasm = typeof WebAssembly === 'object' && ev.error instanceof WebAssembly.RuntimeError;
@@ -402,7 +403,10 @@ const handlers = {
     }
     const ctl = new AbortController();
     mods.guard.setAbortProbe?.(abortProbeFor(m.id));
-    placementSearch?.setPlacementMode?.(m.settings?.interactionMode ?? settings.interactionMode);   // the chat's Fast | Thinking toggle
+    // The chat's Fast | Thinking toggle states the interaction.mode preference when it changes (the turn route reads the preference;
+    // a message such as "think harder" states it too, and the reply's trace carries the mode in force back to the toggle).
+    const toggled = m.settings?.interactionMode && m.settings.interactionMode !== lastToggle ? m.settings.interactionMode : undefined;
+    if (m.settings?.interactionMode) lastToggle = m.settings.interactionMode;
     executionRequestId=m.id;
     active.set(m.id, ctl);
     if (warming) await warming;
@@ -436,14 +440,14 @@ const handlers = {
       let reply;
       const read = async () => {
         session.takeMissed?.();
-        try { return await session.send(m.text, { ...m.opts, language: mods.lang.normalize(m.opts?.language ?? m.settings?.language), signal: ctl.signal, undo: snap, ...(budget ? { budget } : {}) }); }
+        try { return await session.send(m.text, { ...m.opts, ...(toggled ? { interactionMode: toggled } : {}), language: mods.lang.normalize(m.opts?.language ?? m.settings?.language), signal: ctl.signal, undo: snap, ...(budget ? { budget } : {}) }); }
         catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded' || ctl.signal.aborted) { try { session.restore(snap); } catch { /* keep */ } } if (budget && e && typeof e === 'object') e.bySite = { ...budget.bySite }; throw e; }
       };
       readerDiagnostics=[];readerObservation=null;
       worldActivity(['component:reasoner'],'start','Session request');
       reply = await read();
       worldActivity(['component:reasoner'],'end','Session request completed');readerPrevious=m.text;
-      reply.trace={...reply.trace,interactionMode:placementSearch?.placementMode?.()??(settings.interactionMode??'fast'),readerHost:{state:readerStatus.state,reason:readerStatus.reason??null,diagnosticCount:readerDiagnostics.length,area:readerObservation?.area??null,contextSelection:readerObservation?.contextSelection??null,modelContexts:readerDiagnostics.filter(diagnostic=>diagnostic.result?.auxiliary?.contextSelection).map(diagnostic=>diagnostic.result.auxiliary.contextSelection)}};
+      reply.trace={...reply.trace,interactionMode:reply.trace?.interactionMode??placementSearch?.placementMode?.()??(settings.interactionMode??'fast'),readerHost:{state:readerStatus.state,reason:readerStatus.reason??null,diagnosticCount:readerDiagnostics.length,area:readerObservation?.area??null,contextSelection:readerObservation?.contextSelection??null,modelContexts:readerDiagnostics.filter(diagnostic=>diagnostic.result?.auxiliary?.contextSelection).map(diagnostic=>diagnostic.result.auxiliary.contextSelection)}};
       annotateWires(reply);
       noteWorlds(reply);
       return { reply, before: loadedBefore(before, had), state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),

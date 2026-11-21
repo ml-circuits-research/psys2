@@ -53,7 +53,11 @@ export function interpretationPolicy(source=POLICY){
   values:Object.fromEntries(world.ofType(MODULE+'.relationValue').filter(v=>v.attrs.of?.[0]==='$'+row.id).map(v=>[one(v,'value'),one(v,'relation')]))}));
  const control={verbs:Object.fromEntries(world.ofType(MODULE+'.controlVerb').map(row=>[one(row,'act'),one(row,'text')])),modifiers:Object.fromEntries(world.ofType(MODULE+'.controlModifier').map(row=>[one(row,'parameter'),one(row,'text')]))};
  if(!control.verbs.other)throw Error('invalid-interpretation-policy: a control verb for act other');
- const result=Object.freeze({retries,notes,compare,coordination,areaRetry,control,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations,familyOperations,parameterActs,spelling,numberJoiners}});
+ // What each answer mode allows a turn to try (app.interpret.mode; the mode itself is the interaction.mode preference).
+ const modes=Object.fromEntries(world.ofType(MODULE+'.mode').map(row=>[one(row,'mode'),Object.freeze({id:row.id,mode:one(row,'mode'),retries:Number(one(row,'retries')),compare:Number(one(row,'compare')),
+  fallbacks:Number(one(row,'fallbacks')),areas:Number(one(row,'areas')),placement:one(row,'placement'),label:one(row,'label')})]));
+ if(!modes.fast||!modes.thinking)throw Error('invalid-interpretation-policy: the fast and thinking modes must be declared');
+ const result=Object.freeze({retries,notes,compare,modes,coordination,areaRetry,control,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations,familyOperations,parameterActs,spelling,numberJoiners}});
  if(source===POLICY)policy=result;
  return result;
 }

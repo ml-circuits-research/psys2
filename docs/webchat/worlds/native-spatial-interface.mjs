@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Bind native observations and concrete renderer capabilities to the SOP interface.
-import {quote,str} from '../lib/vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
+import {quote,str} from '../lib/vendor/sopworld/sopworld.mjs?v=d86f897e0e';
 
 const atom = /^[A-Za-z_][A-Za-z0-9_.-]*$/;
 export const spatialWire = (id,type,fields) => '@'+id+' '+type+' '+Object.entries(fields).flatMap(([key,value])=>

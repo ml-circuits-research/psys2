@@ -1,4 +1,4 @@
-@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.areaRetry exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback exports=app.interpret.family exports=app.interpret.familyOperation exports=app.interpret.parameterAct exports=app.interpret.spelling exports=app.interpret.spellingStep exports=app.interpret.numberJoiner exports=app.interpret.relation exports=app.interpret.relationValue exports=app.interpret.controlVerb exports=app.interpret.controlModifier
+@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.areaRetry exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback exports=app.interpret.family exports=app.interpret.familyOperation exports=app.interpret.parameterAct exports=app.interpret.spelling exports=app.interpret.spellingStep exports=app.interpret.numberJoiner exports=app.interpret.relation exports=app.interpret.relationValue exports=app.interpret.controlVerb exports=app.interpret.controlModifier exports=app.interpret.mode
 
 # A re-reading of the same text under a reduced context, tried in order while the reading stays incomplete.
 @interpret.retry.type core.type of=app.interpret.retry closed=true
@@ -110,3 +110,14 @@
 # A word allowed inside a run of number words after a hundred or a scale word ("two hundred and six").
 @interpret.numberJoiner.type core.type of=app.interpret.numberJoiner closed=true
 @interpret.numberJoiner.text core.slot of=app.interpret.numberJoiner key=text kind=string present=true
+
+# What an answer mode allows a turn to try (interpretation-policy.sop): context re-readings, compared readings, fallback
+# ladder steps, other editors, and the placement objective.
+@interpret.mode.type core.type of=app.interpret.mode closed=true
+@interpret.mode.mode core.slot of=app.interpret.mode key=mode kind=atom id=true enum=fast enum=thinking present=true
+@interpret.mode.retries core.slot of=app.interpret.mode key=retries kind=integer min=0 present=true
+@interpret.mode.compare core.slot of=app.interpret.mode key=compare kind=integer min=1 present=true
+@interpret.mode.fallbacks core.slot of=app.interpret.mode key=fallbacks kind=integer min=0 present=true
+@interpret.mode.areas core.slot of=app.interpret.mode key=areas kind=integer min=0 present=true
+@interpret.mode.placement core.slot of=app.interpret.mode key=placement kind=atom enum=first enum=optimise present=true
+@interpret.mode.label core.slot of=app.interpret.mode key=label kind=string present=true

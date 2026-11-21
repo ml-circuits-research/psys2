@@ -11,10 +11,10 @@
 //  - interpretation-policy.sop: app.interpret.family, familyOperation, relation, parameterAct;
 //  - execution-policy.sop: app.execution.kindBinding, keyBinding/keyValue, position, canvasUnit, lengthUnit;
 //  - the constructor policy's discriminator, the catalog words of catalog values, the ordinal words of k.values.
-import {parse,str,completeStructuralBindings} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=79c1776d10';
-import {executionPolicyWorld} from './execution-policy.mjs?v=88bdf143f7';
-import {declaredValueRows} from './declared-value-readings.mjs?v=8a2c08916b';
+import {parse,str,completeStructuralBindings} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=544d36d194';
+import {executionPolicyWorld} from './execution-policy.mjs?v=a5aac38038';
+import {declaredValueRows} from './declared-value-readings.mjs?v=55eec3f6e9';
 import {numberWords,numberInfo} from '../knowledge/values.mjs?v=b0000e82a7';
 import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=38faa58bcc';
 import CAPABILITY_POLICY from '../../worlds/app.project/capability-policy.mjs?v=281892343f';
@@ -123,6 +123,8 @@ export async function completeBindings(bindings){
  // ("two cats", "a dozen boxes"), like a property bound to a numeric parameter.
  const {counted}=await nativeInterfaces(),countedSet=new Set(counted);
  const table=countedSet.size?{...completedTable,properties:(completedTable.properties??[]).map(row=>countedSet.has(row.canonical)&&row.numeric===undefined&&!row.classValues?{...row,numeric:true}:row)}:completedTable;
+ // Frozen: a derived table never changes, so what is derived from it (constructor pairs) is reused for it.
+ Object.freeze(table);
  completed.set(bindings,table);
  return table;
 }

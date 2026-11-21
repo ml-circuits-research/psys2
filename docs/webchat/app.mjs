@@ -350,7 +350,7 @@ export async function mountPsys2(element, options = {}) {
   const sumPanel = h('details', { class: 'p2-sum', 'aria-label': 'What we are talking about', hidden: true }, h('summary', {}, 'What we are talking about'), sumBody);
   // Fast | Thinking (owner 2026-11-21, like LLM chat apps): Fast (default) takes the first acceptable placement, Thinking lets Z3 optimise it.
   const modeLabel = () => settings.interactionMode === 'thinking' ? 'Thinking' : 'Fast';
-  const modeBtn = h('button', { class: 'p2-btn-text p2-mode', type: 'button', 'aria-pressed': String(settings.interactionMode === 'thinking'), title: 'Fast: first acceptable answer. Thinking: optimise placements (slower).', 'aria-label': 'Answer mode: ' + modeLabel() }, modeLabel());
+  const modeBtn = h('button', { class: 'p2-btn-text p2-mode', type: 'button', 'aria-pressed': String(settings.interactionMode === 'thinking'), title: 'Fast: the first acceptable reading and placement. Thinking: try the alternatives and optimise placements (slower). "Think harder" or "be quick" in a message does the same.', 'aria-label': 'Answer mode: ' + modeLabel() }, modeLabel());
   modeBtn.addEventListener('click', () => {
     settings.interactionMode = settings.interactionMode === 'thinking' ? 'fast' : 'thinking';
     modeBtn.textContent = modeLabel(); modeBtn.setAttribute('aria-pressed', String(settings.interactionMode === 'thinking')); modeBtn.setAttribute('aria-label', 'Answer mode: ' + modeLabel());
@@ -1115,6 +1115,10 @@ export async function mountPsys2(element, options = {}) {
     if (OFFLINE_LINE.test(answer)) { const rest = answer.replace(OFFLINE_LINE, '').trim(); if (offlineSaid && rest) answer = rest; offlineSaid = true; }
     const notUnderstood = mode === 'voice' && (reply.statuses ?? []).length > 0 && !(reply.statuses ?? []).includes('supported') && (reply.segments ?? []).some((sg) => sg.unparsed);
     if (!modelsStarted && ((reply.statuses ?? []).length === 0 || !(reply.statuses ?? []).includes('supported') || (reply.segments ?? []).some((sg) => sg.unparsed))) startModels();   // LAZY-LOAD-3: the rules did not read it cleanly: the reading model is wanted now
+    // The answer mode in force (the interaction.mode preference: "think harder" / "be quick" state it too) is shown on the toggle.
+    if ((reply.trace?.interactionMode === 'fast' || reply.trace?.interactionMode === 'thinking') && reply.trace.interactionMode !== settings.interactionMode) {
+      settings.interactionMode = reply.trace.interactionMode; modeBtn.textContent = modeLabel(); modeBtn.setAttribute('aria-pressed', String(settings.interactionMode === 'thinking')); modeBtn.setAttribute('aria-label', 'Answer mode: ' + modeLabel()); save();
+    }
     const botMsg = addMessage('bot', answer);
     attachResponseReplay(botMsg,reply.trace?.worldActivity,text);
     appendTurnCircuits(user.bubble, botMsg.bubble, reply.trace);

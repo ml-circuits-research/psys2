@@ -22,6 +22,8 @@ import {routeCoordination} from './coordination-routing.mjs';
 import {declaredKnowledge} from './declared-execution.mjs';
 import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs';
 import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs';
+import {modeLimits,interactionMode,statePreference,readPreferenceStatement,MODE_KEY} from './interaction-mode.mjs';
+import {setPlacementMode} from './placement-search-provider.mjs';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.
 const knownAmounts=()=>amounts??=amountsOf(declaredKnowledge('k.expect.amount'));
@@ -115,7 +117,8 @@ async function dispatchPartial(session,plan,text,options,bindings,refused=null){
  let result=first,step=null,disclosed=[...plan.reading.disclosed],readings=[plan.decision.candidate];
  if(!supported(first)){
   rollback();result=null;
-  for(const option of fallbackLadder(plan.reading.packet)){
+  // The answer mode bounds the ladder steps tried (app.interpret.mode fallbacks).
+  for(const option of fallbackLadder(plan.reading.packet).slice(0,modeLimits(session).fallbacks)){
    const replies=[];
    for(const candidate of option.candidates){const reply=await dispatchRequest(session,candidate,text,options,bindings);replies.push(reply);if(!supported(reply))break;}
    if(!supported(replies[0])){rollback();continue;}
@@ -211,13 +214,18 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  // app.interpret.retry, in their order) are the next hypotheses; the first complete one is routed
  // and every attempt, also an unavailable or failed one, stays in the trace and lights the map.
  const readings=[];
+ // The answer mode bounds how many re-readings a turn makes (app.interpret.mode retries); a re-reading the provider
+ // cannot make (its drop is vacuous: no previous message) is not one.
+ let reread=0;const maxRereads=modeLimits(session).retries;
  for(const {profile,method,label,when} of interpretationPolicy().retries){
   if(when==='incomplete'&&projected.proposal.coverage?.complete)break;
+  if(reread>=maxRereads)break;
   if(typeof provider?.[method]!=='function'){((contextRetry??={attempts:[]}).unavailable??=[]).push({profile,reason:'provider-has-no-'+method});break;}
   let alternate=null,failure=null;
   try{alternate=await provider[method](writeReaderSource(text));}catch(error){failure=String(error?.message??error);}
   observe(session,{nodeIds:['component:reader'],phase:alternate?'stage':'end',operation:'app.reader.retry',label,text,profile,available:!!alternate,...(failure?{error:failure}:{})});
   if(!alternate){((contextRetry??={attempts:[]}).unavailable??=[]).push({profile,reason:failure?'failed':'no-reading',...(failure?{error:failure}:{})});continue;}
+  reread++;
   const retried=await project(alternate),complete=!!retried.proposal.coverage?.complete;
   // A question read without part of what the first reading saw ("who is eyes a cat?" read as "how
   // many cats") is a different question: it is not answered. A request keeps its applied part and
@@ -283,7 +291,9 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  const eligible=decision.admitted,reason=decision.reason;
  const interpretations=proposal?.interpretation?.profile==='declared-creation/1'?proposal.candidates:providerCandidates;
  // Comparison bounds per admission mode are declared (interpretation-policy.sop app.interpret.compare).
- const bounds=comparisonBounds(decision.mode);
+ // ... and how many admitted readings it compares (app.interpret.mode compare; 1 routes the first admitted one).
+ const declaredBounds=comparisonBounds(decision.mode),limit=modeLimits(session).compare;
+ const bounds=declaredBounds&&limit>1?{...declaredBounds,max:Math.min(declaredBounds.max,limit)}:null;
  if(eligible && bounds && !contextProjection && !removalComparison && interpretations.length>=bounds.min && interpretations.length<=bounds.max){
   const admitted=interpretations.filter(option=>assessReaderProposal({proposal:{...proposal,candidates:[option]},text,provenance,area:context.area}).admitted);
   if(admitted.length>1){
@@ -384,7 +394,22 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
 
 /** One routed turn, recorded for later turns that build on the conversation (what the reader read, never the text). */
 export async function routeNewEngine(session,text,options={}){
- const result=await routeNewEngineTurn(session,text,options);
+ // The answer mode is the interaction.mode preference (interaction-mode.mjs). The chat toggle states it (options.interactionMode,
+ // sent when it changes); a message that says a declared phrase ("think harder", "be quick") states it too, and the rest of
+ // the message, if any, is read as usual.
+ if(options.interactionMode)try{statePreference(session,MODE_KEY,options.interactionMode,{about:'the chat toggle'});}catch{/* an undeclared value leaves the mode as it is */}
+ const said=typeof text==='string'&&!isAuthoredRequest(text)?readPreferenceStatement(text):null;
+ if(said)statePreference(session,said.key,said.value,{about:said.phrase});
+ const limits=modeLimits(session);
+ setPlacementMode(limits.placement==='optimise'?'thinking':'fast');
+ if(said&&!said.rest){
+  observe(session,{nodeIds:['component:reader'],phase:'end',operation:'app.preference.state',label:'State a preference',text,key:said.key,value:said.value});
+  return {text:said.reply,parts:[{text:said.reply,translate:false}],statuses:['supported'],answers:[],segments:[],state:{},effects:[],
+   trace:{engine:'new',preference:{key:said.key,value:said.value,phrase:said.phrase},interactionMode:interactionMode(session)}};
+ }
+ const routed=await routeNewEngineTurn(session,said?said.rest:text,options);
+ const result=said?{...routed,text:said.reply+' '+routed.text,parts:[{text:said.reply+' '+routed.text,translate:false}],trace:{...routed.trace,preference:{key:said.key,value:said.value,phrase:said.phrase}}}:routed;
+ result.trace={...result.trace,interactionMode:interactionMode(session),modeLimits:limits};
  const requests=result?.trace?.readerRouting?.rawReading;
  if(Array.isArray(requests)&&requests.length&&!result.trace?.compose)
   session.composeTurns=[...(session.composeTurns??[]).slice(-15),{area:options.view??session.isession?.state?.['ui.shell']?.activeTab??null,requests:structuredClone(requests)}];
@@ -443,7 +468,7 @@ async function routeNewEngineTurn(session,text,options={}){
  collect(first?.trace?.readerRouting?.rawReading);collect(first?.trace?.readerRouting?.contextRetry);
  let kinds=[];try{kinds=session.engine?.requestReader?.bindings?.()?.kinds??[];}catch{/* no bindings: the declared order alone */}
  const binds=area=>kinds.some(row=>row.area===area&&said.has(String(row.lemma).toLowerCase()));
- const active=shell.activeTab,views=liveViews(session,NATIVE_AREAS).filter(([view,area])=>view!==active&&view!==mention?.view&&binds(area.area)).map(([view])=>view);
+ const active=shell.activeTab,views=liveViews(session,NATIVE_AREAS).filter(([view,area])=>view!==active&&view!==mention?.view&&binds(area.area)).map(([view])=>view).slice(0,modeLimits(session).areas);
  const attempts=[];
  for(const view of views){
   const {reply,used}=await attemptInView(session,text,options,view,shell);

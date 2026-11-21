@@ -8,10 +8,10 @@
 //    plural's own binding stays as an alternative in the trace;
 //  - a kind the declared number-agreement rules read by its singular (raw-reading-policy.sop app.reading.bySingular:
 //    "draw a women") binds what its singular binds, like a counted kind.
-import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
+import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
 import {en} from '../lang/en.mjs?v=d028d63371';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=ad9d1579e4';
-import {readsBySingular} from './raw-reading-policy.mjs?v=d6bbacf35f';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=4afe6eb1e8';
+import {readsBySingular} from './raw-reading-policy.mjs?v=b64dcdbdcf';
 
 const attr=(wire,key)=>{const raw=wire?.attrs[key]?.[0];return raw===undefined?undefined:raw.startsWith('"')?str(raw):raw;};
 const words=text=>[...String(text).matchAll(/[\p{L}\p{N}]+/gu)].map(m=>m[0].toLowerCase());

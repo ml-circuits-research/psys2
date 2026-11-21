@@ -35,11 +35,17 @@ export function createNativeToolHost({state,instanceId,scope,operations,toolInte
  for(const op of declared){checkOperation(op);if(!text(op.id)||byId.has(op.id)||!handlers[op.id]||typeof handlers[op.id]!=='function')throw new TypeError('invalid-tool-declaration');byId.set(op.id,op);}
  if(!identityRegistry.has(scope))identityRegistry.set(scope,{sequence:0,live:new Map()});
  const identity=identityRegistry.get(scope),{live}=identity;
- let fingerprint,revision=0;const receipts=new Map();
+ let fingerprint,revision=0,viewed=null;const receipts=new Map();
  const snapshot=()=>{
   const data=copy(state),mark=JSON.stringify(data);if(mark.length>maxBytes)throw new RangeError('host-data-budget');
-  const records=copy(view(data));if(!Array.isArray(records)||records.length>maxObjects)throw new TypeError('host-population-budget');
-  const ids=new Set();for(const row of records){if(!text(row.id)||!text(row.kind)||!text(row.sourceType)||ids.has(row.id)||(row.inputs!==undefined&&!Array.isArray(row.inputs)))throw new TypeError('invalid-host-identity');ids.add(row.id);}
+  // The same state observed again (the observation before a call is the one after the previous call) is not projected again.
+  let records,ids;
+  if(viewed&&viewed.mark===mark)({records,ids}=viewed);
+  else{
+   records=copy(view(data));if(!Array.isArray(records)||records.length>maxObjects)throw new TypeError('host-population-budget');
+   ids=new Set();for(const row of records){if(!text(row.id)||!text(row.kind)||!text(row.sourceType)||ids.has(row.id)||(row.inputs!==undefined&&!Array.isArray(row.inputs)))throw new TypeError('invalid-host-identity');ids.add(row.id);}
+   viewed={mark,records,ids};
+  }
   if(fingerprint!==undefined&&fingerprint!==mark)revision++;fingerprint=mark;
   for(const id of live.keys())if(!ids.has(id))live.delete(id);
   const version=String(revision),objects=records.map(row=>{if(!live.has(row.id))live.set(row.id,++identity.sequence);const source=JSON.stringify([instanceId,scope,row.id,live.get(row.id)]);return {...row,source,version,inputs:(row.inputs||[]).map(input=>({...input,source,sourceType:row.sourceType,version}))};});

@@ -3,9 +3,9 @@
 // context re-readings, the bounds of reading comparison, which readings go to the coordination reader first, and the
 // confidence at which a detected input language replaces the selected one. The routing code reads these facts; it
 // holds no order, bound or threshold of its own.
-import {World,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=b4de129364';
-import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=1cd84ae532';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
+import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=6b76e19282';
+import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=8b329bdf50';
 
 const MODULE='app.interpret';
 let loaded=null,policy=null;
@@ -53,7 +53,11 @@ export function interpretationPolicy(source=POLICY){
   values:Object.fromEntries(world.ofType(MODULE+'.relationValue').filter(v=>v.attrs.of?.[0]==='$'+row.id).map(v=>[one(v,'value'),one(v,'relation')]))}));
  const control={verbs:Object.fromEntries(world.ofType(MODULE+'.controlVerb').map(row=>[one(row,'act'),one(row,'text')])),modifiers:Object.fromEntries(world.ofType(MODULE+'.controlModifier').map(row=>[one(row,'parameter'),one(row,'text')]))};
  if(!control.verbs.other)throw Error('invalid-interpretation-policy: a control verb for act other');
- const result=Object.freeze({retries,notes,compare,coordination,areaRetry,control,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations,familyOperations,parameterActs,spelling,numberJoiners}});
+ // What each answer mode allows a turn to try (app.interpret.mode; the mode itself is the interaction.mode preference).
+ const modes=Object.fromEntries(world.ofType(MODULE+'.mode').map(row=>[one(row,'mode'),Object.freeze({id:row.id,mode:one(row,'mode'),retries:Number(one(row,'retries')),compare:Number(one(row,'compare')),
+  fallbacks:Number(one(row,'fallbacks')),areas:Number(one(row,'areas')),placement:one(row,'placement'),label:one(row,'label')})]));
+ if(!modes.fast||!modes.thinking)throw Error('invalid-interpretation-policy: the fast and thinking modes must be declared');
+ const result=Object.freeze({retries,notes,compare,modes,coordination,areaRetry,control,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations,familyOperations,parameterActs,spelling,numberJoiners}});
  if(source===POLICY)policy=result;
  return result;
 }
