@@ -1,17 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// Counts a reading leaves implicit in a request that makes things. Nothing here names a word:
-//  - a vague amount ("some clouds", "a few birds", "a couple of trees") is a k.expect.amount of the execution
-//    knowledge (its name, said before the kind's plural noun); the request makes its typical number, and the reply
-//    says how it read it;
-//  - a counted kind is read by its singular (w.lang.en morphology, bundled from the catalog): "three houses" binds
-//    the kind the reader binds for "house", not a thing whose own name is the plural (the emoji "houses"); the
-//    plural's own binding stays as an alternative in the trace;
-//  - a kind the declared number-agreement rules read by its singular (raw-reading-policy.sop app.reading.bySingular:
-//    "draw a women") binds what its singular binds, like a counted kind.
+// Counts a reading leaves implicit in a request that makes things. The rules of raw-reading-policy.sop decide
+// (implicit counts): a vague amount (k.expect.amount of the execution knowledge, said before the kind's plural noun or
+// given by the reader as the count's value) makes its typical number; a counted kind, an amount, or a kind the
+// number-agreement rules read by its singular binds what its singular binds. This module tells the reading's words and
+// the bridged count to the rules and applies their conclusions to each candidate; it names no word.
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs';
-import {en} from '../lang/en.mjs';
 import {NATIVE_AREAS} from './app-reader-context.mjs';
-import {readsBySingular} from './raw-reading-policy.mjs';
+import {declaredQuantities} from './raw-reading-policy.mjs';
 
 const attr=(wire,key)=>{const raw=wire?.attrs[key]?.[0];return raw===undefined?undefined:raw.startsWith('"')?str(raw):raw;};
 const words=text=>[...String(text).matchAll(/[\p{L}\p{N}]+/gu)].map(m=>m[0].toLowerCase());
@@ -35,36 +30,29 @@ export function projectQuantities(read,{amounts=[],bindings,view}={}){
  const range=path=>raw.ranges?.find(r=>r.path?.join('.')===path)?.range;
  const kindRange=range('requests.0.target.kind_span'),trigger=range('requests.0.trigger'),span=range('requests.0.span');
  if(request.act!=='make'||request.target?.mode!=='new'||!kindRange)return read;
- const noun=Array.from(text).slice(...kindRange).join(''),head=words(noun).at(-1);
- if(!head)return read;
- const singular=en.singular(head,'lemma'),plural=singular!==head;
+ const noun=Array.from(text).slice(...kindRange).join('');
  // The words of the noun phrase before its kind: after the act's trigger, within the request.
  const from=trigger&&trigger[1]<=kindRange[0]?trigger[1]:span?.[0]??0,before=words(Array.from(text).slice(from,kindRange[0]).join(''));
- const amount=plural?amounts.find(a=>before.includes(a.name)):undefined;
  const area=bindings?.readerAreaByView?.[view]??NATIVE_AREAS[view]?.area;
- // A kind the declared reading rules read by its singular (no vague amount was said).
- const single=plural&&!amount&&readsBySingular(raw,0);
- const singularKind=plural&&area?bindings?.kinds?.find(row=>row.area===area&&row.lemma===singular)?.canonical:undefined;
+ const kinds=area?(bindings?.kinds??[]).filter(row=>row.area===area):[];
  let changed=false;
  const projected=candidates.map(candidate=>{
   const nodes=parse(candidate.wires),root=nodes.find(w=>w.type==='std.request'&&w.id===candidate.request);
   const target=nodes.find(w=>w.type==='std.request.target'&&w.attrs.request?.[0]==='$'+root?.id&&attr(w,'mode')==='new');
   if(!target)return candidate;
   const countRow=nodes.find(w=>w.type==='std.request.constraint'&&attr(w,'concept')==='count'&&w.attrs.target?.[0]==='$'+target.id);
-  // A count the reader gave as a vague amount's name ("several", "a few") is that amount's typical number.
-  const named=countRow&&!/^\d+$/.test(String(attr(countRow,'value')??''))?amounts.find(a=>words(attr(countRow,'value')??'').join(' ')===a.name||words(attr(countRow,'value')??'').includes(a.name)):undefined;
-  const counted=!!countRow;
-  if(!counted&&!amount&&!single)return candidate;
+  const concluded=declaredQuantities(raw,{words:before,amounts,kinds,count:countRow?words(attr(countRow,'value')??''):null});
   const quantities={};
-  if(named){quantities.amount={said:named.name,count:named.typical,knowledge:named.id};countRow.attrs.value=[String(named.typical)];}
-  if(singularKind&&singularKind!==attr(target,'kind')){
-   quantities.kind={said:noun,as:singularKind,instead:attr(target,'kind')};
-   target.attrs.kind=[singularKind];
+  if(concluded.amount){
+   const {name,count,amount,how}=concluded.amount;
+   quantities.amount={said:name,count,knowledge:amount};
+   if(how==='said')countRow.attrs.value=[String(count)];
+   else nodes.push({id:'quantity.count',type:'std.request.constraint',attrs:{character:['requirement'],concept:['count'],operator:['eq'],polarity:['positive'],
+    request:['$'+root.id],target:['$'+target.id],value:[String(count)]},pattern:false});
   }
-  if(!counted&&amount){
-   quantities.amount={said:amount.name,count:amount.typical,knowledge:amount.id};
-   nodes.push({id:'quantity.count',type:'std.request.constraint',attrs:{character:['requirement'],concept:['count'],operator:['eq'],polarity:['positive'],
-    request:['$'+root.id],target:['$'+target.id],value:[String(amount.typical)]},pattern:false});
+  if(concluded.kind&&concluded.kind!==attr(target,'kind')){
+   quantities.kind={said:noun,as:concluded.kind,instead:attr(target,'kind')};
+   target.attrs.kind=[concluded.kind];
   }
   if(!Object.keys(quantities).length)return candidate;
   changed=true;

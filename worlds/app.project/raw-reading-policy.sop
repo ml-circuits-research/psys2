@@ -257,3 +257,37 @@
 @identity.ids app.reading.identityConcept concept="ids"
 @codeHead.kind app.reading.codeHead key="request.target.kind"
 
+# ---- Implicit counts of a make request (quantity-projection.mjs applies these) --------------------------------------
+# A vague amount ("some clouds", "a few birds", "a couple of trees") is a k.expect.amount of the execution knowledge,
+# said before the kind's plural noun or given by the reader as the count's value: the request makes its typical number
+# and the reply says how it read it. A counted kind ("three houses"), a vague amount, or a kind the number-agreement
+# rules read by its singular ("draw a women") binds what its singular binds, not a thing whose own name is the plural.
+@q.req app.reading.request request=?r act="make"
+@q.t app.reading.target request=?r mode="new" kindSpan=?s
+@q.f app.reading.form text=?s singular=?g
+@q.pl core.check fn=neq args=?s args=?g
+@q.plural app.reading.pluralKind request=?r singular=?g
+@rule.quantity.plural core.rule when=$q.req when=$q.t when=$q.f if=$q.pl then=$q.plural
+@q.cs app.reading.countSaid request=?r
+@q.counted app.reading.counted request=?r
+@rule.quantity.counted core.rule when=$q.cs then=$q.counted
+@q.csw app.reading.countSaid request=?r word=?w
+@q.am app.reading.amount name=?w typical=?n amount=?id
+@q.said app.reading.amountCount request=?r name=?w count=?n amount=?id how=said
+@rule.quantity.amount.said core.rule when=$q.req when=$q.t when=$q.csw when=$q.am then=$q.said
+@q.pk app.reading.pluralKind request=?r
+@q.qw app.reading.quantityWord request=?r word=?w
+@q.implicit app.reading.amountCount request=?r name=?w count=?n amount=?id how=implicit
+@rule.quantity.amount.implicit core.rule when=$q.pk when=$q.qw when=$q.am not=$q.counted then=$q.implicit
+@q.pks app.reading.pluralKind request=?r singular=?g
+@q.kl app.reading.kindLemma lemma=?g canonical=?c
+@q.as app.reading.kindAs request=?r canonical=?c
+@rule.quantity.kind core.rule when=$q.pks when=$q.kl then=$q.as
+@q.kas app.reading.kindAs request=?r canonical=?c
+@q.rt app.reading.retargetKind request=?r canonical=?c
+@q.ac app.reading.amountCount request=?r
+@q.bs app.reading.bySingular request=?r
+@rule.quantity.kind.counted core.rule when=$q.kas when=$q.counted then=$q.rt
+@rule.quantity.kind.amount core.rule when=$q.kas when=$q.ac then=$q.rt
+@rule.quantity.kind.singular core.rule when=$q.kas when=$q.bs then=$q.rt
+

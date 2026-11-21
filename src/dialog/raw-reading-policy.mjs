@@ -221,3 +221,23 @@ export function codeReferencePolicy(){
  return codeReference={identityKey:key=>typeof key==='string'&&concepts.has(key.split('.').at(-1)),replacedHead:key=>heads.has(key)};
 }
 
+/**
+ * The implicit counts the rules conclude for request `index` of a raw reading (raw-reading-policy.sop, implicit counts):
+ * `words` the words of its noun phrase before the kind; `amounts` the named amounts of the execution knowledge;
+ * `kinds` the area's kind rows; `count` the words of the count the reading gives the new target (null: none).
+ * Answers { amount: { name, count, amount, how } | null, kind: canonical | null }.
+ */
+export function declaredQuantities(raw,{index=0,words=[],amounts=[],kinds=[],count=null}={}){
+ const request=raw?.requests?.[index];
+ if(!request)return {amount:null,kind:null};
+ const facts=requestFacts(0,request),form=facts.find(f=>f.type==='app.reading.form'),singular=form?str(form.attrs.singular[0]):undefined;
+ words.forEach((word,i)=>facts.push(record(`qw${i}`,'quantityWord',{request:0,word})));
+ amounts.forEach((a,i)=>facts.push(record(`am${i}`,'amount',{name:a.name,typical:a.typical,amount:a.id})));
+ if(singular)kinds.filter(k=>k.lemma===singular&&text(k.canonical)).forEach((k,i)=>facts.push(record(`kl${i}`,'kindLemma',{lemma:k.lemma,canonical:k.canonical})));
+ if(count){facts.push(record('cs','countSaid',{request:0}));count.forEach((word,i)=>facts.push(record(`cs${i}`,'countSaid',{request:0,word})));}
+ const world=policyWorld().fork();
+ if(!world.tell(serialize(facts),{factsOnly:true}).ok)return {amount:null,kind:null};
+ const a=world.ofType('app.reading.amountCount')[0],k=world.ofType('app.reading.retargetKind')[0];
+ return {amount:a?{name:one(a,'name'),count:num(a,'count'),amount:one(a,'amount'),how:one(a,'how')}:null,kind:k?one(k,'canonical'):null};
+}
+
