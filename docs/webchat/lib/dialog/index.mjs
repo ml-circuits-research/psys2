@@ -1,4 +1,4 @@
-import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=0d3803bc7e';
+import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=c7ef333267';
 import {isAuthoredRequest} from './authored-request-tool.mjs?v=0c4b78f098';
 import { interpretationPolicy } from './interpretation-policy.mjs?v=79c1776d10';
 // SPDX-License-Identifier: AGPL-3.0-only
@@ -13,13 +13,13 @@ import { interpretationPolicy } from './interpretation-policy.mjs?v=79c1776d10';
  * Without it all input is treated as English.
  */
 
-import { loadWorlds } from '../worlds/index.mjs?v=011ae21af5';
+import { loadWorlds } from '../worlds/index.mjs?v=2cec589003';
 import { validateWorldSet } from '../worlds/validate.mjs?v=af0869a8e0';
 
 
-import { perf } from './stage-perf.mjs?v=8b73796daa';
-import { guard, TurnAborted } from './turn-guard.mjs?v=34ed257fec';
-import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
+import { perf } from './stage-perf.mjs?v=db6bf9fc0b';
+import { guard, TurnAborted } from './turn-guard.mjs?v=6917b413c9';
+import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=d42dc656e7';
 
 import { attachValues } from '../knowledge/values.mjs?v=b0000e82a7';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=b47ac596cd';
@@ -244,7 +244,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=a59e707120')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=ba45aa9356')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

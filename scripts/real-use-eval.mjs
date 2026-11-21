@@ -19,6 +19,10 @@
 //   node scripts/real-use-eval.mjs --report <run dir>      # only rebuild REPORT.md from <run dir>/judgments.jsonl
 //   options: --rate 0.01 --seed real-use-v1 (sample A) --seed-b S (only to reproduce an old B) --workers 16 --out DIR (default ../management/real-use/<date>-<bundle>)
 //            --limit N (smoke) --runtime-root <node_modules with onnxruntime-node>
+//            --tabs drawing,diagram (only these tabs) --no-b (only the fixed suite A) --mode fast|thinking (answer mode, default fast)
+//   node scripts/real-use-eval.mjs --browser [URL] ...     # Stage-A pass in the browser: the same rows typed into the application page
+//            (headless Chromium, scripts/real-use/browser-runner.mjs; URL default = local docs/webchat; --profile DIR keeps a warm profile;
+//            --cpu-profile adds the engine worker's CPU profile of each turn: top self-time functions)
 import {fork} from 'node:child_process';
 import {mkdirSync,writeFileSync,readFileSync,existsSync,createWriteStream} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -28,6 +32,8 @@ import {loadTrain,randomSample,realUseClass,tierOf} from './real-use/sample.mjs'
 import {writeReport} from './real-use/report.mjs';
 
 const args=process.argv.slice(2),opt=(n,d)=>{const i=args.indexOf('--'+n);return i<0?d:args[i+1];};
+// --mode fast|thinking: the chat's answer mode for every row (browser: the toggle; Node: the same placement mode). Default fast, as the page.
+if(opt('mode',null))process.env.REAL_USE_MODE=opt('mode');
 if(opt('report',null)){writeReport(path.resolve(opt('report')));process.exit(0);}
 const dep=JSON.parse(readFileSync(path.join(PSYS2,'docs/webchat/models/sop-bert/deployment.json'),'utf8'));
 const bundle=dep.manifestSha256.slice(0,8),date=new Date().toISOString().slice(0,10);
@@ -45,6 +51,8 @@ const fixedFrom=opt('fixed-from',opt('inherit',null));let missingA=[];
 if(fixedFrom&&existsSync(path.join(path.resolve(fixedFrom),'sample.jsonl'))){const byIdAll=new Map(all.map(r=>[r.id,r]));
  const ids=readFileSync(path.join(path.resolve(fixedFrom),'sample.jsonl'),'utf8').split('\n').filter(Boolean).map(l=>JSON.parse(l)).filter(r=>(r.setsAll??r.sets??[]).includes('A')).map(r=>r.id);
  missingA=ids.filter(id=>!byIdAll.has(id));setA=ids.filter(id=>byIdAll.has(id)).map(id=>byIdAll.get(id));}
+if(opt('tabs',null)){const tabs=new Set(opt('tabs').split(','));setA=setA.filter(r=>tabs.has(r.world));setB=setB.filter(r=>tabs.has(r.world));}
+if(args.includes('--no-b'))setB=[];
 if(opt('limit',null)){setA=setA.slice(0,Number(opt('limit')));setB=setB.slice(0,Number(opt('limit')));}
 const sets=new Map();for(const r of setA)sets.set(r.id,['A']);for(const r of setB)sets.set(r.id,[...(sets.get(r.id)??[]),'B']);
 const byId=new Map([...setA,...setB].map(r=>[r.id,r]));let rows=[...byId.values()];
@@ -58,6 +66,26 @@ const t0=Date.now(),results=new Map();
 if(args.includes('--reuse-results')&&existsSync(path.join(out,'results.jsonl')))for(const l of readFileSync(path.join(out,'results.jsonl'),'utf8').split('\n').filter(Boolean)){const r=JSON.parse(l);if(byId.has(r.id))results.set(r.id,r);}
 const resFile=createWriteStream(path.join(out,'results.jsonl'));for(const r of results.values())resFile.write(JSON.stringify(r)+'\n');
 const queue=[...rows].filter(r=>!results.has(r.id)).sort((a,b)=>a.id<b.id?-1:1);let next=0,done=0;
+const browserAt=args.indexOf('--browser');
+if(browserAt>=0&&queue.length){
+ // Browser pass: one page, rows typed in order (sequential: the page runs one turn at a time, like a user).
+ const url=args[browserAt+1]&&!args[browserAt+1].startsWith('--')?args[browserAt+1]:null;
+ const {createBrowserRealUseRunner}=await import('./real-use/browser-runner.mjs');
+ const {stageA,initStageA}=await import('./real-use/stage-a.mjs');
+ const runner=await createBrowserRealUseRunner({url,cpuProfile:args.includes('--cpu-profile'),profileDir:opt('profile',null)?path.resolve(opt('profile')):null,scratch:path.join(out,'browser-tmp')});
+ initStageA(runner.bindings);
+ writeFileSync(path.join(out,'browser-session.json'),JSON.stringify({url:runner.url,version:runner.version,startupMs:runner.startupMs,readerReadyMs:runner.readerReadyMs},null,1));
+ const safe=id=>id.replace(/[^A-Za-z0-9._-]+/g,'_');
+ try{for(const row of queue){let r;
+  try{r=await runner.run(row);}catch(e){r={error:'harness:'+String(e?.message??e).slice(0,300)};}
+  const {svgBefore,svgAfter,__stageA,...rest}=r;
+  if(__stageA){try{rest.stageA=stageA(row,__stageA,r.setupFailures);}catch(e){rest.stageA={error:String(e?.message??e).slice(0,200)};}}
+  if(svgAfter){const f=safe(row.id);writeFileSync(path.join(out,'svg',f+'.before.svg'),svgBefore??'');writeFileSync(path.join(out,'svg',f+'.after.svg'),svgAfter);rest.svg=f;}
+  const rec={id:row.id,...rest};results.set(row.id,rec);resFile.write(JSON.stringify(rec)+'\n');
+  if(++done%20===0)process.stderr.write(`  ${done}/${queue.length} rows (browser), ${((Date.now()-t0)/1000).toFixed(0)} s\n`);}}
+ finally{writeFileSync(path.join(out,'browser-console.json'),JSON.stringify(runner.logs.console.slice(-500)));await runner.close();}
+ queue.length=0;
+}
 if(queue.length)await new Promise((resolve,reject)=>{let alive=0;
  const feed=c=>{if(next>=queue.length){c.send({type:'stop'});return;}c.send({type:'rows',rows:queue.slice(next,next+3)});next+=3;};
  for(let i=0;i<Math.min(workers,Math.ceil(queue.length/3));i++){
@@ -124,6 +152,6 @@ const per=90;for(let i=0;i*per<cards.length;i++){
  writeFileSync(path.join(out,'cards',name+'.md'),part.map(c=>c.replace(/PNG: (png\/\S+)/,(m,p)=>idx.has(p)?`${m}  (sheet: ${idx.get(p)})`:m)).join('\n\n')+'\n');
 }
 const judged=[...decidedA,...judgedB];
-writeFileSync(path.join(out,'meta.json'),JSON.stringify({test:'official real-use test',date,bundle,manifestSha256:dep.manifestSha256,rate,seed,seedB,sizeA:setA.length,fixedFrom,missingA:missingA.length,sizeB:setB.length,trainingRows:all.length,sampled:rows.length,ran:results.size,pngs,stageADecided:decidedA.length,inheritedJudgments:judgedB.length,judgeB,toJudge:cards.length,seconds:(Date.now()-t0)/1000},null,1));
+writeFileSync(path.join(out,'meta.json'),JSON.stringify({test:'official real-use test',date,runner:browserAt>=0?'browser':'node',bundle,manifestSha256:dep.manifestSha256,rate,seed,seedB,sizeA:setA.length,fixedFrom,missingA:missingA.length,sizeB:setB.length,trainingRows:all.length,sampled:rows.length,ran:results.size,pngs,stageADecided:decidedA.length,inheritedJudgments:judgedB.length,judgeB,toJudge:cards.length,seconds:(Date.now()-t0)/1000},null,1));
 process.stderr.write(`real-use: Stage A decided ${decidedA.length}, ${judgedB.length} Stage B judgments inherited, ${cards.length} rows to judge in ${out}/cards (rubric: scripts/real-use/JUDGING.md), append judgments to judgments-b.jsonl, then: node scripts/real-use-eval.mjs --report ${out}\n`);
 writeReport(out);

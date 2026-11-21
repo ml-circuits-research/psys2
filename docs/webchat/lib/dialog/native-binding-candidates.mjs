@@ -2,7 +2,7 @@ import { World, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=
 import { executionPolicyWorld } from './execution-policy.mjs?v=88bdf143f7';
 import CONSTRUCTORS from '../../worlds/app.project/constructor-policy-source.mjs?v=91bc3b4d74';
 import SCHEMA from '../../worlds/app.project/constructor-schema-source.mjs?v=97be28057e';
-import { budget } from './budget.mjs?v=00bce6e369';
+import { budget } from './budget.mjs?v=d42dc656e7';
 
 // Preserve declared alternatives for reversible best-effort interpretation; the strict bridge can still abstain.
 // Declared kind bindings (execution-policy.sop app.execution.kindBinding) give a table kind without a native family

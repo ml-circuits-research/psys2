@@ -6,12 +6,12 @@
 // or made is named in the reply.
 import {parse,serialize,quote} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {writeReaderSource} from './reader-source.mjs?v=1baaf5ba91';
-import {coordinationParts} from './coordination-split.mjs?v=accd93f717';
+import {coordinationParts} from './coordination-split.mjs?v=506e3300a3';
 import {resolveRequestRoute} from './request-routing-policy.mjs?v=6c36727506';
-import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=beb95559d2';
-import {executionKnowledge} from './declared-execution.mjs?v=97a095bf31';
-import {recordHistory} from './history-journal.mjs?v=0d3803bc7e';
-import {quantityNote} from './quantity-projection.mjs?v=9e0a655367';
+import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=66ab01ae12';
+import {executionKnowledge} from './declared-execution.mjs?v=b2e68eba69';
+import {recordHistory} from './history-journal.mjs?v=c7ef333267';
+import {quantityNote} from './quantity-projection.mjs?v=cca5c40190';
 
 const reply=(text,supported,trace={})=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 const attr=(wire,key)=>wire?.attrs[key]?.[0];

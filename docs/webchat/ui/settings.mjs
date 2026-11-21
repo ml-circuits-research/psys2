@@ -5,7 +5,7 @@ import { TIME_LIMIT_DEFAULTS } from '../lib/dialog/time-limits.mjs';
 import { normalize as normalizeLanguage, browserLanguage, EN_VARIANTS } from './language.mjs';
 
 /** Bumped whenever a default changes in a way saved settings must follow once. */
-export const SETTINGS_VERSION = 6;
+export const SETTINGS_VERSION = 7;
 export const SETTINGS_KEY = 'psys2.webchat.settings';
 
 /**
@@ -26,6 +26,7 @@ export const DEFAULT_SETTINGS = {
   helperModel: true,              // Settings › Reading › use the helper model for typos and long sentences; formalizer ('encoder' | 'rules') follows it, nxStrategy is always 'rules'
   ...RUNTIME_DEFAULTS,            // formalizer, encoderAcceptRefused, partialUnderstanding, normalizer, spellcheck: one definition shared with the evaluators (src/dialog/runtime-config.mjs)
   timeLimits: { ...TIME_LIMIT_DEFAULTS },   // ms; clamped on use (src/dialog/time-limits.mjs)
+  interactionMode: 'fast',        // chat toggle next to the input (owner 2026-11-21): 'fast' (default) = first acceptable placement (Z3 satisfiable model, no optimisation) | 'thinking' = Z3 optimises the placement
   lazyWorlds: true,               // Settings › Developer › Experiments (specs/06 "Lazy loading"): load the worlds a message needs (default) | false: every world at start (`?psys2lazy=0` does the same); read when the engine starts
   worldAware: 'veto',             // Settings › Developer › World-aware reading (spec 16): 'veto' (default, user decision 2026-11-12) | 'choose' | 'observe' | 'off'
   fastPath: true,                 // webchat: the rules answer at once when they read the whole message (PERF); the model is for the rest
@@ -65,6 +66,13 @@ export function migrateSettings(saved, navLang = globalThis.navigator?.language)
   if (from < 6) {   // defaults by the numbers: the old `reading` choice (hybrid | model | rules) is gone, the normalizer is an optional download (a saved `true` was the old default), the edit head is removed
     s.helperModel = true; s.normalizer = false; s.editHead = false; delete s.reading; migrated = true;
   }
+  if (from < 7) {   // owner 2026-11-21: the automatic turn limit is 60 s (was 8 s) and a stopped turn never restarts the engine; a saved old default follows, an explicit other value stays
+    const t = { ...(s.timeLimits ?? {}) };
+    if (t.watchdogMs === 8000 || t.watchdogMs === undefined) t.watchdogMs = TIME_LIMIT_DEFAULTS.watchdogMs;
+    if (t.runawayMs === 20000) t.runawayMs = TIME_LIMIT_DEFAULTS.runawayMs;
+    s.timeLimits = t; migrated = true;
+  }
+  if (s.interactionMode !== 'fast' && s.interactionMode !== 'thinking') s.interactionMode = DEFAULT_SETTINGS.interactionMode;
   if (s.routing === 'dispatcher') s.routing = 'symbolic+encoder';   // router A is removed
   applyReading(s);
   return { settings: s, migrated };

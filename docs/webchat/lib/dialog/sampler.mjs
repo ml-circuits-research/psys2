@@ -6,7 +6,7 @@
 import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=b0000e82a7';
 import { languageWorld } from './compose-world.mjs?v=296884fceb';
 import { englishOf } from '../lang/en-generate.mjs?v=19f58d0740';
-import { en } from '../lang/en.mjs?v=911f0ab5a1';   // the prepositions of w.lang.en: an attribute named like one cannot be said in "Set X <attr> to V"
+import { en } from '../lang/en.mjs?v=d028d63371';   // the prepositions of w.lang.en: an attribute named like one cannot be said in "Set X <attr> to V"
 import { prefetchSensitive, sensitiveMap, dropSensitive } from '../knowledge/sensitive.mjs?v=45d6df6ec8';
 
 const NOT_SAMPLED = new Set(['place', 'connect', 'group', 'send', 'save', 'load', 'redo']);   // acts the library cannot frame (a place, a second thing, a host act): left to typing

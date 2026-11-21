@@ -1,9 +1,9 @@
 // Exact declared-value proofs; no language rules or domain vocabulary.
 import {numberValue} from '../knowledge/values.mjs?v=b0000e82a7';
-import {cardinalValue} from '../knowledge/number-run.mjs?v=2ab4498fd2';
+import {cardinalValue} from '../knowledge/number-run.mjs?v=efcde74940';
 import {readNumberSpan} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=79c1776d10';
-import {budget} from './budget.mjs?v=00bce6e369';
+import {budget} from './budget.mjs?v=d42dc656e7';
 import {selectedProbability} from './model-selection-score.mjs?v=ac3ac10191';
 export function classifierAlternative(bank,logits){
  if(!Array.isArray(bank)||!Array.isArray(logits)||logits.length!==bank.length||!logits.length||logits.some(v=>typeof v!=='number'||!Number.isFinite(v)))return {index:null,state:'invalid',probability:null};

@@ -4,8 +4,8 @@ import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=89f8029c8e';
 import {inspectReaderContextPolicy} from './reader-context-policy.mjs?v=0952ecbc4c';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=c606798b5f';
 import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=31f1442f0b';
-import {describePlacementSearch} from './placement-search-inspection.mjs?v=8b45aa3bc4';
-import {RUNTIME_COMPONENTS,componentAudit,auditRuntimeComponents} from './runtime-component-registry.mjs?v=a77faebdc2';
+import {describePlacementSearch} from './placement-search-inspection.mjs?v=8a75deedd8';
+import {RUNTIME_COMPONENTS,componentAudit,auditRuntimeComponents} from './runtime-component-registry.mjs?v=0e4c1b9edd';
 
 export function inspectSchemaSource(source){
  if(typeof source!=='string')return {status:'source not loaded',legends:[],modules:[],types:[],slots:[],tools:[],parameters:[],language:[],documentation:[],languageStatus:'Source has not been read; no language binding is asserted.'};

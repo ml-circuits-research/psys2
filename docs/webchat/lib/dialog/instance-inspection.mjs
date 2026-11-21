@@ -1,6 +1,6 @@
 // Read-only presentation of the exact instance archive and its owned object facts.
 import{parse,serialize,str,readInstanceState}from'../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import{createBudget}from'./budget.mjs?v=00bce6e369';
+import{createBudget}from'./budget.mjs?v=d42dc656e7';
 // observedSupport: per observed object id, the instance facts its observation was derived from (the derivation's own
 // record). It binds an object that no fact names by identity; it is never inferred from matching values.
 export function inspectInstanceRecord(record,{observation=null,semanticWires=null,identityKey='id',interfaceTypeKey=null,observationOnlyTypes=[],observedSupport=null}={}){

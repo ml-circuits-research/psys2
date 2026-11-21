@@ -3,17 +3,17 @@ import {World,parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v
 import SOURCE from './new-engine-source.mjs?v=3e016ff1f5';
 import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=28f5161ed2';
 import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=e14e6f1002';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=cfc87f8ce5';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=ad9d1579e4';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=0f46640ed0';
+import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=1d1edb19b2';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=59baa93d85';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=76d588c853';
-import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=ebe12db63b';
-import {en} from '../lang/en.mjs?v=911f0ab5a1';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=4ec2d94fba';
+import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=b75b2ff894';
+import {en} from '../lang/en.mjs?v=d028d63371';
 import {placementHypotheses,placementDisclosure} from './placement-default-policy.mjs?v=3bb1efea3e';
-import {identityConcepts} from './capability-plan-adapter.mjs?v=cfcc812978';
-import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=beb95559d2';
-import {budget} from './budget.mjs?v=00bce6e369';
+import {identityConcepts} from './capability-plan-adapter.mjs?v=188646900d';
+import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=66ab01ae12';
+import {budget} from './budget.mjs?v=d42dc656e7';
 import {executionPolicyWorld} from './execution-policy.mjs?v=88bdf143f7';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;

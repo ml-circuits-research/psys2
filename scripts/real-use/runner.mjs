@@ -48,7 +48,20 @@ const KEEP=['kind','name','label','title','text','colour','color','fill','stroke
 const props=o=>{const m={};for(const i of o.inputs??[]){if(['selected','index','version'].includes(i.key))continue;m[i.key]=i.values.length===1?i.values[0]:i.values;}return m;};
 const brief=o=>{const p=props(o),out={id:o.id,kind:o.kind};for(const k of Object.keys(p))if(KEEP.includes(k)||Object.keys(out).length<14)out[k]=typeof p[k]==='string'?p[k].slice(0,80):Array.isArray(p[k])?p[k].slice(0,8):p[k];return out;};
 
-export async function createRealUseRunner({runtimeRoot=DEFAULT_RUNTIME_ROOT}={}){
+// Placement solver: the page places with Z3 (z3-solver 5.4.1, WebAssembly). Node uses the same package from npm, so a Node run
+// places like the browser; the internal search is only the logged emergency path (z3Status().counts).
+export const DEFAULT_Z3_MODULE=path.resolve(PSYS2,'../soplang-words-lib/experiments/node_modules/z3-solver/build/node.js');
+export async function useNodeZ3(modulePath=process.env.REAL_USE_Z3_MODULE??DEFAULT_Z3_MODULE){
+ const {usePlacementSolver}=await imp('src/dialog/placement-search-provider.mjs');
+ const {solveWithZ3}=await imp('src/vendor/sopworld/z3-translate.mjs');
+ const z3=await import(modulePath),{Context}=await z3.init(),z=new Context('sopworld');
+ usePlacementSolver({solve:model=>solveWithZ3(z,model),label:'z3-solver (node)'});
+ const {setPlacementMode}=await imp('src/dialog/placement-search-provider.mjs');setPlacementMode(process.env.REAL_USE_MODE??'fast');
+ return z3;
+}
+
+export async function createRealUseRunner({runtimeRoot=DEFAULT_RUNTIME_ROOT,z3=true}={}){
+ if(z3)await useNodeZ3();
  const knowledge=siteKnowledge();
  const bindings=JSON.parse(readFileSync(path.join(BUNDLE,'bindings.json'),'utf8'));
  const setup=createSetupCache({knowledge,bindings});

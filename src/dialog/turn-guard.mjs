@@ -26,6 +26,7 @@ export class TurnAborted extends Error {
 
 let cur = null;
 let waitListener = null;
+let abortProbe = null;   // host hook: reads an abort the host posted while this thread was busy (a shared memory cell), see setAbortProbe
 
 /** The most time a turn's loading waits may be taken out of its deadline in total (a hung network must still end the turn). */
 export const LOAD_WAIT_CAP_MS = 30000;
@@ -60,7 +61,9 @@ export const guard = {
     if (!c) return;
     if (stage) c.stage = stage;
     if (!c.tripped) {
+      const probed = abortProbe ? abortProbe() : null;
       if (c.signal?.aborted) c.tripped = c.signal.reason?.name === 'TimeoutError' ? 'timeout' : 'stopped';
+      else if (probed) c.tripped = probed;
       else if (c.clock() > c.hardAt) c.tripped = 'timeout';
       if (c.tripped) c.trippedStage = c.stage;
     }
@@ -89,13 +92,18 @@ export const guard = {
       }
     };
   },
+  /**
+   * The host's abort probe: a function returning 'stopped' | 'timeout' | null, read at every check. A worker busy in synchronous code does not receive
+   * the page's abort message until it yields; the probe reads an abort the page wrote into shared memory, so Stop ends the turn at the next check.
+   */
+  setAbortProbe(fn) { abortProbe = typeof fn === 'function' ? fn : null; },
   /** The host's listener for `untimed` (the engine worker forwards it to the page). */
   setWaitListener(fn) { waitListener = typeof fn === 'function' ? fn : null; },
   /** True when search loops must stop and keep their best result: the turn was stopped or hit the hard deadline. `softMs` of `install` is accepted but no longer used (a clock must not change a reading). */
   soft() {
     const c = cur;
     if (!c) return false;
-    return !!c.tripped || !!c.signal?.aborted;   // never the clock: what a search loop keeps must not depend on machine speed (step budgets bound the work)
+    return !!c.tripped || !!c.signal?.aborted || !!abortProbe?.();   // never the clock: what a search loop keeps must not depend on machine speed (step budgets bound the work)
   },
   /** Remaining milliseconds until the hard deadline (Infinity outside a turn). */
   remaining() { return cur ? cur.hardAt - cur.clock() : Infinity; },

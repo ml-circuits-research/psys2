@@ -1,18 +1,18 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs?v=03af9b7ec4';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=f2cd0b65ce';
-import { en } from '../lang/en.mjs?v=911f0ab5a1';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=cee1939ca4';
+import { en } from '../lang/en.mjs?v=d028d63371';
 import { quote, str } from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import { executionPolicyWorld } from './execution-policy.mjs?v=88bdf143f7';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=cfcc812978';
-import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=075ab1db6d';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=188646900d';
+import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=5f18653abe';
 import { readDegreeBases } from './degree-bases.mjs?v=947db12471';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=cfc87f8ce5';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=ad9d1579e4';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=bcf54aff71';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=9663347525';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=59baa93d85';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=1d571dbe35';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=76d588c853';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=8e88510aca';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=4ec2d94fba';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],

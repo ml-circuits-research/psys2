@@ -7,11 +7,11 @@ test('time limits: defaults, clamping and live apply', () => {
   assert.deepEqual({ ...LIMITS }, { ...TIME_LIMIT_DEFAULTS });
   assert.equal(TIME_LIMIT_DEFAULTS.graceMs, 1500);
   assert.equal(clampLimit('watchdogMs', 1), 2000);
-  assert.equal(clampLimit('watchdogMs', 1e9), 60000);
+  assert.equal(clampLimit('watchdogMs', 1e9), 300000);
   assert.equal(clampLimit('graceMs', 'abc'), 1500);
   assert.equal(clampLimit('graceMs', ''), 1500);
   applyTimeLimits({ timeLimits: { graceMs: 700, normalizerMs: 10 } });
-  assert.equal(LIMITS.graceMs, 700); assert.equal(LIMITS.normalizerMs, 500); assert.equal(LIMITS.watchdogMs, 8000);
+  assert.equal(LIMITS.graceMs, 700); assert.equal(LIMITS.normalizerMs, 500); assert.equal(LIMITS.watchdogMs, 60000);
   applyTimeLimits({});
   assert.equal(LIMITS.graceMs, 1500);
 });

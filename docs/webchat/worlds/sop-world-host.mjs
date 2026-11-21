@@ -7,7 +7,7 @@
 // The objects a reader observes come from app.observe.object facts the same rules derive.
 import {parse, quote, serialize, str} from '../lib/vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {createNativeToolHost, nativeToken} from './native-tool-host.mjs?v=c6ea65e776';
-import {budget} from '../lib/dialog/budget.mjs?v=00bce6e369';
+import {budget} from '../lib/dialog/budget.mjs?v=d42dc656e7';
 
 const CALLS = 512;
 const atom = /^[A-Za-z_][A-Za-z0-9_.-]*$/;

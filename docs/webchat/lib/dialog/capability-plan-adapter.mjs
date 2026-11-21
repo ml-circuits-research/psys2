@@ -6,10 +6,10 @@ import CLOCK from '../../worlds/app.project/clock-projection-source.mjs?v=7d09f1
 import { executionPolicyWorld } from './execution-policy.mjs?v=88bdf143f7';
 import { projectionModule } from './composition-knowledge.mjs?v=9938e65b47';
 import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=03af9b7ec4';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=0f46640ed0';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=1d1edb19b2';
 import { observedReaderContext } from './native-reader-context.mjs?v=e04f0e0830';
-import { budget } from './budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=911f0ab5a1';
+import { budget } from './budget.mjs?v=d42dc656e7';
+import { en } from '../lang/en.mjs?v=d028d63371';
 
 const NS = 'std.capability.';
 const take = (wire, key) => str(wire?.attrs[key]?.[0]);

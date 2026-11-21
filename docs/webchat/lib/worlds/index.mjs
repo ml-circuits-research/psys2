@@ -6,11 +6,11 @@
  *   readFile(id, name)      -> Promise<string | null>   file text, null when absent
  *   loadOps(id)             -> Promise<object | null>   module namespace of ops.mjs
  */
-import { parse, get, getAll } from '../soplang/index.mjs?v=c57881f705';
-import { Legends } from '../legends/index.mjs?v=45bd60c654';
-import { readDescriptionWires, slotDeclarations } from './describe.mjs?v=06c346ca73';
-import { lexIndex } from './lexicon.mjs?v=8857676c6e';
-import { budget } from '../dialog/budget.mjs?v=00bce6e369';
+import { parse, get, getAll } from '../soplang/index.mjs?v=df11e6238f';
+import { Legends } from '../legends/index.mjs?v=0ddabebe9a';
+import { readDescriptionWires, slotDeclarations } from './describe.mjs?v=27fa2e7b25';
+import { lexIndex } from './lexicon.mjs?v=e8e8391727';
+import { budget } from '../dialog/budget.mjs?v=d42dc656e7';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
 // Reasoner files (spec 15). `matrix.sop` and `mapping.sop` are data for src/reasoner. The `matrix.*.sop` extras are appended to the world's own

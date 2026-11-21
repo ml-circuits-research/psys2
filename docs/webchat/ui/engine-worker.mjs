@@ -138,11 +138,12 @@ async function init(m) {
   mark('init');
   Object.assign(ver, m.versions ?? {});
   testHooks = m.testHooks === true;
+  abortCell = m.abortCell instanceof Int32Array ? m.abortCell : null;
   settings = { ...(m.settings ?? {}) };
   const imp = (rel) => import(vurl(rel));
   // Every placement is a placement problem: Z3 (cross-origin isolated pages only) starts loading now, in parallel with the rest of the
   // start-up and never awaited by it; a placement that comes first shares the same load. z3Status() reports its state.
-  if (globalThis.crossOriginIsolated) imp('lib/dialog/placement-search-provider.mjs').then((x) => {
+  if (globalThis.crossOriginIsolated) imp('lib/dialog/placement-search-provider.mjs').then((x) => { placementSearch = x;
     const status = x.warmPlacementSearch({ by: 'startup' });
     worldActivity(['execution:placement-geometry'], 'stage', 'Load the placement solver', { operation: 'z3.preload', state: status.state, isolated: status.isolated });
   }).catch(() => {});
@@ -364,6 +365,29 @@ const allLoaded = () => worldLoader.ids().filter(allowed).every((id) => loadedId
 
 // ---------- requests ----------
 let initReceived = false;
+// The WebAssembly solver failed: the only runtime that starts workers in here is Z3 (its pthreads; the ORT workers belong to the
+// page). Emscripten rethrows a crashed pthread's ErrorEvent in this worker, and its own code then fails with a WebAssembly
+// RuntimeError (memory access out of bounds) in a callback. Unhandled, either reaches the page as a crash of the engine worker,
+// which terminates it and reloads the SOP-BERT reader. They are contained: Z3 is marked failed for this worker (pending and later
+// placements are answered by the library's internal search) and the failure is reported as world activity. Other uncaught errors
+// keep the crash path.
+let placementSearch = null;
+addEventListener('error', (ev) => {
+  const nested = typeof Event === 'function' && ev.error instanceof Event;   // a rethrown event of a nested worker
+  const wasm = typeof WebAssembly === 'object' && ev.error instanceof WebAssembly.RuntimeError;
+  const solving = (placementSearch?.placementSearchPending?.() ?? 0) > 0;
+  if (!nested && !wasm && !solving) return;
+  ev.preventDefault();
+  if (nested) ev.error.preventDefault();   // the nested worker's own error event too: uncancelled, it is also reported up to the page (measured in Chromium)
+  const reason = String(ev.error?.message ?? ev.message ?? 'solver runtime error');
+  if (placementSearch) placementSearch.failPlacementSearch?.('solver runtime: ' + reason);
+  else import(vurl('lib/dialog/placement-search-provider.mjs')).then((x) => x.failPlacementSearch?.('solver runtime: ' + reason)).catch(() => {});
+  try { worldActivity(['component:reasoner'], 'error', 'Placement solver failed; the internal search answers', { operation: 'placement.solver.failed', error: reason }); } catch { /* reporting only */ }
+});
+// The page's shared abort cell ([request id, 1 stopped | 2 timeout]): the turn guard reads it at every check, so a turn busy in synchronous code
+// ends itself at its next check instead of the page terminating this worker (and the SOP-BERT reader loaded in it).
+let abortCell = null;
+const abortProbeFor = (id) => abortCell ? () => (Atomics.load(abortCell, 0) === id ? (Atomics.load(abortCell, 1) === 2 ? 'timeout' : 'stopped') : null) : null;
 const handlers = {
   async init(m) {
     if (initReceived) throw Error('The browser engine has already started.');
@@ -377,6 +401,8 @@ const handlers = {
       await finishSuggestionProbe();
     }
     const ctl = new AbortController();
+    mods.guard.setAbortProbe?.(abortProbeFor(m.id));
+    placementSearch?.setPlacementMode?.(m.settings?.interactionMode ?? settings.interactionMode);   // the chat's Fast | Thinking toggle
     executionRequestId=m.id;
     active.set(m.id, ctl);
     if (warming) await warming;
@@ -417,12 +443,12 @@ const handlers = {
       worldActivity(['component:reasoner'],'start','Session request');
       reply = await read();
       worldActivity(['component:reasoner'],'end','Session request completed');readerPrevious=m.text;
-      reply.trace={...reply.trace,readerHost:{state:readerStatus.state,reason:readerStatus.reason??null,diagnosticCount:readerDiagnostics.length,area:readerObservation?.area??null,contextSelection:readerObservation?.contextSelection??null,modelContexts:readerDiagnostics.filter(diagnostic=>diagnostic.result?.auxiliary?.contextSelection).map(diagnostic=>diagnostic.result.auxiliary.contextSelection)}};
+      reply.trace={...reply.trace,interactionMode:placementSearch?.placementMode?.()??(settings.interactionMode??'fast'),readerHost:{state:readerStatus.state,reason:readerStatus.reason??null,diagnosticCount:readerDiagnostics.length,area:readerObservation?.area??null,contextSelection:readerObservation?.contextSelection??null,modelContexts:readerDiagnostics.filter(diagnostic=>diagnostic.result?.auxiliary?.contextSelection).map(diagnostic=>diagnostic.result.auxiliary.contextSelection)}};
       annotateWires(reply);
       noteWorlds(reply);
       return { reply, before: loadedBefore(before, had), state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
         budget: budget ? { ticks: budget.ticks, bySite: { ...budget.bySite } } : null, ort: true };
-    } catch(error){worldActivity(['component:reasoner'],'error','Session request failed',{error:String(error?.message??error),...(error?.name==='TurnAborted'||error?.name==='BudgetExceeded'?{reason:error.reason??error.name,stage:error.stage??null,limits:{...(mods.tl.LIMITS??{})},budgetBySite:error.bySite??null}:{})});throw error;} finally { active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); }
+    } catch(error){worldActivity(['component:reasoner'],'error','Session request failed',{error:String(error?.message??error),...(error?.name==='TurnAborted'||error?.name==='BudgetExceeded'?{reason:error.reason??error.name,stage:error.stage??null,limits:{...(mods.tl.LIMITS??{})},budgetBySite:error.bySite??null}:{})});throw error;} finally { mods.guard.setAbortProbe?.(null); active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); }
   },
   async nativeTools(m) {
     const {NATIVE_AREAS,createAreaHost}=await import(vurl('lib/dialog/app-reader-context.mjs'));

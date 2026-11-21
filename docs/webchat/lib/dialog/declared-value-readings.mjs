@@ -11,9 +11,9 @@
 //    the key its normalizations).
 import {str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {executionPolicyWorld} from './execution-policy.mjs?v=88bdf143f7';
-import {parseNumberRun} from '../knowledge/number-run.mjs?v=2ab4498fd2';
+import {parseNumberRun} from '../knowledge/number-run.mjs?v=efcde74940';
 import {numberInfo} from '../knowledge/values.mjs?v=b0000e82a7';
-import {budget} from './budget.mjs?v=00bce6e369';
+import {budget} from './budget.mjs?v=d42dc656e7';
 
 const one=(row,key)=>row.attrs[key]?.length?str(row.attrs[key][0]):undefined;
 let declared=null;

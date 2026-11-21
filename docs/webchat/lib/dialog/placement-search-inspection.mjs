@@ -1,6 +1,6 @@
 // Read-only description of the std.problem search providers for the Worlds map. It reads the provider module's
 // exported status and the recorded placement activity; it never loads, warms or calls Z3.
-import {placementSearchStatus} from './placement-search-provider.mjs?v=ebe12db63b';
+import {placementSearchStatus} from './placement-search-provider.mjs?v=b75b2ff894';
 import {z3Version} from '../vendor/sopworld/smt-z3.mjs?v=014593d224';
 
 // The single read of the provider's state (placementSearchStatus is the provider's z3Status accessor).

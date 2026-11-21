@@ -1,7 +1,9 @@
 // Page side of the engine worker (COMPUTE-BUDGET items 1 and 3, spec 06 "Engine worker"): starts ui/engine-worker.mjs, gives the host a `session`
 // with the methods the UI used to call on the in-page DialogSession, and guards every request:
-//   - a turn (or dry read) that does not answer is ended: abort message first, then, after a short grace, the worker is TERMINATED and a new one starts
-//     from the last committed world state (the only way to stop synchronous JavaScript; Stop and the watchdog always work);
+//   - a turn (or dry read) that does not answer is ended at once on screen (Stop, watchdog): the abort is posted and also written into a shared memory
+//     cell the worker's turn guard reads at every check (every budget tick site), so the worker ends the turn itself and keeps its loaded reader;
+//     only when LIMITS.runawayMs > 0 (default 0: never) does a request still running after it get the worker TERMINATED and a new one started from the last
+//     committed world state (the only way to stop synchronous JavaScript that never reaches a check);
 //   - an input (normalized text + tab) that needed a kill, ended in BudgetExceeded or crashed the worker is remembered for the session and never run
 //     again: not by a retry, a dry run, the voice end-of-turn check, the next identical message or a worker restart; the stored outcome is reused;
 //   - the page owns the ORT workers (MessageChannel bridge), so they are stopped with the engine worker.
@@ -10,7 +12,7 @@ import { TurnAborted } from '../lib/dialog/turn-guard.mjs';
 
 export const KNOWN_SLOW_TEXT = 'I stopped that same request earlier because it took too long, so I did not try it again. Please word it differently.';
 export const TOO_COMPLEX_TEXT = 'That was too complex for me. Try a shorter sentence.';
-const ABORT_GRACE_MS = 300;       // a turn that has not answered this long after the abort message is killed
+const RUNAWAY_MS = 0;             // default of LIMITS.runawayMs: 0 = a stopped request is never killed (owner 2026-11-21: only the turn is cancelled; the worker restarts only when it died)
 const MAX_BOOT_FAILURES = 3;      // consecutive failed starts, then the engine stays down (no endless restart loop)
 const MAX_RESTARTS_PER_TURN = 1;  // a turn is never re-sent by the client; the next message starts a worker if the last one died
 
@@ -38,6 +40,10 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
   const snapshots = new WeakMap();
   let restorePending = null, restoreTimer = 0;   // a restore asked while the worker was still busy with an abandoned request
   const options = {};               // local mirror of session options (nx, formalizer)
+  const runawayMs = () => limits.runawayMs ?? RUNAWAY_MS;
+  // Shared abort cell (cross-origin isolated pages): [request id, 1 stopped | 2 timeout]. The worker's turn guard reads it while busy in synchronous code.
+  const abortCell = !spawn && globalThis.crossOriginIsolated && typeof SharedArrayBuffer === 'function' ? new Int32Array(new SharedArrayBuffer(8)) : null;
+  const signalAbort = (id, reason) => { if (abortCell) { Atomics.store(abortCell, 1, reason === 'timeout' ? 2 : 1); Atomics.store(abortCell, 0, id); } };
 
   function moduleUrl(path) {
     const url = new URL(path, base);
@@ -115,7 +121,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     const payload = { ...(init ?? {}), settings: getSettings(), restoreState: restore?.state ?? null, restoreMeta: restore?.meta ?? null, prepareModels: !!restore && !!lastBoot?.modelsWanted?.() };
     delete payload.modelsWanted;
     const hang = testHooks && !!restore && globalThis.__psys2StartHang === true;   // tests only: the replacement worker never becomes ready (start-limit test)
-    const { promise } = rawCall('init', { ...payload, versions, testHooks }, { skipPost: hang });
+    const { promise } = rawCall('init', { ...payload, versions, testHooks, abortCell }, { skipPost: hang });
     // start limit: a worker that is not ready in time is a distinct error (the engine stays down until the page is reloaded), never a chain of kills
     const startMs = limits.startMs ?? 60000;
     const startTimer = setTimeout(() => {
@@ -168,7 +174,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
    * start limit passed (or the engine is down for good); a missing worker is started here. Bounded: the start limit applies to every start.
    */
   async function settled() {
-    for (let i = 0; i < 400 && restarting(); i++) {
+    for (const end = Date.now() + (runawayMs() || Infinity) + (limits.startMs ?? 60000) + 1000; restarting() && Date.now() < end;) {
       if (!worker && !booting && !down) respawn();
       if (booting && readyP) { try { await readyP; } catch { /* checked below */ } continue; }
       await new Promise((r) => setTimeout(r, 25));
@@ -189,7 +195,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
   const dryState = { id: null, timer: 0 };
   /** A request with abort + kill semantics: resolves with the worker's value; rejects TurnAborted when the signal fires (after a cooperative answer or a kill). */
   async function guarded(kind, op, payload, { signal = null, hardMs = null, text = '', key = null, tab = null } = {}) {
-    for (let i = 0; i < 60 && (zombies.size || restorePending); i++) await new Promise((r) => setTimeout(r, 25));   // 60 x 25 ms at most; an abandoned request ends by itself or is killed within the abort grace
+    for (const end = Date.now() + (runawayMs() || Infinity) + 1000; (zombies.size || restorePending) && Date.now() < end;) await new Promise((r) => setTimeout(r, 25));   // an abandoned request ends by itself at its next guard check or is killed at the runaway limit
     await ready();
     if (!worker) throw Object.assign(new Error('engine worker is not running'), { name: 'EngineRestarted' });
     const { id, promise } = rawCall(op, payload, { kind, text, key, tab });
@@ -200,11 +206,12 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       abortedReason = signal.reason?.name === 'TimeoutError' ? 'timeout' : 'stopped';
       if (!pending.has(id)) return;
       zombies.add(id);
+      signalAbort(id, abortedReason);
       try { post({ op: 'abort', id, reason: abortedReason }); } catch { /* worker gone */ }
-      graceTimer = setTimeout(() => doKill(abortedReason), ABORT_GRACE_MS);
+      if (runawayMs() > 0) graceTimer = setTimeout(() => doKill(abortedReason), runawayMs());
     };
     if (signal) { if (signal.aborted) onAbort(); else signal.addEventListener('abort', onAbort, { once: true }); }
-    if (hardMs) hardTimer = setTimeout(() => { abortedReason ??= 'timeout'; try { post({ op: 'abort', id, reason: 'timeout' }); } catch { /* gone */ } graceTimer = setTimeout(() => doKill('timeout'), ABORT_GRACE_MS); }, hardMs);
+    if (hardMs) hardTimer = setTimeout(() => { abortedReason ??= 'timeout'; signalAbort(id, 'timeout'); try { post({ op: 'abort', id, reason: 'timeout' }); } catch { /* gone */ } if (runawayMs() > 0) graceTimer = setTimeout(() => doKill('timeout'), runawayMs()); }, hardMs);
     try {
       const v = await promise;
       if (abortedReason) throw new TurnAborted(abortedReason, stage);
@@ -316,7 +323,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       if (busy.length) {   // the host gave the request up (Stop, watchdog) but the worker has not answered: it gets the abort grace to stop by itself, then it is replaced (from the restored state)
         restorePending = { id: undo.id, saved };
         clearTimeout(restoreTimer);
-        restoreTimer = setTimeout(() => { if (restorePending) { for (const p of busy) if (pending.has(p.id)) rememberBad(p, 'timeout'); restorePending = null; killWorker('restore'); respawn(); } }, ABORT_GRACE_MS + 500);
+        if (runawayMs() > 0) restoreTimer = setTimeout(() => { if (restorePending) { for (const p of busy) if (pending.has(p.id)) rememberBad(p, 'timeout'); restorePending = null; killWorker('restore'); respawn(); } }, runawayMs() + 500);
         return;
       }
       const go = () => restoreById(undo.id, saved).catch(() => {});
@@ -343,6 +350,8 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     get info() { return bootInfo; },
     get booting() { return booting; },
     get restarting() { return restarting(); },
+    /** True while only an abandoned request is still ending in a live worker (no restart: the reader stays loaded). */
+    get finishing() { return !down && !booting && !!worker && (zombies.size > 0 || !!restorePending); },
     /** Settings › Developer › Reasoner (spec 15) is read when the engine starts: a new worker is started from the last committed state (nothing is running when the page calls this). */
     restart(why = 'settings') { if (down) return readyP; killWorker(why); return respawn(); },
     settled,

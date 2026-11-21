@@ -12,23 +12,71 @@
 import {z3Provider,z3Supported,z3Version} from '../vendor/sopworld/smt-z3.mjs?v=014593d224';
 
 export const Z3_BASE=`https://ml-circuits-research.github.io/soplang-words-lib/vendor/z3-solver-${z3Version}/`;
-let provider,state='not-loaded',lastLoad=null,lastSolve=null,warmedBy=null,warmStarted=null;
+let provider,state='not-loaded',lastLoad=null,lastSolve=null,warmedBy=null,warmStarted=null,failed=null,injected=null;
+// Counters for the trace and for evaluation: solves asked, solved by Z3, declined to the internal search (the emergency path:
+// Z3 not loadable here, a Z3 error, a timeout of Z3's own budget, or a failed solver), and the most solves asked at once.
+const counts={asked:0,z3:0,internal:0,maxConcurrent:0,reasons:{}};
+// Z3 runs its solver in pthreads (nested workers) on ONE context per realm. The context is not re-entrant: two solves in flight
+// on it at once (a coordinated request places its things in parallel) corrupt it (Z3 assertion violations, "memory access out
+// of bounds" in a pthread; measured 2026-11-21). Solves therefore run one at a time, in the order asked.
+// A pthread that still crashes leaves the instance unusable; the host reports it (failPlacementSearch) and the internal search
+// answers from then on in that realm, each time counted and logged as the emergency path.
+const pending=new Set();
+let queue=Promise.resolve(),inFlight=0;
 
+// Interaction mode (the chat's Fast | Thinking toggle, settings.interactionMode): 'fast' asks Z3 for the first model that holds the
+// hard constraints (no optimisation of the soft ones, one solution); 'thinking' optimises the declared soft constraints.
+let mode='fast';
+export function setPlacementMode(value){mode=value==='thinking'?'thinking':'fast';return mode;}
+export const placementMode=()=>mode;
+const forMode=model=>mode==='thinking'||!model?{...model}:{...model,soft:[],depth:undefined,count:undefined};
 const isolated=()=>globalThis.crossOriginIsolated===true;
 const begin=by=>{if(state==='not-loaded'){state='warming';warmedBy=by;warmStarted=Date.now();}};
+const declineTo=(reason)=>{counts.internal++;counts.reasons[reason]=(counts.reasons[reason]??0)+1;try{console.warn('placement: internal search (emergency path):',reason);}catch{/* no console */}return null;};
+
+/**
+ * Node and other hosts without the browser build: the caller gives the Z3 solver (for example the npm package z3-solver, the
+ * same version the browser loads), so evaluations place with the same solver as the page. `solve(model)` answers like the
+ * library provider; `preload()` resolves true when it is ready.
+ */
+export function usePlacementSolver({solve,preload=async()=>true,label='z3'}={}){
+ if(typeof solve!=='function')throw TypeError('usePlacementSolver needs solve(model)');
+ injected=Object.assign(solve,{supported:()=>true,preload});provider=undefined;state='not-loaded';failed=null;lastLoad={status:'injected',label};
+}
 
 /** The provider for compileRequest, or undefined when Z3 cannot run here. One instance per realm, created lazily. */
 export function placementSearchProvider({supported=z3Supported}={}) {
- if(!supported()){if(state==='not-loaded')state='unavailable';return undefined;}
+ if(!injected&&!supported()){if(state==='not-loaded')state='unavailable';return undefined;}
  if(!provider){
-  const inner=z3Provider({base:Z3_BASE,onLoad:info=>{lastLoad=info;state=info.status==='loaded'?'ready':'unavailable';},onSolve:info=>{lastSolve=info;}});
+  const inner=injected??z3Provider({base:Z3_BASE,onLoad:info=>{lastLoad=info;state=info.status==='loaded'?'ready':'unavailable';},onSolve:info=>{lastSolve=info;}});
   // Z3 optimises within half of the declared budget; when it cannot finish (timeout) it declines, and the library's internal search answers the same
   // model with its best result, so a hard soft-constraint optimisation never spends the whole budget for no answer (measured: a three-object group placement
   // timed out twice at 3 s in Chromium, the internal search answers it in well under a second).
-  provider=Object.assign(model=>{begin('turn');const budget=Number(model?.budget)>0?Math.max(1,Math.ceil(model.budget/2)):model?.budget;
-   return Promise.resolve(inner({...model,budget})).then(answer=>answer?.status==='budget'?null:answer);},{supported:inner.supported,preload:()=>{begin('idle');return inner.preload();}});
+  provider=Object.assign(model=>{begin('turn');counts.asked++;if(failed)return declineTo('solver-failed');const budget=Number(model?.budget)>0?Math.max(1,Math.ceil(model.budget/2)):model?.budget;
+   // Wall limit of one solve: Z3's own timeout per optimisation (budget/2) for each alternative it is asked for, plus the unsat-core check, plus slack.
+   const runs=(mode==='thinking'&&model?.depth==='alternatives'?Number(model.count)||1:1)+1,wallMs=Number(budget)>0?budget*runs+2000:null;
+   let settle,timer=null;const declined=new Promise(r=>{settle=r;});pending.add(settle);
+   counts.maxConcurrent=Math.max(counts.maxConcurrent,pending.size);
+   // One solve at a time on the context; the wall limit starts when this solve starts on a loaded Z3.
+   const solve=queue.then(()=>inner.preload()).then(async ready=>{if(failed)return null;if(!ready&&!injected)return null;
+    if(wallMs)timer=setTimeout(()=>failPlacementSearch('solve-outlived-budget: no answer within '+wallMs+' ms'),wallMs);
+    inFlight++;try{return await inner({...forMode(model),budget});}finally{inFlight--;if(state!=='unavailable'&&injected)state='ready';}});
+   queue=solve.then(()=>{},()=>{});
+   return Promise.race([solve.then(answer=>answer?.status==='budget'?declineTo('z3-budget'):answer?(counts.z3++,answer):declineTo(failed?'solver-failed':'z3-declined'),
+     error=>{lastSolve={status:'declined',reason:'error',error:String(error?.message??error)};return declineTo('z3-error');}),declined.then(()=>declineTo('solver-failed'))])
+    .finally(()=>{clearTimeout(timer);pending.delete(settle);});},{supported:inner.supported,preload:()=>{begin('idle');return failed?Promise.resolve(false):inner.preload();}});
  }
  return provider;
+}
+
+/** How many placement solves are waiting for Z3 now (the host attributes an uncaught error meanwhile to the solver). */
+export const placementSearchPending=()=>pending.size;
+
+/** The host reports that Z3 failed (a crashed pthread, a solve without answer): pending solves decline at once, later ones too. */
+export function failPlacementSearch(reason){
+ if(!failed){failed={reason:String(reason).slice(0,300),at:Date.now()};state='unavailable';}
+ for(const settle of [...pending])settle(null);pending.clear();
+ return z3Status();
 }
 
 /**
@@ -48,7 +96,7 @@ export function warmPlacementSearch({supported=z3Supported,by='idle'}={}) {
 export function z3Status() {
  return {solver:'z3',version:z3Version,state,supported:z3Supported(),isolated:isolated(),base:Z3_BASE,
   loadMs:lastLoad?.ms??null,warmedBy,elapsedMs:state==='warming'&&warmStarted?Date.now()-warmStarted:null,
-  error:lastLoad?.error??null,load:lastLoad,lastSolve};
+  error:failed?.reason??lastLoad?.error??null,failed,load:lastLoad,lastSolve,mode,counts:{...counts,reasons:{...counts.reasons}}};
 }
 
 /** Resolves with z3Status() once the solver's load (started by warmPlacementSearch) has finished, loaded or not; at once where Z3 cannot run. */

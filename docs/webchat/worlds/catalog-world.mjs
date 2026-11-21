@@ -3,7 +3,7 @@
 // everything they depend on become the World's library, and the shards a caller names are told as facts.
 // Generic: no world, type or tab is named here. readText(path) reads a catalog file (index.json, schemas, shards).
 import {World} from '../lib/vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import {budget} from '../lib/dialog/budget.mjs?v=00bce6e369';
+import {budget} from '../lib/dialog/budget.mjs?v=d42dc656e7';
 
 const MAX_MODULES = 128;
 

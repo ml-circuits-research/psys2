@@ -3,8 +3,8 @@
 // policy says to follow (read from catalog facts that name each term) and the
 // candidates' own measurements. Admission, costs and ranking belong to the policy.
 import {parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
-import {budget} from './budget.mjs?v=00bce6e369';
-import {lemmaCandidates} from '../knowledge/facts.mjs?v=829529408b';
+import {budget} from './budget.mjs?v=d42dc656e7';
+import {lemmaCandidates} from '../knowledge/facts.mjs?v=3d23aa1cdd';
 
 const LOOKUPS=48,EDGES=2048;
 const atom=/^[A-Za-z_][A-Za-z0-9_.-]*$/;

@@ -3,7 +3,7 @@
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=3945d7d8fa';
 import AREA_SOURCES from './area-sources.mjs?v=a53c154f8c';
 import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=62a24b2870';
-import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=a27dcdd4c1';
+import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=25bccf8716';
 
 const area = sopAreaAdapter({ world: 'time.calendar', instance: 'w.meetings', interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['time.calendar'] });
 export const emptyCalendarArea = area.empty, canonicalCalendarArea = area.canonical, createCalendarArea = area.create,

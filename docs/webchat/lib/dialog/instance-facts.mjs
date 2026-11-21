@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Lossless native facts adapter: references require explicit protocol declarations.
-import {createBudget} from './budget.mjs?v=00bce6e369';
+import {createBudget} from './budget.mjs?v=d42dc656e7';
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=c6ea65e776';
 const text=v=>typeof v==='string'&&v.length>0;
 const record=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=fbae621c59';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=59ae4399a8';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=6c0dc1d746';
 // Explicit numeric data only: no text parser, inferred values, or legacy dispatch.
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=c6ea65e776';

@@ -348,7 +348,15 @@ export async function mountPsys2(element, options = {}) {
   // the summary of the conversation (it was the Talk page): a collapsible panel at the top of the chat, filled after every turn
   const sumBody = h('div', { class: 'p2-sum-body' });
   const sumPanel = h('details', { class: 'p2-sum', 'aria-label': 'What we are talking about', hidden: true }, h('summary', {}, 'What we are talking about'), sumBody);
-  const form = h('form', { class: 'p2-form' }, avBtn, micBtn, speakerBtn, input, dieBtn, sendBtn);
+  // Fast | Thinking (owner 2026-11-21, like LLM chat apps): Fast (default) takes the first acceptable placement, Thinking lets Z3 optimise it.
+  const modeLabel = () => settings.interactionMode === 'thinking' ? 'Thinking' : 'Fast';
+  const modeBtn = h('button', { class: 'p2-btn-text p2-mode', type: 'button', 'aria-pressed': String(settings.interactionMode === 'thinking'), title: 'Fast: first acceptable answer. Thinking: optimise placements (slower).', 'aria-label': 'Answer mode: ' + modeLabel() }, modeLabel());
+  modeBtn.addEventListener('click', () => {
+    settings.interactionMode = settings.interactionMode === 'thinking' ? 'fast' : 'thinking';
+    modeBtn.textContent = modeLabel(); modeBtn.setAttribute('aria-pressed', String(settings.interactionMode === 'thinking')); modeBtn.setAttribute('aria-label', 'Answer mode: ' + modeLabel());
+    save(); applyEngineSettings();
+  });
+  const form = h('form', { class: 'p2-form' }, avBtn, micBtn, speakerBtn, input, modeBtn, dieBtn, sendBtn);
   const chat = h('section', { class: 'p2-chat', 'aria-label': 'Chat' },
     h('header', { class: 'p2-head' },
       burgerBtn,
@@ -958,8 +966,9 @@ export async function mountPsys2(element, options = {}) {
     let reply = null;
     try {
     if (engineClient?.restarting || engineClient?.down) {   // a replacement engine worker is starting: show "restarting…", this message waits (later ones queue behind the turn); the turn clock starts when the worker is ready
-      thinkingLabel.textContent = 'restarting…';
-      hostStage('restarting', recId);
+      const finishing = !!engineClient?.finishing;   // the stopped request is still ending in the live worker (the reader stays loaded); otherwise a replacement worker is starting
+      thinkingLabel.textContent = finishing ? 'finishing the stopped request…' : 'restarting…';
+      hostStage(finishing ? 'finishing' : 'restarting', recId);
       const stopped = new Promise((_, rej) => ctl.signal.addEventListener('abort', () => rej(new TurnAborted(tn.reason ?? 'stopped', 'restart')), { once: true }));
       stopped.catch(() => {});
       try { await Promise.race([engineClient.settled(), stopped]); } catch (e) { if (e instanceof TurnAborted) throw e; throw Object.assign(new Error(e?.message ?? 'the engine is down'), { name: 'EngineDown', reason: e?.reason ?? 'down' }); }

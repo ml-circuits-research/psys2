@@ -20,7 +20,7 @@
  * first clause of a compound question and the words between its two clauses), subject (default `i`).
  * Emit templates: `{slot}` placeholders; an optional quantified argument that is absent drops the tokens / lines that use it.
  */
-import { get, getAll } from '../soplang/index.mjs?v=c57881f705';
+import { get, getAll } from '../soplang/index.mjs?v=df11e6238f';
 
 export const INTENT_FRAMES = {
   command: ['imp', 'wish', 'ind', 'can', 'short', 'phr'],

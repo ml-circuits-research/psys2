@@ -8,8 +8,8 @@
  *  - `core.key` may carry `dynamic=true`: the key is a prefix; `<prefix>.<anything>` is accepted
  *    (used for where.* and arg.*). Its value kind is `any`.
  */
-import { get, getAll } from '../soplang/index.mjs?v=c57881f705';
-import { budget } from '../dialog/budget.mjs?v=00bce6e369';
+import { get, getAll } from '../soplang/index.mjs?v=df11e6238f';
+import { budget } from '../dialog/budget.mjs?v=d42dc656e7';
 
 const LITERAL_KINDS = new Set(['integer', 'number', 'string', 'atom', 'boolean', 'any']);
 const isLiteralKind = (k) => LITERAL_KINDS.has(k) || /^quantity\.[\w.-]+$/.test(k) || /^time\.[\w.-]+$/.test(k);

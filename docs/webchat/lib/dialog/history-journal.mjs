@@ -2,7 +2,7 @@
 // editor payloads are held by its concrete journal tool under opaque references.
 import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import { historyPolicy } from './history-policy.mjs?v=2d66ea1a49';
-import { budget } from './budget.mjs?v=00bce6e369';
+import { budget } from './budget.mjs?v=d42dc656e7';
 
 const prefix = 'app.history.';
 const fields = (row, key) => row.attrs[key];

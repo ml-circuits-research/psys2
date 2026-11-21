@@ -1,4 +1,4 @@
-import {createBudget} from './budget.mjs?v=00bce6e369';
+import {createBudget} from './budget.mjs?v=d42dc656e7';
 // Artifact-declared layout; counts and domain identities never come from host constants.
 const object=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const closed=(v,keys)=>object(v)&&Object.keys(v).length===keys.length&&keys.every(k=>Object.hasOwn(v,k));

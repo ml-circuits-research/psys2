@@ -9,6 +9,10 @@
  * `UNLIMITED` is a shared no-op budget for callers that have none (it counts nothing and never throws).
  */
 import { BUDGET_LIMITS } from './budget-limits.mjs';
+import { guard } from './turn-guard.mjs';
+
+/** Ticks between two turn-guard checks: every loop site that counts work is also a cancellation point (Stop, the turn deadline). */
+export const GUARD_POLL_TICKS = 256;
 
 /** A short caller id: the first frames of the stack after the budget internals, `fn (file:line)`, at most 6. */
 export function shortStack(skip = 3, max = 6) {
@@ -34,6 +38,7 @@ export function createBudget(limits = {}) {
   const perSite = limits.perSite ?? BUDGET_LIMITS.perSite;
   const sites = { ...BUDGET_LIMITS.sites, ...(limits.sites ?? {}) };
   const bySite = Object.create(null);
+  let sincePoll = 0;
   const budget = {
     ticks: 0,
     bySite,
@@ -44,6 +49,7 @@ export function createBudget(limits = {}) {
       if (budget.exceeded) throw budget.exceeded;   // sticky: the first excess is the record
       if (s > (sites[site] ?? perSite)) throw (budget.exceeded = new BudgetExceeded(site, s, 'site', { bySite: { ...bySite }, stack: shortStack() }));
       if (budget.ticks > perTurn) throw (budget.exceeded = new BudgetExceeded(site, budget.ticks, 'turn', { bySite: { ...bySite }, stack: shortStack() }));
+      if ((sincePoll += n) >= GUARD_POLL_TICKS) { sincePoll = 0; guard.check(); }   // a no-op outside a turn; throws TurnAborted once the turn is stopped or past its deadline
     },
     /** Ticks left before `tick(site)` would throw: the smaller of the turn's and the site's remainder (a host layer with its own step limit passes it on). */
     remaining(site) { return Math.max(0, Math.min(perTurn - budget.ticks, (sites[site] ?? perSite) - (bySite[site] ?? 0))); },

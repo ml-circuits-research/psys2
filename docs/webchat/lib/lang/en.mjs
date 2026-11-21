@@ -28,7 +28,7 @@
  *   negatedRequest(text)     "do not remove table 3" -> { rest: 'remove table 3', leadEnd } (a request that must not be carried out), null for anything else
  *   oneAnaphora(ct, anchor, env)  "and a yellow one" repeats the previous command with its noun and the new modifiers
  */
-import { parse } from '../soplang/index.mjs?v=c57881f705';
+import { parse } from '../soplang/index.mjs?v=df11e6238f';
 import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=f6a0b10be9';
 import { LANG_EN_LOCAL } from './en.local.mjs?v=38d1132d3b';
 

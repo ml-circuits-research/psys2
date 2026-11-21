@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The English voice word lists of the page (worlds/app.project/voice-words.sop): app.voice.word rows, grouped by list in file
 // order. Read by docs/webchat/ui/voice-words.mjs. Browser-safe: no `node:*`.
-import { parse } from '../soplang/index.mjs?v=c57881f705';
+import { parse } from '../soplang/index.mjs?v=df11e6238f';
 import VOICE_WORDS from '../../worlds/app.project/voice-words-source.mjs?v=81a95c1b3c';
 
 /** { list: [texts] } in file order; a malformed row throws. */

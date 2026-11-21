@@ -1,6 +1,6 @@
 /** Number words to digits (spec 03 section 1.4). Browser-safe. */
 
-import { budget } from '../dialog/budget.mjs?v=00bce6e369';
+import { budget } from '../dialog/budget.mjs?v=d42dc656e7';
 import { numberInfo, numberWordOf, misspeltNumber } from './values.mjs?v=b0000e82a7';   // the one reader of number words (k.values): no number lexicon here
 // Misspellings people type (fourty, ninty, fiveteen, eightteen) are read as the right number: w.lang.en.number misspelled=true.
 const misspelt = (w) => { const i = misspeltNumber(w, 'cardinal'); return i && Number.isInteger(i.value) ? i.value : null; };
