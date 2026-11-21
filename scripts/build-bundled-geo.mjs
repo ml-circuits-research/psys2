@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The bundled k.geo subset: every country (with its borders, region, currency, languages), the groups, the continents, the other spellings of places and the cities of 500,000 people or more plus the
 // capitals, as wires in the catalog's own format, GENERATED from the catalog (never written by hand), so that the map knows its countries and major cities with no network and before the catalog
-// answers; the catalog adds the rest (every river, every smaller city) when reachable. Read SYNCHRONOUSLY by worlds/geo.map/places.mjs and src/knowledge/open-words.mjs (like the animals).
+// answers; the catalog adds the rest (every river, every smaller city) when reachable. Read SYNCHRONOUSLY by worlds/geo.map/places.mjs  (like the animals).
 //   node scripts/build-bundled-geo.mjs [<catalog folder>] [--check]      (also run by scripts/build-bundled-subset.mjs; no folder: the catalog at the pin; --check: exit 1 when stale)
 import path from 'node:path';
 import { createFacts } from '../src/knowledge/facts.mjs';

@@ -22,7 +22,6 @@ import { guard, TurnAborted } from './turn-guard.mjs';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs';
 
 import { attachValues } from '../knowledge/values.mjs';
-import { attachArrangement } from '../knowledge/arrangement.mjs';
 
 /**
  * The world states of a session: one entry per world, seeded from the world's native initializer (`initialState` of its ops module).
@@ -267,7 +266,7 @@ export async function createEngine({ loader, translator = null, options = {} }) 
     applicationAreas: structuredClone(options.applicationAreas ?? []),
     knowledge: options.knowledge ?? null,
     /** Attach or detach the knowledge catalog after creation (the webchat once the catalog is reachable): the colour and number readers (k.values) and the arrangement supports take the catalog's facts. */
-    setKnowledge(cat) { engine.knowledge = cat ?? null; attachValues(cat); attachArrangement(cat); },
+    setKnowledge(cat) { engine.knowledge = cat ?? null; attachValues(cat); },
     set, translator, loader,
     /** Problems found at load time and by static validation (empty when everything is consistent). */
     problems: () => validateWorldSet(set, options.patterns ?? {}),

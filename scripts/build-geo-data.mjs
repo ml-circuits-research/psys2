@@ -22,7 +22,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { singularLemma } from '../src/lang/lemma.mjs';
+import { en } from '../src/lang/en.mjs';
 
 const REPO = fileURLToPath(new URL('..', import.meta.url));
 const WORLD = path.join(REPO, 'worlds/geo.map');
@@ -41,7 +41,7 @@ export function keyOf(name) {
   if (!t.length || t.length > 3) return null;
   if (!t.every((w) => /^[a-z]+(?:['-][a-z]+)*$/.test(w))) return null;
   if (t.some((w) => w.endsWith("'s"))) return null;
-  t[t.length - 1] = singularLemma(t[t.length - 1]);
+  t[t.length - 1] = en.singular(t[t.length - 1], 'lemma');
   return t.join('_');
 }
 const q = (s) => JSON.stringify(String(s));

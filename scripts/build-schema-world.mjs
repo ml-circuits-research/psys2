@@ -8,7 +8,7 @@ import { isCanonicalSentence } from '../src/worlds/canonical.mjs';
 import { parseSchema, serializeSchema, generate, ACT_VERBS, DET_WORDS, REL_WORDS } from '../worlds/acts/acts.mjs';
 
 
-// Kinds from the catalog are not generated: a kind with `catalog=` makes the kinds lexicon open (`open=knowledge`), read by lookup (src/knowledge/open-words.mjs, spec 21 section 10).
+// Kinds from the catalog are not generated: a kind with `catalog=` makes the kinds lexicon open (`open=knowledge`), once read by lookup (spec 21 section 10; the lookup module was retired 2026-11-21 with the legacy pattern compiler: the reader binds catalog kinds through the declared bindings).
 
 /** { files, schema } for a world directory. */
 export async function build(dir) {
