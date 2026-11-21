@@ -251,10 +251,9 @@
 
 # ---- A code names its object (2026-11-21) ----------------------------------------------------------------------------
 # "make e1 dashed", "delete n2": a code names an observed object whatever family the reader gave it. Its identity
-# restatements (a selector by an identity key whose value starts the code) are the same reference and are dropped, and
-# the reader's kind head is replaced by the object's observed kind (src/dialog/project-code-reference.mjs reads these).
-@identity.id app.reading.identityConcept concept="id"
-@identity.ids app.reading.identityConcept concept="ids"
+# restatements (a selector by a key of an identity parameter: capability-policy.sop seeds from target.id/target.list)
+# are the same reference and are dropped, and the reader's kind head is replaced by the object's observed kind
+# (src/dialog/project-code-reference.mjs reads this).
 @codeHead.kind app.reading.codeHead key="request.target.kind"
 
 # ---- Implicit counts of a make request (quantity-projection.mjs applies these) --------------------------------------

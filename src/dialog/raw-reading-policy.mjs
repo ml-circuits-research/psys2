@@ -7,6 +7,7 @@ import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs';
 import SCHEMA from '../../worlds/app.project/raw-reading-schema-source.mjs';
 import POLICY from '../../worlds/app.project/raw-reading-policy-source.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
+import {identityParameters} from './capability-plan-adapter.mjs';
 import {en} from '../lang/en.mjs';
 import {referenceProjection} from './reference-projection.mjs';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs';
@@ -213,12 +214,13 @@ export function pluralReference(request){
  return {plural,distributes:new Set(world.ofType('app.reading.distributes').map(row=>one(row,'key')))};
 }
 
-/** The declared identity concepts and the reader heads a code replaces (app.reading.identityConcept, app.reading.codeHead). */
+/** The reader heads a code replaces (app.reading.codeHead); a key is an identity key when its parameter (the key's last
+ * segment) is one the capability policy seeds from the target's identity (capability-policy.sop target.id / target.list). */
 let codeReference=null;
 export function codeReferencePolicy(){
  if(codeReference)return codeReference;
- const world=policyWorld(),concepts=new Set(world.ofType('app.reading.identityConcept').map(row=>one(row,'concept'))),heads=new Set(world.ofType('app.reading.codeHead').map(row=>one(row,'key')));
- return codeReference={identityKey:key=>typeof key==='string'&&concepts.has(key.split('.').at(-1)),replacedHead:key=>heads.has(key)};
+ const heads=new Set(policyWorld().ofType('app.reading.codeHead').map(row=>one(row,'key'))),identity=identityParameters();
+ return codeReference={identityKey:key=>typeof key==='string'&&identity.has(key.split('.').at(-1)),replacedHead:key=>heads.has(key)};
 }
 
 /**

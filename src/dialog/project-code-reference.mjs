@@ -12,7 +12,7 @@ import {referenceProjection} from './reference-projection.mjs';
 import {codeReferencePolicy} from './raw-reading-policy.mjs';
 
 // Reader diagnostics that only concern the identity heads the code replaces (raw-reading-policy.sop
-// app.reading.identityConcept, app.reading.codeHead), or a constraint the reader could not form (its metadata without
+// app.reading.codeHead; identity parameters: capability-policy.sop seeds), or a constraint the reader could not form (its metadata without
 // a key); every other unresolved head keeps the reading incomplete.
 const identityHead=detail=>{const {identityKey,replacedHead}=codeReferencePolicy();return identityKey(detail?.key)||replacedHead(detail?.key);};
 const absorbed=row=>row?.reason==='incomplete-provider-coverage'||row?.reason==='provider-unresolved'&&

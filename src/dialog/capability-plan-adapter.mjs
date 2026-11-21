@@ -41,7 +41,7 @@ function factWriter() {
 }
 
 let identityNames;
-const identityParameters = () => identityNames ??= new Set(parse(POLICY).filter((wire) => wire.type === NS + 'seed' &&
+export const identityParameters = () => identityNames ??= new Set(parse(POLICY).filter((wire) => wire.type === NS + 'seed' &&
   ['target.list', 'target.id'].includes(take(wire, 'source'))).map((wire) => take(wire, 'parameter')));
 
 function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge, sceneDefaults, previews = [] }, concepts, said = [], selectors = new Set()) {
