@@ -9,9 +9,9 @@ import {writeReaderSource} from './reader-source.mjs?v=1baaf5ba91';
 import {coordinationParts} from './coordination-split.mjs?v=d945210dfe';
 import {resolveRequestRoute} from './request-routing-policy.mjs?v=6c36727506';
 import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=dd9b517a02';
-import {executionKnowledge} from './declared-execution.mjs?v=71b2c6118b';
+import {executionKnowledge} from './declared-execution.mjs?v=38b9357734';
 import {recordHistory} from './history-journal.mjs?v=0d3803bc7e';
-import {quantityNote} from './quantity-projection.mjs?v=dcecb1afb2';
+import {quantityNote} from './quantity-projection.mjs?v=9169c1504e';
 
 const reply=(text,supported,trace={})=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 const attr=(wire,key)=>wire?.attrs[key]?.[0];

@@ -11,7 +11,7 @@
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {en} from '../lang/en.mjs?v=6a69000b47';
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=5b4805a7a9';
-import {readsBySingular} from './raw-reading-policy.mjs?v=6f47dba579';
+import {readsBySingular} from './raw-reading-policy.mjs?v=099fd35c86';
 
 const attr=(wire,key)=>{const raw=wire?.attrs[key]?.[0];return raw===undefined?undefined:raw.startsWith('"')?str(raw):raw;};
 const words=text=>[...String(text).matchAll(/[\p{L}\p{N}]+/gu)].map(m=>m[0].toLowerCase());

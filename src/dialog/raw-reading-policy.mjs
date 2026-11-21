@@ -121,7 +121,8 @@ export function declaredSpanRoles(raw,bindings){
   if(!text(c?.key)||!Array.isArray(range))continue;
   facts.push(record(`s${index}_${ci}`,'span',{request:index,index:ci,key:c.key,start:range[0],end:range[1]}));
   const word=concept(c.key);
-  if(text(word)&&String(word).split(/[._\s]+/).filter(Boolean).every(said))facts.push(record(`e${index}_${ci}`,'evidence',{request:index,key:c.key}));
+  const declared=policyWorld().ofType('app.reading.word').filter(row=>one(row,'key')===c.key).map(row=>one(row,'text'));
+  if(text(word)&&String(word).split(/[._\s]+/).filter(Boolean).every(said)||declared.some(said))facts.push(record(`e${index}_${ci}`,'evidence',{request:index,key:c.key}));
  }
  if(facts.length<2)return raw;
  const world=policyWorld().fork();

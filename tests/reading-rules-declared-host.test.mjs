@@ -28,6 +28,13 @@ test('one value span read for two keys keeps the key whose concept word the requ
  assert.equal(declaredSpanRoles(raw('tilt this one by 20 degrees'),bindings).requests[0].constraints.length,2);
 });
 
+test('a declared concept word keeps the stroke width of a "4 pixels outline", not the size',()=>{
+ const bindings={properties:[{area:'drawing',key:'drawn.size',rawDescriptor:{concept:'size'}},{area:'drawing',key:'drawn.stroke',rawDescriptor:{concept:'stroke'}}]};
+ const raw={area:'drawing',source:{text:'use a 4 pixels yellow outline to the boy'},requests:[{act:'change',constraints:[{key:'drawn.size',value:'4',value_span:'4'},{key:'drawn.stroke',value:'4',value_span:'4'}]}],
+  ranges:[{path:['requests','0','constraints','0','value_span'],range:[6,7]},{path:['requests','0','constraints','1','value_span'],range:[6,7]}]};
+ assert.deepEqual(declaredSpanRoles(raw,bindings).requests[0].constraints.map(c=>c.key),['drawn.stroke']);
+});
+
 test('every editor view declares the words that name it in a request',()=>{
  assert.deepEqual(Object.fromEntries(Object.entries(NATIVE_AREAS).map(([view,area])=>[view,area.words])),
   {avatar:['avatar'],draw:['drawing'],diagram:['diagram'],editor:['document'],calendar:['calendar']});

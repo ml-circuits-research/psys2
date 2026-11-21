@@ -12,7 +12,7 @@ import{inspectQueryPolicy}from'./project-query-action.mjs?v=ffa4949844';
 import{inspectCreationPolicy}from'./project-create-action.mjs?v=e1f7c7d4ee';
 import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=15f0980c7c';
 import{inspectGroundedProjection}from'./grounded-projection.mjs?v=5dca2227e3';
-import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=2f0d253b4a';
+import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=322c48a7e6';
 import{inspectReferencePolicy}from'./reference-policy.mjs?v=35a0db82fe';
 import{inspectSchemaSource}from'./worlds-inspection.mjs?v=6df29bd0c7';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=fc8dc8891b';
@@ -28,7 +28,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=71b2c6118b'),import('./spatial-placement-execution.mjs?v=9d5525ef63'),
+  import('./declared-execution.mjs?v=38b9357734'),import('./spatial-placement-execution.mjs?v=9d5525ef63'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});

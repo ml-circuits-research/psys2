@@ -22,6 +22,12 @@
 # ---- One value, one role (2026-11-21) -------------------------------------------------------------------------------
 # A said value fills one key. When the reader gives the same value span to two keys ("that moon skewed 20 degrees":
 # rotation and skew) and the request says the concept word of one of them only, the other reading of the span is dropped.
+# The words that say a key's concept besides its own name: the width of a drawn outline (a "4px outline" is its stroke
+# width), the font style of a node's text.
+@word.stroke.outline app.reading.word key="drawn.stroke" text="outline"
+@word.stroke.border app.reading.word key="drawn.stroke" text="border"
+@word.stroke.stroke app.reading.word key="drawn.stroke" text="stroke"
+@word.stroke.line app.reading.word key="drawn.stroke" text="line"
 @sr.a app.reading.span request=?r index=?i key=?k start=?s end=?e
 @sr.b app.reading.span request=?r index=?j key=?k2 start=?s end=?e
 @sr.diff core.check fn=neq args=?k args=?k2
