@@ -3,7 +3,7 @@
   "knowledgePin": "60c7aae3afad8b8a608d3086455fdc2c79035acf",
   "inventory": {
     "path": "official-dataset/inventory.json",
-    "sha256": "173a41a4076bab66b7b510c27377c27105ff3718e0d8d5e571e8ffb289791dee"
+    "sha256": "9b3dcb17d623f3e3974c88ffb8d3952386a8f65670a676c7f199ec3fbf4481b2"
   },
   "prompt": {
     "path": "training/sop-bert/data/haiku-v2/INSTRUCTIONS-v2.md",
@@ -11,6 +11,13 @@
   },
   "authority": "Owner-authorized C1 authorial alignment; complete inventory status, independent from native capability and evaluation rows. v2: re-pinned to the PSys2 catalog pin over the official-dataset inventory (the label space of the deployed reader).",
   "families": [
+    {
+      "area": "drawing",
+      "type": "composition",
+      "rawMeaning": "content composed by the editor from knowledge (random, surprise, conversation-grounded)",
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
     {
       "area": "drawing",
       "type": "drawn",
@@ -107,6 +114,13 @@
         "moduleVersion": "1",
         "declaration": "@w.chart.chart core.type of=w.chart.chart extends=std.schema.thing closed=true core.source=\"hand-core 1\""
       }
+    },
+    {
+      "area": "diagram",
+      "type": "composition",
+      "rawMeaning": "content composed by the editor from knowledge (random, surprise, conversation-grounded)",
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
     },
     {
       "area": "diagram",
@@ -363,6 +377,52 @@
     }
   ],
   "properties": [
+    {
+      "area": "drawing",
+      "type": "composition",
+      "key": "composition.source",
+      "descriptor": {
+        "concept": "composition.source",
+        "head": "class",
+        "src": "specs/25-random-as-a-world.md: where composed content comes from (placeholder corpus ui-composition-v1)",
+        "values": [
+          "random",
+          "conversation"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "composition",
+      "key": "composition.variant",
+      "descriptor": {
+        "concept": "composition.variant",
+        "head": "class",
+        "src": "specs/25-random-as-a-world.md: variant of the last composition",
+        "values": [
+          "another",
+          "similar",
+          "simpler",
+          "richer"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "composition",
+      "key": "composition.with",
+      "descriptor": {
+        "concept": "composition.with",
+        "head": "span",
+        "src": "specs/25-random-as-a-world.md: things a composition must include"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
     {
       "area": "drawing",
       "type": "drawn",
@@ -3261,6 +3321,52 @@
     },
     {
       "area": "diagram",
+      "type": "composition",
+      "key": "composition.source",
+      "descriptor": {
+        "concept": "composition.source",
+        "head": "class",
+        "src": "specs/25-random-as-a-world.md: where composed content comes from (placeholder corpus ui-composition-v1)",
+        "values": [
+          "random",
+          "conversation"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "composition",
+      "key": "composition.variant",
+      "descriptor": {
+        "concept": "composition.variant",
+        "head": "class",
+        "src": "specs/25-random-as-a-world.md: variant of the last composition",
+        "values": [
+          "another",
+          "similar",
+          "simpler",
+          "richer"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "composition",
+      "key": "composition.with",
+      "descriptor": {
+        "concept": "composition.with",
+        "head": "span",
+        "src": "specs/25-random-as-a-world.md: things a composition must include"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
       "type": "diagram",
       "key": "diagram.background",
       "descriptor": {
@@ -5109,12 +5215,13 @@
       "descriptor": {
         "concept": "key",
         "head": "class",
-        "src": "native parameter diagram.preference.state.key (worlds/diagram.sketch/native-interface.sop)",
+        "src": "native parameter diagram.preference.state.key; compose.detail: worlds/diagram.sketch/preferences.sop",
         "values": [
           "link.style",
           "palette",
           "ids",
-          "placement.side"
+          "placement.side",
+          "compose.detail"
         ]
       },
       "status": "unresolved",
@@ -5139,7 +5246,7 @@
       "descriptor": {
         "concept": "value",
         "head": "span",
-        "src": "native parameter diagram.preference.state.value (worlds/diagram.sketch/native-interface.sop)"
+        "src": "native parameter diagram.preference.state.value"
       },
       "status": "unresolved",
       "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
@@ -7749,9 +7856,9 @@
     }
   ],
   "coverage": {
-    "families": 28,
+    "families": 30,
     "alignedFamilies": 14,
-    "properties": 391,
+    "properties": 397,
     "alignedProperties": 56
   }
 }

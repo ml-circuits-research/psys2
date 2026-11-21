@@ -1,8 +1,8 @@
 {
   "format": "psys2.browser-reader-deployment/1",
-  "manifestPath": "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/manifest.json",
-  "manifestSha256": "e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37",
-  "artifactBase": "models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/",
+  "manifestPath": "models/sop-bert/851e7f4a4898b3557a0da653521c52584f4c831d1b063fee1d85f65b7c30e61c/manifest.json",
+  "manifestSha256": "851e7f4a4898b3557a0da653521c52584f4c831d1b063fee1d85f65b7c30e61c",
+  "artifactBase": "models/sop-bert/851e7f4a4898b3557a0da653521c52584f4c831d1b063fee1d85f65b7c30e61c/",
   "tokenizerArtifact": {
     "path": "tokenizer.json",
     "sha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
@@ -10,8 +10,8 @@
   },
   "bindingsArtifact": {
     "path": "bindings.json",
-    "sha256": "19a22dd64b6df988b0bf3f0558863f8ab3245745b08790b041499dc19bc96bc2",
-    "bytes": 4034189
+    "sha256": "e47a6ecc0657c46d6b2f49a6eaa27b1add0708220af09b75fe490a1e7aaf16df",
+    "bytes": 4040007
   },
   "tokenizerConfigArtifact": {
     "path": "tokenizer_config.json",
@@ -28,7 +28,7 @@
     "executorSha256": "ef94ce997201a463fee292ca2c25fcd1f92e3b4619ea2f1d96f5c7a987487768",
     "contextSerializationSha256": "dbb19f6c9f25105eb082f084f6268c6a48b8e002d1b98183a5ad4f450c148880",
     "backendSha256": "915f676986a8d6b78afc5aca4352fe553472e4f86e36f1413464398a3c114ae8",
-    "bindingsSha256": "19a22dd64b6df988b0bf3f0558863f8ab3245745b08790b041499dc19bc96bc2"
+    "bindingsSha256": "e47a6ecc0657c46d6b2f49a6eaa27b1add0708220af09b75fe490a1e7aaf16df"
   },
   "implementation": {
     "format": "psys2.browser-reader-implementation/1",
