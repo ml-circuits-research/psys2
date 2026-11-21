@@ -100,7 +100,8 @@ export async function projectQueryAction(proposal,session,{view,bindings}={}){
  const choices=new Map();
  for(const {mapping,operation}of nativeCreationCandidates(bindings,host.bindings(),readerArea)){
   budget.tick('query-reading.kinds');
-  if(!operation.params.kind?.enum?.includes(mapping.lemma)||mapping.lemma.length>64)continue;
+  // The constructor makes the kind when one of its declared parameters lists it (its enum, sourced from the area's kinds).
+  if(!Object.values(operation.params??{}).some(param=>param?.enum?.includes(mapping.lemma))||mapping.lemma.length>64)continue;
   choices.set(JSON.stringify([mapping.canonical,mapping.lemma]),{canonical:mapping.canonical,lemma:mapping.lemma,otherType:Number(mapping.type!==target.type)});
  }
  const candidates=[...choices.values()];
@@ -168,7 +169,7 @@ export async function recoverQueryProjection(projected,session,{view,bindings,pr
  const retain=()=>readings.length===1?projected:{...projected,interpretation:{...projected.interpretation,retry:{readings,failures}}};
  for(const profile of projected.interpretation.strategies){
   let alternate;
-  try{alternate=await provider?.[readFor[profile]]?.(writeReaderSource(projected.raw.source.text));}catch{continue;}
+  try{alternate=await provider?.[readFor[profile]]?.(writeReaderSource(projected.raw.source.text));}catch(error){failures.push([{reason:'reader-failed',profile,detail:String(error?.message??error)}]);continue;}
   if(session.isession.state[area.world]!==state)return retain();
   if(!alternate)continue;
   readings.push(alternate.raw);failures.push(alternate.failures);
