@@ -14,12 +14,19 @@ import gzip
 import hashlib
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 OFFICIAL = ROOT.parents[1] / 'official-dataset'
 UI_SOURCES = {'ui-natural-v1', 'ui-human-v1', 'ui-features-v1', 'ui-quantities-v1', 'human-adapted-v1-drawing', 'human-adapted-v1-diagram', 'ui-drawing-style-v1'}  # executed UI recipes and their paraphrases, and the small avatar feature and quantity corpora; generated relations are already numerous
 SOURCE_WEIGHTS = {'ui-diagram-v2': 2, 'data-drop-v1': 2, 'main-synthetic': 0.5}  # sampling weights (owner phase rule 2026-11-20: weights at training time, no row discarded from the dataset)
+# Data-drop batches below the quality-profile threshold (management/data-drop/QUALITY-PROFILE.md: manual faithfulness < 0.8 or
+# label spans outside the text > 15 per 1k rows) train at weight 1 instead of 2 (coordinator 2026-11-21: down-weight, not exclude).
+LOW_QUALITY_BATCHES = {'pilot', 'dg-batch-04', 'dg-batch-05', 'dg-batch-06', 'dg-batch-07', 'dg-batch-15', 'dg-batch-17',
+                       'dw-batch-04', 'dw-batch-05', 'dw-batch-07', 'dw-batch-13', 'dw-batch-14', 'dw-batch-15'}
+LOW_QUALITY_WEIGHT = 1
+BATCH_OF = re.compile(r'^data-drop-v1:((?:dg|dw|pref)-batch-\d+|pilot)')
 TRAINER_DETERMINERS = {'demonstrative': 'definite', 'possessive': 'definite', 'quantified': 'definite'}  # stored as said; the current determiner head has two classes
 
 
@@ -42,6 +49,9 @@ def trainer_view(raw, inventory):
 
 def repeats_of(source, row_id, ui_weight):
     w = ui_weight if source in UI_SOURCES else SOURCE_WEIGHTS.get(source, 1)
+    m = BATCH_OF.match(row_id) if source == 'data-drop-v1' else None
+    if m and m.group(1) in LOW_QUALITY_BATCHES:
+        w = LOW_QUALITY_WEIGHT
     whole, frac = int(w), w - int(w)
     return whole + (1 if frac and int(hashlib.sha256(('w:' + row_id).encode()).hexdigest(), 16) % 1000 < frac * 1000 else 0)
 

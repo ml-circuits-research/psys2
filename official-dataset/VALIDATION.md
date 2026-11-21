@@ -98,6 +98,12 @@ No issue found.
 | --- | ---: |
 | warning:selector-not-in-context | 1 |
 
+### ui-composition-v1 (868 rows)
+
+| issue | rows |
+| --- | ---: |
+| constraint-with-span-outside-request-removed | 58 |
+
 ### human-adapted-v1-drawing (558 rows)
 
 | issue | rows |
@@ -115,7 +121,7 @@ No issue found.
 | warning:bank-extension-needed | 34,833 |
 | warning:determiner-kept-open | 13,301 |
 | warning:selector-not-in-context | 9,313 |
-| warning:value-span-ambiguous | 2,103 |
+| warning:value-span-ambiguous | 2,077 |
 | trigger-not-in-span-removed | 2,034 |
 | warning:target-kind_span-ambiguous | 1,981 |
 | warning:target-kind-without-source-span | 547 |
@@ -342,6 +348,15 @@ Kept with a warning (not an error; see README):
 | --- | ---: |
 | selector-not-in-context | 1 |
 
+### ui-composition-v1: 868 in, 868 kept
+
+Fixed or converted:
+
+| fix | rows |
+| --- | ---: |
+| chart.type-span-as-whole-kind-phrase | 72 |
+| constraint-with-span-outside-request-removed | 58 |
+
 ### human-adapted-v1-drawing: 558 in, 558 kept
 
 Fixed or converted:
@@ -386,7 +401,7 @@ Kept with a warning (not an error; see README):
 | bank-extension-needed | 34,826 |
 | selector-not-in-context | 19,636 |
 | determiner-kept-open | 13,301 |
-| value-span-ambiguous | 2,470 |
+| value-span-ambiguous | 2,444 |
 | target-kind_span-ambiguous | 1,981 |
 | target-kind-without-source-span | 547 |
 | numeric-value-not-in-surface | 246 |
@@ -502,5 +517,5 @@ Kept with a warning (not an error; see README):
 ## Final check of the written splits
 
 - unresolved errors: **0**
-- families present in more than one split: **3320**
+- families present in more than one split: **3330**
 - label conflicts between identical texts, resolved by source priority: {'main-synthetic<-main-synthetic': 4}

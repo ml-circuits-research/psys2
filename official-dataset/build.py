@@ -41,6 +41,7 @@ SOURCES = [
     ('ui-diagram-v2-voice', DATA / 'ui-diagram-v2' / 'heldout-voice.jsonl', "the Diagram voice set with the owner's session sentences (heldout.py); trained on per the owner's decision that benchmark contamination is irrelevant"),
     ('ui-drawing-style-v1', DATA / 'ui-drawing-style-v1' / 'examples.jsonl', 'Drawing turns, mirrors, facing, leans, opacity, effects, fills, outlines, writing and filters (generate.py)'),
     ('ui-quantities-v1', DATA / 'ui-quantities-v1' / 'examples.jsonl', 'coordination of make requests and quantities (generate.py)'),
+    ('ui-composition-v1', DATA / 'ui-composition-v1' / 'examples.jsonl', 'PLACEHOLDER: random, surprise, conversation-grounded and variant compositions, invented chart values, compose.detail preference (generate.py; no worker data yet)'),
     ('human-adapted-v1-drawing', DATA / 'human-adapted-v1' / 'drawing' / 'examples.jsonl', 'real human utterances adapted to the Drawing tab (specs/human-utterance-benchmark.md)'),
     ('data-drop-v1', DATA / 'data-drop-v1' / 'accepted.jsonl.gz', 'Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py'),
     ('human-adapted-v1-diagram', DATA / 'human-adapted-v1' / 'diagram' / 'examples.jsonl', 'real human utterances adapted to the Diagram tab (specs/human-utterance-benchmark.md)'),
@@ -107,6 +108,7 @@ def build_inventory():
     inventory = union.merge_inventory(inventory, json.loads((DATA / 'data-drop-v1' / 'inventory.json').read_text()))
     # Drawing transforms, writing, effects, fills and filters (catalog b89b4541).
     inventory = union.merge_inventory(inventory, json.loads((DATA / 'ui-drawing-style-v1' / 'inventory.json').read_text()))
+    inventory = union.merge_inventory(inventory, json.loads((DATA / 'ui-composition-v1' / 'inventory.json').read_text()))
     shared = union.load_preparer()
     families = shared.target_families(inventory)
     inventory['request']['target']['keys']['type']['values'] = sorted({t for types in families.values() for t in types})

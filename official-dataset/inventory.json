@@ -1408,6 +1408,36 @@
     }
    }
   },
+  "composition": {
+   "doc": "content composed by the editor from knowledge (random, surprise, conversation-grounded)",
+   "keys": {
+    "source": {
+     "concept": "composition.source",
+     "head": "class",
+     "src": "specs/25-random-as-a-world.md: where composed content comes from (placeholder corpus ui-composition-v1)",
+     "values": [
+      "random",
+      "conversation"
+     ]
+    },
+    "variant": {
+     "concept": "composition.variant",
+     "head": "class",
+     "src": "specs/25-random-as-a-world.md: variant of the last composition",
+     "values": [
+      "another",
+      "similar",
+      "simpler",
+      "richer"
+     ]
+    },
+    "with": {
+     "concept": "composition.with",
+     "head": "span",
+     "src": "specs/25-random-as-a-world.md: things a composition must include"
+    }
+   }
+  },
   "diagram": {
    "doc": "a diagram as a whole",
    "keys": {
@@ -2257,12 +2287,13 @@
     "key": {
      "concept": "key",
      "head": "class",
-     "src": "native parameter diagram.preference.state.key (worlds/diagram.sketch/native-interface.sop)",
+     "src": "native parameter diagram.preference.state.key; compose.detail: worlds/diagram.sketch/preferences.sop",
      "values": [
       "link.style",
       "palette",
       "ids",
-      "placement.side"
+      "placement.side",
+      "compose.detail"
      ]
     },
     "scope": {
@@ -2273,7 +2304,7 @@
     "value": {
      "concept": "value",
      "head": "span",
-     "src": "native parameter diagram.preference.state.value (worlds/diagram.sketch/native-interface.sop)"
+     "src": "native parameter diagram.preference.state.value"
     }
    }
   },
@@ -2865,6 +2896,36 @@
   }
  },
  "drawing": {
+  "composition": {
+   "doc": "content composed by the editor from knowledge (random, surprise, conversation-grounded)",
+   "keys": {
+    "source": {
+     "concept": "composition.source",
+     "head": "class",
+     "src": "specs/25-random-as-a-world.md: where composed content comes from (placeholder corpus ui-composition-v1)",
+     "values": [
+      "random",
+      "conversation"
+     ]
+    },
+    "variant": {
+     "concept": "composition.variant",
+     "head": "class",
+     "src": "specs/25-random-as-a-world.md: variant of the last composition",
+     "values": [
+      "another",
+      "similar",
+      "simpler",
+      "richer"
+     ]
+    },
+    "with": {
+     "concept": "composition.with",
+     "head": "span",
+     "src": "specs/25-random-as-a-world.md: things a composition must include"
+    }
+   }
+  },
   "drawn": {
    "doc": "a drawn thing (book 7.1 t.drawn)",
    "keys": {
@@ -3805,6 +3866,7 @@
       "block",
       "calendar",
       "chart",
+      "composition",
       "diagram",
       "document",
       "drawn",

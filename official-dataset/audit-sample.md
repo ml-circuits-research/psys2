@@ -217,132 +217,134 @@
   - span “make the shape way narrower”: **change**/do trigger=“make”; target node existing definite fill=description kind=shape kind_span=“shape”
     - node.width = "(unlabelled)" from “narrower” [delta, result]
 
-43. [diagram · ui-coverage-v2 · train · diagram.node.make] “small yellow star”  — context: Start, Approved?, Review, Publish, Done, Note
+43. [diagram · ui-composition-v1 · train · diagram.compose] “please chart the numbers I mentioned for me”  — context: Start, Review, e1
+  - span “please chart the numbers I mentioned for me”: **make**/do trigger=“chart”; target composition new indefinite kind=chart kind_span=“chart”
+    - composition.source = "conversation" from “the numbers I mentioned” [eq, result]
+
+44. [diagram · ui-composition-v1 · train · diagram.compose] “could you a line chart with plausible values”  — context: Begin, Ready?, Ship
+  - span “could you a line chart with plausible values”: **make**/do trigger=“chart”; target composition new indefinite kind=chart kind_span=“line chart”
+    - chart.values = "plausible" from “plausible values” [eq, result]
+    - chart.type = "line" from “line chart” [eq, result]
+
+45. [diagram · ui-coverage-v2 · train · diagram.node.make] “small yellow star”  — context: Start, Approved?, Review, Publish, Done, Note
   - span “small yellow star”: **make**/do (no trigger); target node new indefinite kind=star kind_span=“star”
     - node.size = "small" from “small” [degree, result]
     - node.colour = "yellow" from “yellow” [eq, result]
 
-44. [diagram · ui-coverage-v2 · train · diagram.group.layout] “arrange the Approval steps group in a column”  — context: Start, Approved?, Review, Publish, Done, Note
+46. [diagram · ui-coverage-v2 · train · diagram.group.layout] “arrange the Approval steps group in a column”  — context: Start, Approved?, Review, Publish, Done, Note
   - span “arrange the Approval steps group in a column”: **arrange**/do trigger=“arrange”; target group existing definite fill=written name_span=“Approval steps”
     - group.id = "Approval steps" from “Approval steps” [eq, selector]
     - group.layout = "column" from “column” [eq, result]
 
-45. [diagram · ui-diagram-v2 · train · diagram.node.remove] “the Build step away”  — context: Database, Payment, Build, e1
+47. [diagram · ui-diagram-v2 · train · diagram.node.remove] “the Build step away”  — context: Database, Payment, Build, e1
   - span “the Build step away”: **remove**/do trigger=“away”; target node existing definite fill=written name_span=“Build”
     - node.ids = "Build" from “Build” [eq, selector]
 
-46. [diagram · ui-diagram-v2 · train · diagram.link.make] “with this onep icked, I need you to connect it to CEO”  — context: n1, Retry, n3, Draft, CEO, e1
+48. [diagram · ui-diagram-v2 · train · diagram.link.make] “with this onep icked, I need you to connect it to CEO”  — context: n1, Retry, n3, Draft, CEO, e1
   - span “with this onep icked, I need you to connect it to CEO”: **connect**/do trigger=“connect”; target link new indefinite
     - link.to = "CEO" from “CEO” [eq, result]
 
-47. [diagram · ui-diagram-v2 · train · diagram.series.make] “could you draw Costs as a second series: 8, 15, 120”  — context: Onboarding, Research, Deploy, Valid?, Quarterly revenue, 2022
-  - span “could you draw Costs as a second series: 8, 15, 120”: **make**/do trigger=“draw”; target series new indefinite
-    - series.label = "Costs" from “Costs” [eq, result]
-    - series.values = "8" from “8” [eq, result]
-    - series.values = "15" from “15” [eq, result]
-    - series.values = "120" from “120” [eq, result]
-
-48. [diagram · ui-diagram-v2-voice · train · diagram.style.apply] “make it black and white for printing”  — context: Start, Login, Valid?, Dashboard, End, n6
+49. [diagram · ui-diagram-v2-voice · train · diagram.style.apply] “make it black and white for printing”  — context: Start, Login, Valid?, Dashboard, End, n6
   - span “make it black and white for printing”: **change**/do trigger=“make”; target diagram existing definite fill=context
     - diagram.theme = "monochrome" from “black and white” [eq, result]
 
-49. [diagram · ui-diagram-v2-voice · train · compound] “delete Dashboard and connect Valid? to End”  — context: Start, Login, Valid?, Dashboard, End, n6
+50. [diagram · ui-diagram-v2-voice · train · compound] “delete Dashboard and connect Valid? to End”  — context: Start, Login, Valid?, Dashboard, End, n6
   - span “delete Dashboard”: **remove**/do trigger=“delete”; target node existing definite fill=written name_span=“Dashboard”
     - node.ids = "Dashboard" from “Dashboard” [eq, selector]
   - span “connect Valid? to End”: **connect**/do trigger=“connect”; target link new indefinite
     - link.from = "Valid?" from “Valid?” [eq, result]
     - link.to = "End" from “End” [eq, result]
 
-50. [diagram · ui-human-v1 · train · diagram.observe] “hmm, I can't remember what I drew, what's in this diagram?”  — context: link, Sales, Process
+51. [diagram · ui-human-v1 · train · diagram.observe] “hmm, I can't remember what I drew, what's in this diagram?”  — context: link, Sales, Process
   - span “hmm, I can't remember what I drew, what's in this diagram?”: **answer**/ask trigger=“what's”; target sketch existing definite fill=context
     - question {"ask": "describe"}
 
-51. [diagram · ui-human-v1 · train · diagram.group.layout] “stack Process vertically”  — context: Process, link, Sales
+52. [diagram · ui-human-v1 · train · diagram.group.layout] “stack Process vertically”  — context: Process, link, Sales
   - span “stack Process vertically”: **arrange**/do trigger=“stack”; target group existing definite fill=written name_span=“Process”
     - group.id = "Process" from “Process” [eq, selector]
     - group.layout = "column" from “vertically” [eq, result]
 
-52. [diagram · ui-natural-v1 · train · diagram.group.layout] “organise Process as a column”  — context: Process, A, link, Sales
+53. [diagram · ui-natural-v1 · train · diagram.group.layout] “organise Process as a column”  — context: Process, A, link, Sales
   - span “organise Process as a column”: **arrange**/do trigger=“organise”; target group existing definite fill=written name_span=“Process”
     - group.id = "Process" from “Process” [eq, selector]
     - group.layout = "column" from “column” [eq, result]
 
-53. [diagram · ui-natural-v1 · train · diagram.node.change] “update the Start box, labelled Approval, with value 12”  — context: Start, link, Sales, Process
+54. [diagram · ui-natural-v1 · train · diagram.node.change] “update the Start box, labelled Approval, with value 12”  — context: Start, link, Sales, Process
   - span “update the Start box, labelled Approval, with value 12”: **change**/do trigger=“update”; target node existing definite fill=written name_span=“Start”
     - node.ids = "Start" from “Start” [eq, selector]
     - node.label = "Approval" from “Approval” [eq, result]
     - node.value = "12" from “12” [eq, result]
 
-54. [diagram · ui-quantities-v1 · train · compound] “add two circles and a box”  — context: Box, Circle
+55. [diagram · ui-quantities-v1 · train · compound] “add two circles and a box”  — context: Box, Circle
   - span “add two circles”: **make**/do trigger=“add”; target node new indefinite kind=circle kind_span=“circles”
     - node.n = "2" from “two” [eq, result]
   - span “a box”: **make**/do (no trigger); target node new indefinite kind=box kind_span=“box”
 
-55. [diagram · ui-quantities-v1 · train · compound] “create a box and 2 diamonds”  — context: Box, Circle
+56. [diagram · ui-quantities-v1 · train · compound] “create a box and 2 diamonds”  — context: Box, Circle
   - span “create a box”: **make**/do trigger=“create”; target node new indefinite kind=box kind_span=“box”
   - span “2 diamonds”: **make**/do (no trigger); target node new indefinite kind=diamond kind_span=“diamonds”
     - node.n = "2" from “2” [eq, result]
 
-56. [diagram · ui-tiers-v1 · train · diagram.group.chart] “We're presenting the survey tomorrow and the slide needs a heading, so could you turn Survey results into a doughnut chart called "How customers rated us"?”  — context: Sales by region, Monthly visitors, Quarterly revenue, Survey results, North, South
+57. [diagram · ui-tiers-v1 · train · diagram.group.chart] “We're presenting the survey tomorrow and the slide needs a heading, so could you turn Survey results into a doughnut chart called "How customers rated us"?”  — context: Sales by region, Monthly visitors, Quarterly revenue, Survey results, North, South
   - span “We're presenting the survey tomorrow and the slide needs a heading, so could you turn Survey results into a doughnut chart called "How customers rated us"?”: **make**/do trigger=“turn”; target chart new indefinite kind=chart kind_span=“chart”
     - chart.source = "(unlabelled)" from “Survey results” [eq, result]
     - chart.type = "doughnut" from “doughnut chart” [eq, result]
     - chart.title = "How customers rated us" from “How customers rated us” [eq, result]
 
-57. [diagram · ui-tiers-v1 · train · diagram.group.resize] “Survey results: a little smaller”  — context: Sales by region, Monthly visitors, Quarterly revenue, Survey results, North, South
+58. [diagram · ui-tiers-v1 · train · diagram.group.resize] “Survey results: a little smaller”  — context: Sales by region, Monthly visitors, Quarterly revenue, Survey results, North, South
   - span “Survey results: a little smaller”: **change**/do (no trigger); target group existing definite fill=written name_span=“Survey results”
     - group.id = "Survey results" from “Survey results” [eq, selector]
     - group.scale = "(unlabelled)" from “smaller” [delta, result]
 
-58. [document · demo-tool-profile · train · document.block.change] “Let us replace Iceland ring road with "The room is available after lunch.". That would help.”  — context: Draft, Iceland ring road, Packing list
+59. [document · demo-tool-profile · train · document.block.change] “Let us replace Iceland ring road with "The room is available after lunch.". That would help.”  — context: Draft, Iceland ring road, Packing list
   - span “replace Iceland ring road with "The room is available after lunch."”: **change**/do trigger=“replace”; target section existing definite fill=written name_span=“Iceland ring road”
     - section.content = "The room is available after lunch." from “The room is available after lunch.” [eq, result]
 
-59. [document · demo-tool-profile · train · None] “Could you make a heading called Report; then add a paragraph saying "The delivery arrived this morning.". I appreciate it.”  — context: Draft, Report, Summary
+60. [document · demo-tool-profile · train · None] “Could you make a heading called Report; then add a paragraph saying "The delivery arrived this morning.". I appreciate it.”  — context: Draft, Report, Summary
   - span “make a heading called Report”: **make**/do trigger=“make”; target section new indefinite kind=heading kind_span=“heading”
     - section.content = "Report" from “Report” [eq, result]
   - span “add a paragraph saying "The delivery arrived this morning."”: **make**/do trigger=“add”; target section new indefinite kind=paragraph kind_span=“paragraph”
     - section.content = "The delivery arrived this morning." from “The delivery arrived this morning.” [eq, result]
 
-60. [document · demo-tool-profile · train · document.block.change] “Could you replace Meeting recap with "The room is available after lunch.". Thanks!”  — context: Draft, Meeting recap, Summary points
+61. [document · demo-tool-profile · train · document.block.change] “Could you replace Meeting recap with "The room is available after lunch.". Thanks!”  — context: Draft, Meeting recap, Summary points
   - span “replace Meeting recap with "The room is available after lunch."”: **change**/do trigger=“replace”; target section existing definite fill=written name_span=“Meeting recap”
     - section.content = "The room is available after lunch." from “The room is available after lunch.” [eq, result]
 
-61. [document · main-synthetic · train · document.block.select] “pick the blcok Intro plus 2 and 3”  — context: Intro, 3, 2, Intro, Notes
+62. [document · main-synthetic · train · document.block.select] “pick the blcok Intro plus 2 and 3”  — context: Intro, 3, 2, Intro, Notes
   - span “pick the blcok Intro plus 2 and 3”: **select**/do trigger=“pick”; target block existing definite fill=written name_span=“Intro”
     - block.id = "Intro" from “Intro” [eq, selector]
     - block.id = "Intro" from “Intro” [eq, selector]
 
-62. [document · main-synthetic · train · document.section.make] “add a setion Core”  — context: Notes
+63. [document · main-synthetic · train · document.section.make] “add a setion Core”  — context: Notes
   - span “add a setion Core”: **make**/do trigger=“add”; target section existing definite fill=context
     - section.parent = "Core" from “Core” [eq, result]
 
-63. [document · ui-coverage-v2 · train · document.observe] “what does the Budget table contain?”  — context: Project notes, Introduction, Goals, Intro, Background, Customer quote
+64. [document · ui-coverage-v2 · train · document.observe] “what does the Budget table contain?”  — context: Project notes, Introduction, Goals, Intro, Background, Customer quote
   - span “what does the Budget table contain?”: **answer**/ask trigger=“what”; target document existing definite fill=written name_span=“Budget”
     - question {"ask": "describe"}
 
-64. [document · ui-coverage-v2 · train · document.compose] “a quick note for the neighbours about the party, 60 words max”  — context: Project notes, Introduction, Goals, Intro, Background, Customer quote
+65. [document · ui-coverage-v2 · train · document.compose] “a quick note for the neighbours about the party, 60 words max”  — context: Project notes, Introduction, Goals, Intro, Background, Customer quote
   - span “a quick note for the neighbours about the party, 60 words max”: **make**/do (no trigger); target text new indefinite
     - text.genre = "note" from “note” [eq, result]
     - text.about = "about the party" from “about the party” [eq, result]
     - text.words = "60" from “60 words max” [eq, result]
 
-65. [document · ui-human-v1 · train · compound] “change the chapter heading to Overview and tidy the first paragraph”  — context: paragraph, paragraph, Notes
+66. [document · ui-human-v1 · train · compound] “change the chapter heading to Overview and tidy the first paragraph”  — context: paragraph, paragraph, Notes
   - span “change the chapter heading to Overview”: **change**/do trigger=“change”; target section existing definite fill=description kind=chapter kind_span=“chapter”
     - section.text = "Overview" from “Overview” [eq, result]
   - span “tidy”: **change**/do trigger=“tidy”; target block existing definite fill=context
 
-66. [document · ui-human-v1 · train · document.list.change] “edit the Tasks list”  — context: Tasks, Notes
+67. [document · ui-human-v1 · train · document.list.change] “edit the Tasks list”  — context: Tasks, Notes
   - span “edit the Tasks list”: **change**/do trigger=“edit”; target block existing definite fill=written name_span=“Tasks”
     - block.id = "Tasks" from “Tasks” [eq, selector]
 
-67. [document · ui-natural-v1 · train · document.section.change] “give b1 the heading Overview at level 1”  — context: Notes
+68. [document · ui-natural-v1 · train · document.section.change] “give b1 the heading Overview at level 1”  — context: Notes
   - span “give b1 the heading Overview at level 1”: **change**/do trigger=“give”; target section existing definite fill=written name_span=“b1”
     - section.id = "b1" from “b1” [eq, selector]
     - section.text = "Overview" from “Overview” [eq, result]
     - section.level = "1" from “level 1” [eq, result]
 
-68. [document · ui-natural-v1 · train · document.table.make] “Budget table: header Item,Cost; row Paper,12”  — context: Budget, Notes
+69. [document · ui-natural-v1 · train · document.table.make] “Budget table: header Item,Cost; row Paper,12”  — context: Budget, Notes
   - span “Budget table: header Item,Cost; row Paper,12”: **make**/do trigger=“None”; target block new indefinite
     - block.name = "Budget" from “Budget” [eq, result]
     - block.rows = "Item" from “Item” [eq, result]
@@ -351,33 +353,25 @@
     - block.rows = "12" from “12” [eq, result]
     - block.header = "true" from “header Item” [eq, result]
 
-69. [document · ui-tiers-v1 · train · document.block.mark] “readers can't find the sources, so in the Background paragraph please link "the original study" to https://journal.example.org/study-17”  — context: Project notes, Introduction, Goals, Intro, Background, Customer quote
+70. [document · ui-tiers-v1 · train · document.block.mark] “readers can't find the sources, so in the Background paragraph please link "the original study" to https://journal.example.org/study-17”  — context: Project notes, Introduction, Goals, Intro, Background, Customer quote
   - span “in the Background paragraph please link "the original study" to https://journal.example.org/study-17”: **change**/do trigger=“link”; target block existing definite fill=written name_span=“Background”
     - block.id = "Background" from “Background” [eq, selector]
     - block.mark = "link" from “link” [eq, result]
     - block.text = "the original study" from “the original study” [eq, selector]
     - block.attrs = "https://journal.example.org/study-17" from “https://journal.example.org/study-17” [eq, result]
 
-70. [document · ui-tiers-v1 · train · document.block.mark] “link "pricing" to example.com/prices”  — context: Project notes, Introduction, Goals, Intro, Background, Customer quote
+71. [document · ui-tiers-v1 · train · document.block.mark] “link "pricing" to example.com/prices”  — context: Project notes, Introduction, Goals, Intro, Background, Customer quote
   - span “link "pricing" to example.com/prices”: **change**/do trigger=“link”; target block existing definite fill=context
     - block.mark = "link" from “link” [eq, result]
     - block.text = "pricing" from “pricing” [eq, selector]
     - block.attrs = "example.com/prices" from “example.com/prices” [eq, result]
 
-71. [drawing · data-drop-v1 · train · None] “swap the cloud for a little grey rain cloud”  — context: Fish, Bird, Bird 2, Boat, Cat, Tree
+72. [drawing · data-drop-v1 · train · None] “swap the cloud for a little grey rain cloud”  — context: Fish, Bird, Bird 2, Boat, Cat, Tree
   - span “swap the cloud for a little grey rain cloud”: **change**/do trigger=“swap”; target drawn existing definite fill=description kind=cloud kind_span=“cloud”
     - drawn.colour = "grey" from “grey” [eq, result]
     - drawn.variant = "rain cloud" from “a little grey rain cloud” [eq, result]
 
-72. [drawing · data-drop-v1 · train · None] “let the house front be stone”  — context: House, Tree, Sun, Cloud
-  - span “let the house front be stone”: **change**/do trigger=“let”; target part existing definite fill=description kind=front kind_span=“house front”
-    - drawn.material = "stone" from “stone” [eq, result]
-
-73. [drawing · data-drop-v1 · train · None] “the bench by the tree should be over on the right side”  — context: Bench, Tree, House, Sun, Girl
-  - span “the bench by the tree should be over on the right side”: **change**/do trigger=“should”; target drawn existing definite fill=description kind=bench kind_span=“bench” description_span=“the bench by the tree”
-    - drawn.at = "right" from “the right side” [region, result]
-
-74. [drawing · data-drop-v1 · train · compound] “could you put a medium red stall over on the left side, a medium vendor facing right standing just behind the stall, a small boy standing right in front of the stall, and a small white apron on the vendor”  — context: Street, Tree
+73. [drawing · data-drop-v1 · train · compound] “could you put a medium red stall over on the left side, a medium vendor facing right standing just behind the stall, a small boy standing right in front of the stall, and a small white apron on the vendor”  — context: Street, Tree
   - span “could you put a medium red stall over on the left side”: **make**/do trigger=“could”; target drawn new indefinite kind=stall kind_span=“stall”
     - drawn.size = "medium" from “medium” [degree, result]
     - drawn.colour = "red" from “red” [eq, result]
@@ -397,48 +391,54 @@
     - part.owner = "vendor" from “the vendor” [eq, result]
     - part.colour = "white" from “white” [eq, result]
 
-75. [drawing · data-drop-v1 · train · None] “turn the scene into a wet and windy evening”  — context: House, Tree, Sun, Lake, Cloud, Boat
-  - span “turn the scene into a wet and windy evening”: **change**/do trigger=“turn”; target page existing definite fill=context
-
-76. [drawing · data-drop-v1 · train · compound] “make the little car by the gate deep cobalt blue, and give the surface a pearlescent paint look”  — context: House, Tree, Sun, Cloud, Lake, Boat
+74. [drawing · data-drop-v1 · train · compound] “make the little car by the gate deep cobalt blue, and give the surface a pearlescent paint look”  — context: House, Tree, Sun, Cloud, Lake, Boat
   - span “make the little car by the gate deep cobalt blue”: **change**/do trigger=“make”; target drawn existing definite fill=description kind=car kind_span=“car” description_span=“the little car by the gate”
     - drawn.colour = "cobalt" from “deep cobalt blue” [eq, result]
   - span “give the surface a pearlescent paint look”: **change**/do trigger=“give”; target drawn existing definite fill=description kind=surface kind_span=“surface” description_span=“surface”
 
-77. [drawing · data-drop-v1 · train · None] “maybe a little cat could go near the tree, but not so close that the door is blocked.”  — context: House, Tree, Bench, Barn, Well, Fence
+75. [drawing · data-drop-v1 · train · None] “maybe a little cat could go near the tree, but not so close that the door is blocked.”  — context: House, Tree, Bench, Barn, Well, Fence
   - span “maybe a little cat could go near the tree, but not so close that the door is blocked.”: **make**/do (no trigger); target drawn new indefinite kind=cat kind_span=“cat”
     - drawn.relation = "near" from “near” [relation, result]
     - drawn.anchor = "the tree" from “the tree” [relation, selector]
 
-78. [drawing · demo-tool-profile · train · None] “place duck pond to the left of barn.”  — context: duck pond, barn
+76. [drawing · demo-tool-profile · train · None] “place duck pond to the left of barn.”  — context: duck pond, barn
   - span “place duck pond to the left of barn”: **place**/do trigger=“place”; target drawn existing definite fill=written name_span=“duck pond”
     - drawn.relation = "left_of" from “to the left of” [relation, result]
     - drawn.anchor = "barn" from “barn” [relation, selector]
 
-79. [drawing · demo-tool-profile · train · drawing.object.change] “I need you to make meadow green. I appreciate it.”  — context: meadow, bubbles
+77. [drawing · demo-tool-profile · train · drawing.object.change] “I need you to make meadow green. I appreciate it.”  — context: meadow, bubbles
   - span “make meadow green”: **change**/do trigger=“make”; target drawn existing definite fill=written name_span=“meadow”
     - drawn.colour = "green" from “green” [eq, result]
 
-80. [drawing · human-adapted-v1-drawing · train · None] “the man in the blue shirt disappears”  — context: Man in blue shirt, Man in red shirt
+78. [drawing · human-adapted-v1-drawing · train · None] “the man in the blue shirt disappears”  — context: Man in blue shirt, Man in red shirt
   - span “the man in the blue shirt disappears”: **remove**/do trigger=“disappears”; target drawn existing definite fill=description kind=man kind_span=“man” description_span=“in the blue shirt”
 
-81. [drawing · human-adapted-v1-drawing · train · None] “is the boy large?”  — context: Boy
+79. [drawing · human-adapted-v1-drawing · train · None] “is the boy large?”  — context: Boy
   - span “is the boy large?”: **answer**/check trigger=“is”; target drawn existing definite fill=description kind=boy kind_span=“boy”
     - question {"ask": "describe"}
 
-82. [drawing · main-synthetic · train · drawing.object.make] “my current project needs a bean curd”  — context: House, Box, Circle
+80. [drawing · main-synthetic · train · drawing.object.make] “my current project needs a bean curd”  — context: House, Box, Circle
   - span “my current project needs a bean curd”: **make**/do trigger=“needs”; target drawn new indefinite kind=bean curd kind_span=“bean curd”
 
-83. [drawing · main-synthetic · train · drawing.object.make] “my current project needs a hen”  — context: House, Box, Circle
+81. [drawing · main-synthetic · train · drawing.object.make] “my current project needs a hen”  — context: House, Box, Circle
   - span “my current project needs a hen”: **make**/do trigger=“needs”; target drawn new indefinite kind=hen kind_span=“hen”
 
-84. [drawing · ui-comparatives-v1 · train · drawing.drawn.size.delta] “make the lake a bit larger”  — context: House, Box, Circle, Tree, Sun, Lake
+82. [drawing · ui-comparatives-v1 · train · drawing.drawn.size.delta] “make the lake a bit larger”  — context: House, Box, Circle, Tree, Sun, Lake
   - span “make the lake a bit larger”: **change**/do trigger=“make”; target drawn existing definite fill=description kind=lake kind_span=“lake”
     - drawn.size = "(unlabelled)" from “larger” [delta, result]
 
-85. [drawing · ui-comparatives-v1 · train · drawing.drawn.width.delta] “I want the lake a little narrower”  — context: House, Box, Circle, Tree, Sun, Lake
+83. [drawing · ui-comparatives-v1 · train · drawing.drawn.width.delta] “I want the lake a little narrower”  — context: House, Box, Circle, Tree, Sun, Lake
   - span “I want the lake a little narrower”: **change**/do trigger=“want”; target drawn existing definite fill=description kind=lake kind_span=“lake”
     - drawn.width = "(unlabelled)" from “narrower” [delta, result]
+
+84. [drawing · ui-composition-v1 · dev · drawing.compose] “go on, make me a random picture”  — context: (empty)
+  - span “go on, make me a random picture”: **make**/do trigger=“make”; target composition new indefinite
+    - composition.source = "random" from “random” [eq, result]
+
+85. [drawing · ui-composition-v1 · train · drawing.compose] “can you draw a random picture with three sheep in it!”  — context: House, Old oak
+  - span “can you draw a random picture with three sheep in it!”: **make**/do trigger=“draw”; target composition new indefinite
+    - composition.source = "random" from “random” [eq, result]
+    - composition.with = "sheep" from “three sheep” [eq, result]
 
 86. [drawing · ui-coverage-v2 · train · drawing.object.make] “white cloud, size 50”  — context: House, Old oak, Lake, Sun, Red car, Cloud
   - span “white cloud, size 50”: **make**/do (no trigger); target drawn new indefinite kind=cloud kind_span=“cloud”

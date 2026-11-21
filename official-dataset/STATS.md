@@ -1,13 +1,13 @@
 # Statistics
 
-196,865 messages; train 185,107, dev 7,865, test 3,893.
+197,862 messages; train 186,043, dev 7,911, test 3,908.
 
 ## Tab (world) × split
 
 | world | train | dev | test | total |
 | --- | ---: | ---: | ---: | ---: |
-| drawing | 81,890 | 3,461 | 1,719 | 87,070 |
-| diagram | 74,137 | 3,146 | 1,562 | 78,845 |
+| drawing | 82,375 | 3,486 | 1,729 | 87,590 |
+| diagram | 74,588 | 3,167 | 1,567 | 79,322 |
 | document | 11,568 | 498 | 242 | 12,308 |
 | avatar | 9,834 | 409 | 211 | 10,454 |
 | calendar | 7,678 | 351 | 159 | 8,188 |
@@ -16,7 +16,7 @@
 
 | source | rows |
 | --- | ---: |
-| data-drop-v1 | 106,901 |
+| data-drop-v1 | 106,902 |
 | demo-tool-profile | 33,297 |
 | main-synthetic | 26,363 |
 | ui-diagram-v2 | 7,875 |
@@ -25,6 +25,7 @@
 | ui-coverage-v2 | 3,775 |
 | ui-drawing-style-v1 | 2,238 |
 | ui-natural-v1 | 1,788 |
+| ui-composition-v1 | 996 |
 | ui-comparatives-v1 | 940 |
 | human-adapted-v1-drawing | 670 |
 | human-adapted-v1-diagram | 610 |
@@ -37,7 +38,7 @@
 
 | requests | rows |
 | --- | ---: |
-| 1 | 155,911 |
+| 1 | 156,908 |
 | 2 | 28,912 |
 | 3 | 4,497 |
 | 4 | 2,311 |
@@ -51,7 +52,7 @@
 
 | act | rows |
 | --- | ---: |
-| make | 119,770 |
+| make | 120,695 |
 | change | 93,106 |
 | answer | 11,690 |
 | place | 11,094 |
@@ -67,6 +68,7 @@
 | reverse | 313 |
 | merge | 135 |
 | split | 126 |
+| set | 72 |
 | repeat | 7 |
 | disconnect | 1 |
 
@@ -74,7 +76,7 @@
 
 | world.type | rows |
 | --- | ---: |
-| drawing.drawn | 113,896 |
+| drawing.drawn | 113,897 |
 | diagram.chart | 42,058 |
 | diagram.node | 31,915 |
 | drawing.page | 9,955 |
@@ -95,18 +97,20 @@
 | diagram.point | 724 |
 | diagram.series | 720 |
 | diagram.sketch | 681 |
+| drawing.composition | 519 |
+| diagram.composition | 405 |
 | drawing.preference | 306 |
 | calendar.room | 283 |
 | document.document | 249 |
 | document.inline | 136 |
 | calendar.person | 121 |
-| diagram.preference | 48 |
+| diagram.preference | 120 |
 
 ## Operation (top 60)
 
 | operation | rows |
 | --- | ---: |
-| none | 87,708 |
+| none | 87,709 |
 | compound | 36,786 |
 | drawing.object.make | 19,978 |
 | avatar.part.change | 5,728 |
@@ -126,8 +130,10 @@
 | document.block.make | 673 |
 | diagram.chart.change | 599 |
 | calendar.meeting.change | 598 |
+| drawing.compose | 519 |
 | drawn.observe | 516 |
 | drawing.object.place | 489 |
+| diagram.compose | 477 |
 | world-informed-completion | 432 |
 | diagram.group.change | 411 |
 | diagram.observe.node | 386 |
@@ -164,9 +170,7 @@
 | drawing.drawn.height.delta | 181 |
 | document.list.make | 172 |
 | calendar.event.add | 171 |
-| document.table.make | 169 |
-| diagram.selection.remove | 168 |
-| … 101 more | 8,480 |
+| … 103 more | 8,817 |
 
 ## Relation
 
@@ -333,11 +337,11 @@
 | drawing.drawn.relation | 50,959 |
 | drawing.drawn.size | 35,803 |
 | drawing.drawn.colour | 31,647 |
-| drawing.drawn.at | 15,872 |
+| drawing.drawn.at | 15,873 |
 | drawing.drawn.count | 12,730 |
-| diagram.chart.type | 12,313 |
+| diagram.chart.type | 12,406 |
 | drawing.drawn.facing | 9,973 |
-| diagram.node.ids | 8,896 |
+| diagram.node.ids | 7,389 |
 | avatar.part.variant | 7,040 |
 | diagram.node.label | 6,359 |
 | drawing.drawn.pose | 5,990 |
@@ -364,10 +368,11 @@
 | avatar.part.colour | 2,339 |
 | diagram.chart.legend | 2,150 |
 | diagram.chart.sort | 2,012 |
-| drawing.drawn.label | 1,863 |
+| drawing.drawn.label | 1,864 |
 | diagram.chart.grid | 1,700 |
 | diagram.node.relation | 1,669 |
 | drawing.drawn.ids | 1,660 |
+| diagram.chart.values | 1,624 |
 | diagram.chart.show_values | 1,618 |
 | drawing.part.colour | 1,617 |
 | diagram.node.n | 1,615 |
@@ -375,7 +380,6 @@
 | avatar.part.id | 1,562 |
 | diagram.chart.fontSize | 1,549 |
 | diagram.node.x | 1,545 |
-| diagram.chart.values | 1,509 |
 | diagram.link.ids | 1,471 |
 | drawing.drawn.kind | 1,450 |
 | drawing.preference.scope | 1,442 |
@@ -389,13 +393,13 @@
 | document.text.about | 1,101 |
 | document.text.title | 1,057 |
 | document.text.words | 1,044 |
-| … 225 more | 56,300 |
+| … 231 more | 57,299 |
 
 ## Style (top 40)
 
 | style | rows |
 | --- | ---: |
-| drop-equivalent | 70,690 |
+| drop-equivalent | 70,691 |
 | drop-complex | 19,838 |
 | haiku-v2 | 17,506 |
 | haiku-v1 | 14,706 |
@@ -419,6 +423,7 @@
 | coverage-complex | 1,107 |
 | demo-tool-profile | 1,085 |
 | human-adapted | 1,077 |
+| composition-placeholder | 996 |
 | mechanical-simplified | 968 |
 | comparative-natural | 940 |
 | mechanical-question | 686 |
@@ -434,12 +439,11 @@
 | human-syn | 272 |
 | diagram-simplified-typo | 270 |
 | mechanical-numberwords | 250 |
-| diagram-equivalent-nospace | 224 |
-| … 56 more | 3,885 |
+| … 57 more | 4,109 |
 
 ## Text length
 
 | measure | min | median | p90 | max |
 | --- | ---: | ---: | ---: | ---: |
-| characters | 2 | 52 | 120 | 379 |
+| characters | 2 | 51 | 119 | 379 |
 | words | 1 | 10 | 24 | 72 |

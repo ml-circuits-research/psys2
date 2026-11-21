@@ -1,0 +1,83 @@
+{
+ "drawing": {
+  "composition": {
+   "keys": {
+    "source": {
+     "concept": "composition.source",
+     "head": "class",
+     "src": "specs/25-random-as-a-world.md: where composed content comes from (placeholder corpus ui-composition-v1)",
+     "values": [
+      "random",
+      "conversation"
+     ]
+    },
+    "variant": {
+     "concept": "composition.variant",
+     "head": "class",
+     "src": "specs/25-random-as-a-world.md: variant of the last composition",
+     "values": [
+      "another",
+      "similar",
+      "simpler",
+      "richer"
+     ]
+    },
+    "with": {
+     "concept": "composition.with",
+     "head": "span",
+     "src": "specs/25-random-as-a-world.md: things a composition must include"
+    }
+   },
+   "doc": "content composed by the editor from knowledge (random, surprise, conversation-grounded)"
+  }
+ },
+ "diagram": {
+  "composition": {
+   "keys": {
+    "source": {
+     "concept": "composition.source",
+     "head": "class",
+     "src": "specs/25-random-as-a-world.md: where composed content comes from (placeholder corpus ui-composition-v1)",
+     "values": [
+      "random",
+      "conversation"
+     ]
+    },
+    "variant": {
+     "concept": "composition.variant",
+     "head": "class",
+     "src": "specs/25-random-as-a-world.md: variant of the last composition",
+     "values": [
+      "another",
+      "similar",
+      "simpler",
+      "richer"
+     ]
+    },
+    "with": {
+     "concept": "composition.with",
+     "head": "span",
+     "src": "specs/25-random-as-a-world.md: things a composition must include"
+    }
+   },
+   "doc": "content composed by the editor from knowledge (random, surprise, conversation-grounded)"
+  },
+  "preference": {
+   "keys": {
+    "key": {
+     "concept": "key",
+     "head": "class",
+     "src": "native parameter diagram.preference.state.key; compose.detail: worlds/diagram.sketch/preferences.sop",
+     "values": [
+      "compose.detail"
+     ]
+    },
+    "value": {
+     "concept": "value",
+     "head": "span",
+     "src": "native parameter diagram.preference.state.value"
+    }
+   }
+  }
+ }
+}

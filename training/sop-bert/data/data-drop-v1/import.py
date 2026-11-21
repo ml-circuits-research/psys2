@@ -615,6 +615,47 @@ def colour_label(row, q, t, span, stats):
     stats['colour adjective on the target noun without a colour label -> colour label'] += 1
 
 
+def reference_ids(row, q, t, stats):
+    """Selector ids name the things the request acts on (official contract, real-use v10/v11 diagnosis 2026-11-21):
+    - an id that repeats the request's anchor is the reference point, not a selected thing ("send Flask on top of
+      Sample": Sample is the anchor only);
+    - an id whose value is a cut-short context name ("Supplier" when the text and the context say "Supplier A") is left
+      out rather than kept truncated;
+    - an answer about a named context thing that is a chart asks about the chart (target type chart, key chart.id)."""
+    cons = q.get('constraints') or []
+    if not cons:
+        return
+    fam = lambda c: str(c.get('key', '')).rsplit('.', 1)[0]
+    tail = lambda c: str(c.get('key', '')).rsplit('.', 1)[-1]
+    anchors = {(fam(c), str(c.get('value'))) for c in cons if tail(c) == 'anchor'}
+    existing = (row.get('context') or {}).get('existing') or []
+    names = {str(e.get('name')): str(e.get('kind') or '') for e in existing if e.get('name')}
+    text = row.get('text') or ''
+    kept = []
+    for c in cons:
+        if tail(c) in ('ids', 'id'):
+            v = str(c.get('value'))
+            if (fam(c), v) in anchors:
+                stats['selector id repeating the anchor dropped'] += 1
+                continue
+            longer = [n for n in names if n != v and len(n) > len(v) and n.lower().startswith(v.lower()) and not n[len(v)].isalpha()
+                      and n.lower() in text.lower()]
+            if v not in names and longer:
+                stats['cut-short name id left out'] += 1
+                continue
+        kept.append(c)
+    if len(kept) != len(cons):
+        q['constraints'] = kept
+    if q.get('act') == 'answer' and t.get('type') == 'node' and row.get('world') == 'diagram':
+        named = [str(c.get('value')) for c in kept if c.get('key') == 'node.ids']
+        if named and all('chart' in names.get(v, '') for v in named):
+            t['type'] = 'chart'
+            for c in kept:
+                if c.get('key') == 'node.ids':
+                    c['key'] = 'chart.id'
+            stats['answer about a named chart relabelled to the chart'] += 1
+
+
 def official_contract(row, stats):
     """The official label contract on every imported row (frozen batches included): an existing target always states how it is
     given (written name or code, kind description, population, the context, a journal step), as the rest of the official data
@@ -636,6 +677,7 @@ def official_contract(row, stats):
             stats[f'existing target without fill -> {fill}'] += 1
         span = q.get('span') or ''
         colour_label(row, q, t, span, stats)
+        reference_ids(row, q, t, stats)
         for c in q.get('constraints') or []:
             if c.get('key') == 'chart.type' and isinstance(c.get('value_span'), str):
                 m = re.search(re.escape(c['value_span']) + r'(\s+(?:chart|graph|plot|diagram))\b', span)

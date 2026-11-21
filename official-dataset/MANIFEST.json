@@ -479,7 +479,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "661065cb03860cefabfdddf382c433a6cf08052d10085ef741e57c11aab94378",
+  "builderSha256": "5d9c7f7a0d250354af10860b981add726d2405d1519cd34d8c14f706895e5d33",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -669,6 +669,21 @@
       }
     },
     {
+      "name": "ui-composition-v1",
+      "path": "training/sop-bert/data/ui-composition-v1/examples.jsonl",
+      "description": "PLACEHOLDER: random, surprise, conversation-grounded and variant compositions, invented chart values, compose.detail preference (generate.py; no worker data yet)",
+      "gitCommit": null,
+      "sha256": "66ff2c20c6252541aad5287090e83956c80cf47ee5a9fde8414beffdbb695d45",
+      "rowsIn": 868,
+      "rowsKept": 868,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {
+        "chart.type-span-as-whole-kind-phrase": 72,
+        "constraint-with-span-outside-request-removed": 58
+      }
+    },
+    {
       "name": "human-adapted-v1-drawing",
       "path": "training/sop-bert/data/human-adapted-v1/drawing/examples.jsonl",
       "description": "real human utterances adapted to the Drawing tab (specs/human-utterance-benchmark.md)",
@@ -687,8 +702,8 @@
       "name": "data-drop-v1",
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl.gz",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": "e332b9ed0384a9393b1e165b3aaadb06c63138fd",
-      "sha256": "5c91f323030b87f3775cadb21befe8fbc2d12efe4247f0ac4ff732fa7ebaac85",
+      "gitCommit": "1020f86cdfc30546860d0e6ddc759db48715efb3",
+      "sha256": "184b0494dfecfdd8cdef9606309893753571b55f6021fba452a9d06bc56fad36",
       "rowsIn": 95260,
       "rowsKept": 95259,
       "rowsDropped": 1,
@@ -894,12 +909,12 @@
     }
   ],
   "splits": {
-    "train": 185107,
-    "dev": 7865,
-    "test": 3893
+    "train": 186043,
+    "dev": 7911,
+    "test": 3908
   },
-  "families": 26950,
-  "leakedFamilies": 3320,
+  "families": 26960,
+  "leakedFamilies": 3330,
   "labelConflictsResolvedByPriority": {
     "main-synthetic<-main-synthetic": 4
   },
@@ -915,8 +930,9 @@
     "ui-diagram-v2-voice": 14,
     "ui-drawing-style-v1": 307,
     "ui-quantities-v1": 42,
+    "ui-composition-v1": 128,
     "human-adapted-v1-drawing": 112,
-    "data-drop-v1": 11642,
+    "data-drop-v1": 11643,
     "human-adapted-v1-diagram": 72,
     "main-synthetic": 5109
   },
@@ -929,37 +945,37 @@
     "anchor_kind": 5374
   },
   "kindVocabulary": {
-    "path": "docs/webchat/models/sop-bert/41b4fa40f97188656ded0af98e51a25250f47f9a5c4cf5c4c1f43dbf85e16a1c/bindings.json",
-    "sha256": "117477f1e4e296ba030916e46c6b55b705557d05580e700e8c089a24907923b9"
+    "path": "docs/webchat/models/sop-bert/e1a9e8d56bb911572870800e2f806a43040b7bc60f2602ef4b8e7e136c459a37/bindings.json",
+    "sha256": "19a22dd64b6df988b0bf3f0558863f8ab3245745b08790b041499dc19bc96bc2"
   },
   "files": {
     "STATS.md": {
-      "sha256": "01987ffa688bf88e37370bbbf1e473dea2477b8669134a0ed5889e8b3ffbca37",
-      "bytes": 10802
+      "sha256": "36d2b0dad151d6c86322d25b4eccd80ff2b0d5c0398e7502498206a899668a20",
+      "bytes": 10894
     },
     "VALIDATION.md": {
-      "sha256": "8922312317cafa108a0cfd5b2213a06cf188aaeb38b5bbc36a8d824f83b3f827",
-      "bytes": 13911
+      "sha256": "e183c17653e1ccc378078d1c7f2cfc8227deab413fa842c2cc7fe6fe9c65b266",
+      "bytes": 13913
     },
     "audit-sample.md": {
-      "sha256": "d36e7594addbff8e1ea416dd7ed1f7db8a45baca8a979fb7b3cae05f13b8a453",
-      "bytes": 48263
+      "sha256": "9a4212d1d6c7d9530b7126335eddd9f513442d5e8cbdaf48d2ce91d7d685af45",
+      "bytes": 46253
     },
     "dev.jsonl": {
-      "sha256": "de7f4a56a87fd11d0b360885afef15db207260024deb25f54f626215ed9232bf",
-      "bytes": 10886175
+      "sha256": "27be422a30a5989f5b6f373721313380cfb1d32f858b2429e34cfe7bc9e1d070",
+      "bytes": 10917014
     },
     "inventory.json": {
-      "sha256": "173a41a4076bab66b7b510c27377c27105ff3718e0d8d5e571e8ffb289791dee",
-      "bytes": 86841
+      "sha256": "9b3dcb17d623f3e3974c88ffb8d3952386a8f65670a676c7f199ec3fbf4481b2",
+      "bytes": 88481
     },
     "test.jsonl": {
-      "sha256": "932f8002106f8d54a0bae9ff1bf35cfbd47d6cf8a51dd0889d939f682960c007",
-      "bytes": 5395968
+      "sha256": "1d644ac3fcc4fbea9deb0098fb2b6d4c18d0a632cba73c04ff9d82b11c1a8317",
+      "bytes": 5402601
     },
     "train.jsonl.gz": {
-      "sha256": "20e082548a3d6e723bef93fed564fd8d0694bfb9786150d5fdab7b500235d453",
-      "bytes": 9812292
+      "sha256": "cce7a4c3507a21352ef05a1f43a0faa4ad781d7383cea7d6599504dd0767af91",
+      "bytes": 9835200
     }
   },
   "policy": {
@@ -975,6 +991,7 @@
       "ui-diagram-v2-voice",
       "ui-drawing-style-v1",
       "ui-quantities-v1",
+      "ui-composition-v1",
       "human-adapted-v1-drawing",
       "data-drop-v1",
       "human-adapted-v1-diagram",
