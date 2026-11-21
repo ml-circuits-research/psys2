@@ -47,6 +47,8 @@ SOURCES = [
     ('human-adapted-v1-diagram', DATA / 'human-adapted-v1' / 'diagram' / 'examples.jsonl', 'real human utterances adapted to the Diagram tab (specs/human-utterance-benchmark.md)'),
     ('demo-tool-profile', DATA / 'demo-tool-profile' / 'active.jsonl.gz', 'the corpus of the deployed reader: haiku-v1/v2 authored data plus demo tool supplements'),
     ('main-synthetic', REPO / 'main-synthetic-dataset' / 'examples.jsonl', 'owner synthetic set (generate-reader-datasets skill); converted, mostly dropped'),
+    # Lowest priority: canonical anchors (style "canonical", not paraphrases) for every declared operation x parameter x value x target form.
+    ('ui-systematic-v1', DATA / 'ui-systematic-v1' / 'examples.jsonl', 'CANONICAL anchors: one plain command per declared operation x parameter x value x target form, combinations, compounds, follow-ups, UI controls (generate.py); trained at low weight'),
 ]
 # Sources still being authored by other workstreams are included once their file exists.
 SOURCES = [src for src in SOURCES if src[1].exists() or not src[0].startswith(('human-adapted', 'data-drop'))]

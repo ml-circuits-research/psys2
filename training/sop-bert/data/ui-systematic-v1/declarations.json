@@ -1,0 +1,6828 @@
+{
+ "drawing": {
+  "view": "draw",
+  "operations": [
+   {
+    "id": "drawing.object.make",
+    "act": "make",
+    "on": "art.draw.object",
+    "sample": [
+     {
+      "args": {
+       "kind": {
+        "enum": true
+       },
+       "label": {
+        "unique": {
+         "prefix": "Shape"
+        }
+       },
+       "x": {
+        "number": {
+         "min": 80,
+         "max": 650
+        }
+       },
+       "y": {
+        "number": {
+         "min": 80,
+         "max": 450
+        }
+       },
+       "size": {
+        "number": {
+         "min": 40,
+         "max": 100
+        }
+       }
+      }
+     }
+    ],
+    "spatial": {
+     "frame": "drawing.canvas",
+     "kindKey": "kind",
+     "xKey": "x",
+     "yKey": "y",
+     "sizeKey": "size"
+    },
+    "params": {
+     "kind": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "circle",
+       "oval",
+       "square",
+       "rectangle",
+       "triangle",
+       "star",
+       "heart",
+       "line",
+       "arrow",
+       "lake",
+       "river",
+       "road",
+       "field",
+       "patch",
+       "hill",
+       "house",
+       "tree",
+       "sun",
+       "cloud",
+       "car",
+       "flower",
+       "cat",
+       "dog",
+       "fish",
+       "bird",
+       "boat",
+       "mountain",
+       "rainbow",
+       "person",
+       "balloon",
+       "rocket",
+       "moon",
+       "landscape",
+       "pond",
+       "text"
+      ]
+     },
+     "name": {
+      "type": "string"
+     },
+     "label": {
+      "type": "string"
+     },
+     "width": {
+      "type": "number",
+      "min": 0.001
+     },
+     "height": {
+      "type": "number",
+      "min": 0.001
+     },
+     "x": {
+      "type": "number"
+     },
+     "y": {
+      "type": "number"
+     },
+     "size": {
+      "type": "number",
+      "min": 0.001
+     },
+     "color": {
+      "type": "string",
+      "nullable": true
+     },
+     "age": {
+      "type": "string"
+     },
+     "sex": {
+      "type": "string"
+     },
+     "facing": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right"
+      ]
+     },
+     "toward": {
+      "type": "string"
+     },
+     "pose": {
+      "type": "string"
+     },
+     "expression": {
+      "type": "string"
+     },
+     "trait": {
+      "type": "string"
+     },
+     "wear": {
+      "type": "string"
+     },
+     "edge": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right",
+       "top",
+       "bottom"
+      ]
+     },
+     "cut": {
+      "type": "number",
+      "min": 0,
+      "max": 0.9
+     },
+     "behind": {
+      "type": "string"
+     },
+     "hidden": {
+      "type": "number",
+      "min": 0,
+      "max": 1
+     },
+     "side": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right",
+       "top",
+       "above",
+       "below"
+      ]
+     },
+     "offset": {
+      "type": "number"
+     },
+     "unit": {
+      "type": "string"
+     },
+     "grade": {
+      "type": "string"
+     },
+     "near": {
+      "type": "string"
+     },
+     "material": {
+      "type": "string"
+     },
+     "cause": {
+      "type": "string"
+     },
+     "seat": {
+      "type": "string"
+     },
+     "holds": {
+      "type": "string"
+     },
+     "at": {
+      "type": "string",
+      "enum": [
+       "top",
+       "bottom",
+       "left",
+       "right",
+       "center",
+       "middle",
+       "top_left",
+       "top_right",
+       "bottom_left",
+       "bottom_right",
+       "corner",
+       "background",
+       "foreground"
+      ]
+     },
+     "text": {
+      "type": "string"
+     },
+     "font": {
+      "type": "string"
+     },
+     "weight": {
+      "type": "string",
+      "enum": [
+       "normal",
+       "bold"
+      ]
+     },
+     "slant": {
+      "type": "string",
+      "enum": [
+       "normal",
+       "italic"
+      ]
+     },
+     "align": {
+      "type": "string",
+      "enum": [
+       "start",
+       "middle",
+       "end"
+      ]
+     },
+     "frame": {
+      "type": "string"
+     },
+     "rotation": {
+      "type": "number",
+      "min": -360,
+      "max": 360
+     },
+     "opacity": {
+      "type": "number",
+      "min": 0,
+      "max": 1
+     },
+     "effect": {
+      "type": "string"
+     },
+     "fill": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "drawing.catalog.make",
+    "act": "make",
+    "on": "art.draw.object",
+    "knowledgeInputs": [
+     {
+      "argument": "name",
+      "load": "thing"
+     }
+    ],
+    "spatial": {
+     "frame": "drawing.canvas",
+     "kindKey": "name",
+     "xKey": "x",
+     "yKey": "y",
+     "sizeKey": "size"
+    },
+    "params": {
+     "name": {
+      "type": "string",
+      "required": true
+     },
+     "x": {
+      "type": "number"
+     },
+     "y": {
+      "type": "number"
+     },
+     "size": {
+      "type": "number",
+      "min": 0.001
+     },
+     "age": {
+      "type": "string"
+     },
+     "sex": {
+      "type": "string"
+     },
+     "facing": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right"
+      ]
+     },
+     "toward": {
+      "type": "string"
+     },
+     "pose": {
+      "type": "string"
+     },
+     "expression": {
+      "type": "string"
+     },
+     "trait": {
+      "type": "string"
+     },
+     "wear": {
+      "type": "string"
+     },
+     "edge": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right",
+       "top",
+       "bottom"
+      ]
+     },
+     "cut": {
+      "type": "number",
+      "min": 0,
+      "max": 0.9
+     },
+     "behind": {
+      "type": "string"
+     },
+     "hidden": {
+      "type": "number",
+      "min": 0,
+      "max": 1
+     },
+     "side": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right",
+       "top",
+       "above",
+       "below"
+      ]
+     },
+     "offset": {
+      "type": "number"
+     },
+     "unit": {
+      "type": "string"
+     },
+     "grade": {
+      "type": "string"
+     },
+     "near": {
+      "type": "string"
+     },
+     "material": {
+      "type": "string"
+     },
+     "cause": {
+      "type": "string"
+     },
+     "seat": {
+      "type": "string"
+     },
+     "holds": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "drawing.object.change",
+    "act": "change",
+    "on": "art.draw.object",
+    "effectScope": {
+     "ancestors": {
+      "via": [
+       "in",
+       "parent"
+      ],
+      "keys": [
+       "x",
+       "y",
+       "size",
+       "width",
+       "height"
+      ]
+     }
+    },
+    "sample": [
+     {
+      "args": {
+       "ids": {
+        "ref": {
+         "on": "art.draw.object",
+         "many": true
+        }
+       },
+       "label": {
+        "unique": {
+         "prefix": "Shape"
+        }
+       }
+      }
+     }
+    ],
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "name": {
+      "type": "string"
+     },
+     "label": {
+      "type": "string"
+     },
+     "width": {
+      "type": "number",
+      "min": 0.001
+     },
+     "height": {
+      "type": "number",
+      "min": 0.001
+     },
+     "x": {
+      "type": "number"
+     },
+     "y": {
+      "type": "number"
+     },
+     "size": {
+      "type": "number",
+      "min": 0.001
+     },
+     "color": {
+      "type": "string",
+      "nullable": true
+     },
+     "facing": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right"
+      ]
+     },
+     "toward": {
+      "type": "string"
+     },
+     "rotation": {
+      "type": "number",
+      "min": -360,
+      "max": 360
+     },
+     "turn": {
+      "type": "string"
+     },
+     "mirror": {
+      "type": "string",
+      "enum": [
+       "horizontal",
+       "vertical",
+       "none"
+      ]
+     },
+     "skew": {
+      "type": "number",
+      "min": -75,
+      "max": 75
+     },
+     "opacity": {
+      "type": "number",
+      "min": 0,
+      "max": 1
+     },
+     "effect": {
+      "type": "string"
+     },
+     "fill": {
+      "type": "string"
+     },
+     "gradient": {
+      "type": "string"
+     },
+     "pose": {
+      "type": "string"
+     },
+     "expression": {
+      "type": "string"
+     },
+     "trait": {
+      "type": "string"
+     },
+     "wear": {
+      "type": "string"
+     },
+     "edge": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right",
+       "top",
+       "bottom"
+      ]
+     },
+     "cut": {
+      "type": "number",
+      "min": 0,
+      "max": 0.9
+     },
+     "behind": {
+      "type": "string"
+     },
+     "hidden": {
+      "type": "number",
+      "min": 0,
+      "max": 1
+     },
+     "side": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right",
+       "top",
+       "above",
+       "below"
+      ]
+     },
+     "offset": {
+      "type": "number"
+     },
+     "unit": {
+      "type": "string"
+     },
+     "grade": {
+      "type": "string"
+     },
+     "near": {
+      "type": "string"
+     },
+     "material": {
+      "type": "string"
+     },
+     "cause": {
+      "type": "string"
+     },
+     "seat": {
+      "type": "string"
+     },
+     "variant": {
+      "type": "string"
+     },
+     "outline": {
+      "type": "string"
+     },
+     "stroke": {
+      "type": "number",
+      "min": 0,
+      "max": 40
+     },
+     "text": {
+      "type": "string"
+     },
+     "font": {
+      "type": "string"
+     },
+     "weight": {
+      "type": "string",
+      "enum": [
+       "normal",
+       "bold"
+      ]
+     },
+     "slant": {
+      "type": "string",
+      "enum": [
+       "normal",
+       "italic"
+      ]
+     },
+     "align": {
+      "type": "string",
+      "enum": [
+       "start",
+       "middle",
+       "end"
+      ]
+     },
+     "frame": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "drawing.object.select",
+    "act": "pick",
+    "on": "art.draw.object",
+    "effectScope": {
+     "selection": {
+      "key": "selected"
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true,
+      "nullable": true
+     }
+    }
+   },
+   {
+    "id": "drawing.objects.select",
+    "act": "pick",
+    "on": "art.draw.object",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "drawing.object.place",
+    "act": "place",
+    "on": "art.draw.object",
+    "effectScope": {
+     "ancestors": {
+      "via": [
+       "in",
+       "parent"
+      ],
+      "keys": [
+       "x",
+       "y",
+       "size",
+       "width",
+       "height"
+      ]
+     }
+    },
+    "coordinates": {
+     "dimension": "length",
+     "unit": "canvas.pixel",
+     "frame": "drawing.canvas"
+    },
+    "spatial": {
+     "frame": "drawing.canvas",
+     "xKey": "x",
+     "yKey": "y",
+     "idsKey": "ids"
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "x": {
+      "type": "number",
+      "required": true
+     },
+     "y": {
+      "type": "number",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "drawing.object.move",
+    "act": "place",
+    "on": "art.draw.object",
+    "effectScope": {
+     "ancestors": {
+      "via": [
+       "in",
+       "parent"
+      ],
+      "keys": [
+       "x",
+       "y",
+       "size",
+       "width",
+       "height"
+      ]
+     }
+    },
+    "coordinates": {
+     "dimension": "length",
+     "unit": "canvas.pixel",
+     "frame": "drawing.canvas"
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "direction": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "left",
+       "right",
+       "up",
+       "down"
+      ]
+     },
+     "distance": {
+      "type": "number",
+      "min": 1,
+      "default": 80
+     }
+    }
+   },
+   {
+    "id": "drawing.objects.transform",
+    "act": "change",
+    "on": "art.draw.object",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "coordinates": {
+     "dimension": "length",
+     "unit": "canvas.pixel",
+     "frame": "drawing.canvas"
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "x": {
+      "type": "number",
+      "required": true
+     },
+     "y": {
+      "type": "number",
+      "required": true
+     },
+     "width": {
+      "type": "number",
+      "required": true,
+      "min": 0.001
+     },
+     "height": {
+      "type": "number",
+      "required": true,
+      "min": 0.001
+     }
+    }
+   },
+   {
+    "id": "drawing.page.clear",
+    "act": "remove",
+    "on": "art.draw.page",
+    "intent": {
+     "subject": "contents of the drawing",
+     "determiner": "the"
+    },
+    "params": {}
+   },
+   {
+    "id": "drawing.object.remove",
+    "act": "remove",
+    "on": "art.draw.object",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "drawing.ids.show",
+    "act": "ask",
+    "on": "art.draw.page",
+    "intent": {
+     "subject": "ObjectIDs",
+     "determiner": "the",
+     "parameters": {
+      "duration": {
+       "format": "duration-ms",
+       "label": "for"
+      }
+     }
+    },
+    "params": {
+     "mode": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "temporary",
+       "always",
+       "off"
+      ]
+     },
+     "duration": {
+      "type": "integer",
+      "min": 1,
+      "max": 60000,
+      "default": 4000
+     }
+    }
+   },
+   {
+    "id": "drawing.observe",
+    "act": "ask",
+    "on": "art.draw.object",
+    "params": {}
+   },
+   {
+    "id": "drawing.undo",
+    "act": "undo",
+    "on": "art.draw.object",
+    "params": {}
+   },
+   {
+    "id": "drawing.redo",
+    "act": "redo",
+    "on": "art.draw.object",
+    "params": {}
+   },
+   {
+    "id": "drawing.object.parts",
+    "act": "ask",
+    "on": "art.draw.object",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "drawing.part.select",
+    "act": "ask",
+    "on": "art.draw.part",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "index": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     }
+    }
+   },
+   {
+    "id": "drawing.part.change",
+    "act": "change",
+    "on": "art.draw.part",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "index": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     },
+     "color": {
+      "type": "string"
+     },
+     "width": {
+      "type": "number",
+      "min": 0.01
+     },
+     "height": {
+      "type": "number",
+      "min": 0.01
+     },
+     "variant": {
+      "type": "string"
+     },
+     "length": {
+      "type": "string"
+     },
+     "shape": {
+      "type": "string"
+     },
+     "material": {
+      "type": "string"
+     },
+     "rotation": {
+      "type": "number",
+      "min": -360,
+      "max": 360
+     },
+     "turn": {
+      "type": "string"
+     },
+     "mirror": {
+      "type": "string",
+      "enum": [
+       "horizontal",
+       "vertical",
+       "none"
+      ]
+     },
+     "opacity": {
+      "type": "number",
+      "min": 0,
+      "max": 1
+     },
+     "effect": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "drawing.part.place",
+    "act": "place",
+    "on": "art.draw.part",
+    "coordinates": {
+     "dimension": "length",
+     "unit": "canvas.pixel",
+     "frame": "drawing.canvas"
+    },
+    "effectScope": {
+     "projection": "composite"
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "index": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     },
+     "x": {
+      "type": "number",
+      "required": true
+     },
+     "y": {
+      "type": "number",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "drawing.part.remove",
+    "act": "remove",
+    "on": "art.draw.part",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "index": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     }
+    }
+   },
+   {
+    "id": "drawing.part.extract",
+    "act": "ungroup",
+    "on": "art.draw.part",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "intent": {
+     "parameters": {
+      "id": {
+       "role": "source",
+       "reference": true,
+       "label": "from object"
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "index": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     }
+    }
+   },
+   {
+    "id": "drawing.object.group",
+    "act": "group",
+    "on": "art.draw.object",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "intent": {
+     "parameters": {
+      "ids": {
+       "role": "source",
+       "reference": true,
+       "label": "from members"
+      }
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "name": {
+      "type": "string",
+      "default": "Group"
+     },
+     "label": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "drawing.object.ungroup",
+    "act": "ungroup",
+    "on": "art.draw.object",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "intent": {
+     "parameters": {
+      "id": {
+       "role": "source",
+       "reference": true,
+       "label": "from object"
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "drawing.part.add",
+    "act": "make",
+    "on": "art.draw.part",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "kind": {
+      "type": "string",
+      "required": true
+     },
+     "variant": {
+      "type": "string"
+     },
+     "color": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "drawing.person.vary",
+    "act": "change",
+    "on": "art.draw.object",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "drawing.person.expression",
+    "act": "change",
+    "on": "art.draw.object",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "expression": {
+      "type": "string",
+      "required": true
+     },
+     "cause": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "drawing.page.change",
+    "act": "change",
+    "on": "art.draw.page",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "params": {
+     "filter": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "drawing.person.pose",
+    "act": "change",
+    "on": "art.draw.object",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "pose": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "drawing.person.hold",
+    "act": "change",
+    "on": "art.draw.object",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "kind": {
+      "type": "string"
+     },
+     "thing": {
+      "type": "string"
+     }
+    }
+   }
+  ]
+ },
+ "diagram": {
+  "view": "diagram",
+  "operations": [
+   {
+    "id": "diagram.node.make",
+    "act": "make",
+    "on": "diagram.sketch.node",
+    "sample": [
+     {
+      "args": {
+       "kind": {
+        "enum": true
+       },
+       "n": {
+        "value": 1
+       },
+       "colour": {
+        "enum": true
+       },
+       "size": {
+        "enum": true
+       }
+      }
+     }
+    ],
+    "spatial": {
+     "frame": "diagram.canvas",
+     "kindKey": "kind",
+     "xKey": "x",
+     "yKey": "y",
+     "countKey": "n"
+    },
+    "effectScope": {
+     "reflow": {
+      "keys": [
+       "x",
+       "y"
+      ]
+     }
+    },
+    "params": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "rectangle",
+       "rounded_rectangle",
+       "square",
+       "circle",
+       "ellipse",
+       "oval",
+       "diamond",
+       "parallelogram",
+       "hexagon",
+       "triangle",
+       "star",
+       "chevron",
+       "double_rectangle",
+       "document",
+       "cylinder",
+       "cloud",
+       "actor",
+       "note",
+       "text",
+       "dot",
+       "picture",
+       "table"
+      ]
+     },
+     "label": {
+      "type": "string"
+     },
+     "n": {
+      "type": "integer",
+      "min": 1,
+      "max": 12,
+      "default": 1
+     },
+     "colour": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     },
+     "size": {
+      "type": "string",
+      "enum": [
+       "tiny",
+       "small",
+       "medium",
+       "large",
+       "huge"
+      ]
+     },
+     "layout": {
+      "type": "string",
+      "enum": [
+       "tree",
+       "grid",
+       "row",
+       "column",
+       "circle",
+       "radial",
+       "layers"
+      ]
+     },
+     "x": {
+      "type": "number"
+     },
+     "y": {
+      "type": "number"
+     },
+     "outline": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     },
+     "textColour": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     },
+     "role": {
+      "type": "string",
+      "enum": [
+       "start",
+       "end",
+       "process",
+       "decision",
+       "data",
+       "document",
+       "subprocess",
+       "connector",
+       "database",
+       "actor",
+       "note",
+       "external"
+      ]
+     },
+     "fontWeight": {
+      "type": "string",
+      "enum": [
+       "normal",
+       "bold"
+      ]
+     },
+     "fontStyle": {
+      "type": "string",
+      "enum": [
+       "normal",
+       "italic"
+      ]
+     },
+     "source": {
+      "type": "string"
+     },
+     "caption": {
+      "type": "string"
+     },
+     "rows": {
+      "type": "integer",
+      "min": 1,
+      "max": 40
+     },
+     "columns": {
+      "type": "integer",
+      "min": 1,
+      "max": 20
+     },
+     "cells": {
+      "type": "array"
+     }
+    }
+   },
+   {
+    "id": "diagram.node.change",
+    "act": "change",
+    "on": "diagram.sketch.node",
+    "sample": [
+     {
+      "args": {
+       "ids": {
+        "ref": {
+         "on": "diagram.sketch.node",
+         "many": true
+        }
+       },
+       "label": {
+        "unique": {
+         "prefix": "Node"
+        }
+       }
+      }
+     }
+    ],
+    "effectScope": {
+     "reflow": {
+      "keys": [
+       "x",
+       "y"
+      ]
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "colour": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     },
+     "size": {
+      "type": "string",
+      "enum": [
+       "tiny",
+       "small",
+       "medium",
+       "large",
+       "huge"
+      ]
+     },
+     "label": {
+      "type": "string"
+     },
+     "value": {
+      "type": "number"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "rectangle",
+       "rounded_rectangle",
+       "square",
+       "circle",
+       "ellipse",
+       "oval",
+       "diamond",
+       "parallelogram",
+       "hexagon",
+       "triangle",
+       "star",
+       "chevron",
+       "double_rectangle",
+       "document",
+       "cylinder",
+       "cloud",
+       "actor",
+       "note",
+       "text",
+       "dot",
+       "picture",
+       "table"
+      ]
+     },
+     "outline": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     },
+     "textColour": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     },
+     "fontSize": {
+      "type": "number",
+      "min": 8,
+      "max": 48
+     },
+     "fontWeight": {
+      "type": "string",
+      "enum": [
+       "normal",
+       "bold"
+      ]
+     },
+     "fontStyle": {
+      "type": "string",
+      "enum": [
+       "normal",
+       "italic"
+      ]
+     },
+     "role": {
+      "type": "string",
+      "enum": [
+       "start",
+       "end",
+       "process",
+       "decision",
+       "data",
+       "document",
+       "subprocess",
+       "connector",
+       "database",
+       "actor",
+       "note",
+       "external"
+      ]
+     },
+     "effect": {
+      "type": "string",
+      "enum": [
+       "none",
+       "shadow",
+       "glow"
+      ]
+     },
+     "opacity": {
+      "type": "number",
+      "min": 0.1,
+      "max": 1
+     },
+     "corner": {
+      "type": "number",
+      "min": 0,
+      "max": 40
+     },
+     "source": {
+      "type": "string"
+     },
+     "caption": {
+      "type": "string"
+     },
+     "rows": {
+      "type": "integer",
+      "min": 1,
+      "max": 40
+     },
+     "columns": {
+      "type": "integer",
+      "min": 1,
+      "max": 20
+     },
+     "cells": {
+      "type": "array"
+     },
+     "rotation": {
+      "type": "number",
+      "min": -360,
+      "max": 360
+     }
+    }
+   },
+   {
+    "id": "diagram.node.select",
+    "act": "pick",
+    "on": "diagram.sketch.node",
+    "effectScope": {
+     "selection": {
+      "key": "selected"
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "edges": {
+      "type": "array"
+     }
+    }
+   },
+   {
+    "id": "diagram.node.remove",
+    "act": "remove",
+    "on": "diagram.sketch.node",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.node.place",
+    "act": "place",
+    "on": "diagram.sketch.node",
+    "coordinates": {
+     "dimension": "length",
+     "unit": "canvas.pixel",
+     "frame": "diagram.canvas"
+    },
+    "spatial": {
+     "frame": "diagram.canvas",
+     "xKey": "x",
+     "yKey": "y",
+     "idsKey": "ids"
+    },
+    "effectScope": {
+     "reflow": {
+      "keys": [
+       "x",
+       "y"
+      ]
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "x": {
+      "type": "number",
+      "required": true
+     },
+     "y": {
+      "type": "number",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.node.resize",
+    "act": "change",
+    "on": "diagram.sketch.node",
+    "coordinates": {
+     "dimension": "length",
+     "unit": "canvas.pixel",
+     "frame": "diagram.canvas"
+    },
+    "effectScope": {
+     "reflow": {
+      "keys": [
+       "x",
+       "y"
+      ]
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "width": {
+      "type": "number",
+      "min": 8,
+      "max": 4096
+     },
+     "height": {
+      "type": "number",
+      "min": 8,
+      "max": 4096
+     }
+    }
+   },
+   {
+    "id": "diagram.node.layout",
+    "act": "change",
+    "on": "diagram.sketch.node",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "layout": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "tree",
+       "grid",
+       "row",
+       "column",
+       "circle",
+       "radial",
+       "layers"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.link.make",
+    "act": "make",
+    "on": "diagram.sketch.link",
+    "intent": {
+     "verb": "Draw",
+     "parameters": {
+      "fromSide": {
+       "label": "from the side"
+      },
+      "toSide": {
+       "label": "to the side"
+      },
+      "head": {
+       "label": "with the head"
+      },
+      "tail": {
+       "label": "with the tail"
+      },
+      "from": {
+       "label": "from",
+       "reference": true
+      },
+      "to": {
+       "label": "to",
+       "reference": true
+      },
+      "route": {
+       "label": "drawn"
+      }
+     }
+    },
+    "params": {
+     "from": {
+      "type": "string",
+      "required": true
+     },
+     "to": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string"
+     },
+     "colour": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     },
+     "style": {
+      "type": "string",
+      "enum": [
+       "solid",
+       "dashed",
+       "dotted"
+      ]
+     },
+     "arrow": {
+      "type": "string",
+      "enum": [
+       "forward",
+       "back",
+       "both",
+       "none"
+      ]
+     },
+     "fromSide": {
+      "type": "string",
+      "enum": [
+       "auto",
+       "top",
+       "right",
+       "bottom",
+       "left",
+       "centre"
+      ]
+     },
+     "toSide": {
+      "type": "string",
+      "enum": [
+       "auto",
+       "top",
+       "right",
+       "bottom",
+       "left",
+       "centre"
+      ]
+     },
+     "head": {
+      "type": "string",
+      "enum": [
+       "arrow",
+       "open",
+       "diamond",
+       "circle",
+       "none"
+      ]
+     },
+     "tail": {
+      "type": "string",
+      "enum": [
+       "arrow",
+       "open",
+       "diamond",
+       "circle",
+       "none"
+      ]
+     },
+     "route": {
+      "type": "string",
+      "enum": [
+       "orthogonal",
+       "straight",
+       "curved"
+      ]
+     },
+     "fromPort": {
+      "type": "string"
+     },
+     "toPort": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "diagram.link.select",
+    "act": "pick",
+    "on": "diagram.sketch.link",
+    "effectScope": {
+     "selection": {
+      "key": "selected"
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "nodes": {
+      "type": "array"
+     }
+    }
+   },
+   {
+    "id": "diagram.link.change",
+    "act": "change",
+    "on": "diagram.sketch.link",
+    "intent": {
+     "parameters": {
+      "fromSide": {
+       "label": "from the side"
+      },
+      "toSide": {
+       "label": "to the side"
+      },
+      "head": {
+       "label": "with the head"
+      },
+      "tail": {
+       "label": "with the tail"
+      },
+      "from": {
+       "label": "from",
+       "reference": true
+      },
+      "to": {
+       "label": "to",
+       "reference": true
+      },
+      "labelAt": {
+       "label": "with the label at the"
+      },
+      "labelPosition": {
+       "label": "with the label at"
+      },
+      "fromX": {
+       "label": "with the start free at x"
+      },
+      "fromY": {
+       "label": "y"
+      },
+      "toX": {
+       "label": "with the end free at x"
+      },
+      "toY": {
+       "label": "y"
+      }
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "from": {
+      "type": "string"
+     },
+     "to": {
+      "type": "string"
+     },
+     "label": {
+      "type": "string"
+     },
+     "colour": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     },
+     "style": {
+      "type": "string",
+      "enum": [
+       "solid",
+       "dashed",
+       "dotted"
+      ]
+     },
+     "arrow": {
+      "type": "string",
+      "enum": [
+       "forward",
+       "back",
+       "both",
+       "none"
+      ]
+     },
+     "width": {
+      "type": "number",
+      "min": 0.5,
+      "max": 12
+     },
+     "route": {
+      "type": "string",
+      "enum": [
+       "orthogonal",
+       "straight",
+       "curved"
+      ]
+     },
+     "fromSide": {
+      "type": "string",
+      "enum": [
+       "auto",
+       "top",
+       "right",
+       "bottom",
+       "left",
+       "centre"
+      ]
+     },
+     "toSide": {
+      "type": "string",
+      "enum": [
+       "auto",
+       "top",
+       "right",
+       "bottom",
+       "left",
+       "centre"
+      ]
+     },
+     "head": {
+      "type": "string",
+      "enum": [
+       "arrow",
+       "open",
+       "diamond",
+       "circle",
+       "none"
+      ]
+     },
+     "tail": {
+      "type": "string",
+      "enum": [
+       "arrow",
+       "open",
+       "diamond",
+       "circle",
+       "none"
+      ]
+     },
+     "labelAt": {
+      "type": "string",
+      "enum": [
+       "start",
+       "middle",
+       "end"
+      ]
+     },
+     "labelPosition": {
+      "type": "number",
+      "min": 0,
+      "max": 1
+     },
+     "fromX": {
+      "type": "number"
+     },
+     "fromY": {
+      "type": "number"
+     },
+     "toX": {
+      "type": "number"
+     },
+     "toY": {
+      "type": "number"
+     },
+     "fromPort": {
+      "type": "string"
+     },
+     "toPort": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "diagram.link.remove",
+    "act": "remove",
+    "on": "diagram.sketch.link",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.selection.remove",
+    "act": "remove",
+    "on": "diagram.sketch",
+    "effectScope": {
+     "projection": "composite"
+    },
+    "params": {
+     "nodes": {
+      "type": "array",
+      "required": true
+     },
+     "links": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.page.clear",
+    "act": "remove",
+    "on": "diagram.sketch",
+    "intent": {
+     "subject": "contents of the diagram",
+     "determiner": "the"
+    },
+    "effectScope": {
+     "projection": "composite"
+    },
+    "params": {}
+   },
+   {
+    "id": "diagram.ids.show",
+    "act": "ask",
+    "on": "diagram.sketch.page",
+    "intent": {
+     "subject": "object IDs",
+     "determiner": "the",
+     "parameters": {
+      "duration": {
+       "format": "duration-ms",
+       "label": "for"
+      }
+     }
+    },
+    "params": {
+     "mode": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "temporary",
+       "always",
+       "off"
+      ]
+     },
+     "duration": {
+      "type": "integer",
+      "min": 1,
+      "max": 60000,
+      "default": 4000
+     }
+    }
+   },
+   {
+    "id": "diagram.observe",
+    "act": "ask",
+    "on": "diagram.sketch",
+    "params": {}
+   },
+   {
+    "id": "diagram.undo",
+    "act": "undo",
+    "on": "diagram.sketch",
+    "params": {}
+   },
+   {
+    "id": "diagram.redo",
+    "act": "redo",
+    "on": "diagram.sketch",
+    "params": {}
+   },
+   {
+    "id": "diagram.group.make",
+    "act": "make",
+    "on": "diagram.sketch.group",
+    "params": {
+     "name": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string"
+     },
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.group.select",
+    "act": "ask",
+    "on": "diagram.sketch.group",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.group.change",
+    "act": "change",
+    "on": "diagram.sketch.group",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string"
+     },
+     "colour": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     },
+     "size": {
+      "type": "string",
+      "enum": [
+       "tiny",
+       "small",
+       "medium",
+       "large",
+       "huge"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.group.layout",
+    "act": "place",
+    "on": "diagram.sketch.group",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "layout": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "row",
+       "column",
+       "grid",
+       "circle",
+       "bar",
+       "line",
+       "area",
+       "pie",
+       "doughnut",
+       "scatter",
+       "radar",
+       "treemap",
+       "free",
+       "tree",
+       "radial",
+       "layers"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.group.resize",
+    "act": "change",
+    "on": "diagram.sketch.group",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "scale": {
+      "type": "number",
+      "required": true,
+      "min": 0.05,
+      "max": 20
+     }
+    }
+   },
+   {
+    "id": "diagram.group.place",
+    "act": "place",
+    "on": "diagram.sketch.group",
+    "coordinates": {
+     "dimension": "length",
+     "unit": "canvas.pixel",
+     "frame": "diagram.canvas"
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "x": {
+      "type": "number"
+     },
+     "y": {
+      "type": "number"
+     },
+     "at": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right",
+       "top",
+       "bottom",
+       "center",
+       "top_left",
+       "top_right",
+       "bottom_left",
+       "bottom_right"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.group.remove",
+    "act": "remove",
+    "on": "diagram.sketch.group",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.group.ungroup",
+    "act": "remove",
+    "on": "diagram.sketch.group",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.group.chart.make",
+    "act": "make",
+    "on": "diagram.sketch.group",
+    "sample": [
+     {
+      "args": {
+       "label": {
+        "unique": {
+         "prefix": "Values"
+        }
+       },
+       "labels": {
+        "value": [
+         "A",
+         "B",
+         "C"
+        ]
+       },
+       "values": {
+        "value": [
+         3,
+         7,
+         5
+        ]
+       },
+       "layout": {
+        "enum": true
+       }
+      }
+     }
+    ],
+    "result": {
+     "identityParameter": null
+    },
+    "params": {
+     "label": {
+      "type": "string",
+      "required": true
+     },
+     "labels": {
+      "type": "array"
+     },
+     "values": {
+      "type": "array"
+     },
+     "layout": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "bar",
+       "line",
+       "area",
+       "pie",
+       "doughnut",
+       "scatter",
+       "radar",
+       "treemap"
+      ]
+     },
+     "dimension": {
+      "type": "string"
+     },
+     "measure": {
+      "type": "string"
+     },
+     "aggregate": {
+      "type": "string",
+      "enum": [
+       "count",
+       "sum",
+       "avg",
+       "min",
+       "max"
+      ]
+     },
+     "top": {
+      "type": "integer",
+      "min": 1,
+      "max": 50
+     },
+     "above": {
+      "type": "number"
+     },
+     "below": {
+      "type": "number"
+     },
+     "only": {
+      "type": "array"
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "ascending",
+       "descending",
+       "label"
+      ]
+     },
+     "bins": {
+      "type": "integer",
+      "min": 2,
+      "max": 20
+     },
+     "errors": {
+      "type": "array"
+     }
+    }
+   },
+   {
+    "id": "diagram.group.chart.adopt",
+    "act": "make",
+    "on": "diagram.sketch.group",
+    "result": {
+     "identityParameter": null
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.group.chart",
+    "act": "make",
+    "on": "data.charts.chart",
+    "derivedProjection": {
+     "id": "diagram.group.numeric-chart",
+     "source": "diagram.sketch.group",
+     "members": "members",
+     "label": "label",
+     "memberLabel": "label",
+     "memberValue": "value",
+     "missingSource": "detach-snapshot",
+     "directDataEdit": "detach-snapshot",
+     "preserve": [
+      "type",
+      "placement",
+      "options",
+      "dataset.color"
+     ]
+    },
+    "result": {
+     "identityParameter": null
+    },
+    "intent": {
+     "parameters": {
+      "id": {
+       "role": "source",
+       "reference": true,
+       "label": "from group"
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "type": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "bar",
+       "line",
+       "pie",
+       "doughnut",
+       "radar",
+       "polarArea",
+       "scatter"
+      ]
+     },
+     "title": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "diagram.layout",
+    "act": "change",
+    "on": "diagram.sketch.page",
+    "params": {
+     "layout": {
+      "type": "string",
+      "enum": [
+       "tree",
+       "layered",
+       "row",
+       "column",
+       "grid",
+       "circle",
+       "radial",
+       "free"
+      ]
+     },
+     "direction": {
+      "type": "string",
+      "enum": [
+       "down",
+       "right",
+       "up",
+       "left"
+      ]
+     },
+     "spacing": {
+      "type": "string",
+      "enum": [
+       "compact",
+       "normal",
+       "loose"
+      ]
+     },
+     "route": {
+      "type": "string",
+      "enum": [
+       "orthogonal",
+       "straight",
+       "curved"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.layout.improve",
+    "act": "change",
+    "on": "diagram.sketch.page",
+    "params": {}
+   },
+   {
+    "id": "diagram.steps.number",
+    "act": "change",
+    "on": "diagram.sketch.page",
+    "params": {
+     "mode": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "on",
+       "off"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.nodes.align",
+    "act": "place",
+    "on": "diagram.sketch.node",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "edge": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "left",
+       "centre",
+       "right",
+       "top",
+       "middle",
+       "bottom"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.nodes.distribute",
+    "act": "place",
+    "on": "diagram.sketch.node",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "axis": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "horizontal",
+       "vertical"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.style.apply",
+    "act": "change",
+    "on": "diagram.sketch.node",
+    "params": {
+     "theme": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "classic",
+       "pastel",
+       "dark",
+       "blueprint",
+       "monochrome",
+       "highlight",
+       "vivid",
+       "ocean",
+       "forest",
+       "sunset",
+       "flowchart"
+      ]
+     },
+     "ids": {
+      "type": "array"
+     },
+     "role": {
+      "type": "string",
+      "enum": [
+       "start",
+       "end",
+       "process",
+       "decision",
+       "data",
+       "document",
+       "subprocess",
+       "connector",
+       "database",
+       "actor",
+       "note",
+       "external"
+      ]
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "rectangle",
+       "rounded_rectangle",
+       "square",
+       "circle",
+       "ellipse",
+       "oval",
+       "diamond",
+       "parallelogram",
+       "hexagon",
+       "triangle",
+       "star",
+       "chevron",
+       "double_rectangle",
+       "document",
+       "cylinder",
+       "cloud",
+       "actor",
+       "note",
+       "text",
+       "dot",
+       "picture",
+       "table"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.colour.by",
+    "act": "change",
+    "on": "diagram.sketch.node",
+    "params": {
+     "by": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "level",
+       "shape",
+       "role",
+       "group"
+      ]
+     },
+     "theme": {
+      "type": "string",
+      "enum": [
+       "classic",
+       "pastel",
+       "dark",
+       "blueprint",
+       "monochrome",
+       "highlight",
+       "vivid",
+       "ocean",
+       "forest",
+       "sunset",
+       "flowchart"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.links.connect",
+    "act": "make",
+    "on": "diagram.sketch.link",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "pattern": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "chain",
+       "cycle",
+       "star",
+       "all"
+      ]
+     },
+     "hub": {
+      "type": "string"
+     },
+     "confirm": {
+      "type": "boolean"
+     }
+    }
+   },
+   {
+    "id": "diagram.link.reverse",
+    "act": "change",
+    "on": "diagram.sketch.link",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.node.insert",
+    "act": "make",
+    "on": "diagram.sketch.node",
+    "params": {
+     "link": {
+      "type": "string",
+      "required": true
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "rectangle",
+       "rounded_rectangle",
+       "square",
+       "circle",
+       "ellipse",
+       "oval",
+       "diamond",
+       "parallelogram",
+       "hexagon",
+       "triangle",
+       "star",
+       "chevron",
+       "double_rectangle",
+       "document",
+       "cylinder",
+       "cloud",
+       "actor",
+       "note",
+       "text",
+       "dot",
+       "picture",
+       "table"
+      ]
+     },
+     "label": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "diagram.node.duplicate",
+    "act": "make",
+    "on": "diagram.sketch.node",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.node.merge",
+    "act": "change",
+    "on": "diagram.sketch.node",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "label": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "diagram.node.split",
+    "act": "make",
+    "on": "diagram.sketch.node",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.value",
+    "act": "change",
+    "on": "diagram.sketch.group",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "category": {
+      "type": "string",
+      "required": true
+     },
+     "value": {
+      "type": "number",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.category.add",
+    "act": "make",
+    "on": "diagram.sketch.node",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string",
+      "required": true
+     },
+     "value": {
+      "type": "number",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.category.remove",
+    "act": "remove",
+    "on": "diagram.sketch.node",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "category": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.category.rename",
+    "act": "change",
+    "on": "diagram.sketch.node",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "category": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.format",
+    "act": "change",
+    "on": "diagram.sketch.group",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "title": {
+      "type": "string"
+     },
+     "label": {
+      "type": "string"
+     },
+     "xLabel": {
+      "type": "string"
+     },
+     "yLabel": {
+      "type": "string"
+     },
+     "valueLabels": {
+      "type": "boolean"
+     },
+     "gridlines": {
+      "type": "boolean"
+     },
+     "legend": {
+      "type": "string",
+      "enum": [
+       "none",
+       "right",
+       "bottom"
+      ]
+     },
+     "yMax": {
+      "type": "number"
+     },
+     "layout": {
+      "type": "string",
+      "enum": [
+       "bar",
+       "line",
+       "area",
+       "pie",
+       "doughnut",
+       "scatter",
+       "radar",
+       "treemap"
+      ]
+     },
+     "palette": {
+      "type": "string",
+      "enum": [
+       "classic",
+       "pastel",
+       "dark",
+       "blueprint",
+       "monochrome",
+       "highlight",
+       "vivid",
+       "ocean",
+       "forest",
+       "sunset",
+       "flowchart"
+      ]
+     },
+     "errorBars": {
+      "type": "boolean"
+     },
+     "errorCap": {
+      "type": "number",
+      "min": 0,
+      "max": 30
+     },
+     "xAxis": {
+      "type": "string",
+      "enum": [
+       "bottom",
+       "top"
+      ]
+     },
+     "fontSize": {
+      "type": "number",
+      "min": 6,
+      "max": 40
+     },
+     "lineWidth": {
+      "type": "number",
+      "min": 0.5,
+      "max": 12
+     },
+     "markerSize": {
+      "type": "number",
+      "min": 2,
+      "max": 40
+     },
+     "markerEdge": {
+      "type": "number",
+      "min": 0,
+      "max": 8
+     },
+     "barWidth": {
+      "type": "number",
+      "min": 0.1,
+      "max": 1
+     },
+     "barGap": {
+      "type": "string"
+     },
+     "pieRadius": {
+      "type": "number",
+      "min": 30,
+      "max": 300
+     },
+     "precision": {
+      "type": "integer",
+      "min": 0,
+      "max": 4
+     },
+     "titleWeight": {
+      "type": "string",
+      "enum": [
+       "normal",
+       "bold"
+      ]
+     },
+     "titleColour": {
+      "type": "string"
+     },
+     "titlePosition": {
+      "type": "string",
+      "enum": [
+       "top",
+       "top_left",
+       "bottom"
+      ]
+     },
+     "axisSide": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right"
+      ]
+     },
+     "invert": {
+      "type": "string",
+      "enum": [
+       "none",
+       "x",
+       "y"
+      ]
+     },
+     "axisScale": {
+      "type": "string",
+      "enum": [
+       "linear",
+       "log"
+      ]
+     },
+     "tickFormat": {
+      "type": "string",
+      "enum": [
+       "plain",
+       "magnitude",
+       "power"
+      ]
+     },
+     "lineStyle": {
+      "type": "string",
+      "enum": [
+       "solid",
+       "dashed",
+       "dotted",
+       "dash_dot"
+      ]
+     },
+     "gridStyle": {
+      "type": "string",
+      "enum": [
+       "solid",
+       "dashed",
+       "dotted"
+      ]
+     },
+     "yMin": {
+      "type": "number"
+     },
+     "orientation": {
+      "type": "string",
+      "enum": [
+       "vertical",
+       "horizontal"
+      ]
+     },
+     "stacking": {
+      "type": "string",
+      "enum": [
+       "none",
+       "stacked",
+       "percent"
+      ]
+     },
+     "width": {
+      "type": "number",
+      "min": 60,
+      "max": 2000
+     },
+     "height": {
+      "type": "number",
+      "min": 60,
+      "max": 2000
+     },
+     "effect": {
+      "type": "string",
+      "enum": [
+       "none",
+       "shadow",
+       "glow"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.link.improve",
+    "act": "arrange",
+    "on": "diagram.sketch.link",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.nodes.swap",
+    "act": "place",
+    "on": "diagram.sketch.node",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.node.scale",
+    "act": "change",
+    "on": "diagram.sketch.node",
+    "effectScope": {
+     "reflow": {
+      "keys": [
+       "x",
+       "y"
+      ]
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "factor": {
+      "type": "number",
+      "required": true,
+      "min": 0.1,
+      "max": 10
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.highlight",
+    "act": "change",
+    "on": "diagram.sketch.group",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "test": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "below",
+       "above"
+      ]
+     },
+     "value": {
+      "type": "number",
+      "required": true
+     },
+     "colour": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.sort",
+    "act": "change",
+    "on": "diagram.sketch.group",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "order": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "ascending",
+       "descending",
+       "label"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.page.change",
+    "act": "change",
+    "on": "diagram.sketch.page",
+    "params": {
+     "background": {
+      "type": "string"
+     },
+     "title": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.series.add",
+    "act": "make",
+    "on": "diagram.sketch.series",
+    "params": {
+     "chart": {
+      "type": "string"
+     },
+     "label": {
+      "type": "string",
+      "required": true
+     },
+     "values": {
+      "type": "array"
+     },
+     "colour": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.preference.state",
+    "act": "change",
+    "on": "diagram.sketch.page",
+    "intent": {
+     "subject": "standing preference",
+     "determiner": "a",
+     "parameters": {
+      "about": {
+       "hidden": true
+      }
+     }
+    },
+    "params": {
+     "key": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "link.style",
+       "palette",
+       "ids",
+       "placement.side",
+       "compose.detail"
+      ]
+     },
+     "value": {
+      "type": "string",
+      "required": true
+     },
+     "about": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.series.change",
+    "act": "change",
+    "on": "diagram.sketch.series",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string"
+     },
+     "values": {
+      "type": "array"
+     },
+     "colour": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.preference.reset",
+    "act": "change",
+    "on": "diagram.sketch.page",
+    "intent": {
+     "subject": "standing preference",
+     "determiner": "a",
+     "parameters": {
+      "about": {
+       "hidden": true
+      }
+     }
+    },
+    "params": {
+     "key": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "link.style",
+       "palette",
+       "ids",
+       "placement.side",
+       "compose.detail"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.series.remove",
+    "act": "remove",
+    "on": "diagram.sketch.series",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.point.add",
+    "act": "make",
+    "on": "diagram.sketch.point",
+    "effectScope": {
+     "reflow": {
+      "keys": [
+       "x",
+       "y",
+       "width",
+       "height"
+      ]
+     }
+    },
+    "params": {
+     "chart": {
+      "type": "string"
+     },
+     "label": {
+      "type": "string",
+      "required": true
+     },
+     "value": {
+      "type": "number",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.point.change",
+    "act": "change",
+    "on": "diagram.sketch.point",
+    "effectScope": {
+     "reflow": {
+      "keys": [
+       "x",
+       "y",
+       "width",
+       "height"
+      ]
+     },
+     "amounts": {
+      "add": {
+       "key": "value",
+       "sign": 1
+      },
+      "subtract": {
+       "key": "value",
+       "sign": -1
+      }
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "value": {
+      "type": "number"
+     },
+     "add": {
+      "type": "number"
+     },
+     "subtract": {
+      "type": "number"
+     },
+     "label": {
+      "type": "string"
+     },
+     "colour": {
+      "type": "string",
+      "enum": [
+       "red",
+       "orange",
+       "yellow",
+       "gold",
+       "lime",
+       "green",
+       "teal",
+       "cyan",
+       "blue",
+       "navy",
+       "indigo",
+       "purple",
+       "magenta",
+       "pink",
+       "brown",
+       "gray",
+       "black",
+       "white"
+      ]
+     }
+    }
+   },
+   {
+    "id": "diagram.chart.point.remove",
+    "act": "remove",
+    "on": "diagram.sketch.point",
+    "effectScope": {
+     "reflow": {
+      "keys": [
+       "x",
+       "y",
+       "width",
+       "height"
+      ]
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.link.attach",
+    "act": "change",
+    "on": "diagram.sketch.link",
+    "intent": {
+     "verb": "Attach",
+     "parameters": {
+      "end": {
+       "label": "the end"
+      },
+      "at": {
+       "label": "the end at",
+       "reference": true
+      },
+      "node": {
+       "label": "to",
+       "reference": true
+      },
+      "side": {
+       "label": "at the side"
+      }
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "node": {
+      "type": "string",
+      "required": true
+     },
+     "end": {
+      "type": "string",
+      "enum": [
+       "from",
+       "to",
+       "start",
+       "end",
+       "source",
+       "target",
+       "tail",
+       "head",
+       "left",
+       "right",
+       "top",
+       "bottom",
+       "upper",
+       "lower"
+      ]
+     },
+     "at": {
+      "type": "string"
+     },
+     "side": {
+      "type": "string",
+      "enum": [
+       "auto",
+       "top",
+       "right",
+       "bottom",
+       "left",
+       "centre"
+      ]
+     },
+     "port": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "diagram.link.detach",
+    "act": "change",
+    "on": "diagram.sketch.link",
+    "intent": {
+     "verb": "Detach",
+     "parameters": {
+      "end": {
+       "label": "the end"
+      },
+      "at": {
+       "label": "the end at",
+       "reference": true
+      },
+      "x": {
+       "label": "leaving it at x"
+      },
+      "y": {
+       "label": "y"
+      }
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "end": {
+      "type": "string",
+      "enum": [
+       "from",
+       "to",
+       "start",
+       "end",
+       "source",
+       "target",
+       "tail",
+       "head",
+       "left",
+       "right",
+       "top",
+       "bottom",
+       "upper",
+       "lower"
+      ]
+     },
+     "at": {
+      "type": "string"
+     },
+     "x": {
+      "type": "number"
+     },
+     "y": {
+      "type": "number"
+     }
+    }
+   },
+   {
+    "id": "diagram.link.bend.add",
+    "act": "change",
+    "on": "diagram.sketch.link",
+    "intent": {
+     "verb": "Bend",
+     "parameters": {
+      "x": {
+       "label": "through x"
+      },
+      "y": {
+       "label": "y"
+      },
+      "after": {
+       "label": "after bend"
+      }
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "x": {
+      "type": "number",
+      "required": true
+     },
+     "y": {
+      "type": "number",
+      "required": true
+     },
+     "after": {
+      "type": "integer",
+      "min": 0,
+      "max": 100
+     }
+    }
+   },
+   {
+    "id": "diagram.link.bend.move",
+    "act": "change",
+    "on": "diagram.sketch.link",
+    "intent": {
+     "verb": "Move a bend of",
+     "parameters": {
+      "bend": {
+       "label": "number"
+      },
+      "x": {
+       "label": "to x"
+      },
+      "y": {
+       "label": "y"
+      }
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "bend": {
+      "type": "integer",
+      "required": true,
+      "min": 1,
+      "max": 100
+     },
+     "x": {
+      "type": "number",
+      "required": true
+     },
+     "y": {
+      "type": "number",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "diagram.link.bend.remove",
+    "act": "change",
+    "on": "diagram.sketch.link",
+    "intent": {
+     "verb": "Straighten",
+     "parameters": {
+      "bend": {
+       "label": "removing bend"
+      }
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "bend": {
+      "type": "integer",
+      "min": 1,
+      "max": 100
+     }
+    }
+   },
+   {
+    "id": "diagram.page.new",
+    "act": "make",
+    "on": "diagram.sketch.page",
+    "params": {
+     "title": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "chart.make",
+    "act": "make",
+    "on": "data.charts.chart",
+    "params": {
+     "type": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "bar",
+       "line",
+       "pie",
+       "doughnut",
+       "radar",
+       "polarArea",
+       "scatter"
+      ]
+     },
+     "title": {
+      "type": "string",
+      "required": true
+     },
+     "labels": {
+      "type": "array",
+      "required": true,
+      "default": []
+     },
+     "values": {
+      "type": "array",
+      "required": true,
+      "default": []
+     },
+     "series": {
+      "type": "string",
+      "default": "Value"
+     },
+     "datasets": {
+      "type": "array"
+     },
+     "source": {
+      "type": "array",
+      "required": true,
+      "default": []
+     }
+    }
+   },
+   {
+    "id": "chart.change",
+    "act": "change",
+    "on": "data.charts.chart",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "title": {
+      "type": "string"
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "bar",
+       "line",
+       "pie",
+       "doughnut",
+       "radar",
+       "polarArea",
+       "scatter"
+      ]
+     },
+     "horizontal": {
+      "type": "boolean"
+     },
+     "stacked": {
+      "type": "boolean"
+     },
+     "showLegend": {
+      "type": "boolean"
+     },
+     "showValues": {
+      "type": "boolean"
+     },
+     "sort": {
+      "type": "string",
+      "enum": [
+       "asc",
+       "desc",
+       "alpha",
+       "none"
+      ]
+     },
+     "colour": {
+      "type": "string"
+     },
+     "palette": {
+      "type": "string",
+      "enum": [
+       "default",
+       "classic",
+       "rainbow",
+       "pastel",
+       "ocean",
+       "forest",
+       "sunset",
+       "warm",
+       "cool",
+       "neon",
+       "earth"
+      ]
+     }
+    }
+   },
+   {
+    "id": "chart.data.change",
+    "act": "change",
+    "on": "data.charts.chart",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "labels": {
+      "type": "array",
+      "required": true
+     },
+     "values": {
+      "type": "array",
+      "required": true
+     },
+     "series": {
+      "type": "integer",
+      "min": 0,
+      "default": 0
+     }
+    }
+   },
+   {
+    "id": "chart.datasets.change",
+    "act": "change",
+    "on": "data.charts.chart",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "labels": {
+      "type": "array",
+      "required": true
+     },
+     "datasets": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "chart.series.add",
+    "act": "make",
+    "on": "data.charts.series",
+    "params": {
+     "chart": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string",
+      "required": true
+     },
+     "values": {
+      "type": "array",
+      "required": true
+     },
+     "colour": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "chart.series.change",
+    "act": "change",
+    "on": "data.charts.series",
+    "params": {
+     "chart": {
+      "type": "string",
+      "required": true
+     },
+     "index": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     },
+     "label": {
+      "type": "string"
+     },
+     "values": {
+      "type": "array"
+     },
+     "colour": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "chart.series.remove",
+    "act": "remove",
+    "on": "data.charts.series",
+    "params": {
+     "chart": {
+      "type": "string",
+      "required": true
+     },
+     "index": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     }
+    }
+   },
+   {
+    "id": "chart.point.change",
+    "act": "change",
+    "on": "data.charts.point",
+    "measurement": {
+     "dimension": "number",
+     "unit": "unitless",
+     "frame": "chart.data"
+    },
+    "params": {
+     "chart": {
+      "type": "string",
+      "required": true
+     },
+     "index": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     },
+     "series": {
+      "type": "integer",
+      "min": 0,
+      "default": 0
+     },
+     "value": {
+      "type": "number",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "chart.select",
+    "act": "pick",
+    "on": "data.charts.chart",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "chart.place",
+    "act": "place",
+    "on": "data.charts.chart",
+    "coordinates": {
+     "dimension": "length",
+     "unit": "canvas.pixel",
+     "frame": "diagram.canvas"
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "x": {
+      "type": "number",
+      "required": true
+     },
+     "y": {
+      "type": "number",
+      "required": true
+     },
+     "width": {
+      "type": "number",
+      "min": 240,
+      "max": 1600
+     },
+     "height": {
+      "type": "number",
+      "min": 180,
+      "max": 1200
+     }
+    }
+   },
+   {
+    "id": "chart.remove",
+    "act": "remove",
+    "on": "data.charts.chart",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "chart.observe",
+    "act": "ask",
+    "on": "data.charts.chart",
+    "params": {}
+   }
+  ]
+ },
+ "document": {
+  "view": "editor",
+  "operations": [
+   {
+    "id": "document.title.change",
+    "act": "change",
+    "on": "docs.editor.document",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "title": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "document.block.select",
+    "act": "pick",
+    "on": "docs.editor.block",
+    "effectScope": {
+     "selection": {
+      "key": "selected"
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "at": {
+      "type": "string",
+      "default": "0"
+     },
+     "from": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     },
+     "to": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     }
+    }
+   },
+   {
+    "id": "document.section.select",
+    "act": "pick",
+    "on": "docs.editor.section",
+    "effectScope": {
+     "selection": {
+      "key": "selected"
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "at": {
+      "type": "string",
+      "default": "0"
+     },
+     "from": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     },
+     "to": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     }
+    }
+   },
+   {
+    "id": "document.section.change",
+    "act": "change",
+    "on": "docs.editor.section",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "text": {
+      "type": "string"
+     },
+     "name": {
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "heading"
+      ]
+     },
+     "level": {
+      "type": "integer",
+      "min": 1,
+      "max": 2
+     },
+     "align": {
+      "type": "string",
+      "enum": [
+       "left",
+       "center",
+       "right",
+       "justify"
+      ]
+     }
+    }
+   },
+   {
+    "id": "document.block.mark",
+    "act": "change",
+    "on": "docs.editor.block",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "at": {
+      "type": "string",
+      "default": "0"
+     },
+     "from": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     },
+     "to": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     },
+     "mark": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "link",
+       "bold",
+       "italic",
+       "underline",
+       "strike",
+       "code",
+       "highlight"
+      ]
+     },
+     "enabled": {
+      "type": "boolean",
+      "required": true
+     },
+     "attrs": {
+      "type": "object"
+     }
+    }
+   },
+   {
+    "id": "document.section.mark",
+    "act": "change",
+    "on": "docs.editor.section",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "at": {
+      "type": "string",
+      "default": "0"
+     },
+     "from": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     },
+     "to": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+     },
+     "mark": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "link",
+       "bold",
+       "italic",
+       "underline",
+       "strike",
+       "code",
+       "highlight"
+      ]
+     },
+     "enabled": {
+      "type": "boolean",
+      "required": true
+     },
+     "attrs": {
+      "type": "object"
+     }
+    }
+   },
+   {
+    "id": "document.block.align",
+    "act": "change",
+    "on": "docs.editor.block",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "align": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "left",
+       "center",
+       "right",
+       "justify"
+      ]
+     }
+    }
+   },
+   {
+    "id": "document.section.align",
+    "act": "change",
+    "on": "docs.editor.section",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "align": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "left",
+       "center",
+       "right",
+       "justify"
+      ]
+     }
+    }
+   },
+   {
+    "id": "document.block.reorder",
+    "act": "place",
+    "on": "docs.editor.block",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "document.list.make",
+    "act": "make",
+    "on": "docs.editor.block",
+    "params": {
+     "parent": {
+      "type": "string",
+      "required": true
+     },
+     "name": {
+      "type": "string"
+     },
+     "items": {
+      "type": "array",
+      "required": true
+     },
+     "style": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "bullet",
+       "numbered",
+       "task"
+      ]
+     }
+    }
+   },
+   {
+    "id": "document.list.change",
+    "act": "change",
+    "on": "docs.editor.block",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "items": {
+      "type": "array"
+     },
+     "style": {
+      "type": "string",
+      "enum": [
+       "bullet",
+       "numbered",
+       "task"
+      ]
+     },
+     "checked": {
+      "type": "array"
+     }
+    }
+   },
+   {
+    "id": "document.table.make",
+    "act": "make",
+    "on": "docs.editor.block",
+    "params": {
+     "parent": {
+      "type": "string",
+      "required": true
+     },
+     "name": {
+      "type": "string"
+     },
+     "rows": {
+      "type": "array",
+      "required": true
+     },
+     "header": {
+      "type": "boolean",
+      "default": true
+     }
+    }
+   },
+   {
+    "id": "document.table.change",
+    "act": "change",
+    "on": "docs.editor.block",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "rows": {
+      "type": "array"
+     },
+     "header": {
+      "type": "boolean"
+     }
+    }
+   },
+   {
+    "id": "document.container.change",
+    "act": "change",
+    "on": "docs.editor.text",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "text": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "document.write",
+    "act": "make",
+    "on": "docs.editor.document",
+    "sample": [
+     {
+      "when": {
+       "missing": "docs.editor.document"
+      },
+      "args": {
+       "title": {
+        "unique": {
+         "prefix": "Notes"
+        }
+       },
+       "blocks": {
+        "value": []
+       }
+      }
+     }
+    ],
+    "params": {
+     "title": {
+      "type": "string",
+      "required": true
+     },
+     "blocks": {
+      "type": "array",
+      "required": true
+     },
+     "genre": {
+      "type": "string"
+     },
+     "topic": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "document.compose",
+    "act": "make",
+    "on": "docs.editor.document",
+    "requires": [
+     "knowledge-composer"
+    ],
+    "params": {
+     "genre": {
+      "type": "string",
+      "required": true
+     },
+     "topic": {
+      "type": "string",
+      "required": true
+     },
+     "words": {
+      "type": "integer",
+      "min": 1,
+      "max": 100000
+     },
+     "chapters": {
+      "type": "integer",
+      "min": 1,
+      "max": 100
+     }
+    }
+   },
+   {
+    "id": "document.rewrite",
+    "act": "change",
+    "on": "docs.editor.document",
+    "requires": [
+     "knowledge-rewriter"
+    ],
+    "params": {
+     "property": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "tone",
+       "length"
+      ]
+     },
+     "value": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "document.block.make",
+    "act": "make",
+    "on": "docs.editor.block",
+    "sample": [
+     {
+      "args": {
+       "parent": {
+        "ref": {
+         "on": "docs.editor.document"
+        }
+       },
+       "kind": {
+        "enum": true
+       },
+       "text": {
+        "value": "A new idea for this document."
+       },
+       "name": {
+        "unique": {
+         "prefix": "Note"
+        }
+       }
+      }
+     }
+    ],
+    "params": {
+     "parent": {
+      "type": "string",
+      "required": true
+     },
+     "kind": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "paragraph",
+       "heading",
+       "quote"
+      ]
+     },
+     "text": {
+      "type": "string",
+      "default": ""
+     },
+     "level": {
+      "type": "integer",
+      "min": 3,
+      "max": 6
+     },
+     "name": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "document.section.make",
+    "act": "make",
+    "on": "docs.editor.section",
+    "params": {
+     "parent": {
+      "type": "string",
+      "required": true
+     },
+     "after": {
+      "type": "string"
+     },
+     "text": {
+      "type": "string",
+      "default": ""
+     },
+     "level": {
+      "type": "integer",
+      "min": 1,
+      "max": 2,
+      "default": 2
+     },
+     "name": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "document.block.change",
+    "act": "change",
+    "on": "docs.editor.block",
+    "sample": [
+     {
+      "args": {
+       "id": {
+        "ref": {
+         "on": "docs.editor.block"
+        }
+       },
+       "name": {
+        "unique": {
+         "prefix": "Note"
+        }
+       }
+      }
+     }
+    ],
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "text": {
+      "type": "string"
+     },
+     "name": {
+      "type": "string"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "paragraph",
+       "heading",
+       "quote"
+      ]
+     },
+     "level": {
+      "type": "integer",
+      "min": 3,
+      "max": 6
+     },
+     "align": {
+      "type": "string",
+      "enum": [
+       "left",
+       "center",
+       "right",
+       "justify"
+      ]
+     }
+    }
+   },
+   {
+    "id": "document.block.remove",
+    "act": "remove",
+    "on": "docs.editor.block",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "document.section.remove",
+    "act": "remove",
+    "on": "docs.editor.section",
+    "descendantPolicy": "until-next-heading-at-same-or-shallower-level",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "document.section.reorder",
+    "act": "place",
+    "on": "docs.editor.section",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "document.remove",
+    "act": "remove",
+    "on": "docs.editor.document",
+    "params": {}
+   },
+   {
+    "id": "document.observe",
+    "act": "ask",
+    "on": "docs.editor.document",
+    "params": {}
+   },
+   {
+    "id": "document.undo",
+    "act": "undo",
+    "on": "docs.editor.document",
+    "params": {}
+   },
+   {
+    "id": "document.redo",
+    "act": "redo",
+    "on": "docs.editor.document",
+    "params": {}
+   }
+  ]
+ },
+ "calendar": {
+  "view": "calendar",
+  "operations": [
+   {
+    "id": "calendar.calendar.add",
+    "act": "make",
+    "on": "time.calendar.calendar",
+    "intent": {
+     "subject": "personal calendar",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string",
+      "required": true
+     },
+     "colour": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "calendar.calendar.change",
+    "act": "change",
+    "on": "time.calendar.calendar",
+    "intent": {
+     "subject": "personal calendar",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string",
+      "required": false
+     },
+     "colour": {
+      "type": "string",
+      "required": false
+     }
+    }
+   },
+   {
+    "id": "calendar.calendar.remove",
+    "act": "remove",
+    "on": "time.calendar.calendar",
+    "intent": {
+     "subject": "personal calendar",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "calendar.person.add",
+    "act": "make",
+    "on": "time.calendar.person",
+    "intent": {
+     "subject": "person",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "calendar.person.change",
+    "act": "change",
+    "on": "time.calendar.person",
+    "intent": {
+     "subject": "person",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string",
+      "required": false
+     }
+    }
+   },
+   {
+    "id": "calendar.person.remove",
+    "act": "remove",
+    "on": "time.calendar.person",
+    "intent": {
+     "subject": "person",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "calendar.room.add",
+    "act": "make",
+    "on": "time.calendar.room",
+    "intent": {
+     "subject": "room",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string",
+      "required": true
+     },
+     "capacity": {
+      "type": "integer",
+      "min": 1
+     },
+     "location": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "calendar.room.change",
+    "act": "change",
+    "on": "time.calendar.room",
+    "intent": {
+     "subject": "room",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "label": {
+      "type": "string",
+      "required": false
+     },
+     "capacity": {
+      "type": "integer",
+      "required": false,
+      "nullable": true,
+      "min": 1
+     },
+     "location": {
+      "type": "string",
+      "required": false,
+      "nullable": true
+     }
+    }
+   },
+   {
+    "id": "calendar.room.remove",
+    "act": "remove",
+    "on": "time.calendar.room",
+    "intent": {
+     "subject": "room",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "calendar.meeting.add",
+    "act": "make",
+    "on": "time.calendar.meeting",
+    "intent": {
+     "subject": "event",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "title": {
+      "type": "string",
+      "required": true
+     },
+     "start": {
+      "type": "integer",
+      "required": true
+     },
+     "duration": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+     },
+     "participants": {
+      "type": "array",
+      "required": true
+     },
+     "room": {
+      "type": "string",
+      "required": true,
+      "nullable": true
+     },
+     "calendar": {
+      "type": "string",
+      "nullable": true
+     },
+     "notes": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "calendar.event.select",
+    "act": "pick",
+    "on": "time.calendar.meeting",
+    "effectScope": {
+     "selection": {
+      "key": "selected"
+     }
+    },
+    "intent": {
+     "subject": "event",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true,
+      "nullable": true
+     }
+    }
+   },
+   {
+    "id": "calendar.event.add",
+    "act": "make",
+    "on": "time.calendar.meeting",
+    "sample": [
+     {
+      "args": {
+       "id": {
+        "unique": {
+         "prefix": "event",
+         "separator": "-"
+        }
+       },
+       "title": {
+        "unique": {
+         "prefix": "Event"
+        }
+       },
+       "start": {
+        "now": {
+         "round": 86400000,
+         "offset": 43200000
+        }
+       },
+       "duration": {
+        "value": 3600000
+       }
+      }
+     }
+    ],
+    "intent": {
+     "subject": "event",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "title": {
+      "type": "string",
+      "required": true
+     },
+     "start": {
+      "type": "integer",
+      "required": true
+     },
+     "duration": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+     },
+     "notes": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "calendar.meeting.change",
+    "act": "change",
+    "on": "time.calendar.meeting",
+    "sample": [
+     {
+      "args": {
+       "id": {
+        "ref": {
+         "on": "time.calendar.meeting"
+        }
+       },
+       "title": {
+        "unique": {
+         "prefix": "Event"
+        }
+       }
+      }
+     }
+    ],
+    "intent": {
+     "subject": "event",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "title": {
+      "type": "string",
+      "required": false
+     },
+     "start": {
+      "type": "integer",
+      "required": false
+     },
+     "duration": {
+      "type": "integer",
+      "required": false,
+      "min": 1
+     },
+     "participants": {
+      "type": "array",
+      "required": false
+     },
+     "room": {
+      "type": "string",
+      "required": false,
+      "nullable": true
+     },
+     "calendar": {
+      "type": "string",
+      "required": false,
+      "nullable": true
+     },
+     "notes": {
+      "type": "string",
+      "required": false
+     }
+    }
+   },
+   {
+    "id": "calendar.meeting.move",
+    "act": "place",
+    "on": "time.calendar.meeting",
+    "coordinates": {
+     "dimension": "time",
+     "unit": "millisecond",
+     "frame": "unix"
+    },
+    "intent": {
+     "subject": "event",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "start": {
+      "type": "integer",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "calendar.events.remove",
+    "act": "remove",
+    "on": "time.calendar.meeting",
+    "intent": {
+     "subject": "event",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "calendar.meeting.remove",
+    "act": "remove",
+    "on": "time.calendar.meeting",
+    "intent": {
+     "subject": "event",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "calendar.observe",
+    "act": "ask",
+    "on": "time.calendar",
+    "intent": {
+     "subject": "personal calendar",
+     "parameters": {
+      "calendar": {
+       "reference": true,
+       "label": "in calendar"
+      },
+      "room": {
+       "reference": true,
+       "label": "in room"
+      },
+      "start": {
+       "format": "unix-ms",
+       "label": "starting at"
+      },
+      "duration": {
+       "format": "duration-ms",
+       "label": "lasting"
+      },
+      "participants": {
+       "reference": true,
+       "label": "with participants",
+       "hiddenIfEmpty": true
+      },
+      "notes": {
+       "label": "with notes",
+       "hiddenIfEmpty": true
+      }
+     }
+    },
+    "params": {}
+   }
+  ]
+ },
+ "avatar": {
+  "view": "avatar",
+  "operations": [
+   {
+    "id": "avatar.face.compose",
+    "act": "change",
+    "on": "ui.avatar.face",
+    "intent": {
+     "subject": "composition",
+     "parameters": {
+      "characterKind": {
+       "label": "of character kind"
+      },
+      "base": {
+       "label": "using composition base"
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "enum": [
+       "face"
+      ],
+      "default": "face"
+     },
+     "characterKind": {
+      "type": "string",
+      "enum": [
+       "human",
+       "robot",
+       "alien"
+      ]
+     },
+     "base": {
+      "type": "string",
+      "enum": [
+       "baby",
+       "child",
+       "girl",
+       "boy",
+       "woman",
+       "man",
+       "old woman",
+       "old man",
+       "bearded man",
+       "woman with curly hair",
+       "robot",
+       "robot-classic",
+       "alien",
+       "clown",
+       "queen"
+      ]
+     }
+    }
+   },
+   {
+    "id": "avatar.face.preset",
+    "act": "change",
+    "on": "ui.avatar.face",
+    "intent": {
+     "subject": "face",
+     "parameters": {
+      "preset": {
+       "label": "using preset"
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "enum": [
+       "face"
+      ],
+      "default": "face"
+     },
+     "preset": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "baby",
+       "child",
+       "girl",
+       "boy",
+       "woman",
+       "man",
+       "old woman",
+       "old man",
+       "bearded man",
+       "woman with curly hair",
+       "robot",
+       "robot-classic",
+       "alien",
+       "clown",
+       "queen"
+      ]
+     }
+    }
+   },
+   {
+    "id": "avatar.face.expression",
+    "act": "change",
+    "on": "ui.avatar.face",
+    "sample": [
+     {
+      "args": {
+       "expression": {
+        "enum": true
+       }
+      }
+     }
+    ],
+    "intent": {
+     "subject": "face",
+     "parameters": {
+      "expression": {
+       "label": "with expression"
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "enum": [
+       "face"
+      ],
+      "default": "face"
+     },
+     "expression": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "",
+       "happy",
+       "sad",
+       "angry",
+       "surprised",
+       "sleepy",
+       "wink",
+       "talking",
+       "smiling",
+       "laughing",
+       "crying",
+       "shocked",
+       "scared",
+       "frowning"
+      ]
+     }
+    }
+   },
+   {
+    "id": "avatar.face.name",
+    "act": "change",
+    "on": "ui.avatar.face",
+    "params": {
+     "id": {
+      "type": "string",
+      "enum": [
+       "face"
+      ],
+      "default": "face"
+     },
+     "name": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "avatar.face.select",
+    "act": "pick",
+    "on": "ui.avatar.face",
+    "params": {
+     "id": {
+      "type": "string",
+      "enum": [
+       "face"
+      ],
+      "default": "face"
+     }
+    }
+   },
+   {
+    "id": "avatar.ids.show",
+    "act": "ask",
+    "on": "ui.avatar.face",
+    "intent": {
+     "subject": "object IDs",
+     "determiner": "the"
+    },
+    "params": {
+     "mode": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "temporary",
+       "always",
+       "off"
+      ]
+     },
+     "duration": {
+      "type": "integer",
+      "min": 1,
+      "max": 60000,
+      "default": 4000
+     }
+    }
+   },
+   {
+    "id": "avatar.part.select",
+    "act": "pick",
+    "on": "ui.avatar.part",
+    "effectScope": {
+     "selection": {
+      "key": "selected"
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true,
+      "nullable": true,
+      "enum": [
+       null,
+       "hair_back",
+       "shoulders",
+       "clothes",
+       "neck",
+       "ears",
+       "head",
+       "cheeks",
+       "beard",
+       "mouth",
+       "moustache",
+       "nose",
+       "eyes",
+       "eyebrows",
+       "glasses",
+       "hair_front",
+       "earrings",
+       "hat",
+       "accessories",
+       "body",
+       "top",
+       "bottom",
+       "shoes",
+       "coat",
+       "back",
+       "neckwear",
+       "hands"
+      ]
+     }
+    }
+   },
+   {
+    "id": "avatar.face.resize",
+    "act": "change",
+    "on": "ui.avatar.face",
+    "params": {
+     "id": {
+      "type": "string",
+      "enum": [
+       "face"
+      ],
+      "default": "face"
+     },
+     "scale": {
+      "type": "number",
+      "required": true,
+      "min": 0.6,
+      "max": 1.5
+     }
+    }
+   },
+   {
+    "id": "avatar.part.resize",
+    "act": "change",
+    "on": "ui.avatar.part",
+    "effectScope": {
+     "related": []
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "scale": {
+      "type": "number",
+      "required": true,
+      "min": 0.6,
+      "max": 1.5
+     }
+    }
+   },
+   {
+    "id": "avatar.part.add",
+    "act": "make",
+    "on": "ui.avatar.part",
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "hair_back",
+       "shoulders",
+       "clothes",
+       "neck",
+       "ears",
+       "head",
+       "cheeks",
+       "beard",
+       "mouth",
+       "moustache",
+       "nose",
+       "eyes",
+       "eyebrows",
+       "glasses",
+       "hair_front",
+       "earrings",
+       "hat",
+       "accessories",
+       "body",
+       "top",
+       "bottom",
+       "shoes",
+       "coat",
+       "back",
+       "neckwear",
+       "hands"
+      ]
+     },
+     "variant": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "cape",
+       "cloak",
+       "bare",
+       "trousers",
+       "jeans",
+       "shorts",
+       "skirt",
+       "jacket",
+       "coat",
+       "suit jacket",
+       "gloves",
+       "mittens",
+       "scarf",
+       "tie",
+       "bow tie",
+       "shoes",
+       "boots",
+       "trainers",
+       "sandals",
+       "t-shirt",
+       "shirt",
+       "jumper",
+       "tank top",
+       "dress",
+       "full",
+       "short",
+       "chinstrap",
+       "goatee",
+       "long",
+       "soul patch",
+       "sideburns",
+       "stubble",
+       "blush",
+       "round blush",
+       "freckles",
+       "dimple",
+       "wrinkles",
+       "scar",
+       "mole",
+       "tear",
+       "stud",
+       "hoop",
+       "drop",
+       "pearl",
+       "large hoop",
+       "star",
+       "bolt",
+       "round",
+       "small",
+       "large",
+       "pointed",
+       "square",
+       "dial",
+       "straight",
+       "thick",
+       "arched",
+       "thick arched",
+       "angry",
+       "sad",
+       "bushy",
+       "raised",
+       "dot",
+       "oval",
+       "narrow",
+       "closed",
+       "happy",
+       "surprised",
+       "sleepy",
+       "lashes",
+       "soft round",
+       "downcast",
+       "looking up",
+       "looking out",
+       "looking in",
+       "small round",
+       "sunglasses",
+       "cat-eye",
+       "monocle",
+       "visor",
+       "long straight",
+       "long wavy",
+       "long curly",
+       "bob",
+       "ponytail",
+       "pigtails",
+       "bun",
+       "afro",
+       "fringe",
+       "side parting",
+       "curly",
+       "spikes",
+       "bald on top",
+       "receding",
+       "centre parting",
+       "long sides",
+       "wavy",
+       "mohawk",
+       "tuft",
+       "cap",
+       "beanie",
+       "top hat",
+       "crown",
+       "cowboy hat",
+       "party hat",
+       "bow",
+       "antenna",
+       "light antenna",
+       "sun hat",
+       "chef hat",
+       "hard hat",
+       "fire helmet",
+       "police cap",
+       "pilot cap",
+       "nurse cap",
+       "sailor cap",
+       "military helmet",
+       "space helmet",
+       "knight helmet",
+       "pirate hat",
+       "witch hat",
+       "wizard hat",
+       "Santa hat",
+       "beret",
+       "fedora",
+       "swimming cap",
+       "judge wig",
+       "headscarf",
+       "flower wreath",
+       "heart",
+       "wide",
+       "box",
+       "dome",
+       "thin",
+       "handlebar",
+       "walrus",
+       "pencil",
+       "chevron",
+       "smile",
+       "big smile",
+       "neutral",
+       "open",
+       "talking",
+       "smirk",
+       "full lips",
+       "grin",
+       "tongue out",
+       "frown",
+       "grille",
+       "light smile",
+       "gritted",
+       "half open",
+       "pressed",
+       "lip bite",
+       "tongue tip",
+       "medium",
+       "tapered",
+       "necklace",
+       "pipe",
+       "ring",
+       "button",
+       "v-neck",
+       "suit",
+       "hoodie",
+       "metal plate",
+       "round plate",
+       "lab coat",
+       "scrubs",
+       "chef jacket",
+       "apron",
+       "overalls",
+       "safety vest",
+       "uniform",
+       "fire jacket",
+       "sailor collar",
+       "space suit",
+       "robe",
+       "fur coat",
+       "football shirt",
+       "boiler suit"
+      ]
+     }
+    }
+   },
+   {
+    "id": "avatar.part.change",
+    "act": "change",
+    "on": "ui.avatar.part",
+    "effectScope": {
+     "related": []
+    },
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "variant": {
+      "type": "string",
+      "enum": [
+       "cape",
+       "cloak",
+       "bare",
+       "trousers",
+       "jeans",
+       "shorts",
+       "skirt",
+       "jacket",
+       "coat",
+       "suit jacket",
+       "gloves",
+       "mittens",
+       "scarf",
+       "tie",
+       "bow tie",
+       "shoes",
+       "boots",
+       "trainers",
+       "sandals",
+       "t-shirt",
+       "shirt",
+       "jumper",
+       "tank top",
+       "dress",
+       "full",
+       "short",
+       "chinstrap",
+       "goatee",
+       "long",
+       "soul patch",
+       "sideburns",
+       "stubble",
+       "blush",
+       "round blush",
+       "freckles",
+       "dimple",
+       "wrinkles",
+       "scar",
+       "mole",
+       "tear",
+       "stud",
+       "hoop",
+       "drop",
+       "pearl",
+       "large hoop",
+       "star",
+       "bolt",
+       "round",
+       "small",
+       "large",
+       "pointed",
+       "square",
+       "dial",
+       "straight",
+       "thick",
+       "arched",
+       "thick arched",
+       "angry",
+       "sad",
+       "bushy",
+       "raised",
+       "dot",
+       "oval",
+       "narrow",
+       "closed",
+       "happy",
+       "surprised",
+       "sleepy",
+       "lashes",
+       "soft round",
+       "downcast",
+       "looking up",
+       "looking out",
+       "looking in",
+       "small round",
+       "sunglasses",
+       "cat-eye",
+       "monocle",
+       "visor",
+       "long straight",
+       "long wavy",
+       "long curly",
+       "bob",
+       "ponytail",
+       "pigtails",
+       "bun",
+       "afro",
+       "fringe",
+       "side parting",
+       "curly",
+       "spikes",
+       "bald on top",
+       "receding",
+       "centre parting",
+       "long sides",
+       "wavy",
+       "mohawk",
+       "tuft",
+       "cap",
+       "beanie",
+       "top hat",
+       "crown",
+       "cowboy hat",
+       "party hat",
+       "bow",
+       "antenna",
+       "light antenna",
+       "sun hat",
+       "chef hat",
+       "hard hat",
+       "fire helmet",
+       "police cap",
+       "pilot cap",
+       "nurse cap",
+       "sailor cap",
+       "military helmet",
+       "space helmet",
+       "knight helmet",
+       "pirate hat",
+       "witch hat",
+       "wizard hat",
+       "Santa hat",
+       "beret",
+       "fedora",
+       "swimming cap",
+       "judge wig",
+       "headscarf",
+       "flower wreath",
+       "heart",
+       "wide",
+       "box",
+       "dome",
+       "thin",
+       "handlebar",
+       "walrus",
+       "pencil",
+       "chevron",
+       "smile",
+       "big smile",
+       "neutral",
+       "open",
+       "talking",
+       "smirk",
+       "full lips",
+       "grin",
+       "tongue out",
+       "frown",
+       "grille",
+       "light smile",
+       "gritted",
+       "half open",
+       "pressed",
+       "lip bite",
+       "tongue tip",
+       "medium",
+       "tapered",
+       "necklace",
+       "pipe",
+       "ring",
+       "button",
+       "v-neck",
+       "suit",
+       "hoodie",
+       "metal plate",
+       "round plate",
+       "lab coat",
+       "scrubs",
+       "chef jacket",
+       "apron",
+       "overalls",
+       "safety vest",
+       "uniform",
+       "fire jacket",
+       "sailor collar",
+       "space suit",
+       "robe",
+       "fur coat",
+       "football shirt",
+       "boiler suit"
+      ]
+     },
+     "colour": {
+      "type": "string",
+      "enum": [
+       "pale",
+       "light",
+       "tan",
+       "olive",
+       "brown",
+       "dark brown",
+       "metal grey",
+       "green",
+       "blue",
+       "yellow",
+       "white",
+       "robot white",
+       "black",
+       "auburn",
+       "red",
+       "blond",
+       "grey",
+       "pink",
+       "purple",
+       "orange",
+       "hazel",
+       "amber",
+       "light blue"
+      ]
+     },
+     "size": {
+      "type": "string",
+      "enum": [
+       "tiny",
+       "small",
+       "default",
+       "big",
+       "huge"
+      ]
+     },
+     "length": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "avatar.part.feature",
+    "act": "change",
+    "on": "ui.avatar.part",
+    "intent": {
+     "parameters": {
+      "property": {
+       "label": "with feature"
+      },
+      "value": {
+       "label": "set to"
+      }
+     }
+    },
+    "params": {
+     "id": {
+      "type": "string",
+      "required": true
+     },
+     "property": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "length",
+       "feel",
+       "kind",
+       "size",
+       "age",
+       "shape"
+      ]
+     },
+     "value": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "medium",
+       "thick",
+       "full beard",
+       "short",
+       "thin",
+       "chinstrap",
+       "small",
+       "goatee",
+       "long",
+       "bushy",
+       "old",
+       "long beard",
+       "soul patch",
+       "sideburns",
+       "stubble",
+       "oval",
+       "blush",
+       "round",
+       "freckles",
+       "dimple",
+       "wrinkles",
+       "scar",
+       "mole",
+       "tear",
+       "stud",
+       "hoop",
+       "drop",
+       "pearl",
+       "large",
+       "star",
+       "square",
+       "robot",
+       "pointed",
+       "flat",
+       "arched",
+       "angry",
+       "sad",
+       "surprised",
+       "open",
+       "dot",
+       "child",
+       "wide",
+       "narrow",
+       "closed",
+       "smiling",
+       "half closed",
+       "lashes",
+       "looking down",
+       "looking up",
+       "looking aside",
+       "sunglasses",
+       "cat-eye",
+       "monocle",
+       "visor",
+       "straight",
+       "wavy",
+       "curly",
+       "bob",
+       "ponytail",
+       "pigtails",
+       "bun",
+       "afro",
+       "fringe",
+       "side parting",
+       "spikes",
+       "bald on top",
+       "adult",
+       "receding",
+       "centre parting",
+       "mohawk",
+       "tuft",
+       "cap",
+       "beanie",
+       "top hat",
+       "crown",
+       "cowboy hat",
+       "party hat",
+       "bow",
+       "antenna",
+       "sun hat",
+       "chef hat",
+       "hard hat",
+       "fire helmet",
+       "police cap",
+       "pilot cap",
+       "nurse cap",
+       "sailor cap",
+       "military helmet",
+       "space helmet",
+       "knight helmet",
+       "pirate hat",
+       "witch hat",
+       "wizard hat",
+       "Santa hat",
+       "beret",
+       "fedora",
+       "swimming cap",
+       "wig",
+       "headscarf",
+       "flower wreath",
+       "heart",
+       "box",
+       "handlebar",
+       "walrus",
+       "pencil",
+       "chevron",
+       "smirk",
+       "full lips",
+       "grin",
+       "tongue out",
+       "gritted teeth",
+       "half open",
+       "pressed lips",
+       "teeth on lip",
+       "tongue tip",
+       "tapered",
+       "necklace",
+       "button",
+       "t-shirt",
+       "v-neck",
+       "shirt",
+       "suit",
+       "hoodie",
+       "tank top",
+       "lab coat",
+       "scrubs",
+       "chef jacket",
+       "apron",
+       "overalls",
+       "safety vest",
+       "uniform",
+       "fire jacket",
+       "sailor collar",
+       "space suit",
+       "robe",
+       "cloak",
+       "cape",
+       "fur-trimmed coat",
+       "football shirt",
+       "waistcoat and bow tie",
+       "boiler suit"
+      ]
+     }
+    }
+   },
+   {
+    "id": "avatar.part.move",
+    "act": "place",
+    "on": "ui.avatar.part",
+    "sample": [
+     {
+      "args": {
+       "ids": {
+        "ref": {
+         "on": "ui.avatar.part",
+         "many": true
+        }
+       },
+       "place": {
+        "enum": true
+       }
+      }
+     }
+    ],
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     },
+     "place": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "up",
+       "down",
+       "left",
+       "right"
+      ]
+     }
+    }
+   },
+   {
+    "id": "avatar.part.remove",
+    "act": "remove",
+    "on": "ui.avatar.part",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "avatar.parts.remove",
+    "act": "remove",
+    "on": "ui.avatar.part",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "avatar.clear",
+    "act": "remove",
+    "on": "ui.avatar.part",
+    "params": {
+     "ids": {
+      "type": "array",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "avatar.observe",
+    "act": "ask",
+    "on": "ui.avatar.face",
+    "params": {}
+   },
+   {
+    "id": "avatar.undo",
+    "act": "undo",
+    "on": "ui.avatar.face",
+    "params": {}
+   },
+   {
+    "id": "avatar.redo",
+    "act": "redo",
+    "on": "ui.avatar.face",
+    "params": {}
+   },
+   {
+    "id": "avatar.face.pose",
+    "act": "change",
+    "on": "ui.avatar.face",
+    "params": {
+     "pose": {
+      "type": "string",
+      "required": true
+     }
+    }
+   },
+   {
+    "id": "avatar.figure.default",
+    "act": "change",
+    "on": "ui.avatar.face",
+    "params": {}
+   },
+   {
+    "id": "avatar.figure.describe",
+    "act": "change",
+    "on": "ui.avatar.face",
+    "intent": {
+     "subject": "avatar figure",
+     "determiner": "the",
+     "parameters": {
+      "preset": {
+       "label": "as"
+      },
+      "age": {
+       "label": "aged"
+      },
+      "traits": {
+       "label": "with"
+      },
+      "without": {
+       "label": "without"
+      },
+      "person": {
+       "label": "as a"
+      },
+      "about": {
+       "hidden": true
+      }
+     }
+    },
+    "params": {
+     "preset": {
+      "type": "string",
+      "enum": [
+       "baby",
+       "child",
+       "girl",
+       "boy",
+       "woman",
+       "man",
+       "old woman",
+       "old man",
+       "bearded man",
+       "woman with curly hair",
+       "robot",
+       "robot-classic",
+       "alien",
+       "clown",
+       "queen"
+      ]
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "human",
+       "robot",
+       "alien"
+      ]
+     },
+     "person": {
+      "type": "string"
+     },
+     "age": {
+      "type": "string"
+     },
+     "sex": {
+      "type": "string",
+      "enum": [
+       "female",
+       "male"
+      ]
+     },
+     "traits": {
+      "type": "array"
+     },
+     "without": {
+      "type": "array"
+     },
+     "colour": {
+      "type": "string"
+     },
+     "about": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "avatar.preference.state",
+    "act": "change",
+    "on": "ui.avatar.face",
+    "intent": {
+     "subject": "standing preference",
+     "determiner": "a"
+    },
+    "params": {
+     "key": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "ids"
+      ]
+     },
+     "field": {
+      "type": "string"
+     },
+     "value": {
+      "type": "string",
+      "required": true
+     },
+     "about": {
+      "type": "string"
+     }
+    }
+   },
+   {
+    "id": "avatar.preference.reset",
+    "act": "change",
+    "on": "ui.avatar.face",
+    "intent": {
+     "subject": "standing preference",
+     "determiner": "a"
+    },
+    "params": {
+     "key": {
+      "type": "string",
+      "required": true,
+      "enum": [
+       "ids",
+       "avatar.figure"
+      ]
+     },
+     "field": {
+      "type": "string"
+     }
+    }
+   }
+  ]
+ }
+}
