@@ -271,8 +271,8 @@
     "worlds/ui.shell/bundle.json": "cd254bfac04c9c0d",
     "worlds/ui.shell/ops.mjs": "12898fb719c270c1"
   },
-  "builtAt": "2026-11-21T00:05:14.748Z",
-  "commit": "3c9bf18cf-dirty",
+  "builtAt": "2026-11-21T00:05:27.228Z",
+  "commit": "591967c00",
   "catalog": "7d9f76406f2fc8e2e07694cbd1427bf7afb5b64a",
   "assets": {
     "app.mjs": "dda989c018",
