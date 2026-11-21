@@ -97,3 +97,8 @@ test('a classifier normalization is decided by the bridge under declared binding
  assert.equal(out.candidates.length,0);assert.ok(!out.failures.some(f=>f.reason==='provider-unresolved'||f.reason==='incomplete-provider-coverage'),JSON.stringify(out.failures));
  assert.ok(out.failures.some(f=>f.reason==='unresolved-source-value-normalization'),JSON.stringify(out.failures));
 });
+test('a cut holding only clause joiners of w.lang.en says no request and is not read',async()=>{
+ const {pipeline,calls}=await setup({spans:[[0,12],[12,17],[17,29]]}),seen=[];
+ for await(const p of pipeline.proposeRequests(writeReaderSource('set widget 🟦 and set widget 🟦'))){assert.equal(p.candidates.length,1,JSON.stringify(p.failures));seen.push(p.composition.range);assert.equal(p.composition.total,2);}
+ assert.deepEqual(seen,[[0,12],[17,29]]);assert.equal(calls.filter(c=>c[0]==='read').length,2);
+});

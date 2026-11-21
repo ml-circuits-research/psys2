@@ -6,7 +6,7 @@
 // or made is named in the reply.
 import {parse,serialize,quote} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {writeReaderSource} from './reader-source.mjs?v=1baaf5ba91';
-import {coordinationParts} from './coordination-split.mjs?v=912695a94b';
+import {coordinationParts} from './coordination-split.mjs?v=accd93f717';
 import {resolveRequestRoute} from './request-routing-policy.mjs?v=6c36727506';
 import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=beb95559d2';
 import {executionKnowledge} from './declared-execution.mjs?v=e9a0573f13';

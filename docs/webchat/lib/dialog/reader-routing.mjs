@@ -18,10 +18,10 @@ import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs
 import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=fadf4fc918';
 import {completeBindings} from './declared-bindings.mjs?v=7b35f75998';
 import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=ea81998615';
-import {routeCoordination} from './coordination-routing.mjs?v=b1ff4972ba';
+import {routeCoordination} from './coordination-routing.mjs?v=6039b58a68';
 import {declaredKnowledge} from './declared-execution.mjs?v=e9a0573f13';
 import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=79c1776d10';
-import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs?v=814463bcb4';
+import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs?v=44de98c980';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.
 const knownAmounts=()=>amounts??=amountsOf(declaredKnowledge('k.expect.amount'));

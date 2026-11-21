@@ -148,3 +148,42 @@ test('which readings start a composition is declared: a kindless drawing, an ope
   assert.equal(await start({ area: 'diagram', act: 'make', mode: 'new', type: 'node', word: 'box', bound: true, canonical: 'w.diagram.node' }), null);
   assert.equal(await start({ area: 'diagram', act: 'make', mode: 'new', type: 'node' }), null, 'a node with no kind is a plain node, not a composition');
 });
+
+// The reader's composition keys (spec 25; reader v12): simulated raw readings of a composition target, its source,
+// variant and with, and a chart's values said as random. The declared rules read these names; no JS names them.
+test('reader v12 composition keys: target type composition, composition.source / variant / with, chart.values random', async () => {
+  const { composeReading } = await import('../src/dialog/compose-execution.mjs');
+  const said = (key, value) => ({ key, value, value_span: value, operator: 'eq', phase: 'result', character: 'requirement', polarity: 'positive' });
+  const read = (area, target, constraints = [], span = 'x') => ({ raw: { area, source: { text: span }, requests: [{ act: 'make', mood: 'do', span, target: { mode: 'new', determiner: 'indefinite', ...target }, constraints }] }, candidates: [], failures: [] });
+  const start = async (view, proposal, s = session(view)) => composeStart(s, composeReading(proposal), { knowledge });
+  // "surprise me with a drawing": a composition with no kind, source random.
+  assert.deepEqual(await start('draw', read('drawing', { type: 'composition' }, [said('composition.source', 'random')])), { area: 'drawing', form: 'scene', subject: undefined, variant: undefined, source: 'random' });
+  // "draw a random farm": the scene the knowledge has.
+  assert.equal((await start('draw', read('drawing', { type: 'composition', kind: 'farm', kind_span: 'farm' }, [said('composition.source', 'random')]))).subject, 'farm');
+  // "a random scene with a dog": with, the scene left open.
+  const withDog = await start('draw', read('drawing', { type: 'composition' }, [said('composition.source', 'random'), said('composition.with', 'a dog')]));
+  assert.equal(withDog.form, 'scene'); assert.equal(withDog.with, 'dog', 'the thing the phrase names (w.lang.en determiners, singular)');
+  // "chart the numbers I mentioned": a chart from the conversation.
+  assert.deepEqual(await start('diagram', read('diagram', { type: 'composition', kind: 'chart', kind_span: 'chart' }, [said('composition.source', 'conversation')])), { area: 'diagram', form: 'chart', subject: undefined, variant: undefined, source: 'conversation' });
+  // "make a random flowchart": a diagram kind the knowledge can fill, no random word needed.
+  assert.deepEqual(await start('diagram', read('diagram', { type: 'composition', kind: 'flowchart', kind_span: 'flowchart' }, [said('composition.source', 'random')])), { area: 'diagram', form: 'diagram', subject: 'flowchart', variant: undefined, source: 'random' });
+  // "simpler": the variant of the last composition (same form, same subject, same seed).
+  const s = session('draw'); s.composeLast = { drawing: { form: 'scene', seed: 5, subject: 'farm', source: 'random' } };
+  const simpler = await start('draw', read('drawing', { type: 'composition' }, [said('composition.variant', 'simpler')]), s);
+  assert.equal(simpler.variant, 'simpler');
+  assert.deepEqual(composeRequest(s, simpler), { form: 'scene', source: 'random', seed: 5, subject: 'farm', with: undefined, variant: 'simpler' });
+  // An undeclared value of a closed option gives no option.
+  assert.equal((await start('draw', read('drawing', { type: 'composition' }, [said('composition.variant', 'bluer')]))).variant, undefined);
+  // "a chart with random values": chart.values random leaves the content open and composes a chart; numbers do not.
+  assert.equal((await start('diagram', read('diagram', { type: 'chart', kind: 'chart', kind_span: 'chart' }, [said('chart.values', 'random')])))?.form, 'chart');
+  assert.equal(await start('diagram', read('diagram', { type: 'chart', kind: 'chart', kind_span: 'chart' }, [said('chart.values', '3, 5, 7')])), null);
+  // A composition that specifies something else of the result (a text) is built from the request, not composed.
+  assert.equal(await start('draw', read('drawing', { type: 'composition' }, [said('composition.source', 'random'), said('drawn.text', 'OPEN')])), null);
+});
+
+test('reader v12 preference key compose.detail: the stated detail preference is a declared key of diagram.preference.state', () => {
+  const iface = readFileSync(new URL('../worlds/diagram.sketch/native-interface.sop', import.meta.url), 'utf8');
+  const prefs = readFileSync(new URL('../worlds/diagram.sketch/preferences.sop', import.meta.url), 'utf8');
+  assert.match(iface, /op\.diagram\.preference\.state\.param\.key[^\n]*enum="compose\.detail"/);
+  assert.match(prefs, /w\.preferences\.default key=compose\.detail/);
+});

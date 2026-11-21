@@ -7,6 +7,7 @@ import {referenceProjection} from './reference-projection.mjs?v=cfb59bc4a2';
 import {completeBindings} from './declared-bindings.mjs?v=7b35f75998';
 import {declaredRawReadings} from './partial-admission.mjs?v=fadf4fc918';
 import {declaredValueReadings} from './declared-value-readings.mjs?v=919730b453';
+import {en} from '../lang/en.mjs?v=911f0ab5a1';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
@@ -96,7 +97,11 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
  return {provenance:()=>copyHostData(provenance),propose:sourceSop=>propose(sourceSop),
   proposeIndependent:sourceSop=>repeat(sourceSop,'independent'),
   proposeLiteral:sourceSop=>repeat(sourceSop,'literal'),async *proposeRequests(sourceSop){
-  const initial=await propose(sourceSop,null,true),cut=initial.sourceCut;
+  const initial=await propose(sourceSop,null,true);let cut=initial.sourceCut;
+  // A cut that holds only the clause joiners of w.lang.en ("and", "then", ",") says no request of its own.
+  if(cut&&cut.spans.length>1){const chars=Array.from(readReaderSource(sourceSop)),joiners=en.cutWords();
+   const spans=cut.spans.filter(([a,b])=>{const words=[...chars.slice(a,b).join('').toLowerCase().matchAll(/[\p{L}\p{N}]+|[^\s\p{L}\p{N}]/gu)].map(m=>m[0]);return !words.length||!words.every(w=>joiners.has(w));});
+   if(spans.length&&spans.length<cut.spans.length)cut={...cut,spans};}
   if(!cut||cut.coverage.complete!==true||cut.coverage.truncated||cut.unresolved.length||cut.spans.length<2){yield cut?await propose(sourceSop,cut):initial;return;}
   for(const [index,range]of cut.spans.entries()){
    const proposal=await propose(sourceSop,{...cut,spans:[range]});

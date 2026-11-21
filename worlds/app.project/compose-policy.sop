@@ -309,7 +309,8 @@
 @b.c app.compose.constraint key=?key
 @b.free app.compose.free key=?key
 @b.c.out app.compose.blocked why=specified key=?key
-@blocked.specified core.rule when=$b.c not=$b.free then=$b.c.out
+@b.open app.compose.openSaid key=?key
+@blocked.specified core.rule when=$b.c not=$b.free not=$b.open then=$b.c.out
 @a.w app.compose.word word=?w
 @a.rand app.compose.random word=?w
 @a.out app.compose.asked word=?w
@@ -357,3 +358,66 @@
 @k.formc app.compose.form area=?a kind=?k canonical=?c
 @k.startc app.compose.start area=?a form=diagram subject=?k
 @start.diagram.kind core.rule when=$k.rc when=$k.formc not=$t.blocked when=$o.asked then=$k.startc
+
+# ---- The reader's composition keys (spec 25; reader v12, 2026-11-21) ----------------------------------------------
+# The reader reads a composition as a target of type composition (its kind the scene name, diagram kind or chart) with
+# the constraints composition.source (random, conversation), composition.variant (another, similar, simpler, richer)
+# and composition.with (a span); a chart's values as chart.values random or plausible; the stated detail preference as
+# preference.key=compose.detail of diagram.preference.state (preferences.sop). These keys leave the content open: they
+# never block a composition. The option keys give the request its source, variant and with.
+@free.composition.source app.compose.free key="composition.source"
+@free.composition.variant app.compose.free key="composition.variant"
+@free.composition.with app.compose.free key="composition.with"
+@optkey.source app.compose.optionKey key="composition.source" option=source
+@optkey.variant app.compose.optionKey key="composition.variant" option=variant
+@optkey.with app.compose.optionKey key="composition.with" option=with open=true
+@optval.random app.compose.optionValue option=source value=random
+@optval.conversation app.compose.optionValue option=source value=conversation
+@optval.another app.compose.optionValue option=variant value=another
+@optval.similar app.compose.optionValue option=variant value=similar
+@optval.simpler app.compose.optionValue option=variant value=simpler
+@optval.richer app.compose.optionValue option=variant value=richer
+@op.c app.compose.constraint key=?k value=?v
+@op.k app.compose.optionKey key=?k option=?o
+@op.v app.compose.optionValue option=?o value=?v
+@op.out app.compose.option option=?o value=?v
+@option.closed core.rule when=$op.c when=$op.k when=$op.v then=$op.out
+@op.ko app.compose.optionKey key=?k option=?o open=true
+@option.open core.rule when=$op.c when=$op.ko then=$op.out
+# A chart's values said as random or plausible leave its content open and compose a chart of invented values.
+@openval.random app.compose.openValue key="chart.values" value=random
+@openval.plausible app.compose.openValue key="chart.values" value=plausible
+@openform.chart app.compose.openForm key="chart.values" form=chart
+@os.c app.compose.constraint key=?k value=?v
+@os.v app.compose.openValue key=?k value=?v
+@os.out app.compose.openSaid key=?k
+@open.said core.rule when=$os.c when=$os.v then=$os.out
+@ov.r app.compose.reading area=?a act=make mode=new
+@ov.s app.compose.openSaid key=?k
+@ov.f app.compose.openForm key=?k form=?f
+@ov.start app.compose.start area=?a form=?f
+@start.open.value core.rule when=$ov.r when=$ov.s when=$ov.f not=$t.blocked then=$ov.start
+# A composition target: the area's form when it names no kind; the form its kind word names (a chart); a diagram kind
+# the knowledge can fill; a scene the knowledge has; another kind word in the Drawing tab is a scene with that thing.
+@tf.drawing app.compose.typeForm area=drawing type=composition form=scene
+@tf.diagram app.compose.typeForm area=diagram type=composition form=diagram
+@kf.chart app.compose.kindForm area=diagram word=chart form=chart
+@kf.charts app.compose.kindForm area=diagram word=charts form=chart
+@kf.graph app.compose.kindForm area=diagram word=graph form=chart
+@cp.r app.compose.reading area=?a mode=new type=composition
+@cp.word app.compose.reading word=?anyWord
+@cp.tf app.compose.typeForm area=?a type=composition form=?f
+@cp.start app.compose.start area=?a form=?f
+@start.composition core.rule when=$cp.r not=$cp.word when=$cp.tf not=$t.blocked then=$cp.start
+@cp.rw app.compose.reading area=?a mode=new type=composition word=?w
+@cp.kf app.compose.kindForm area=?a word=?w form=?f
+@start.composition.kind core.rule when=$cp.rw when=$cp.kf not=$t.blocked then=$cp.start
+@cp.df app.compose.form area=?a kind=?w
+@cp.dstart app.compose.start area=?a form=diagram subject=?w
+@start.composition.diagram core.rule when=$cp.rw when=$cp.df not=$t.blocked then=$cp.dstart
+@cp.rd app.compose.reading area=drawing mode=new type=composition word=?w
+@cp.scene k.scenes.scene name=?w
+@cp.sstart app.compose.start area=drawing form=scene subject=?w
+@start.composition.scene core.rule when=$cp.rd when=$cp.scene not=$t.blocked then=$cp.sstart
+@cp.wstart app.compose.start area=drawing form=scene with=?w
+@start.composition.with core.rule when=$cp.rd not=$cp.scene not=$t.blocked then=$cp.wstart

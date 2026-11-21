@@ -4,7 +4,7 @@ import * as lib from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {createSampler} from './sampler.mjs?v=c5ffa482dc';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=0f46640ed0';
 import {declaredPropertyValues} from './declared-execution.mjs?v=e9a0573f13';
-import {routeNewEngine} from './reader-routing.mjs?v=c88ed4bec8';
+import {routeNewEngine} from './reader-routing.mjs?v=51201121ac';
 const word = x => typeof x==='string' && /^[a-z]+$/.test(x);
 
 export function samplingSchema({area,operations,observation,bindings}) {

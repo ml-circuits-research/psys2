@@ -5,7 +5,7 @@ import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=c
 import {createCutterInference} from './cutter-inference.mjs?v=01ff223f93';
 import {createKeyReaderInference} from './key-reader-inference.mjs?v=b799218d5a';
 import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs?v=d88d1e36fe';
-import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=e1fae66c72';
+import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=132de149b6';
 import {BINDING_NODES} from './raw-structural-bridge.mjs?v=a101603524';
 
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);

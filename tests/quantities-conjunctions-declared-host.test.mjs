@@ -91,6 +91,21 @@ test('"draw a boy and a girl": both noun phrases are read and each is made or na
  apart(made);
 });
 
+test('"sketch a red fish and call it cat": a clause naming what was made is not a further noun phrase; one fish named cat',async()=>{
+ const text='sketch a red fish and call it cat';
+ const said=(key,value)=>({key,value,value_span:value,character:'requirement',operator:'eq',phase:'result',polarity:'positive'});
+ const {s,objects,say}=drawing({[text]:()=>reading('drawing',text,{act:'make',trigger:'sketch',target:target('fish'),constraints:[said('drawn.colour','red'),said('drawn.name','cat')]}),
+  // What the reader gives for the pieces a cut at "and" would read (the deployed reader, real-use run cmp-v11-runtime-417e5cb81).
+  'sketch a red fish':()=>reading('drawing','sketch a red fish',{act:'make',trigger:'sketch',target:target('fish'),constraints:[said('drawn.colour','red')]}),
+  'sketch call it cat':()=>reading('drawing','sketch call it cat',{act:'make',trigger:'sketch',target:{mode:'new',determiner:'indefinite',type:'drawn'},constraints:[said('drawn.name','cat')]})});
+ const reply=await say(text);
+ assert.ok(reply.statuses.includes('supported'),reply.text);
+ assert.equal(reply.trace.coordination,undefined,'not cut at "and"');
+ const made=objects();
+ assert.deepEqual(made.map(o=>o.kind),['fish']);
+ assert.equal(str(parse(s.isession.state['art.draw'].sop).find(w=>w.type==='w.drawing.object')?.attrs.name?.[0]??'""'),'cat');
+});
+
 test('"draw some clouds": the typical number of k.expect.amount some, in the sky, apart',async()=>{
  const text='draw some clouds';
  const {objects,say}=drawing({[text]:()=>reading('drawing',text,{act:'make',trigger:'draw',target:target('clouds')})});

@@ -31,6 +31,19 @@ export function coordinationParts(text,read){
  const separators=en.words('coord.sep','things');
  const kinds=kindMentions(read)??listAfter(read,separators,slice,cut);
  if(!kinds||trigger[1]>kinds[0][0])return null;
+ // A later conjunct whose words hold a pronoun as the object of a verb ("and call it cat", "and paint them red") is a
+ // clause about what an earlier noun phrase made, not a further noun phrase: the reading of the whole message stands.
+ const parts=splitParts(kinds,text,read,chars,cut,slice,trigger,separators);
+ return parts&&parts.slice(1).some(part=>refersBack(slice(...part.range)))?null:parts;
+}
+
+// A pronoun of w.lang.en (view acts, not also a determiner) not governed by a preposition of w.lang.en.
+function refersBack(phrase){
+ const words=[...phrase.toLowerCase().matchAll(/[\p{L}]+/gu)].map(m=>m[0]),pronouns=en.words('pron','acts'),determiners=en.words('det'),prepositions=en.words('prep');
+ return words.some((w,i)=>pronouns.has(w)&&!determiners.has(w)&&!prepositions.has(words[i-1]));
+}
+
+function splitParts(kinds,text,read,chars,cut,slice,trigger,separators){
  if(kinds.list)return kinds.list.map(([a,b],i)=>{const own=slice(a,b).trim();return {said:i===0?slice(trigger[1],b).trim():own,text:(i===0?own:slice(cut[0],trigger[1]).trim()+' '+own).replace(/\s+/g,' ').trim(),range:[a,b]};});
  // In each gap between two kind mentions, the last coordinator token separates the noun phrases.
  const cuts=[];

@@ -15,6 +15,7 @@ import { describeNativeControl } from './native-control-intent.mjs';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs';
 import { budget } from './budget.mjs';
+import { en } from '../lang/en.mjs';
 
 const family = 'app.compose.';
 const first = (row, key) => row?.attrs[key]?.[0];
@@ -103,10 +104,22 @@ export function composeReading(proposal) {
   // What else the reading says, for the declared trigger conditions: how many requests the turn has (the reader's
   // source cuts), the keys of what it specifies about the result, and the words of its own request span.
   const parts = Array.isArray(proposal.composition?.sourceCuts) ? proposal.composition.sourceCuts.length : raw.requests.length;
-  const constraints = [...new Set((r.constraints ?? []).filter((c) => typeof c?.key === 'string' && c.phase !== 'selector').map((c) => c.key))];
+  // Each constraint with the value it says (a closed value the reader chose, else its span), for the declared options.
+  const said = (c) => { const v = c.value ?? c.value_span; return typeof v === 'string' || typeof v === 'number' ? String(v) : undefined; };
+  const constraints = [...new Map((r.constraints ?? []).filter((c) => typeof c?.key === 'string' && c.phase !== 'selector').map((c) => [c.key + '\u0000' + (said(c) ?? ''), { key: c.key, value: said(c) }])).values()];
   const words = [...new Set([...String(r.span ?? raw.source?.text ?? '').toLowerCase().matchAll(/\p{L}+/gu)].map((m) => m[0]))];
   return { area: raw.area, act: r.act, mode: target.mode, type: target.type, word: typeof word === 'string' && word ? word.toLowerCase() : undefined, bound: word ? !unbound && !!canonical : undefined, canonical,
     parts, constraints, words };
+}
+
+// The thing a "with" phrase names: its words without the determiners and numbers of w.lang.en, the last one singular
+// ("a dog" -> dog, "two cows" -> cow), as the knowledge names things.
+function thingOf(phrase) {
+  const det = en.words('det'), words = String(phrase).toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];
+  const rest = words.filter((w, i) => !(i < words.length - 1 && (det.has(w) || /^\d+$/.test(w))));
+  if (!rest.length) return phrase;
+  const last = rest.at(-1), singular = en.singular(last, 'lemma');
+  return [...rest.slice(0, -1), typeof singular === 'string' && singular ? singular : last].join(' ');
 }
 
 /** Does this reading start a composition? The declared trigger rules decide; the result names form, subject, variant. */
@@ -117,12 +130,16 @@ export async function composeStart(session, reading, { knowledge } = {}) {
   const last = session.composeLast?.[reading.area];
   const { constraints = [], words = [], ...said } = reading;
   const facts = [fact('reading', 'reading', said), ...(last ? [fact('last', 'last', { area: reading.area, form: last.form })] : []),
-    ...constraints.map((key, i) => fact('constraint.' + i, 'constraint', { key })), ...words.map((word, i) => fact('word.' + i, 'word', { word }))];
+    ...constraints.map((c, i) => fact('constraint.' + i, 'constraint', typeof c === 'string' ? { key: c } : c)), ...words.map((word, i) => fact('word.' + i, 'word', { word }))];
   if (!world.tell(serialize(facts), { factsOnly: true }).ok) return null;
   const starts = world.ofType(family + 'start');
   if (!starts.length) return null;
   const start = starts.find((row) => first(row, 'subject') !== undefined) ?? starts[0];
-  return { area: reading.area, form: text(start, 'form'), subject: text(start, 'subject'), variant: text(start, 'variant') };
+  // The declared options the reading says (app.compose.option: source, variant, with), first one per option.
+  const options = {};
+  for (const row of world.ofType(family + 'option')) { const key = text(row, 'option'); if (['source', 'variant', 'with'].includes(key) && options[key] === undefined) options[key] = text(row, 'value'); }
+  return { area: reading.area, form: text(start, 'form'), subject: text(start, 'subject'), variant: text(start, 'variant') ?? options.variant,
+    ...(options.source ? { source: options.source } : {}), ...(text(start, 'with') ?? options.with ? { with: thingOf(text(start, 'with') ?? options.with) } : {}) };
 }
 
 /** The calls the policy concludes for a request: { calls, lists, found, reply, level }. */
