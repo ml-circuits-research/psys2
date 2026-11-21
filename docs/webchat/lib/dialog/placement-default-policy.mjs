@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Declared application defaults of the default-placement problem and the rule that picks a solved candidate region
 // (worlds/app.project/placement-default-policy.sop). default-placement.mjs holds no weight, budget or ordering itself.
-import {World,str} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import SCHEMA from '../../worlds/app.project/placement-default-schema-source.mjs?v=170e03c550';
 import POLICY from '../../worlds/app.project/placement-default-policy-source.mjs?v=b1864ccb45';
-import {compileObservedChoice} from './observed-choice.mjs?v=75c7f94eb1';
+import {compileObservedChoice} from './observed-choice.mjs?v=ca9485e4cd';
 
 let loaded=null;
 function policy(){

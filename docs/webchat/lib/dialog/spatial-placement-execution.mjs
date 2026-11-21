@@ -1,20 +1,20 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
-import {World,parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
-import SOURCE from './new-engine-source.mjs?v=7199ce1ff6';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=ffd3b499d4';
-import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=eed265b32e';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=3e86b7f558';
+import {World,parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
+import SOURCE from './new-engine-source.mjs?v=d7b7628ab6';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=de478a8655';
+import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=0e1de960a8';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=8ed1f1339c';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=48479fd48d';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=24495a868d';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=cfe104acdb';
+import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=5e634e9c04';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=86d64591aa';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=bd00f37a4a';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0dd451c667';
 import {en} from '../lang/en.mjs?v=d028d63371';
-import {placementHypotheses,placementDisclosure} from './placement-default-policy.mjs?v=423274185e';
-import {identityConcepts} from './capability-plan-adapter.mjs?v=2d839ae029';
-import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=75d74875f7';
+import {placementHypotheses,placementDisclosure} from './placement-default-policy.mjs?v=66a0218151';
+import {identityConcepts} from './capability-plan-adapter.mjs?v=c9ca45400c';
+import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=16d8011b51';
 import {budget} from './budget.mjs?v=d42dc656e7';
-import {executionPolicyWorld} from './execution-policy.mjs?v=3dd93446cd';
+import {executionPolicyWorld} from './execution-policy.mjs?v=b5f62f6321';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {

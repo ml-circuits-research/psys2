@@ -1,6 +1,6 @@
-import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=fb12a09352';
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=f6e747d111';
-import { interpretationPolicy } from './interpretation-policy.mjs?v=5a0fca4ac9';
+import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=abfa3ead05';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=8ddb059cc1';
+import { interpretationPolicy } from './interpretation-policy.mjs?v=fd093a4a9b';
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * C2 dialog pipeline (spec 06). Browser-safe.
@@ -13,7 +13,7 @@ import { interpretationPolicy } from './interpretation-policy.mjs?v=5a0fca4ac9';
  * Without it all input is treated as English.
  */
 
-import { loadWorlds } from '../worlds/index.mjs?v=2cec589003';
+import { loadWorlds } from '../worlds/index.mjs?v=18dd3040a1';
 import { validateWorldSet } from '../worlds/validate.mjs?v=af0869a8e0';
 
 
@@ -22,7 +22,6 @@ import { guard, TurnAborted } from './turn-guard.mjs?v=6917b413c9';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=d42dc656e7';
 
 import { attachValues } from '../knowledge/values.mjs?v=b0000e82a7';
-import { attachArrangement } from '../knowledge/arrangement.mjs?v=b47ac596cd';
 
 /**
  * The world states of a session: one entry per world, seeded from the world's native initializer (`initialState` of its ops module).
@@ -244,7 +243,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=313078c4d4')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=9a21722701')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {
@@ -267,7 +266,7 @@ export async function createEngine({ loader, translator = null, options = {} }) 
     applicationAreas: structuredClone(options.applicationAreas ?? []),
     knowledge: options.knowledge ?? null,
     /** Attach or detach the knowledge catalog after creation (the webchat once the catalog is reachable): the colour and number readers (k.values) and the arrangement supports take the catalog's facts. */
-    setKnowledge(cat) { engine.knowledge = cat ?? null; attachValues(cat); attachArrangement(cat); },
+    setKnowledge(cat) { engine.knowledge = cat ?? null; attachValues(cat); },
     set, translator, loader,
     /** Problems found at load time and by static validation (empty when everything is consistent). */
     problems: () => validateWorldSet(set, options.patterns ?? {}),

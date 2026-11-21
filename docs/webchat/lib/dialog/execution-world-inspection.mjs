@@ -1,21 +1,21 @@
 // Read-only inspection of execution worlds already owned by the application.
-import{parse,serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=935d4d1757';
-import SOURCE from'./new-engine-source.mjs?v=7199ce1ff6';
+import{parse,serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
+import SOURCE from'./new-engine-source.mjs?v=d7b7628ab6';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=ad1717bca7';
-import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs?v=31cf22e9b6';
-import{inspectHistoryPolicy}from'./history-policy.mjs?v=5d4896233e';
-import{inspectHistoryJournal}from'./history-journal.mjs?v=fb12a09352';
-import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=3dd93446cd';
-import{sceneDefaultInspection}from'./scene-placement-defaults.mjs?v=7d6412d92b';
-import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=2d839ae029';
-import{inspectQueryPolicy}from'./project-query-action.mjs?v=e1e027cd38';
-import{inspectCreationPolicy}from'./project-create-action.mjs?v=5b755a74b9';
-import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=48479fd48d';
-import{inspectGroundedProjection}from'./grounded-projection.mjs?v=945954014c';
-import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=1366218f52';
-import{inspectReferencePolicy}from'./reference-policy.mjs?v=a6bfb0a9fa';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=45173c91ca';
-import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=bf72bce925';
+import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs?v=e2404661d6';
+import{inspectHistoryPolicy}from'./history-policy.mjs?v=d162b05ea8';
+import{inspectHistoryJournal}from'./history-journal.mjs?v=abfa3ead05';
+import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=b5f62f6321';
+import{sceneDefaultInspection}from'./scene-placement-defaults.mjs?v=02d5853491';
+import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=c9ca45400c';
+import{inspectQueryPolicy}from'./project-query-action.mjs?v=ffc6c40fb6';
+import{inspectCreationPolicy}from'./project-create-action.mjs?v=52057e8315';
+import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=5e634e9c04';
+import{inspectGroundedProjection}from'./grounded-projection.mjs?v=620cc79527';
+import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=84957e2cfd';
+import{inspectReferencePolicy}from'./reference-policy.mjs?v=66f10b900d';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=7805f16ef1';
+import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=79169c1fb5';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
 const importsOf=snapshot=>[...new Set(loggedWires(snapshot).filter(wire=>wire.type==='core.use').flatMap(wire=>(wire.attrs.world??[]).map(str)))];
@@ -28,7 +28,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=997413aa50'),import('./spatial-placement-execution.mjs?v=037a0236db'),
+  import('./declared-execution.mjs?v=3b92cfbf58'),import('./spatial-placement-execution.mjs?v=b2548ad606'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});

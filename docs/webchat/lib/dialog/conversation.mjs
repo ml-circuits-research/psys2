@@ -4,19 +4,19 @@
 // was asked back, open threads; one line per item, newest first. Pure and browser-safe: no `node:*`, no DOM.
 // TEMPORARY: the turn kinds and the focus log come from the replies and the session things until sopworld's `std.dialogue` (0.47) exists; then `turnRecord` reads them from there.
 
-/** done, already, refused, not-understood, answer, question-back: how a reply went (the avatar's face and the summary both read this). */
+/** The engine's reasons of a reply that read no request at all (reader-routing.mjs: nothing read, no declared action). */
+const UNREAD = new Set(['reading', 'no-declared-action']);
+/**
+ * done, refused, not-understood, answer, question-back: how a reply went (the avatar's face and the summary both read this), from the reply's
+ * own fields, never from its words: `statuses` (supported / unsupported per request), the engine's `trace.reason`, a missing answer the
+ * dialogue asks for, and whether the turn changed state.
+ */
 export function outcomeOf(reply) {
-  const answers = reply?.answers ?? [], segs = reply?.segments ?? [];
-  const text = String(reply?.text ?? '');
-  const handled = segs.filter((s) => !s.unparsed);
-  const supported = answers.filter((a) => a.status === 'supported');
-  if (answers.some((a) => a.status === 'missing' && /\?\s*$/.test(String(a.text ?? '').trim()))) return 'question-back';
-  if (!handled.length && !supported.length) return 'not-understood';
-  if (!supported.length) return /\?\s*$/.test(text.trim()) ? 'question-back' : 'refused';
-  if (supported.every((a) => /\balready\b/i.test(String(a.text ?? '')))) return 'already';
+  const statuses = reply?.statuses ?? [], answers = reply?.answers ?? [];
+  if (answers.some((a) => a.status === 'missing') || reply?.trace?.discourse?.pending) return 'question-back';
   const changed = Object.keys(reply?.state ?? {}).length > 0 || (reply?.effects ?? []).length > 0;
-  if (!changed && segs.some((s) => s.isQuestion)) return 'answer';
-  return 'done';
+  if (statuses.includes('supported') || answers.some((a) => a.status === 'supported')) return changed ? 'done' : 'answer';
+  return UNREAD.has(reply?.trace?.reason) || !statuses.length ? 'not-understood' : 'refused';
 }
 
 /**
@@ -50,7 +50,7 @@ export function turnRecord(n, text, reply, { tab = null } = {}) {
   return {
     n, text: String(text ?? '').slice(0, 200), tab, outcome: outcomeOf(reply), worlds, acts,
     answer: String(reply?.text ?? '').replace(/\s+/g, ' ').slice(0, 200),
-    asked: answers.filter((a) => a.status === 'missing' && /\?\s*$/.test(String(a.text ?? '').trim())).map((a) => String(a.text).trim().slice(0, 160)),
+    asked: answers.filter((a) => a.status === 'missing').map((a) => String(a.text).trim().slice(0, 160)),
     pending: (pending?.type === 'fill' || pending?.type === 'confirm') && String(pending.text ?? '').trim() ? `${pending.type === 'confirm' ? 'waiting for a yes or no' : 'waiting for the missing part'} of "${String(pending.text ?? '').slice(0, 100)}"` : null,
   };
 }

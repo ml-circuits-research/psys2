@@ -4,16 +4,17 @@
 // reading is re-bridged with the object's own family (a node for n2, a link for e1), its identity restatements
 // (an `ids` selector with the code) dropped, and the object as the declared context target; the reply says how the
 // code was taken. Nothing here inspects words: only the reader's name span and the observed codes.
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=3e86b7f558';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=48479fd48d';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=5eee029b6d';
-import {comparativeSteps} from './comparative-projection.mjs?v=55f3f4579e';
-import {referenceProjection} from './reference-projection.mjs?v=fb387ab994';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=8ed1f1339c';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=5e634e9c04';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=f6c7f255fe';
+import {comparativeSteps} from './comparative-projection.mjs?v=6b26f12061';
+import {referenceProjection} from './reference-projection.mjs?v=9e25562b87';
+import {codeReferencePolicy} from './raw-reading-policy.mjs?v=dd142452d6';
 
-// Reader diagnostics that only concern the identity heads the code replaces, or a constraint the reader could not
-// form (its metadata without a key); every other unresolved head keeps the reading incomplete.
-// The target's own kind head is replaced too: the code names the object, whose kind is observed.
-const identityHead=detail=>typeof detail?.key==='string'&&(/\.ids?$/.test(detail.key)||detail.key==='request.target.kind');
+// Reader diagnostics that only concern the identity heads the code replaces (raw-reading-policy.sop
+// app.reading.identityConcept, app.reading.codeHead), or a constraint the reader could not form (its metadata without
+// a key); every other unresolved head keeps the reading incomplete.
+const identityHead=detail=>{const {identityKey,replacedHead}=codeReferencePolicy();return identityKey(detail?.key)||replacedHead(detail?.key);};
 const absorbed=row=>row?.reason==='incomplete-provider-coverage'||row?.reason==='provider-unresolved'&&
  (identityHead(row.detail)||row.detail?.reason==='metadata-presence-inconsistent'&&/^request\.constraint\./.test(row.detail.key??''));
 
@@ -41,7 +42,7 @@ export async function projectCodeReference(proposal,session,{bindings,view}={}){
  // object's family when that family declares the same property.
  const keyOf=key=>{const [prefix,...rest]=String(key).split('.'),moved=type+'.'+rest.join('.');
   return prefix!==type&&rest.length&&bindings.properties?.some(p=>p.area===readerArea&&p.key===moved)?moved:key;};
- const restates=c=>/\.ids?$/.test(String(c?.key))&&typeof c.value==='string'&&code.startsWith(c.value);
+ const restates=c=>codeReferencePolicy().identityKey(c?.key)&&typeof c.value==='string'&&code.startsWith(c.value);
  const kept=[],renumber=new Map();
  for(const [index,c] of (r.constraints??[]).entries()){if(restates(c))continue;renumber.set(String(index),String(kept.length));kept.push({...c,key:keyOf(c.key)});}
  const target={...r.target,type,fill:'context'};delete target.name_span;

@@ -1,28 +1,28 @@
 import {en} from '../lang/en.mjs?v=d028d63371';
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=75d74875f7';
-import {projectRemovalAction} from './project-removal-action.mjs?v=9c62d5a0e9';
-import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=fb12a09352';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=1366218f52';
-import {parse} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
-import {writeReaderSource} from './reader-source.mjs?v=a41a7be6a2';
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=f6e747d111';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=16d8011b51';
+import {projectRemovalAction} from './project-removal-action.mjs?v=2966137247';
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=abfa3ead05';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=84957e2cfd';
+import {parse} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
+import {writeReaderSource} from './reader-source.mjs?v=d0098b2ead';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=8ddb059cc1';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=bf72bce925';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=997413aa50';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=e1e027cd38';
-import {projectContextAction} from './project-context-action.mjs?v=9c744a8f84';
-import {projectCodeReference} from './project-code-reference.mjs?v=a5fe3c1bc3';
-import {projectCreateAction} from './project-create-action.mjs?v=5b755a74b9';
-import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=ef04815bed';
-import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=279c6908d8';
-import {completeBindings} from './declared-bindings.mjs?v=95b8eef1a7';
-import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=cb9c8185b4';
-import {routeCoordination} from './coordination-routing.mjs?v=4c67128a05';
-import {declaredKnowledge} from './declared-execution.mjs?v=997413aa50';
-import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=5a0fca4ac9';
-import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs?v=8991d98e0e';
-import {modeLimits,interactionMode,statePreference,readPreferenceStatement,MODE_KEY} from './interaction-mode.mjs?v=029cdcc8df';
+import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=79169c1fb5';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=3b92cfbf58';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=ffc6c40fb6';
+import {projectContextAction} from './project-context-action.mjs?v=a95f4e70e3';
+import {projectCodeReference} from './project-code-reference.mjs?v=36d112fd78';
+import {projectCreateAction} from './project-create-action.mjs?v=52057e8315';
+import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=55daccc94f';
+import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=05dd19d4ea';
+import {completeBindings} from './declared-bindings.mjs?v=1ee53872c2';
+import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=7266a4d975';
+import {routeCoordination} from './coordination-routing.mjs?v=523794f92d';
+import {declaredKnowledge} from './declared-execution.mjs?v=3b92cfbf58';
+import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=fd093a4a9b';
+import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs?v=4d736deecd';
+import {modeLimits,interactionMode,statePreference,readPreferenceStatement,MODE_KEY} from './interaction-mode.mjs?v=d5defeb3a8';
 import {setPlacementMode} from './placement-search-provider.mjs?v=0dd451c667';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.
@@ -207,7 +207,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   // A composition another editor composes (compose-policy.sop app.compose.away) runs in that live editor, which the shell shows.
   let view=context.area,shell=null;
   if(start&&start.area!==reading.area){
-   const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=3e86b7f558');
+   const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=8ed1f1339c');
    view=liveViews(session,NATIVE_AREAS).find(([,area])=>area.area===start.area)?.[0]??null;
    shell=composeShell=session.isession.state['ui.shell'];
    if(view&&shell)session.isession.state['ui.shell']={...shell,activeTab:view};
@@ -459,7 +459,7 @@ const liveViews=(session,NATIVE_AREAS)=>Object.entries(NATIVE_AREAS).filter(([,a
 // ("add a box to the diagram", "in the drawing") is read in that editor first; when it does not apply fully there it is
 // read as usual. The words are the registry's; the request's words are compared by their singular (w.lang.en).
 async function mentionedView(session,text,active){
- const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=3e86b7f558');
+ const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=8ed1f1339c');
  const said=new Set([...String(text).toLowerCase().matchAll(/[\p{L}\p{N}]+/gu)].flatMap(m=>[m[0],en.singular(m[0],'lemma')]));
  const named=liveViews(session,NATIVE_AREAS).filter(([view,area])=>view!==active&&(area.words??[]).some(word=>word.split(/\s+/).every(part=>said.has(part.toLowerCase())))).map(([view])=>view);
  return named.length===1?named[0]:null;
@@ -483,7 +483,7 @@ async function routeNewEngineTurn(session,text,options={}){
  const first=await routeInView(session,text,options);
  const withMention=reply=>mention?{...reply,trace:{...reply.trace,editorMention:mention}}:reply;
  if(!retrying)return withMention(first);
- const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=3e86b7f558');
+ const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=8ed1f1339c');
  let kinds=[];try{kinds=session.engine?.requestReader?.bindings?.()?.kinds??[];}catch{/* no bindings: the declared order alone */}
  const active=shell.activeTab,applied=first?.statuses?.includes('supported');
  const requests=Array.isArray(first?.trace?.readerRouting?.rawReading)?first.trace.readerRouting.rawReading:[];

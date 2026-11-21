@@ -1,5 +1,5 @@
 // Read-only presentation of the exact instance archive and its owned object facts.
-import{parse,serialize,str,readInstanceState}from'../vendor/sopworld/sopworld.mjs?v=935d4d1757';
+import{parse,serialize,str,readInstanceState}from'../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import{createBudget}from'./budget.mjs?v=d42dc656e7';
 // observedSupport: per observed object id, the instance facts its observation was derived from (the derivation's own
 // record). It binds an object that no fact names by identity; it is never inferred from matching values.

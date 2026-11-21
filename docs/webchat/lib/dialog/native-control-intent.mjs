@@ -1,10 +1,10 @@
 // Typed UI intent capture. No language parser, model inference or optimistic effect claims.
 import {budget} from './budget.mjs?v=d42dc656e7';
-import {copyHostData,validateNativeArguments,toolInvocationContext} from '../../worlds/native-tool-host.mjs?v=646e795567';
-import {compactNativeIntent} from './native-intent-reader.mjs?v=5a043d8e89';
+import {copyHostData,validateNativeArguments,toolInvocationContext} from '../../worlds/native-tool-host.mjs?v=5af5f5af31';
+import {compactNativeIntent} from './native-intent-reader.mjs?v=5755975290';
 
 import {historyControlQuery} from './history-control-query.mjs?v=227273ef37';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=5a0fca4ac9';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=fd093a4a9b';
 
 // The page calls this with its gesture and the active editor's declared interface.
 export async function editorGestureSop(operation,args,loadDeclarations){

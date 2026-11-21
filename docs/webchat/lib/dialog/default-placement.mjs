@@ -13,9 +13,9 @@
 // placement is solved again with the surfaces as a soft constraint of avoidWeight, so it still keeps out where it can.
 // A thing that lies in the land (app.place.peers strength=hard: a lake, a river) keeps clear of every observed object
 // the same way: hard first, then soft at peerWeight.
-import {solveProblem,parse,str} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
+import {solveProblem,parse,str} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0dd451c667';
-import {resolveObjective,chooseRegion,stopAtNoOverlap} from './placement-default-policy.mjs?v=423274185e';
+import {resolveObjective,chooseRegion,stopAtNoOverlap} from './placement-default-policy.mjs?v=66a0218151';
 // Every weight, budget, grid division and centre share an area leaves out comes from the declared application defaults
 // (worlds/app.project/placement-default-policy.sop app.placement.default); the keys taken from there are reported
 // (defaulted), and the candidate region is chosen by its declared criteria (std.decide of=app.place.region).

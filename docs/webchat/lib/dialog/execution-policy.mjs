@@ -1,5 +1,5 @@
 // Admit owned default and value-lookup policy facts for the request compiler.
-import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=935d4d1757';
+import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import SOURCE from'../../worlds/app.project/execution-policy-source.mjs?v=38faa58bcc';
 import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs?v=cd13991a95';
 import SCENE_SCHEMA from'../../worlds/app.project/scene-default-schema-source.mjs?v=cde8a3092d';

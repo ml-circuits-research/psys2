@@ -4,14 +4,14 @@
 // (executeNativeGroup); noun phrases that share a relation ("a house and two trees near the lake") become one
 // request with several subjects, placed by the library in one std.problem. Every noun phrase that could not be read
 // or made is named in the reply.
-import {parse,serialize,quote} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
-import {writeReaderSource} from './reader-source.mjs?v=a41a7be6a2';
-import {coordinationParts} from './coordination-split.mjs?v=506e3300a3';
-import {resolveRequestRoute} from './request-routing-policy.mjs?v=31cf22e9b6';
-import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=75d74875f7';
-import {executionKnowledge} from './declared-execution.mjs?v=997413aa50';
-import {recordHistory} from './history-journal.mjs?v=fb12a09352';
-import {quantityNote} from './quantity-projection.mjs?v=cb9c8185b4';
+import {parse,serialize,quote} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
+import {writeReaderSource} from './reader-source.mjs?v=d0098b2ead';
+import {coordinationParts} from './coordination-split.mjs?v=438aa7a1af';
+import {resolveRequestRoute} from './request-routing-policy.mjs?v=e2404661d6';
+import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=16d8011b51';
+import {executionKnowledge} from './declared-execution.mjs?v=3b92cfbf58';
+import {recordHistory} from './history-journal.mjs?v=abfa3ead05';
+import {quantityNote} from './quantity-projection.mjs?v=7266a4d975';
 
 const reply=(text,supported,trace={})=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 const attr=(wire,key)=>wire?.attrs[key]?.[0];

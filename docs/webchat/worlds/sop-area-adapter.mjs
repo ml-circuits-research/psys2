@@ -2,8 +2,8 @@
 // A SOP area's place in the application, for any tab: the state carrier, host creation with the application's
 // catalog (or the generated offline subset), the view projection and the persisted instance world. Nothing here
 // names a tab; each tab passes its world id, its native interface, its area files and its offline subset.
-import {World, parse, serialize} from '../lib/vendor/sopworld/sopworld.mjs?v=935d4d1757';
-import {createSopArea, initialSopAreaState, projectSopArea} from './sop-area.mjs?v=d10bfc3d70';
+import {World, parse, serialize} from '../lib/vendor/sopworld/sopworld.mjs?v=bee14f8b59';
+import {createSopArea, initialSopAreaState, projectSopArea} from './sop-area.mjs?v=c12d599d7a';
 
 export const emptyAreaState = () => ({ sop: '', runtime: { view: {} } });
 

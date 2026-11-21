@@ -5,10 +5,10 @@
 // instance facts kept in the session state (APP_PREFERENCES), validated by the w.preferences schema; the latest one is in
 // force, otherwise the declared default. The chat toggle and a message ("think harder", "be quick") state it the same way.
 // Nothing here names a mode, a limit or a phrase.
-import {World,parse,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
+import {World,parse,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=bee14f8b59';
 import {BUNDLED_AREAS} from '../knowledge/bundled-areas.mjs?v=62a24b2870';
 import PREFERENCES from '../../worlds/app.project/interaction-preferences-source.mjs?v=875aec0e2a';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=5a0fca4ac9';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=fd093a4a9b';
 
 export const APP_PREFERENCES='app.preferences';
 export const MODE_KEY='interaction.mode';
