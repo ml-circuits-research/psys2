@@ -410,3 +410,6 @@ Open: italic fontStyle, "new page" operation, compiled-world snapshot and increm
 Real-use rows: 2/2 "new page" make a page (one keeps the title "Ward Census"), 6/6 italic rows set fontStyle=italic (bold kept where said), 26/26 "what values does <chart>" list the values (5 still carry a partial note from fragment spans like "Log"/"in").
 Gate: npm test 760 pass / 0 fail after system-map regen (first run 1 fail: stale system map); test-world diagram.sketch 7/7; catalog test:changed 89/0.
 Open: "center aligned" title alignment unsupported; reply says "Created a diagram" for a new page (page kind word).
+2026-11-21 — Reader v11 activated (e29deff06): official dataset 1020f86cd (196,865 rows incl. staged dg-21/pref-01/dw-19), warm from v10, cutter v7, bindings v15 at catalog 60c7aae3. Gate: npm test 760/0.
+Real-use run 2026-11-21-e1a9e8d5 (inherits 41b4fa40): L2+ A 37% (v10 38%), fresh B 25% (v10 run's B 37%, other sample). v11 regressions: "draw X and call it Y" cut into two makes (6), "what values does <chart>" read as node target → "No objects match" (4).
+Runtime failures seen: composition answers text/placement requests with random scenes (8 cards: "add the word OPEN on the fence", "add 'Summer 2026' at the top"). Summary in management/OVERNIGHT.md.
