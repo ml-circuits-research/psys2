@@ -42,6 +42,8 @@ for (const [source, module] of [
   ['voice-words.sop', 'voice-words-source.mjs'],
   ['compose-schema.sop', 'compose-schema-source.mjs'],
   ['compose-policy.sop', 'compose-policy-source.mjs'],
+  ['grounded-projection-schema.sop', 'grounded-projection-schema-source.mjs'],
+  ['grounded-projection.sop', 'grounded-projection-source.mjs'],
   ['person-view-schema.sop', 'person-view-schema-source.mjs'],
   ['person-view.sop', 'person-view-source.mjs'],
 ]) {

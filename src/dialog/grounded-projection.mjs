@@ -91,3 +91,14 @@ export function observeGroundedProjection(session, projection) {
     // Inspection cannot change the request.
   }
 }
+
+/** The declared raw request shapes whose written name is grounded (app.grounded.nameShape) and the meaning limit. */
+let nameShapes;
+export function groundedNameShapes() {
+  if (nameShapes) return nameShapes;
+  const world = groundingWorld(), text = (row, key) => (first(row, key) === undefined ? undefined : str(first(row, key)));
+  const shapes = world.ofType('app.grounded.nameShape').map((row) => Object.fromEntries(['profile', 'act', 'mood', 'mode', 'fill', 'determiner'].map((key) => [key, text(row, key)]).filter(([, v]) => v !== undefined)));
+  const limit = Number(text(world.ofType('app.grounded.limit')[0] ?? { attrs: {} }, 'meanings') ?? 0);
+  return nameShapes = { shapes, limit };
+}
+

@@ -1,4 +1,4 @@
-@ground.module core.module name=app.grounded imports=std.request exports=app.grounded.profile exports=app.grounded.input exports=app.grounded.value exports=app.grounded.graph exports=app.grounded.alias exports=app.grounded.constraint exports=app.grounded.mention exports=app.grounded.lexeme exports=app.grounded.meaning
+@ground.module core.module name=app.grounded imports=std.request exports=app.grounded.profile exports=app.grounded.nameShape exports=app.grounded.limit exports=app.grounded.input exports=app.grounded.value exports=app.grounded.graph exports=app.grounded.alias exports=app.grounded.constraint exports=app.grounded.mention exports=app.grounded.lexeme exports=app.grounded.meaning
 @ground.profile core.type of=app.grounded.profile closed=true
 @ground.profile.key core.slot of=app.grounded.profile key=profile kind=atom present=true
 @ground.profile.mode core.slot of=app.grounded.profile key=mode kind=atom present=true
@@ -62,3 +62,16 @@
 @ground.mention.headStart core.slot of=app.grounded.mention key=headStart kind=integer
 @ground.mention.headEnd core.slot of=app.grounded.mention key=headEnd kind=integer
 @ground.lexeme.form core.slot of=app.grounded.lexeme key=form kind=atom present=true
+# A raw request shape whose written name is resolved by grounding (src/dialog/project-removal-action.mjs): every slot
+# said must equal the request's (act, mood) or its target's (mode, fill, determiner); the shape names no constraint.
+@ground.nameShape core.type of=app.grounded.nameShape closed=true
+@ground.nameShape.profile core.slot of=app.grounded.nameShape key=profile kind=atom present=true
+@ground.nameShape.act core.slot of=app.grounded.nameShape key=act kind=atom present=true
+@ground.nameShape.mood core.slot of=app.grounded.nameShape key=mood kind=atom
+@ground.nameShape.mode core.slot of=app.grounded.nameShape key=mode kind=atom
+@ground.nameShape.fill core.slot of=app.grounded.nameShape key=fill kind=atom
+@ground.nameShape.determiner core.slot of=app.grounded.nameShape key=determiner kind=atom
+# The most meanings a grounded name may have before it is too vague to resolve.
+@ground.limit core.type of=app.grounded.limit closed=true
+@ground.limit.meanings core.slot of=app.grounded.limit key=meanings kind=integer present=true
+

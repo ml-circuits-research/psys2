@@ -58,3 +58,9 @@
 @o.meaning app.grounded.meaning lexeme=$p.lexeme
 @ground.mention.kind.gap core.rule when=$p.kind.gap when=$p.lexeme then=$o.meaning
 @ground.mention.description.gap core.rule when=$p.description.gap when=$p.lexeme then=$o.meaning
+
+# The raw request shapes whose written name is grounded in the area's kind lexemes (project-removal-action.mjs): a
+# definite written removal said with no constraints ("remove the tree"). A name with more than 16 meanings is too vague.
+@ground.shape.remove app.grounded.nameShape profile=context act=remove mood=do mode=existing fill=written determiner=definite
+@ground.limit.meanings app.grounded.limit meanings=16
+
