@@ -129,13 +129,15 @@ def main():
     for line in (HERE / 'examples.jsonl').read_text().splitlines():
         e = json.loads(line)
         c = e['cohort']
+        if c['operation'] != 'compound':
+            canon.setdefault((c['operation'], '*'), (e['text'], c['form']))
         if c['combination'] in ('single', 'operation') and c['form'] in ('name', 'new', 'context', 'description'):
             key = (c['operation'], (c.get('parameters') or [None])[0] if c['combination'] == 'single' else None)
             if key not in canon or (c['form'] == 'name' and canon[key][1] != 'name'):
                 canon[key] = (e['text'], c['form'])
     funcs = []
     for f in fx['functions']:
-        if f['parameter'] in ('id', 'ids') and f['key'] in ('@ref', None):
+        if f['parameter'] is None or (f['parameter'] in ('id', 'ids') and f['key'] in ('@ref', None)):
             continue  # the target reference: covered by the operation row
         op, p = f['operation'], f['parameter']
         key = f['key']
@@ -143,10 +145,10 @@ def main():
         funcs.append({'tab': f['tab'], 'operation': op, 'parameter': p, 'key': key, 'rows': rows_n[(op, p)] if key else 0,
                       'keyHuman': len(key_human[(f['tab'], kb)]) if kb else None,
                       'human': len(human[(op, p)]) if key else 0, 'corpus': len(corpus[(op, p)]) if key else 0,
-                      'canonical': (canon.get((op, p)) or canon.get((op, None)) or ('', ''))[0]})
+                      'canonical': (canon.get((op, p)) or canon.get((op, None)) or canon.get((op, '*')) or ('', ''))[0]})
     for op, t in templates.items():
         funcs.append({'tab': t['tab'], 'operation': op, 'parameter': None, 'key': None, 'rows': rows_n[(op, None)], 'human': len(human[(op, None)]),
-                      'corpus': len(corpus[(op, None)]), 'canonical': (canon.get((op, None)) or ('', ''))[0], 'opRow': True})
+                      'corpus': len(corpus[(op, None)]), 'canonical': (canon.get((op, None)) or canon.get((op, '*')) or ('', ''))[0], 'opRow': True})
     for f in funcs:
         f['status'] = 'no-key' if (f['key'] is None and not f.get('opRow')) else 'covered' if f['human'] >= TARGET else 'thin' if f['human'] else 'missing'
         f['need'] = 0 if f['status'] == 'covered' else 25 - f['human']
