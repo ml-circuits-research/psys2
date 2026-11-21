@@ -29,7 +29,14 @@ let queue=Promise.resolve(),inFlight=0;
 let mode='fast';
 export function setPlacementMode(value){mode=value==='thinking'?'thinking':'fast';return mode;}
 export const placementMode=()=>mode;
-const forMode=model=>mode==='thinking'||!model?{...model}:{...model,soft:[],depth:undefined,count:undefined};
+// Fast is not "any model" (a first model sits in a corner): the declared preferences still choose the place. The soft
+// predicates (gap from other objects, not centred on one) are asked to hold as hard ones, and the linear terms (the pull to
+// a region's point, minimise/maximise) stay the objective, which Z3 settles quickly; when the predicates cannot all hold,
+// the same without them, and only then any model of the hard constraints. No search over which soft predicates to give up.
+const linear=c=>['align','minimise','maximise'].includes(c.predicate);
+const fastSteps=model=>{const soft=model.soft??[],rules=soft.filter(c=>!linear(c)),terms=soft.filter(linear),base={...model,depth:undefined,count:undefined};
+ return [...(rules.length?[{...base,hard:[...model.hard,...rules],soft:terms}]:[]),...(terms.length?[{...base,soft:terms}]:[]),{...base,soft:[]}];};
+const forMode=model=>mode==='thinking'||!model?[{...model}]:fastSteps(model);
 const isolated=()=>globalThis.crossOriginIsolated===true;
 const begin=by=>{if(state==='not-loaded'){state='warming';warmedBy=by;warmStarted=Date.now();}};
 const declineTo=(reason)=>{counts.internal++;counts.reasons[reason]=(counts.reasons[reason]??0)+1;try{console.warn('placement: internal search (emergency path):',reason);}catch{/* no console */}return null;};
@@ -60,7 +67,7 @@ export function placementSearchProvider({supported=z3Supported}={}) {
    // One solve at a time on the context; the wall limit starts when this solve starts on a loaded Z3.
    const solve=queue.then(()=>inner.preload()).then(async ready=>{if(failed)return null;if(!ready&&!injected)return null;
     if(wallMs)timer=setTimeout(()=>failPlacementSearch('solve-outlived-budget: no answer within '+wallMs+' ms'),wallMs);
-    inFlight++;try{return await inner({...forMode(model),budget});}finally{inFlight--;if(state!=='unavailable'&&injected)state='ready';}});
+    inFlight++;try{let answer=null;for(const step of forMode(model)){answer=await inner({...step,budget});if(answer?.status!=='unsatisfiable')break;}return answer;}finally{inFlight--;if(state!=='unavailable'&&injected)state='ready';}});
    queue=solve.then(()=>{},()=>{});
    return Promise.race([solve.then(answer=>answer?.status==='budget'?declineTo('z3-budget'):answer?(counts.z3++,answer):declineTo(failed?'solver-failed':'z3-declined'),
      error=>{lastSolve={status:'declined',reason:'error',error:String(error?.message??error)};return declineTo('z3-error');}),declined.then(()=>declineTo('solver-failed'))])

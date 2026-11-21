@@ -131,7 +131,7 @@ export function fallbackLadder(packet){
    follow.evidence=follow.evidence.filter(e=>!(e.path[0]==='targets'&&e.path[1]===target.id&&e.path[2]==='name'));
    delete follow.targets.find(t=>t.id===target.id)?.name;
    const changed=decodeVariant(packet,[follow]);
-   if(placed&&changed)steps.push({step,text,candidates:[placed,changed],dropped:[],followDropped:named(other)});
+   if(placed&&changed)steps.push({step,text,candidates:[placed,changed],dropped:[],followDropped:named(other),keeps:['placement']});
   }else if(step==='without-placement'){
    if(!label.constraints.some(placement))continue;
    const c=decodeVariant(packet,[reduced(x=>!placement(x))]);if(c)steps.push({step,text,candidates:[c],dropped:named(label.constraints.filter(placement))});

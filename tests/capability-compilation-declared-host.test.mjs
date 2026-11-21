@@ -144,7 +144,7 @@ test('two reader-proposed meanings for one turn compile against the observed dia
   candidates:[option('example.absent'),option('example.rectangle')],coverage:{complete:true,graphProposal:true},failures:[],
   selectionScore:{definition:'psys2.model-minimum/1',value:0.8},
  })};
- const r=await routeNewEngine(value,phrase,{view:'diagram'});
+ const r=await routeNewEngine(value,phrase,{view:'diagram',interactionMode:'thinking'});   // comparing meanings is the Thinking path
  assert.deepEqual(r.statuses,['supported'],JSON.stringify(r.trace));
  assert.match(r.trace.readingComparison,/std.interpret.reading/);
  assert.deepEqual(diagramNodes(value.isession.state['diagram.sketch']).map(n=>[n.x,n.y]),[[100,120]]);

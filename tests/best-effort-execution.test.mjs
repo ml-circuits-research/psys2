@@ -78,7 +78,7 @@ test('creation hypotheses preserve exact identities, consume coextensive evidenc
  assert.deepEqual(completed.interpretation.alternatives.map(row=>row.canonical),['fixture.square','fixture.outline.square']);
  assert.equal(completed.candidates.length,2);
  assert.deepEqual(completed.interpretation.unapplied,[]);
- const made=await routeNewEngine(session,source,{view:'draw'});
+ const made=await routeNewEngine(session,source,{view:'draw',interactionMode:'thinking'});   // comparing readings is the Thinking path
  assert.equal(made.statuses[0],'supported',JSON.stringify(made.trace));
  assert.equal(made.trace.readerRouting.admission.alternatives.length,2);
  assert.match(made.trace.readingComparison,/std.interpret.reading/);

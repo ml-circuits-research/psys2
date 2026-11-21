@@ -5,15 +5,15 @@
 // to load), runs the declared rules, and executes the calls they conclude through the area's own declared operations:
 // the made things placed together by the placement problem (executeNativeGroup: std.problem, Z3 where available), the
 // calls of the after phase with the ids made, everything as one undoable turn. It names no scene, kind or sentence.
-import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
+import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
 import POLICY from '../../worlds/app.project/compose-policy-source.mjs?v=03c2556471';
 import SCHEMA from '../../worlds/app.project/compose-schema-source.mjs?v=26d40ac451';
-import { NATIVE_AREAS, createAreaHost } from './app-reader-context.mjs?v=4afe6eb1e8';
+import { NATIVE_AREAS, createAreaHost } from './app-reader-context.mjs?v=ea9d685adb';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { executeNativeGroup } from './capability-plan-execution.mjs?v=c305284e10';
-import { describeNativeControl } from './native-control-intent.mjs?v=94cc7d01b8';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=a8b0e1d688';
-import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=9afff05a19';
+import { executeNativeGroup } from './capability-plan-execution.mjs?v=cbb83be640';
+import { describeNativeControl } from './native-control-intent.mjs?v=01d3de93b6';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=24495a868d';
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=fb12a09352';
 import { budget } from './budget.mjs?v=d42dc656e7';
 import { en } from '../lang/en.mjs?v=d028d63371';
 

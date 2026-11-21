@@ -1,18 +1,18 @@
-import { historyHeads } from './history-journal.mjs?v=9afff05a19';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=73dec78e54';
+import { historyHeads } from './history-journal.mjs?v=fb12a09352';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=48479fd48d';
 // Bind model-declared context references to actual native objects; never inspect source words.
-import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=4afe6eb1e8';
-import {executionPolicyWorld} from './execution-policy.mjs?v=a5aac38038';
-import {readReferenceTurn,resolveObservedReference,referencePolicyWorld} from './reference-policy.mjs?v=7fbf456cc8';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=8c3d48a45a';
-import {flatRequestProjection} from './request-projection.mjs?v=75e3416602';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=79cbaee755';
-import {retargetRule,pluralReference} from './raw-reading-policy.mjs?v=b64dcdbdcf';
+import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=ea9d685adb';
+import {executionPolicyWorld} from './execution-policy.mjs?v=3dd93446cd';
+import {readReferenceTurn,resolveObservedReference,referencePolicyWorld} from './reference-policy.mjs?v=a6bfb0a9fa';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=945954014c';
+import {flatRequestProjection} from './request-projection.mjs?v=ae54e832aa';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=05e816ce7e';
+import {retargetRule,pluralReference} from './raw-reading-policy.mjs?v=7d611bb87a';
 import {en} from '../lang/en.mjs?v=d028d63371';
-import {comparativeSteps} from './comparative-projection.mjs?v=65e0e7d8a2';
-import {referenceProjection} from './reference-projection.mjs?v=ea9b35dda0';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=544d36d194';
+import {comparativeSteps} from './comparative-projection.mjs?v=55f3f4579e';
+import {referenceProjection} from './reference-projection.mjs?v=fb387ab994';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=d70c8952d1';
 // What an act on the referent that says nothing more does (reference-policy.sop app.reference.bare: none | grounded).
 const bareUse=act=>{const row=referencePolicyWorld().ofType('app.reference.bare').find(r=>str(r.attrs.act?.[0])===act);return row?str(row.attrs.use[0]):undefined;};
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {

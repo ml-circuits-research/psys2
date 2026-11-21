@@ -1,10 +1,10 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
-import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=812ac605aa';
-import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=c86da55247';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=9e91985d6d';
-import {unitConversion,stripPhrase,splitPhrase} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
+import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=646e795567';
+import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=72bbcf6ab2';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=e69d59dd98';
+import {unitConversion,stripPhrase,splitPhrase} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
 import {en} from '../lang/en.mjs?v=d028d63371';
-import {populationReference} from './raw-reading-policy.mjs?v=b64dcdbdcf';
+import {populationReference} from './raw-reading-policy.mjs?v=7d611bb87a';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 // The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
 export const BINDING_NODES=250000;

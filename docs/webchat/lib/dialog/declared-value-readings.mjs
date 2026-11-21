@@ -9,8 +9,8 @@
 //  - a position (app.execution.position): a target ordinal ("the third bar", "the first month") is a selector on the
 //    family's declared position key, its value the ordinal's number (k.values ordinals; declared-bindings.mjs gives
 //    the key its normalizations).
-import {str} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
-import {executionPolicyWorld} from './execution-policy.mjs?v=a5aac38038';
+import {str} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
+import {executionPolicyWorld} from './execution-policy.mjs?v=3dd93446cd';
 import {parseNumberRun} from '../knowledge/number-run.mjs?v=efcde74940';
 import {numberInfo} from '../knowledge/values.mjs?v=b0000e82a7';
 import {budget} from './budget.mjs?v=d42dc656e7';

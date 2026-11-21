@@ -1,9 +1,9 @@
 // Ground an existing-object mention in the current application's declared vocabulary.
-import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
+import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=f6a0b10be9';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=4afe6eb1e8';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=73dec78e54';
-import {projectGroundedRequest,observeGroundedProjection,resolveGroundedMention} from './grounded-projection.mjs?v=8c3d48a45a';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=ea9d685adb';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=48479fd48d';
+import {projectGroundedRequest,observeGroundedProjection,resolveGroundedMention} from './grounded-projection.mjs?v=945954014c';
 
 const read=(wire,key)=>str(wire.attrs[key]?.[0]);
 const articles=parse(LANG_EN_FACTS.determiners)

@@ -4,7 +4,7 @@
 // relation anchor phrase as a kind lemma; nothing here names a word. With them, the declared question heads
 // (query-reading-policy.sop app.query.read.head: "what" asks the values of a property, "how many" a count) that
 // project an annotated question into a std.request.query.
-import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
+import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=f6a0b10be9';
 import QUERY_POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=219c267031';
 import {en} from '../lang/en.mjs?v=d028d63371';

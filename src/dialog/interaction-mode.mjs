@@ -36,7 +36,8 @@ export function preferenceValue(session,key){const rows=stated(session,key);retu
 /** State a value (source stated, scope app): validated by the schema and by the values the policy declares. */
 export function statePreference(session,key,value,{about}={}){
  if(!values(key).includes(value))throw Error('undeclared-preference-value');
- if(preferenceValue(session,key)===value&&stated(session,key).length)return false;
+ // Nothing is stated when the value is already in force (the default before any statement included).
+ if(preferenceValue(session,key)===value)return false;
  const state=session.isession.state,sop=state[APP_PREFERENCES]?.sop??'',rows=parse(sop);
  const at=1+Math.max(0,...rows.filter(w=>w.type==='w.preferences.preference').map(w=>Number(one(w,'at'))||0));
  // One value per field: the earlier statement of this key goes.

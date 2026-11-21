@@ -1,29 +1,29 @@
 import {en} from '../lang/en.mjs?v=d028d63371';
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=c305284e10';
-import {projectRemovalAction} from './project-removal-action.mjs?v=6e31d63433';
-import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=9afff05a19';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=c513d6de90';
-import {parse} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
-import {writeReaderSource} from './reader-source.mjs?v=97a5138f69';
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=b2f07e2e88';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=cbb83be640';
+import {projectRemovalAction} from './project-removal-action.mjs?v=3a77da7c89';
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=fb12a09352';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=902759d8e4';
+import {parse} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
+import {writeReaderSource} from './reader-source.mjs?v=a41a7be6a2';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=f6e747d111';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=4e1b84152b';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=9def34b1f0';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=32838d4383';
-import {projectContextAction} from './project-context-action.mjs?v=0269665c1c';
-import {projectCodeReference} from './project-code-reference.mjs?v=1c2c219abd';
-import {projectCreateAction} from './project-create-action.mjs?v=bc977be63a';
-import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=70817b3207';
-import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=24df99deae';
-import {completeBindings} from './declared-bindings.mjs?v=0bffaa1338';
-import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=cf83664eb3';
-import {routeCoordination} from './coordination-routing.mjs?v=da3225c00b';
-import {declaredKnowledge} from './declared-execution.mjs?v=9def34b1f0';
-import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=544d36d194';
-import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs?v=aee50074b7';
-import {modeLimits,interactionMode,statePreference,readPreferenceStatement,MODE_KEY} from './interaction-mode.mjs?v=3538d5a697';
-import {setPlacementMode} from './placement-search-provider.mjs?v=b75b2ff894';
+import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=bf72bce925';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=2cb454d2c6';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=2076e6d058';
+import {projectContextAction} from './project-context-action.mjs?v=25a0a9b6f1';
+import {projectCodeReference} from './project-code-reference.mjs?v=e136d92b68';
+import {projectCreateAction} from './project-create-action.mjs?v=8eb020d82f';
+import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=ef04815bed';
+import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=d8fce8f8d2';
+import {completeBindings} from './declared-bindings.mjs?v=3e9b75e479';
+import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=9afaca4cae';
+import {routeCoordination} from './coordination-routing.mjs?v=88d81d6c4e';
+import {declaredKnowledge} from './declared-execution.mjs?v=2cb454d2c6';
+import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=d70c8952d1';
+import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs?v=80935e34db';
+import {modeLimits,interactionMode,statePreference,readPreferenceStatement,MODE_KEY} from './interaction-mode.mjs?v=f9bac33176';
+import {setPlacementMode} from './placement-search-provider.mjs?v=0dd451c667';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.
 const knownAmounts=()=>amounts??=amountsOf(declaredKnowledge('k.expect.amount'));
@@ -117,8 +117,10 @@ async function dispatchPartial(session,plan,text,options,bindings,refused=null){
  let result=first,step=null,disclosed=[...plan.reading.disclosed],readings=[plan.decision.candidate];
  if(!supported(first)){
   rollback();result=null;
-  // The answer mode bounds the ladder steps tried (app.interpret.mode fallbacks).
-  for(const option of fallbackLadder(plan.reading.packet).slice(0,modeLimits(session).fallbacks)){
+  // A step that keeps the role the editor refused (the placement interpreter refused the reading) would repeat the
+  // refusal, so it is not tried; the answer mode bounds the other steps (app.interpret.mode fallbacks).
+  const refusedPlacement=['spatial','reject'].includes(first?.trace?.executionRoute?.method);
+  for(const option of fallbackLadder(plan.reading.packet).filter(option=>!(refusedPlacement&&option.keeps?.includes('placement'))).slice(0,modeLimits(session).fallbacks)){
    const replies=[];
    for(const candidate of option.candidates){const reply=await dispatchRequest(session,candidate,text,options,bindings);replies.push(reply);if(!supported(reply))break;}
    if(!supported(replies[0])){rollback();continue;}
@@ -323,6 +325,12 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   // per thing, in order, as one undoable turn.
   if(contextProjection?.members?.length>1)result=await dispatchMembers(session,contextProjection,text,options,bindings,proposal.interpretation);
   else result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives,comparison?.plan);
+  // Without a comparison (Fast: compare 1), the readings are taken in order: when the editor refuses the first admitted
+  // reading, the next admitted one is the next hypothesis, once (the first acceptable reading, not a sweep).
+  if(!comparison&&limit<=1&&declaredBounds&&!contextProjection&&!removalComparison&&!result?.statuses?.includes('supported')&&!result?.trace?.history&&!result?.trace?.readOnly&&interpretations.length>1&&interpretations.length<=declaredBounds.max){
+   const next=interpretations.filter(option=>option.wires!==candidate?.wires&&assessReaderProposal({proposal:{...proposal,candidates:[option]},text,provenance,area:context.area}).admitted)[0];
+   if(next){const retried=await dispatchRequest(session,next,text,options,bindings,null,proposal.interpretation,decision.alternatives);if(retried?.statuses?.includes('supported')){result=retried;candidate=next;}}
+  }
   if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-creation/1'){
    const {requestedName}=proposal.interpretation,notes=[];
    const note=candidate.creationNote??proposal.interpretation.note;
@@ -438,7 +446,7 @@ const liveViews=(session,NATIVE_AREAS)=>Object.entries(NATIVE_AREAS).filter(([,a
 // ("add a box to the diagram", "in the drawing") is read in that editor first; when it does not apply fully there it is
 // read as usual. The words are the registry's; the request's words are compared by their singular (w.lang.en).
 async function mentionedView(session,text,active){
- const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=4afe6eb1e8');
+ const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=ea9d685adb');
  const said=new Set([...String(text).toLowerCase().matchAll(/[\p{L}\p{N}]+/gu)].flatMap(m=>[m[0],en.singular(m[0],'lemma')]));
  const named=liveViews(session,NATIVE_AREAS).filter(([view,area])=>view!==active&&(area.words??[]).some(word=>word.split(/\s+/).every(part=>said.has(part.toLowerCase())))).map(([view])=>view);
  return named.length===1?named[0]:null;
@@ -461,7 +469,7 @@ async function routeNewEngineTurn(session,text,options={}){
  if(!rule||options.view||isAuthoredRequest(text)||!shell?.activeTab||first?.statuses?.includes('supported'))return withMention(first);
  const reasons=new Set(unboundReasons(first).filter(reason=>rule.reasons.includes(reason)));
  if(!reasons.size)return withMention(first);
- const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=4afe6eb1e8');
+ const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=ea9d685adb');
  // The knowledge prior: only an editor whose bindings bind a kind word the reading saw is a hypothesis (declared area order among them);
  // a word no other editor binds is not re-read there (each re-reading costs the reader passes of a whole turn).
  const said=new Set(),collect=(value,depth=0)=>{if(depth>8||!value||typeof value!=='object')return;for(const [key,item] of Object.entries(value)){if((key==='kind'||key==='kind_span')&&typeof item==='string')said.add(item.toLowerCase());else collect(item,depth+1);}};

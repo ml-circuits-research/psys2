@@ -111,7 +111,7 @@ test('actual declared capability, spatial and history interpreters route once an
  const original=World.prototype.compileRequest,compilations=[];
  try{
   World.prototype.compileRequest=function(sop){compilations.push(sop);return original.call(this,sop);};
-  const mixed=await routeNewEngine(session,'Observed request',{view:'draw'});
+  const mixed=await routeNewEngine(session,'Observed request',{view:'draw',interactionMode:'thinking'});   // the comparison is the Thinking path; Fast takes the readings in order
   assert.equal(mixed.statuses[0],'supported',JSON.stringify(mixed.trace));
   assert.equal(mixed.trace.executionRoute.method,'capability');
   assert.match(mixed.trace.readingComparison,/no-common-interpreter-comparison/);

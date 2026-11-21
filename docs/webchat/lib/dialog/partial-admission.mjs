@@ -5,15 +5,15 @@
 // defaults, admitted act classes, reply wording and the run-time fallback ladder (interpretation-policy.sop), the
 // admission decision (reader-admission-policy.sop) and every binding (the deployed binding table). Nothing here names a
 // word, a sentence, a tool or a world.
-import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=79cbaee755';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=9e91985d6d';
-import {comparativeSteps} from './comparative-projection.mjs?v=65e0e7d8a2';
-import {referenceProjection} from './reference-projection.mjs?v=ea9b35dda0';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=544d36d194';
-import {declaredRetargets,declaredSpanRoles} from './raw-reading-policy.mjs?v=b64dcdbdcf';
+import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=05e816ce7e';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=e69d59dd98';
+import {comparativeSteps} from './comparative-projection.mjs?v=55f3f4579e';
+import {referenceProjection} from './reference-projection.mjs?v=fb387ab994';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=d70c8952d1';
+import {declaredRetargets,declaredSpanRoles} from './raw-reading-policy.mjs?v=7d611bb87a';
 import {en} from '../lang/en.mjs?v=d028d63371';
 import {budget} from './budget.mjs?v=d42dc656e7';
-import {readLexicalPhrase} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
+import {readLexicalPhrase} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
 
 const scalarsOf=text=>Array.from(text);
 // Adjacent mentions of one target-kind head that only whitespace or a hyphen separates and that together spell a
@@ -131,7 +131,7 @@ export function fallbackLadder(packet){
    follow.evidence=follow.evidence.filter(e=>!(e.path[0]==='targets'&&e.path[1]===target.id&&e.path[2]==='name'));
    delete follow.targets.find(t=>t.id===target.id)?.name;
    const changed=decodeVariant(packet,[follow]);
-   if(placed&&changed)steps.push({step,text,candidates:[placed,changed],dropped:[],followDropped:named(other)});
+   if(placed&&changed)steps.push({step,text,candidates:[placed,changed],dropped:[],followDropped:named(other),keeps:['placement']});
   }else if(step==='without-placement'){
    if(!label.constraints.some(placement))continue;
    const c=decodeVariant(packet,[reduced(x=>!placement(x))]);if(c)steps.push({step,text,candidates:[c],dropped:named(label.constraints.filter(placement))});

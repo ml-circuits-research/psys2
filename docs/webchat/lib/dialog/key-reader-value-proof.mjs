@@ -1,8 +1,8 @@
 // Exact declared-value proofs; no language rules or domain vocabulary.
 import {numberValue} from '../knowledge/values.mjs?v=b0000e82a7';
 import {cardinalValue} from '../knowledge/number-run.mjs?v=efcde74940';
-import {readNumberSpan} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=544d36d194';
+import {readNumberSpan} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=d70c8952d1';
 import {budget} from './budget.mjs?v=d42dc656e7';
 import {selectedProbability} from './model-selection-score.mjs?v=ac3ac10191';
 export function classifierAlternative(bank,logits){

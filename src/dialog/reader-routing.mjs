@@ -117,8 +117,10 @@ async function dispatchPartial(session,plan,text,options,bindings,refused=null){
  let result=first,step=null,disclosed=[...plan.reading.disclosed],readings=[plan.decision.candidate];
  if(!supported(first)){
   rollback();result=null;
-  // The answer mode bounds the ladder steps tried (app.interpret.mode fallbacks).
-  for(const option of fallbackLadder(plan.reading.packet).slice(0,modeLimits(session).fallbacks)){
+  // A step that keeps the role the editor refused (the placement interpreter refused the reading) would repeat the
+  // refusal, so it is not tried; the answer mode bounds the other steps (app.interpret.mode fallbacks).
+  const refusedPlacement=['spatial','reject'].includes(first?.trace?.executionRoute?.method);
+  for(const option of fallbackLadder(plan.reading.packet).filter(option=>!(refusedPlacement&&option.keeps?.includes('placement'))).slice(0,modeLimits(session).fallbacks)){
    const replies=[];
    for(const candidate of option.candidates){const reply=await dispatchRequest(session,candidate,text,options,bindings);replies.push(reply);if(!supported(reply))break;}
    if(!supported(replies[0])){rollback();continue;}
@@ -323,6 +325,12 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   // per thing, in order, as one undoable turn.
   if(contextProjection?.members?.length>1)result=await dispatchMembers(session,contextProjection,text,options,bindings,proposal.interpretation);
   else result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives,comparison?.plan);
+  // Without a comparison (Fast: compare 1), the readings are taken in order: when the editor refuses the first admitted
+  // reading, the next admitted one is the next hypothesis, once (the first acceptable reading, not a sweep).
+  if(!comparison&&limit<=1&&declaredBounds&&!contextProjection&&!removalComparison&&!result?.statuses?.includes('supported')&&!result?.trace?.history&&!result?.trace?.readOnly&&interpretations.length>1&&interpretations.length<=declaredBounds.max){
+   const next=interpretations.filter(option=>option.wires!==candidate?.wires&&assessReaderProposal({proposal:{...proposal,candidates:[option]},text,provenance,area:context.area}).admitted)[0];
+   if(next){const retried=await dispatchRequest(session,next,text,options,bindings,null,proposal.interpretation,decision.alternatives);if(retried?.statuses?.includes('supported')){result=retried;candidate=next;}}
+  }
   if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-creation/1'){
    const {requestedName}=proposal.interpretation,notes=[];
    const note=candidate.creationNote??proposal.interpretation.note;

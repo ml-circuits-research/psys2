@@ -1,12 +1,12 @@
 // Actual application state only. No request annotations or invented semantic types.
-import {observedReaderContext} from './native-reader-context.mjs?v=1a3e19d553';
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=b2f07e2e88';
-import {createDrawingArea,canonicalDrawingArea,projectDrawingArea,drawingAreaStateWorld} from '../../worlds/art.draw/sop-drawing.mjs?v=4ff045e3a4';
-import {createDiagramArea,canonicalDiagramArea,projectDiagramArea,diagramAreaStateWorld} from '../../worlds/diagram.sketch/sop-diagram.mjs?v=d233f8a4e3';
-import {createDocumentArea,canonicalDocumentArea,projectDocumentArea,documentAreaStateWorld} from '../../worlds/docs.editor/sop-document.mjs?v=fa60e87685';
-import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=0419523027';
-import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs?v=0941bd3053';
-import {World,str} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
+import {observedReaderContext} from './native-reader-context.mjs?v=702b5ceb1b';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=f6e747d111';
+import {createDrawingArea,canonicalDrawingArea,projectDrawingArea,drawingAreaStateWorld} from '../../worlds/art.draw/sop-drawing.mjs?v=60367e4ea9';
+import {createDiagramArea,canonicalDiagramArea,projectDiagramArea,diagramAreaStateWorld} from '../../worlds/diagram.sketch/sop-diagram.mjs?v=cbce4d9ebb';
+import {createDocumentArea,canonicalDocumentArea,projectDocumentArea,documentAreaStateWorld} from '../../worlds/docs.editor/sop-document.mjs?v=96d216ffb0';
+import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=035c8af56c';
+import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs?v=ed7b41cc2a';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
 import AREA_SCHEMA from '../../worlds/app.project/area-registry-schema-source.mjs?v=66ce5c3b51';
 import AREA_REGISTRY from '../../worlds/app.project/area-registry-source.mjs?v=fb8bcf935b';
 // The native host of each world (code: the factories its module exports). Which views exist, their reader area,

@@ -1,6 +1,6 @@
 // A declared journal-step act has no object/property arguments. This consumes model structure, never source words.
-import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
-import {historyPolicy} from './history-policy.mjs?v=db4e734a23';
+import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
+import {historyPolicy} from './history-policy.mjs?v=5d4896233e';
 export function projectJournalAction(proposal) {
  const raw=proposal?.raw,request=raw?.requests?.[0];
  const profile=request?.target?.fill && historyPolicy().ofType('app.history.reader').find(wire=>wire.attrs.act[0]===request.act&&wire.attrs.fill[0]===request.target.fill);

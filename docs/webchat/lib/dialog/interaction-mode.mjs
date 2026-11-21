@@ -5,10 +5,10 @@
 // instance facts kept in the session state (APP_PREFERENCES), validated by the w.preferences schema; the latest one is in
 // force, otherwise the declared default. The chat toggle and a message ("think harder", "be quick") state it the same way.
 // Nothing here names a mode, a limit or a phrase.
-import {World,parse,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
+import {World,parse,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
 import {BUNDLED_AREAS} from '../knowledge/bundled-areas.mjs?v=62a24b2870';
 import PREFERENCES from '../../worlds/app.project/interaction-preferences-source.mjs?v=875aec0e2a';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=544d36d194';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=d70c8952d1';
 
 export const APP_PREFERENCES='app.preferences';
 export const MODE_KEY='interaction.mode';
@@ -36,7 +36,8 @@ export function preferenceValue(session,key){const rows=stated(session,key);retu
 /** State a value (source stated, scope app): validated by the schema and by the values the policy declares. */
 export function statePreference(session,key,value,{about}={}){
  if(!values(key).includes(value))throw Error('undeclared-preference-value');
- if(preferenceValue(session,key)===value&&stated(session,key).length)return false;
+ // Nothing is stated when the value is already in force (the default before any statement included).
+ if(preferenceValue(session,key)===value)return false;
  const state=session.isession.state,sop=state[APP_PREFERENCES]?.sop??'',rows=parse(sop);
  const at=1+Math.max(0,...rows.filter(w=>w.type==='w.preferences.preference').map(w=>Number(one(w,'at'))||0));
  // One value per field: the earlier statement of this key goes.

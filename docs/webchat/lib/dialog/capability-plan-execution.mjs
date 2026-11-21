@@ -1,18 +1,18 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=54b89822cc';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=d62a257d7c';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=7d6412d92b';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=b746bd25cf';
 import { en } from '../lang/en.mjs?v=d028d63371';
-import { quote, str } from '../vendor/sopworld/sopworld.mjs?v=d86f897e0e';
-import { executionPolicyWorld } from './execution-policy.mjs?v=a5aac38038';
+import { quote, str } from '../vendor/sopworld/sopworld.mjs?v=935d4d1757';
+import { executionPolicyWorld } from './execution-policy.mjs?v=3dd93446cd';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=46c009d759';
-import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=9253643e7e';
-import { readDegreeBases } from './degree-bases.mjs?v=d56eb1afba';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=4afe6eb1e8';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=2d839ae029';
+import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=0971a22734';
+import { readDegreeBases } from './degree-bases.mjs?v=9de2e160f1';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=ea9d685adb';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=a5b09cf66a';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=a8b0e1d688';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=916df024e7';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=94cc7d01b8';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=abf4f307c4';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=24495a868d';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=0938683588';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=01d3de93b6';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],

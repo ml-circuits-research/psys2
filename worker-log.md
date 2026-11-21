@@ -431,3 +431,9 @@ Gate: npm test 767 pass, 0 fail, 3 skipped, 5 todo; webchat rebuilt.
 2026-11-21 — Reader v12 activated: importer selector-id repair (dg-batch-21 anchor ids), below-threshold drops at half weight, composition placeholder corpus; official dataset 156415fe6 (197,862 rows), warm from v11, cutter v8, bindings v16 (catalog 60c7aae3).
 Paired real-use on runtime 156415fe6, same samples, same bindings (management/real-use/cmp2-v11/v12-runtime-156415fe6): L2+ A v11 40% → v12 42% (diagram 44→48, drawing 64→65), B 32% → 31%. Fixed: cut-short name ids ("Supplier A"), chart-value questions; composition requests read ("surprise me with a forest scene"). New miss: "put a plug in" read kindless → random scene.
 Gate: npm test 766/0; webchat rebuilt with no REFUSED/stale lines.
+
+
+2026-11-21 — Turn speed: answer mode as the declared interaction.mode preference (toggle, "think harder"/"be quick"; per-mode limits in interpretation-policy.sop app.interpret.mode: Fast = 1 re-reading actually made, readings in order, 1 ladder step, first Z3 place that keeps the soft predicates as hard with the linear pulls as objective); area states derived incrementally (sopworld 0.249.1 syncState, identical to full derivation in check mode); a ladder step that keeps a refused placement is skipped.
+Run (browser, local): 40 slowest Drawing rows Fast p50 7.0 s / p90 11.8 s, Thinking 7.3 / 12.3 (before: 12.6 / 20.7); 150 Drawing+Diagram rows Fast Drawing 1.0 / 1.4 s, Diagram 0.5 / 0.8 s (before Drawing 2.0 / 3.0). Fast vs Thinking by grade: 150 rows 0 worse, 40 slow rows 0 worse; 0 objects in the top-left corner (cmp2-v12 regression). Dirs: management/real-use/browser-speed3-*.
+Open: the slow rows stay ~7 s (composition of up to 16 objects: per-object invokes, knowledge shards loaded mid-turn force a full re-derivation, reader passes per cut); 1-2 s not reached there.
+Gate: npm test 770 pass, 0 fail (registry entry added after the run), 3 skipped, 5 todo; webchat rebuilt.
