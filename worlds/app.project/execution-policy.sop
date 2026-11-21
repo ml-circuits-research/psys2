@@ -362,3 +362,9 @@
 @flow.page app.execution.flow sourceType="diagram.sketch.page" field="direction"
 # "what colour is the house?": its fill #ffa500 is said as orange.
 @answer.rgbName app.execution.codeName prefix="#" channels=3 width=2 radix=16 values=colour
+
+# What each act does to the work and how the reply says it (app.execution.actOutcome).
+@actOutcome.make app.execution.actOutcome act=make outcome=creates reply="Created {a kind}." many="Created {count} objects of kind {kind}." matched="I used the most recent matching {planKind}."
+@actOutcome.remove app.execution.actOutcome act=remove outcome=removes reply="Removed the {kind}." matched="More than one matched. I used {kind} {id}. You can undo this."
+@actOutcome.any app.execution.actOutcome act=any outcome=changes reply="Updated the {kind}." matched="I used the most recent matching {planKind}."
+

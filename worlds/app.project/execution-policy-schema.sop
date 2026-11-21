@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.codeName exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.linkPattern exports=app.execution.linkPatternNote exports=app.execution.populationNote exports=app.execution.operationNote exports=app.execution.standInNote exports=app.execution.flow exports=app.execution.canvasUnit exports=app.execution.lengthUnit exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue exports=app.execution.amount exports=app.execution.range exports=app.execution.position
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.codeName exports=app.execution.actOutcome exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.linkPattern exports=app.execution.linkPatternNote exports=app.execution.populationNote exports=app.execution.operationNote exports=app.execution.standInNote exports=app.execution.flow exports=app.execution.canvasUnit exports=app.execution.lengthUnit exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue exports=app.execution.amount exports=app.execution.range exports=app.execution.position
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -209,3 +209,15 @@
 @codeName.width core.slot of=app.execution.codeName key=width kind=integer present=true
 @codeName.radix core.slot of=app.execution.codeName key=radix kind=integer present=true
 @codeName.values core.slot of=app.execution.codeName key=values kind=atom enum=colour present=true
+# What an executed act does to the work and how the reply says it (capability-plan-execution.mjs, coordination-routing.mjs):
+# outcome creates (new objects: focus on the made object, its drawn stand-in, a default place, several made as one group),
+# removes (focus stays on what remains, a scoped removal is reversible best effort) or changes. reply / many (several
+# made) / matched (more than one object matched the target) are sentences with {kind}, {a kind}, {count}, {id},
+# {planKind}. act=any is the row of every act without its own.
+@actOutcome.type core.type of=app.execution.actOutcome closed=true
+@actOutcome.act core.slot of=app.execution.actOutcome key=act kind=atom present=true
+@actOutcome.outcome core.slot of=app.execution.actOutcome key=outcome kind=atom enum=creates enum=removes enum=changes present=true
+@actOutcome.reply core.slot of=app.execution.actOutcome key=reply kind=string present=true
+@actOutcome.many core.slot of=app.execution.actOutcome key=many kind=string
+@actOutcome.matched core.slot of=app.execution.actOutcome key=matched kind=string present=true
+

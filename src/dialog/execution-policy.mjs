@@ -42,3 +42,14 @@ export function executionValueSource(concept,world=executionPolicyWorld()){
  if(rows.length>1)throw Error('ambiguous-policy-value-source');if(!rows.length)return null;
  return Object.fromEntries(['valueType','nameKey','valueKey'].map(key=>[key,str(rows[0].attrs[key][0])]));
 }
+/** What an act does to the work and its reply sentences (app.execution.actOutcome; act=any for an act without its own row). */
+const outcomes=new Map();
+export function actOutcome(act){
+ if(outcomes.has(act))return outcomes.get(act);
+ const rows=executionPolicyWorld().ofType('app.execution.actOutcome'),pick=a=>rows.find(row=>str(row.attrs.act[0])===a);
+ const row=pick(act)??pick('any');
+ const text=key=>row?.attrs[key]?.length?str(row.attrs[key][0]):undefined;
+ const out=row?{outcome:text('outcome'),reply:text('reply'),many:text('many'),matched:text('matched')}:{outcome:'changes'};
+ outcomes.set(act,out);return out;
+}
+

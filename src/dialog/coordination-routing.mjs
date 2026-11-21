@@ -10,6 +10,7 @@ import {coordinationParts} from './coordination-split.mjs';
 import {resolveRequestRoute} from './request-routing-policy.mjs';
 import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs';
 import {executionKnowledge} from './declared-execution.mjs';
+import {actOutcome} from './execution-policy.mjs';
 import {recordHistory} from './history-journal.mjs';
 import {quantityNote} from './quantity-projection.mjs';
 
@@ -78,7 +79,7 @@ export async function routeCoordination(session,text,read,{provider,project,admi
   const area=view,before=structuredClone(session.isession.state),compiled=[],refused=[];
   for(const member of members){
    const plan=(await compileNativePlan(session,member.candidate,{bindings,view,readKnowledge:executionKnowledge}))?.plan;
-   if(plan?.status==='compiled'&&plan.act==='make')compiled.push({candidate:member.candidate,plan});
+   if(plan?.status==='compiled'&&actOutcome(plan.act).outcome==='creates')compiled.push({candidate:member.candidate,plan});
    else refused.push({said:member.part.said,reason:plan?.message??plan?.reason??'not-applicable'});
   }
   for(const r of refused)dropped.push(r.said);
