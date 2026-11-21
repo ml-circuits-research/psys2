@@ -2051,8 +2051,8 @@ export async function mountPsys2(element, options = {}) {
   }
   // ---------- what the conversation knows about the person (Q19, spec 23): w.person facts of this session only, never sent, gone with the session ----------
   function personSection() {
-    const v = personView(states['session.things']);
-    const rows = [['Name', v.name], ['Age', v.age], ['Job', v.occupation], ['Languages', v.language.join(', ')], ['Family', v.relatives.map((r) => `${r.count} × ${r.relation}`).join(', ')], ['Likes', v.likes.map((x) => x.thing).join(', ')], ['Does not like', v.dislikes.map((x) => x.thing).join(', ')]].filter(([, x]) => x != null && x !== '');
+    // the declared rows (worlds/app.project/person-view.sop) filled from the told facts
+    const rows = personView(states['session.things']).map((row) => [row.label, row.values.join(', ')]);
     const forget = h('button', { class: 'p2-btn-text', type: 'button', disabled: rows.length ? null : true, onclick: async () => {
       const changes = await reportBrowserState('@forget app.browser.state.forget-person');
       if (!changes) return;

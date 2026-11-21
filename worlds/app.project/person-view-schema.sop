@@ -1,0 +1,15 @@
+@person.module core.module name=app.person version=1 exports=app.person.row
+
+# A row of the view of the person of the session (Settings > Privacy): which told facts of one type fill it.
+# key: the slot whose values the row shows; with: a slot whose value is shown before it ("2 x child");
+# where/is: only facts whose slot `where` says `is` (the latest fact for a value decides, so a taste said again with
+# the other stance moves); many: every distinct value, else the latest one; order: the row's place.
+@person.row.type core.type of=app.person.row closed=true
+@person.row.label core.slot of=app.person.row key=label kind=string present=true
+@person.row.of core.slot of=app.person.row key=of kind=atom present=true
+@person.row.key core.slot of=app.person.row key=key kind=atom present=true
+@person.row.with core.slot of=app.person.row key=with kind=atom
+@person.row.where core.slot of=app.person.row key=where kind=atom
+@person.row.is core.slot of=app.person.row key=is kind=atom
+@person.row.many core.slot of=app.person.row key=many kind=boolean
+@person.row.order core.slot of=app.person.row key=order kind=integer present=true
