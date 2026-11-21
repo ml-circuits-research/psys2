@@ -51,8 +51,12 @@ test('what the user taught is named: wires of the session things', () => {
   assert.match(t[0], /my dog/); assert.match(t[1], /villa/);   // newest first
 });
 
-test('outcomeOf: an unparsed turn is not understood, an ask back is a question back', () => {
-  assert.equal(outcomeOf({ text: 'I did not understand "x".', segments: [{ unparsed: true }], answers: [], statuses: ['unparsed'] }), 'not-understood');
-  assert.equal(outcomeOf({ text: 'What should I draw?', segments: [{}], answers: [{ status: 'missing', text: 'What should I draw?' }] }), 'question-back');
-  assert.equal(outcomeOf({ text: 'I cannot draw a duck yet.', segments: [{}], answers: [{ status: 'unsupported', text: 'I cannot draw a duck yet.' }] }), 'refused');
+test('outcomeOf reads the reply\'s own fields, never its words: statuses, the engine reason, a missing answer, a change', () => {
+  const reply = (statuses, reason, extra = {}) => ({ text: 'any words?', statuses, answers: [], segments: [], state: {}, effects: [], trace: { reason }, ...extra });
+  assert.equal(outcomeOf(reply(['unsupported'], 'reading')), 'not-understood');
+  assert.equal(outcomeOf(reply(['unsupported'], 'no-declared-action')), 'not-understood');
+  assert.equal(outcomeOf(reply(['unsupported'], 'native-binding-gap')), 'refused');
+  assert.equal(outcomeOf(reply(['supported'], null, { state: { 'art.draw': {} } })), 'done');
+  assert.equal(outcomeOf(reply(['supported'], null)), 'answer');
+  assert.equal(outcomeOf(reply(['unsupported'], null, { answers: [{ status: 'missing', text: 'What should I draw' }] })), 'question-back');
 });
