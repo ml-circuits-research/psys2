@@ -150,7 +150,181 @@ def normalized(r):
                 t['kind_span'] = t['kind']
             else:
                 t.pop('kind_span', None)
+        if t.get('kind') and not t.get('kind_span') and not says(t['kind'], r['text']):
+            del t['kind']  # a kind the text does not say
+        for c in q.get('constraints') or []:  # a value that is a phrase the text does not say: the words stay
+            if invented(c.get('value'), r['text']) or (isinstance(c.get('value'), list) and any(invented(x, r['text']) for x in c['value'])):
+                del c['value']
+        for nd in q.get('needs') or []:
+            v = nd.get('value')
+            if isinstance(v, list):
+                v = [x for x in v if not invented(x, r['text'])]
+                nd['value'] = v if len(v) > 1 else v[0] if v else None
+            elif invented(v, r['text']):
+                nd['value'] = None
+            if nd['value'] is None:
+                del nd['value']
+        add_key_words(q, r['text'])
+        where = needs_lookup(q, r['context'].get('previous'))
+        q.pop('lookup', None)
+        if where:
+            q['lookup'] = [{'key': 'thing', 'from': where}]
+    r['filler'] = coverage(r)[0]
     return r
+
+
+# ---------------------------------------------------------------- evidence, filler and lookups
+
+KNOWLEDGE = Path(os.environ.get('SOP_KNOWLEDGE', REPO.parent / 'sop-knowledge-worlds'))
+TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:['’][A-Za-z]+)?")
+GRAMMAR_CLOSED = {'determiner', 'pronoun', 'preposition', 'conjunction', 'auxiliary', 'particle', 'adverb'}
+FILLER_SKIP = {'politeness', 'filler', 'desire'}
+_LEXICON = None
+
+
+def lexicon():
+    """Grammar words (expressed by the structure: determiners, pronouns, prepositions, auxiliaries ...) and filler words
+    (politeness, hedges, wishes, interjections), from w.lang.en of sop-knowledge-worlds (w.lang.en.closed and
+    w.lang.en.skip). Every other word of a message is content and must be the evidence of a wire."""
+    global _LEXICON
+    if _LEXICON is None:  # (grammar, filler, contraction endings)
+        grammar, filler = set(), set()
+        val = r'("(?:[^"\\]|\\.)*"|\S+)'
+        for path in sorted((KNOWLEDGE / 'docs' / 'worlds' / 'w.lang.en' / 'shards').glob('*.sop')):
+            for line in path.read_text().splitlines():
+                parts = line.split(' ', 2)
+                if len(parts) == 3 and parts[1] == 'w.lang.en.imperative.lead':  # words dropped before the verb
+                    grammar.update(t.lower() for t in re.findall(r'\btext=(\S+)', line))
+                    continue
+                if len(parts) < 3 or parts[1] not in ('w.lang.en.closed', 'w.lang.en.skip'):
+                    continue
+                cls = re.search(r'\bclass=(\S+)', line).group(1)
+                texts = [json.loads(t) if t.startswith('"') else t for t in re.findall(r'\btext=' + val, line)]
+                into = (filler if (parts[1] == 'w.lang.en.skip' and cls in FILLER_SKIP) or cls == 'interjection'
+                        else grammar if (parts[1] == 'w.lang.en.closed' and cls in GRAMMAR_CLOSED) or parts[1] == 'w.lang.en.skip' else None)
+                if into is not None:
+                    into.update(t.lower() for t in texts)
+        if not grammar:
+            raise SystemExit(f'w.lang.en not found under {KNOWLEDGE} (set SOP_KNOWLEDGE)')
+        # a contraction is a grammar word when its expansion is (w.lang.en.contraction; else word + ending of
+        # w.lang.en.contraction.ending: I'd = I + 'd, that'll = that + 'll)
+        endings = set()
+        for path in sorted((KNOWLEDGE / 'docs' / 'worlds' / 'w.lang.en' / 'shards').glob('*.sop')):
+            for line in path.read_text().splitlines():
+                parts = line.split(' ', 2)
+                if len(parts) == 3 and parts[1] == 'w.lang.en.contraction':
+                    t, e = re.search(r'\btext=("[^"]*"|\S+)', line).group(1), re.search(r'\bexpands=("[^"]*"|\S+)', line).group(1)
+                    t, e = (json.loads(x) if x.startswith('"') else x for x in (t, e))
+                    if all(w.lower() in grammar for w in e.split()):
+                        grammar.add(t.lower())
+                elif len(parts) == 3 and parts[1] == 'w.lang.en.contraction.ending':
+                    endings.add(json.loads(re.search(r'\bending=("[^"]*"|\S+)', line).group(1)).lower())
+        _LEXICON = grammar, filler, endings
+    return _LEXICON
+
+
+def evidence(q, text):
+    """The phrases of the text a request's wires were read from."""
+    t = q.get('target') or {}
+    out = [q.get('trigger')] + [t.get(k) for k in ('kind_span', 'name_span', 'description_span', 'count_span', 'code_span')]
+    out += t.get('ids', []) + t.get('family_words', []) + ([t['kind']] if t.get('kind') and says(t['kind'], text) else [])
+    for c in q.get('constraints') or []:
+        out += [c.get('value_span'), c.get('measure_span')] + c.get('key_words', []) + ([str(c['value'])] if isinstance(c.get('value'), (str, int)) and not isinstance(c.get('value'), bool) else [])
+    out += [nd.get('span') for nd in q.get('needs') or []]
+    return [x for x in out if x]
+
+
+def coverage(r):
+    """(filler phrases, uncovered content words) of a row: each word of the text is evidence of a wire, a grammar word,
+    or filler; filler runs (starting and ending with a filler word) become w.request.filler wires."""
+    grammar, filler, endings = lexicon()
+    text = r['text']
+    covered = [False] * len(text)
+    spans = []
+    for q in r['requests']:
+        i = text.find(q['span'])
+        spans.append((i, i + len(q['span'])) if i >= 0 else (0, len(text)))
+    for q in r['requests']:
+        for ph in evidence(q, text):
+            for m in re.finditer(r'(?<![\w])' + re.escape(str(ph)) + r'(?![\w])', text, re.I):
+                covered[m.start():m.end()] = [True] * (m.end() - m.start())
+    for ph in sorted((f for f in filler if ' ' in f), key=len, reverse=True):  # multi-word filler ("thank you")
+        for m in re.finditer(r'(?<![\w])' + re.escape(ph) + r'(?![\w])', text, re.I):
+            if not any(covered[m.start():m.end()]):
+                covered[m.start():m.end()] = [None] * (m.end() - m.start())
+    tokens = []
+    for m in TOKEN_RE.finditer(text):
+        w = m.group(0).lower()
+        state = covered[m.start()]
+        base, _, end = w.replace('’', "'").partition("'")
+        is_grammar = w in grammar or (end and base in grammar and "'" + end in endings)
+        outside = not any(a <= m.start() < b for a, b in spans)  # words no request covers: said around the request
+        kind = ('covered' if state is True else 'filler' if state is None or w in filler else 'grammar' if is_grammar
+                else 'filler' if outside else 'content')
+        zone = next((k for k, (a, b) in enumerate(spans) if a <= m.start() < b), -1)
+        tokens.append((m.start(), m.end(), kind, m.group(0), zone))
+    runs, cur = [], []
+    for tok in tokens + [(0, 0, 'end', '', None)]:
+        if cur and tok[4] != cur[-1][4]:  # a filler run stays inside one request's words, or outside every request
+            while cur and cur[-1][2] != 'filler':
+                cur.pop()
+            if cur:
+                runs.append(text[cur[0][0]:cur[-1][1]])
+            cur = []
+        if tok[2] in ('filler', 'grammar') and (cur or tok[2] == 'filler'):
+            cur.append(tok)
+            continue
+        while cur and cur[-1][2] != 'filler':
+            cur.pop()
+        if cur:
+            runs.append(text[cur[0][0]:cur[-1][1]])
+        cur = [tok] if tok[2] == 'filler' else []
+    return runs, [t[3] for t in tokens if t[2] == 'content']
+
+
+def name_words(name):
+    """The words of a key or family name: drawn.fontSize -> font, size; chart.show_values -> show, values; colour also
+    spelt color."""
+    words = set()
+    for part in re.split(r'[._]', name):
+        for w in re.findall(r'[A-Z]?[a-z]+', part):
+            words.add(w.lower())
+    return words | ({'color'} if 'colour' in words else set()) | ({'colour'} if 'color' in words else set())
+
+
+def add_key_words(q, text):
+    """A constraint's key_words and a target's family_words: the words of the request that name them (whole words, a
+    plural counts), when no other evidence of the request already holds them."""
+    span = q['span']
+    grammar = lexicon()[0]
+    held = ' '.join(str(x) for x in evidence(q, text)).lower()
+    for c in q.get('constraints') or []:
+        found = [m.group(0) for w in sorted(name_words(c['key'].split('.', 1)[-1]), key=lambda x: (-len(x), x)) if len(w) > 2 and w not in held and w not in grammar
+                 for m in [re.search(r'(?<![\w])' + re.escape(w) + r'(?:e?s)?(?![\w])', span, re.I)] if m]
+        if found:
+            c['key_words'] = found
+    t = q.get('target') or {}
+    if t.get('type') and not t.get('kind'):
+        found = [m.group(0) for w in sorted(name_words(t['type']), key=lambda x: (-len(x), x)) if len(w) > 2 and w not in held and w not in grammar
+                 for m in [re.search(r'(?<![\w])' + re.escape(w) + r'(?:e?s)?(?![\w])', span, re.I)] if m]
+        if found:
+            t['family_words'] = found
+
+
+def needs_lookup(q, previous):
+    """An existing target the message does not identify (no name, description, kind, code, count words or ids it says):
+    which thing it is must be looked up, in the previous turn when there is one, else on the page."""
+    t = q.get('target') or {}
+    if t.get('mode') == 'new' or t.get('fill') == 'all':
+        return None
+    if any(t.get(k) for k in ('name_span', 'description_span', 'kind_span', 'code_span', 'count_span', 'ids')):
+        return None
+    return 'previous' if previous else 'page'
+
+
+def invented(v, text):
+    """A value that is a phrase (not a closed-bank atom, not a number) and that the text does not say."""
+    return isinstance(v, str) and not ATOM.match(v) and not re.fullmatch(r'-?\d+(\.\d+)?', v) and not DATETIME.match(v) and v not in text
 
 
 # ---------------------------------------------------------------- render (row -> circuit)
@@ -163,6 +337,8 @@ def render(r):
         e = r['context']['existing'][i]
         out.append(f'@o{n} w.request.context ' + slots([(b, e[a]) for a, b in CONTEXT_FIELDS if e.get(a) not in (None, '')]))
     r = normalized(r)
+    for j, f in enumerate(r['filler'], 1):
+        out.append(f'@f{j} w.request.filler ' + slots([('text', f)]))
     if r['context'].get('previous') is not None:
         out.append('@prev w.request.previous ' + slots([('text', r['context']['previous'])]))
     if r['context'].get('clock'):
@@ -189,8 +365,10 @@ def render(r):
         assert t.get('det') is None or t.get('determiner') is not None
         ts = [('request', f'${rid}')] + [(b, int(t[a]) if a == 'count' else t[a]) for a, b in TARGET_FIELDS
                                         if t.get(a) is not None and not (a == 'kind_span' and t[a] == t.get('kind'))]
-        ts += [('ids', x) for x in t.get('ids', [])] + [('thing', ref[i]) for i in target_things[n - 1]]  # ids: only those the text says
+        ts += [('ids', x) for x in t.get('ids', [])] + [('family_words', x) for x in t.get('family_words', [])]
         out.append(f'@{rid}.t w.request.target ' + slots(ts))
+        for j, lk in enumerate(q.get('lookup') or [], 1):
+            out.append(f'@{rid}.l{j} w.request.lookup ' + slots([('request', f'${rid}'), ('target', f'${rid}.t'), ('key', lk['key']), ('from', lk['from'])]))
         for j, c in enumerate(q.get('constraints') or [], 1):
             cs = [('request', f'${rid}'), ('on', on_of(c)), ('attribute', c['key'])]
             v = c.get('value')
@@ -203,12 +381,12 @@ def render(r):
             if c['polarity'] != 'positive':
                 cs.append(('want', 'no') if c['polarity'] == 'negative' else ('polarity', c['polarity']))
             cs += [(b, measure(c[a]) if a == 'measure' else c[a]) for a, b in CONSTRAINT_FIELDS if a in c and c[a] != DEFAULTS.get(a)]
-            cs += [('thing', ref[i]) for i in constraint_things[n - 1][j - 1]]
+            cs += [('key_words', x) for x in c.get('key_words', [])]
             out.append(f'@{rid}.c{j} w.request.constraint ' + slots(cs))
         for j, nd in enumerate(q.get('needs') or [], 1):
             ns = [('request', f'${rid}'), ('text', nd['span']), ('note', nd['frame'])]
-            v = nd['value']
-            ns += [('value', x) for x in v] if isinstance(v, list) else [('value', v)]
+            v = nd.get('value')
+            ns += [('value', x) for x in v] if isinstance(v, list) else [('value', v)] if v is not None else []
             out.append(f'@{rid}.u{j} w.request.unread ' + slots(ns))
     return '\n'.join(out)
 
@@ -251,7 +429,7 @@ def parse_wires(text):
 
 def parse(text, sop, tab):
     context = {'existing': [], 'previous': None}
-    requests, world = {}, None
+    requests, world, filler = {}, None, []
     back_c = {b: a for a, b in CONTEXT_FIELDS}
     back_t = {b: a for a, b in TARGET_FIELDS}
     back_k = {b: a for a, b in CONSTRAINT_FIELDS}
@@ -282,8 +460,8 @@ def parse(text, sop, tab):
             for k, v in one.items():
                 if k in ('request', 'thing'):
                     continue
-                if k == 'ids':
-                    q['target']['ids'] = [str(x) for x in d['ids']]
+                if k in ('ids', 'family_words'):
+                    q['target'][k] = [str(x) for x in d[k]]
                 elif k == 'determiner':
                     q['target']['determiner'] = str(v)
                     if len(d['determiner']) > 1:
@@ -293,6 +471,8 @@ def parse(text, sop, tab):
         elif typ == 'w.request.constraint':
             q = requests[one['request'][1:]]
             c = {'key': one['attribute']}
+            if 'key_words' in d:
+                c['key_words'] = [str(x) for x in d['key_words']]
             if 'value' in d:
                 c['value'] = d['value'] if len(d['value']) > 1 or one.get('value_list') else d['value'][0]
             c['value_span'] = str(one['words']) if 'words' in one else str(c['value'])
@@ -305,13 +485,20 @@ def parse(text, sop, tab):
             q['constraints'].append(c)
         elif typ == 'w.request.unread':
             q = requests[one['request'][1:]]
-            v = d['value']
-            q.setdefault('needs', []).append({'frame': one['note'], 'value': v if len(v) > 1 else v[0], 'span': str(one['text'])})
+            v = d.get('value', [])
+            nd = {'frame': one['note'], 'span': str(one['text'])}
+            if v:
+                nd['value'] = v if len(v) > 1 else v[0]
+            q.setdefault('needs', []).append(nd)
+        elif typ == 'w.request.lookup':
+            requests[one['request'][1:]].setdefault('lookup', []).append({'key': one['key'], 'from': one.get('from', 'any')})
+        elif typ == 'w.request.filler':
+            filler.append(str(one['text']))
     for q in requests.values():  # kind words left out: the kind itself, when the request's words say it
         t = q['target']
         if t.get('kind') and 'kind_span' not in t and says(t['kind'], q['span'], case=True) and t['kind'] in q['span']:
             t['kind_span'] = t['kind']
-    return {'text': text, 'context': context, 'requests': list(requests.values())}, tab
+    return {'text': text, 'context': context, 'requests': list(requests.values()), 'filler': filler}, tab
 
 
 # ---------------------------------------------------------------- the trainer's files (official-dataset/*.jsonl)
@@ -419,7 +606,7 @@ def load(folder=DATASET):
 
 
 def comparable(r):
-    r = {'text': r['text'], 'context': copy.deepcopy(r['context']), 'requests': copy.deepcopy(r['requests'])}
+    r = {'text': r['text'], 'context': copy.deepcopy(r['context']), 'requests': copy.deepcopy(r['requests']), 'filler': r.get('filler', [])}
     r['context'].setdefault('previous', None)
     for e in r['context']['existing']:
         if e.get('name') == '':
