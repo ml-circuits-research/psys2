@@ -141,6 +141,10 @@ def normalized(r):
     r['context']['existing'] = [r['context']['existing'][i] for i in kept]
     for q in r['requests']:
         t = q.get('target') or {}
+        if t.get('ids'):  # an id the text does not say is a page state, not the message
+            t['ids'] = [x for x in t['ids'] if x in r['text']]
+            if not t['ids']:
+                del t['ids']
         if t.get('kind') and t.get('kind_span') in (None, t['kind']):
             if says(t['kind'], q['span'], case=True) and t['kind'] in q['span']:
                 t['kind_span'] = t['kind']
@@ -185,7 +189,7 @@ def render(r):
         assert t.get('det') is None or t.get('determiner') is not None
         ts = [('request', f'${rid}')] + [(b, int(t[a]) if a == 'count' else t[a]) for a, b in TARGET_FIELDS
                                         if t.get(a) is not None and not (a == 'kind_span' and t[a] == t.get('kind'))]
-        ts += [('ids', x) for x in t.get('ids', [])] + [('thing', ref[i]) for i in target_things[n - 1]]
+        ts += [('ids', x) for x in t.get('ids', [])] + [('thing', ref[i]) for i in target_things[n - 1]]  # ids: only those the text says
         out.append(f'@{rid}.t w.request.target ' + slots(ts))
         for j, c in enumerate(q.get('constraints') or [], 1):
             cs = [('request', f'${rid}'), ('on', on_of(c)), ('attribute', c['key'])]
