@@ -27,10 +27,13 @@ def load(name, path):
 
 def fixture_contexts():
     votes = collections.defaultdict(collections.Counter)
-    with gzip.open(REPO / 'official-dataset' / 'train.jsonl.gz', 'rt') as stream:
+    train = REPO / 'official-dataset' / 'train.jsonl.gz'
+    if not train.exists():
+        raise SystemExit(f'{train} is missing: run python3 official-dataset/sop_dataset.py load')
+    with gzip.open(train, 'rt') as stream:
         for line in stream:
             r = json.loads(line)
-            if r['source'] in ('ui-natural-v1', 'ui-relations-v1'):
+            if r['source'] in ('ui-natural', 'ui-relations'):
                 votes[r['world']][json.dumps(r['context'], sort_keys=True)] += 1
     return {w: json.loads(v.most_common(1)[0][0]) for w, v in votes.items()}
 

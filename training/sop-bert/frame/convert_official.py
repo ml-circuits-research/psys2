@@ -2,7 +2,7 @@
 """Mechanical conversion of the official tool-key labels to the domain-general semantic frame (specs/semantic-frame.md).
 
 Reads official-dataset/{train.jsonl.gz,dev.jsonl,test.jsonl} and inventory.json; writes a separate folder (default
-training/sop-bert/data/official-frame-v1/) with the same rows carrying `frame` (sop.semantic-frame/1) instead of
+training/runs/official-frame-v1/, not in git) with the same rows carrying `frame` (sop.semantic-frame/1) instead of
 `requests`, plus report.json and REPORT.md. The official dataset is not changed.
 
 The role of a constraint comes from the inventory `concept` of its key (frame/concept-roles.json), never from the key's
@@ -268,9 +268,12 @@ class Converter:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--official', default=os.path.join(ROOT, 'official-dataset'))
-    ap.add_argument('--out', default=os.path.join(ROOT, 'training', 'sop-bert', 'data', 'official-frame-v1'))
+    ap.add_argument('--out', default=os.path.join(ROOT, 'training', 'runs', 'official-frame-v1'))
     a = ap.parse_args()
     inv = json.load(open(os.path.join(a.official, 'inventory.json')))
+    for name in ('train.jsonl.gz', 'dev.jsonl', 'test.jsonl'):
+        if not os.path.exists(os.path.join(a.official, name)):
+            raise SystemExit(f'{os.path.join(a.official, name)} is missing: run python3 official-dataset/sop_dataset.py load')
     table = json.load(open(os.path.join(HERE, 'concept-roles.json')))
     conv = Converter(inv, table)
     os.makedirs(a.out, exist_ok=True)

@@ -1,143 +1,35 @@
 # Official SOP-BERT reader dataset
 
-This folder is the **only** input of SOP-BERT reader fine-tuning. One script, `build.py`, produces every file in it from the source corpora listed in `MANIFEST.json`, deterministically. The fine-tuning commands read only these files (see "Training from this folder").
+The reader's training data lives in the sibling repository
+[`webmeet-dataset`](../../webmeet-dataset/README.md): one two-column CSV per tab and source
+(`<tab>/<source>[.N].csv`, columns `text` and `sop`, the circuit in the `w.request` schema). Add or fix data there and
+run its checker (`node tools/check.mjs`). This folder holds no data rows.
 
 | File | Contents |
 | --- | --- |
-| `train.jsonl.gz` | training messages (gzip; one JSON object per line) |
-| `dev.jsonl` | development messages: model selection (the trainer's "calibration" split) |
-| `test.jsonl` | held-out messages: reporting only, never selection |
-| `inventory.json` | the reader's label inventory: areas, target types, keys, heads and class banks |
-| `MANIFEST.json` | every source corpus and generator file: path, git commit, SHA-256, rows in / kept / dropped with reasons; output hashes; policy |
-| `VALIDATION.md` | the checks, issue counts of each source as delivered, what was fixed or dropped, and the final zero-error check |
-| `STATS.md` | counts per tab, source, act, target type, operation, relation, key and style; text length |
-| `audit-sample.md` | 100 stratified rows rendered as text → labels for human review |
+| `sop_dataset.py` | reads webmeet-dataset and writes the trainer's row files (below); `check <dir>` compares CSVs with the current rows |
+| `inventory.json` | the reader's label inventory: areas, target types, keys, heads and class banks (read by the preparers, the exporters and tests) |
+| `train.jsonl.gz`, `dev.jsonl`, `test.jsonl` | **generated, not in git**: the rows in the trainer's format |
 
-Regenerate everything with `python3 official-dataset/build.py` (about 10 seconds; needs the sibling `sop-knowledge-worlds` checkout for two vocabulary files). Outputs are byte-identical for identical sources.
-
-## One row
-
-Each line is one message a person types in one tab, with the labels of every request in it.
-
-| Field | Meaning |
-| --- | --- |
-| `id` | unique id: `<source>:<source row id>` |
-| `split` | `train`, `dev` or `test` |
-| `world` | the tab/area: `drawing`, `diagram`, `document`, `calendar`, `avatar` (the label keys are `world.type.key`) |
-| `text` | the whole message, as typed |
-| `context` | what the reader sees besides the text: `existing` (objects on the page, `{kind, name}`, ranked as at runtime) and `previous` (the previous turn or null) |
-| `requests` | the labelled requests, in source order (empty for a message with no request) |
-| `family` | paraphrase-family id. All paraphrases, omissions and compounds of one seed, and all rows sharing a request text, have the same family; a family is never split across train/dev/test |
-| `source`, `source_id` | the source corpus and its row id (provenance) |
-| `operation` | the editor operation the seed was written for (provenance, not a model input) |
-| `style` | how the text was produced (`natural-direct`, `human-equivalent`, `human-tangle`, `relation-natural`, `haiku-v2`, `mechanical-trigger`, …) |
-| `phase` | `direct` or `world-inference` (old corpus) |
-| `augmentation` | present only on the previous-message copies (see below) |
-| `rewrite` | present only when the build changed the text (main-synthetic avatar slot ids replaced by the w.face word; see MANIFEST) |
-
-A request:
-
-| Field | Meaning |
-| --- | --- |
-| `span` | the exact substring of `text` this request covers (the request cutter learns these) |
-| `trigger` | the exact words that carry the act ("add", "make", "how many"); absent when the text has no such words (fragments like "a sun hat for me") |
-| `act` | `make`, `change`, `place`, `remove`, `select`, `group`, `ungroup`, `connect`, `arrange`, `answer`, `undo`, `redo`, … |
-| `mood` | `do`, `ask` (a question), `check` (a yes/no question), `propose` |
-| `target` | `type` (target family of the area: `drawn`, `node`, `meeting`, `part`, `face`, …), `mode` (`new` / `existing` / `bound`), `determiner`, `fill` (how an existing target is given: `written` name, `context`, `description`, `all`, `journal_step`), and source phrases `kind_span`/`kind`, `name_span`, `description_span`, `count_span`, `ordinal` |
-| `question` | for `act=answer`: `ask` (`count`, `exists`, `list`, `what`, `describe`, …) and optionally `asked_key` |
-| `constraints` | one per condition (comparatives: `operator: delta` with `step`, see below): `key` (`type.key` of the area, e.g. `drawn.colour`, `meeting.time`), `value_span` (exact source phrase), `value` (the class-bank value for class keys, the source phrase for copy keys, digits for numbers; absent when the phrase has no declared normalisation), `operator` (`eq`, `degree`, `relation`, `delta`, …), `phase` (`selector` picks the target, `result` is the desired outcome), `polarity`, `character` (`requirement`, `preference`), optional `unit`, `measure`, `step`, `scope` |
-
-Relative positions are two mentions: the relation itself (`drawn.relation`, value from the bank: `near`, `left_of`, `right_of`, `above`, `below`, `in`, `on`, …) and its anchor (`drawn.anchor`, or `meeting.relation_anchor` in the calendar), whose `value_span` is the phrase naming the other object. Coordinates are never labelled unless written.
-
-## Examples
-
-**A relative placement** (ui-relations-v1, drawing). Context: Lake, Tree, House, Mountain, Road, Hill.
-
-```text
-"place a large lake left of that tree"
-request "place a large lake left of that tree"  trigger "place"  act=make mood=do
-  target  type=drawn mode=new determiner=indefinite kind "lake"
-  drawn.size     = big       from "large"      degree,   result
-  drawn.relation = left_of   from "left of"    relation, result
-  drawn.anchor   = that tree from "that tree"  relation, selector (the anchor object)
-```
-
-**A question inside a long message** (main-synthetic hard question, drawing).
-
-```text
-"You'll laugh, but I showed the canvas to my cat …, and realized I still don't know what's on it — so, how many dogs are we talking about in there?"
-request = the whole text  trigger "how many"  act=answer mood=ask question {ask: count}
-  target  type=drawn mode=existing fill=all kind "dogs"
-```
-
-**Two requests in one message** (demo-tool-profile, drawing). The words outside the request spans ("Let us", "That would help.") belong to no request.
-
-```text
-"Let us sketch a flower called bird; then put bird below tree. That would help."
-request 1 "sketch a flower called bird"  trigger "sketch"  act=make
-  target type=drawn mode=new kind "flower";  drawn.name = bird from "bird"
-request 2 "put bird below tree"  trigger "put"  act=place
-  target type=drawn mode=existing fill=written name "bird"
-  drawn.relation = below from "below";  drawn.anchor = tree from "tree"
-```
-
-## How labels become SOP request wires
-
-The reader predicts these fields per request (BIO spans for keys and the trigger, classes for banks), and `src/dialog/raw-structural-bridge.mjs` turns them into the published request graph:
-
-```text
-@source std.request.source text="put bird below tree"
-@r      std.request act=place mood=do source=$source          # act anchored on the trigger span
-@t      std.request.target request=$r mode=existing name="bird" kind=<canonical kind from bindings>
-@c      std.request.constraint request=$r target=$t concept=<bound property> operator=… value=… polarity=positive character=requirement
-```
-
-Selector constraints become the target's `selector`; result constraints the request root; `question` a query projection. The bridge binds kinds and properties through `bindings.json`; keys without a published binding, relations/anchors and population targets (`fill=all`) are reported as unresolved by the current bridge. The dataset labels them anyway, because they are the text's meaning; the bridge projection is separate work.
-
-## Split policy (owner phase rule, 2026-11-20)
-
-- As much as possible goes into training: rows are split at random by row id (train 94%, dev 4% to monitor training,
-  test 2% kept only for continuity of reports). Families are still computed and stored (`family`) but no longer keep
-  paraphrases out of other splits (MANIFEST reports how many cross); evaluation uses user cases and fresh samples.
-- Duplicates are rows with the same text, context and previous message; the higher-priority source keeps its copy.
-
-## Balancing
-
-No row is discarded to balance the data. Sources are weighted at training time by `prepare-official.py`
-(`--ui-weight` for the executed UI corpora, `SOURCE_WEIGHTS`: ui-diagram-v2 and data-drop-v1 twice, main-synthetic 0.5).
-
-## What was fixed and what was dropped
-
-Since 2026-11-20 repairable rows are repaired, not dropped: main-synthetic terse/mechanical edits and edits whose usual target is not
-a written name are converted like human edits (target in focus when no name is written), placeholder values and numbers the text
-does not hold leave only that constraint out, avatar part edits that name a document label get the part word of their variant's
-slot, unplaceable optional span fields are removed, values outside a closed bank stay as open values (`open_value`, the
-bank extension is reported; the trainer drops only their class), determiners stay as written (demonstrative, possessive,
-quantified; the trainer maps them to definite) and `needs` stay in the request. Older notes below describe the earlier policy.
-
-See VALIDATION.md and MANIFEST.json for counts. In short:
-
-- **main-synthetic** (owner set): spans converted from offsets to strings; the trigger, which was the canonical act in 56% of requests, replaced by the verb actually in the text (k.actions verbs and reviewed corpus triggers) or removed; questions converted to `act=answer` with `question`; creation rows converted to the target-kind form; avatar presets mapped to `face.preset`; avatar part additions kept only where the variant belongs to the slot (attested in executed recipes) and the slot id in the text ("hair_back") replaced by the w.face word ("back hair"). Dropped: avatar part edits whose selector is a document label ("Deep Dive", "Plan": 8,120 constraints), calendar rows whose values are placeholders ("start 3, duration 1"), colours/kinds that are placeholder names, numbers that disagree with their text ("x=260" for "400, 30"), keyword-list texts about existing objects, and duplicates. Generator files (`seeds-*`, `variants/*`, `mech-variants.jsonl`) are accounted for per file in `MANIFEST.json.mainSyntheticFiles`; variant texts missing from `examples.jsonl` are assembled from their seed when an assembled sibling gives the request frame.
-- **ui-natural-v1 / ui-human-v1**: values outside a class bank (`face.id=avatar`, `centred`, `justified`, `briefly`) and vague values keep their phrase as a mention without a class label; rows whose measure/anchor phrase is not in the request are dropped.
-- **ui-relations-v1 and relation rows of other sources**: the anchor phrase becomes the anchor mention; `left`/`right` use the bank's `left_of`/`right_of`.
-- **demo-tool-profile**: exact duplicate texts removed; identical texts with different labels resolved by keeping the first.
-- **all sources, definite descriptions**: "make the house blue" was labelled with `name_span: "the house"` plus an id selector repeating the phrase. A definite description is not a name: when the phrase is a determiner plus a kind word (a kind of the context or a kind the runtime grounds, from the deployed bindings) and not capitalised, the target becomes `kind`/`kind_span` "house", `fill: description`, and the repeated selector is removed. Proper names ("Review", "The Fox Who Lost His Tail") stay names; phrases that occur twice in one request stay as they were (ambiguous).
-- **all sources, comparatives and degrees**: on size/width/height/scale/length keys a comparative ("bigger", "a bit smaller", "much wider") is `operator: delta`, `step: more|much_more|less|much_less`, the comparative word as `value_span` and no value ; written amounts ("20 percent bigger") keep their measure. A bare absolute degree word ("big", "small", "tiny") is `operator: degree`. New source `ui-comparatives-v1` adds 786 comparative requests across Drawing, Diagram, Avatar and Calendar.
-- **all sources, possessive descriptions**: "her hair", "his nose" are definite descriptions too: the same conversion as "the house" (target kind, `fill: description`, no repeated id selector) when the noun is a kind word.
-- **avatar part length**: `part.length` (values: the steps of the catalog's k.values scale `length`, short < medium < long) is the ordinal key of a part's length. New source `ui-features-v1` (generate.py: 249 authored paraphrases in three tiers over 10 cases) labels absolute lengths ("give her long hair": `degree`), comparatives ("make her hair shorter": `delta` with `step`) and other declared features (curly, straight, wavy hair; thick, thin, bushy, arched brows: `part.value`); a length said as a feature value in older sources (`part.value=long`, `part.property=length`) becomes `part.length`. New source `ui-tiers-v1` adds 23 tier supplements to thin ui-coverage-v2 cases.
-- **one label per intent**: `ui-coverage-v2` (3,180 rows, every tab case at least 20 rows), the old corpus and the UI corpora disagreed on a few intents; the build harmonises ui-natural/ui-human to the majority: links are `connect`, layouts `arrange`, deleting a node+link selection `remove`, grouping diagram nodes `group`/`ungroup`, `document.write` targets `text` with `text.*` keys, a meeting's duration is `meeting.length`, and colour is `drawn.colour`/`part.colour` (the native parameter spelling `color` had produced two keys for one concept, and only `colour` is bound at runtime).
-- **reader fields only**: constraint fields the reader does not predict (`anchor_kind`, `anchor_fill`, `typo_of`, `alias_of`, the author's out-of-bank value) are removed from the written labels (counts in MANIFEST `nonReaderLabelFieldsRemoved`); they remain in the source corpora.
-- **previous-message invariance**: a quarter of the single-turn rows (UI corpora and main-synthetic) also appear with an unrelated previous message of the same tab and split (`augmentation: previous-message-invariance`, labels unchanged), so the reader does not copy heads from the previous turn. Drawing creation is never labelled as a `page` target (checked: 0 rows).
-
-Warnings in VALIDATION.md (`selector-not-in-context`, ambiguous spans) are not errors: compact runtime context lists kinds and names, not ids such as "o1" or "b2", and the preparer masks an ambiguous span rather than guessing.
-
-## Training from this folder
+## Generating the rows
 
 ```sh
-.venv/bin/python training/sop-bert/prepare-official.py --out ../.session-control/official-prepared --cutter-out ../.session-control/official-cutter
-.venv/bin/python training/sop-bert/train-key-reader.py --data ../.session-control/official-prepared --encoder <distilbert-base-uncased> --out <run> --input-padding dynamic
-.venv/bin/python training/sop-bert/train-request-cutter.py train --data ../.session-control/official-cutter --source-root ../.session-control/official-cutter/raw --exclusions ../.session-control/official-cutter/exclusions.json --out <cutter run> --encoder <…>
-.venv/bin/python training/sop-bert/evaluate-demo-reader.py --model <run> --input ../.session-control/official-prepared/test.jsonl --out <report.jsonl> [--cutter-model <cutter run>]
+python3 official-dataset/sop_dataset.py load    # webmeet-dataset (sibling checkout, or $WEBMEET_DATASET) -> train/dev/test
 ```
 
-`prepare-official.py` reads only `official-dataset/`; its outputs are derived and not committed.
+Each row gets the id `<source>:<hash of text and circuit>`, where `source` is the CSV file stem (`data-drop`,
+`ui-diagram`, `main-synthetic`, `human-adapted-drawing`, ...), a split drawn from the id (94% train, 4% dev, 2% test),
+and some single-turn rows also appear with an unrelated previous message (labels unchanged). Rerun `load` whenever
+webmeet-dataset changes; scripts that read these files print this command when they are missing.
+
+## Training
+
+```sh
+.venv/bin/python training/sop-bert/prepare-official.py --out <prepared> --cutter-out <cutter-data>
+.venv/bin/python training/sop-bert/train-key-reader.py --data <prepared> --encoder <distilbert-base-uncased> --out <run> --input-padding dynamic
+.venv/bin/python training/sop-bert/train-request-cutter.py train --data <cutter-data> --source-root <cutter-data>/raw --exclusions <cutter-data>/exclusions.json --out <cutter run> --encoder <...>
+.venv/bin/python training/sop-bert/evaluate-demo-reader.py --model <run> --input <prepared>/test.jsonl --out <report.jsonl> [--cutter-model <cutter run>]
+```
+
+`prepare-official.py` weights sources by name at training time (no row is dropped); its outputs are derived and not
+committed. The dev split is for model selection, the test split for reporting only.

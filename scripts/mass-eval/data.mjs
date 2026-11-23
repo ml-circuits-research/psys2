@@ -21,6 +21,7 @@ export function loadRows({root,managementRoot,drops=true,human=true}){
  // needs: a list of {frame,...} per request (some drops write one object or null).
  const norm=r=>{for(const q of r.requests??[]){if(q.needs===null||q.needs===undefined)delete q.needs;else if(!Array.isArray(q.needs))q.needs=[q.needs];}return r;};
  const push=(r,src)=>{norm(r);const k=key(r);if(seen.has(k)){sources[src+':duplicate']=(sources[src+':duplicate']??0)+1;return;}seen.add(k);rows.push(r);sources[src]=(sources[src]??0)+1;};
+ for(const name of ['train.jsonl.gz','dev.jsonl','test.jsonl'])if(!existsSync(path.join(off,name)))throw new Error(path.join(off,name)+' is missing: run python3 official-dataset/sop_dataset.py load');
  for(const r of lines(gunzipSync(readFileSync(path.join(off,'train.jsonl.gz'))).toString('utf8')))push(r,'official');
  for(const s of ['dev','test'])for(const r of lines(readFileSync(path.join(off,s+'.jsonl'),'utf8')))push(r,'official');
  const batches=drops&&managementRoot?doneDropBatches(managementRoot):[];

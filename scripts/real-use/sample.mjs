@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Official real-use test: a plain RANDOM fixed-seed ~1% sample of the official training dataset (all tabs).
 // No stratification. Classes are only computed afterwards, for reporting.
-import {readFileSync} from 'node:fs';
+import {readFileSync,existsSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
@@ -11,7 +11,9 @@ export function rng(seed){let a=seed>>>0;return ()=>{a|=0;a=a+0x6D2B79F5|0;let t
 const hashSeed=s=>parseInt(createHash('sha256').update(String(s)).digest('hex').slice(0,8),16);
 
 export function loadTrain(){
- return gunzipSync(readFileSync(path.join(PSYS2,'official-dataset/train.jsonl.gz'))).toString('utf8').split('\n').filter(Boolean).map(l=>JSON.parse(l));
+ const file=path.join(PSYS2,'official-dataset/train.jsonl.gz');
+ if(!existsSync(file))throw new Error(file+' is missing: run python3 official-dataset/sop_dataset.py load');
+ return gunzipSync(readFileSync(file)).toString('utf8').split('\n').filter(Boolean).map(l=>JSON.parse(l));
 }
 
 /** Random sample: each row independently with a seeded order; the first round(rate*N) of a seeded shuffle. */

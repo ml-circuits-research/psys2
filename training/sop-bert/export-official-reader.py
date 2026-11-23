@@ -126,7 +126,7 @@ def main():
     manifest.update({'bindingsSha256': sha(extra['bindings.json']), 'runComplete': True, 'selectedEpoch': selected_epoch, 'calibration': 'none',
                      'componentProofs': {'key': {'profile': 'completed-run', 'path': 'key-run.json', 'sha256': sha(run_bytes), 'checkpointSha256': sha(key_checkpoint_bytes), 'selectedEpoch': selected_epoch},
                                          'cutter': {'profile': 'frozen-cutter', 'path': 'cutter-proof.json', 'sha256': sha(cutter_proof_bytes), 'checkpointSha256': sha(cutter_checkpoint_bytes)}},
-                     'trainingData': {'officialManifestSha256': json.loads(data_manifest_bytes).get('officialManifestSha256'), 'dataset': 'official-dataset/'}})
+                     'trainingData': {'officialDataSha256': json.loads(data_manifest_bytes).get('officialDataSha256'), 'dataset': 'official-dataset/ (generated from webmeet-dataset)'}})
     body = (json.dumps(manifest, indent=2) + '\n').encode()
     (staging / 'manifest.json').write_bytes(body)
     final = a.out / sha(body)

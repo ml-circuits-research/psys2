@@ -60,6 +60,19 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def official_files():
+    """The generated split files; missing ones mean the dataset was not loaded from webmeet-dataset yet."""
+    files = {'train': OFFICIAL / 'train.jsonl.gz', 'calibration': OFFICIAL / 'dev.jsonl', 'test': OFFICIAL / 'test.jsonl'}
+    missing = [str(path) for path in files.values() if not path.exists()]
+    if missing:
+        raise SystemExit(f'missing {", ".join(missing)}: run python3 official-dataset/sop_dataset.py load')
+    return files
+
+
+def official_data_sha():
+    return hashlib.sha256(''.join(sha(path) for path in official_files().values()).encode()).hexdigest()
+
+
 def load(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
@@ -79,7 +92,7 @@ def prepare(out, ui_weight=3, max_length=256):
     inventory = json.loads(inventory_path.read_text())
     registry = shared.registry(inventory)
     old_coverage = set(shared.registry(json.loads((ROOT / 'data/demo-tool-profile/inventory.json').read_text())))
-    splits = {'train': OFFICIAL / 'train.jsonl.gz', 'calibration': OFFICIAL / 'dev.jsonl', 'test': OFFICIAL / 'test.jsonl'}
+    splits = official_files()
     out.mkdir(parents=True, exist_ok=False)
     counts, diagnostics = collections.Counter(), collections.Counter()
     authored = (out / 'authored.jsonl').open('w')
@@ -115,7 +128,7 @@ def prepare(out, ui_weight=3, max_length=256):
     manifest = {
         'format': 'sop.per-key-supervision/1', 'annotationContract': 'official-dataset V2 requests; demo-tool-profile rows supervise only their original vocabulary',
         'maxLength': max_length, 'registry': registry, 'targetFamilies': shared.target_families(inventory),
-        'inventorySha256': sha(inventory_path), 'officialManifestSha256': sha(OFFICIAL / 'MANIFEST.json'), 'scriptSha256': sha(Path(__file__)),
+        'inventorySha256': sha(inventory_path), 'officialDataSha256': official_data_sha(), 'scriptSha256': sha(Path(__file__)),
         'sharedPreparerSha256': sha(ROOT / 'prepare-key-reader.py'), 'uiTrainWeight': ui_weight,
         'sources': {'official': {'path': str(out / 'authored.jsonl'), 'sha256': sha(out / 'authored.jsonl')}},
         'counts': dict(counts), 'diagnostics': dict(diagnostics), 'outputs': {name: sha(out / (name + '.jsonl')) for name in splits},
@@ -139,7 +152,7 @@ def prepare_cutter(out):
     out.mkdir(parents=True, exist_ok=False)
     (out / 'raw').mkdir()
     raw_rows, records, exclusions = [], {'train': [], 'calibration': []}, []
-    for split, path in [('train', OFFICIAL / 'train.jsonl.gz'), ('calibration', OFFICIAL / 'dev.jsonl'), ('test', OFFICIAL / 'test.jsonl')]:
+    for split, path in official_files().items():
         for r in rows(path):
             group = group_key(r['family'], split == 'calibration')
             raw_rows.append({'id': r['id'], 'world': r['world'], 'text': r['text'], 'requests': r['requests'], 'origin': r['source'], 'split_group': group})
@@ -158,7 +171,7 @@ def prepare_cutter(out):
     manifest = {'format': 'psys2.ui-union-cutter-data/1', 'sources': [{'path': 'official.jsonl', 'sha256': sha(raw_path)}],
                 'outputs': {s: sha(out / (s + '.jsonl')) for s in records}, 'exclusion': {'sha256': sha(out / 'exclusions.json')},
                 'sourceGrouping': {'format': 'psys2.source-cohort-split/1', 'field': 'split_group', 'hash': 'sha256-first8-mod10'},
-                'counts': {s: len(v) for s, v in records.items()} | {'reservedTest': len(exclusions)}, 'officialManifestSha256': sha(OFFICIAL / 'MANIFEST.json'),
+                'counts': {s: len(v) for s, v in records.items()} | {'reservedTest': len(exclusions)}, 'officialDataSha256': official_data_sha(),
                 'scriptSha256': sha(Path(__file__)), 'trainingRun': False}
     (out / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     return manifest
