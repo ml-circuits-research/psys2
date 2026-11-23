@@ -479,7 +479,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "d3732b399768ae94faba71bd0430eebec950dafdcf69548b65c3ddb5a150656d",
+  "builderSha256": "0bd84b37befbc8cb5bb8dde74551a595bf25cd04a011de6c424b35089dc7582e",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -639,6 +639,18 @@
       "fixes": {}
     },
     {
+      "name": "ui-drawing-style-v1",
+      "path": "training/sop-bert/data/ui-drawing-style-v1/examples.jsonl",
+      "description": "Drawing turns, mirrors, facing, leans, opacity, effects, fills, outlines, writing and filters (generate.py)",
+      "gitCommit": null,
+      "sha256": "2a394b1d5c51f168968f45e49e001eb93ff66b4f3269d0edd2519da27d51db20",
+      "rowsIn": 1931,
+      "rowsKept": 1931,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {}
+    },
+    {
       "name": "ui-quantities-v1",
       "path": "training/sop-bert/data/ui-quantities-v1/examples.jsonl",
       "description": "coordination of make requests and quantities (generate.py)",
@@ -671,7 +683,7 @@
       "name": "data-drop-v1",
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": "2a14bbdb26a9a1c1819c714217d4d33c4441f8e7",
+      "gitCommit": "3533670b89e218711718c763d319f68cef44763c",
       "sha256": "babd6333378bdab4cde60aa5c2ba03a5d2090c1d238271950f43a0df14cf23d4",
       "rowsIn": 16934,
       "rowsKept": 16934,
@@ -875,12 +887,12 @@
     }
   ],
   "splits": {
-    "train": 101790,
-    "dev": 4368,
-    "test": 2180
+    "train": 103883,
+    "dev": 4458,
+    "test": 2235
   },
-  "families": 26197,
-  "leakedFamilies": 2723,
+  "families": 26315,
+  "leakedFamilies": 2795,
   "labelConflictsResolvedByPriority": {
     "main-synthetic<-main-synthetic": 4
   },
@@ -894,6 +906,7 @@
     "ui-features-v1": 66,
     "ui-diagram-v2": 1207,
     "ui-diagram-v2-voice": 14,
+    "ui-drawing-style-v1": 307,
     "ui-quantities-v1": 42,
     "human-adapted-v1-drawing": 112,
     "data-drop-v1": 3679,
@@ -914,11 +927,11 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "94bb625e193468c51e29de96102ed3f5dd45cebe4423ba54a5763c4a7a710d35",
-      "bytes": 8101
+      "sha256": "4356e10f6045360bc1430d0fe3e8d5efebbc046178a26ccd61712ccc8bb883d4",
+      "bytes": 8098
     },
     "VALIDATION.md": {
-      "sha256": "dfa1574c5dcdf8a1a41ba75651035208685c8a2464ed22b54a58b952c607d120",
+      "sha256": "343dce0bf1baf6dff84f292c72f77cf0ef0dd3131f99291160c5b24102ec8aaf",
       "bytes": 13019
     },
     "audit-sample.md": {
@@ -926,20 +939,20 @@
       "bytes": 44259
     },
     "dev.jsonl": {
-      "sha256": "5977bdad51fae890a157077977e9cd7cb5aa9f8fceb7779b4deb42258d04057e",
-      "bytes": 4754650
+      "sha256": "6440fc8da3147057e2805ff87b5044cce949d81bf7ebe6ee04bb3e1491b09029",
+      "bytes": 4863715
     },
     "inventory.json": {
-      "sha256": "014aa89451c7e8683dfe3af6f256b7e57de2cd8b00955404d8a506c63d234513",
-      "bytes": 56648
+      "sha256": "94c30e30ab39b3eca35ae13eed67e859cbb10c5e855b2dc9efcf913f718ab34a",
+      "bytes": 61409
     },
     "test.jsonl": {
-      "sha256": "9f2ce31c06d39adc61957b50146e5b22d6d747cea6bca0de78577273a8c5c1d5",
-      "bytes": 2365530
+      "sha256": "c314f8dd7c786ee0a1021bcf30cdbebce2166301cc74f20f5451a0a52d8a2bd7",
+      "bytes": 2431098
     },
     "train.jsonl.gz": {
-      "sha256": "e1fde1fe5620f520b34c9222f3b7757276d31ad9306a034bff18df80b86277e3",
-      "bytes": 5004825
+      "sha256": "e662ba273eafce2bfd658d340f30ee2166ff5bfdfd863801c3c3d6e2db083bd6",
+      "bytes": 5121173
     }
   },
   "policy": {
@@ -953,6 +966,7 @@
       "ui-features-v1",
       "ui-diagram-v2",
       "ui-diagram-v2-voice",
+      "ui-drawing-style-v1",
       "ui-quantities-v1",
       "human-adapted-v1-drawing",
       "data-drop-v1",

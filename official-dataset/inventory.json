@@ -2229,6 +2229,16 @@
   "drawn": {
    "doc": "a drawn thing (book 7.1 t.drawn)",
    "keys": {
+    "align": {
+     "concept": "align",
+     "head": "class",
+     "src": "Native parameter: drawing.object.change.align",
+     "values": [
+      "start",
+      "middle",
+      "end"
+     ]
+    },
     "anchor": {
      "concept": "reference",
      "head": "fill+span",
@@ -2294,6 +2304,20 @@
      "head": "candidate",
      "src": "Authored semantic intent; requires world-informed completion"
     },
+    "effect": {
+     "concept": "effect",
+     "head": "candidate",
+     "src": "Native parameter: drawing.object.change.effect ; values: k.styles (catalog b89b4541)",
+     "values": [
+      "none",
+      "glow",
+      "neon",
+      "shadow",
+      "long_shadow",
+      "blur",
+      "soft"
+     ]
+    },
     "facing": {
      "concept": "facing",
      "head": "class",
@@ -2302,6 +2326,54 @@
       "left",
       "right"
      ]
+    },
+    "fill": {
+     "concept": "fill",
+     "head": "candidate",
+     "src": "Native parameter: drawing.object.change.fill ; values: k.styles (catalog b89b4541)",
+     "values": [
+      "solid",
+      "none",
+      "crayon",
+      "striped",
+      "dotted",
+      "checked",
+      "zigzag",
+      "dashed",
+      "gradient"
+     ]
+    },
+    "font": {
+     "concept": "font",
+     "head": "candidate",
+     "src": "Native parameter: drawing.object.change.font ; values: k.styles (catalog b89b4541)",
+     "values": [
+      "serif",
+      "sans",
+      "handwritten",
+      "comic",
+      "mono",
+      "fancy",
+      "poster",
+      "rounded"
+     ]
+    },
+    "frame": {
+     "concept": "frame",
+     "head": "candidate",
+     "src": "Native parameter: drawing.object.change.frame ; values: k.styles (catalog b89b4541)",
+     "values": [
+      "none",
+      "speech",
+      "thought",
+      "caption",
+      "sign"
+     ]
+    },
+    "gradient": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "Native parameter: drawing.object.change.gradient"
     },
     "height": {
      "concept": "height",
@@ -2328,10 +2400,30 @@
      "head": "candidate",
      "src": "Native parameter: drawing.object.make.label"
     },
+    "mirror": {
+     "concept": "mirror",
+     "head": "class",
+     "src": "Native parameter: drawing.object.change.mirror",
+     "values": [
+      "horizontal",
+      "vertical",
+      "none"
+     ]
+    },
     "name": {
      "concept": "name",
      "head": "span",
      "src": "label given by the user"
+    },
+    "opacity": {
+     "concept": "opacity",
+     "head": "number",
+     "src": "Native parameter: drawing.object.change.opacity"
+    },
+    "outline": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "Native parameter: drawing.object.change.outline"
     },
     "relation": {
      "concept": "spatial_relation",
@@ -2356,10 +2448,63 @@
       "along"
      ]
     },
+    "rotation": {
+     "concept": "rotation",
+     "head": "number",
+     "src": "Native parameter: drawing.object.change.rotation"
+    },
     "size": {
      "concept": "size",
      "head": "number+class+step",
      "src": "s.drawn.size space=size"
+    },
+    "skew": {
+     "concept": "skew",
+     "head": "number",
+     "src": "Native parameter: drawing.object.change.skew"
+    },
+    "slant": {
+     "concept": "slant",
+     "head": "class",
+     "src": "Native parameter: drawing.object.change.slant",
+     "values": [
+      "normal",
+      "italic"
+     ]
+    },
+    "stroke": {
+     "concept": "stroke",
+     "head": "number",
+     "src": "Native parameter: drawing.object.change.stroke"
+    },
+    "text": {
+     "concept": "literal_text",
+     "head": "span",
+     "src": "Native parameter: drawing.object.change.text"
+    },
+    "turn": {
+     "concept": "turn",
+     "head": "candidate+number",
+     "src": "Native parameter: drawing.object.change.turn ; values: k.styles (catalog b89b4541)",
+     "values": [
+      "rotate_right",
+      "rotate_left",
+      "upside_down",
+      "upright",
+      "tilt",
+      "tilt_left",
+      "half",
+      "full"
+     ]
+    },
+    "weight": {
+     "concept": "weight",
+     "head": "class",
+     "src": "Native parameter: drawing.object.change.weight",
+     "values": [
+      "normal",
+      "bold"
+     ]
     },
     "width": {
      "concept": "width",
@@ -2401,6 +2546,22 @@
      "head": "number",
      "src": "Native parameter: drawing.ids.show.duration"
     },
+    "filter": {
+     "concept": "filter",
+     "head": "candidate",
+     "src": "Native parameter: drawing.page.change.filter ; values: k.styles (catalog b89b4541)",
+     "values": [
+      "none",
+      "sepia",
+      "black_and_white",
+      "night",
+      "sunset",
+      "vintage",
+      "bright",
+      "faded",
+      "dreamy"
+     ]
+    },
     "mode": {
      "concept": "mode",
      "head": "candidate",
@@ -2426,6 +2587,20 @@
      "head": "candidate",
      "src": "native drawing part parameter"
     },
+    "effect": {
+     "concept": "effect",
+     "head": "candidate",
+     "src": "Native parameter: drawing.part.change.effect ; values: k.styles (catalog b89b4541)",
+     "values": [
+      "none",
+      "glow",
+      "neon",
+      "shadow",
+      "long_shadow",
+      "blur",
+      "soft"
+     ]
+    },
     "height": {
      "concept": "height",
      "head": "number",
@@ -2441,10 +2616,45 @@
      "head": "number",
      "src": "native drawing part parameter"
     },
+    "mirror": {
+     "concept": "mirror",
+     "head": "class",
+     "src": "Native parameter: drawing.part.change.mirror",
+     "values": [
+      "horizontal",
+      "vertical",
+      "none"
+     ]
+    },
+    "opacity": {
+     "concept": "opacity",
+     "head": "number",
+     "src": "Native parameter: drawing.part.change.opacity"
+    },
     "owner": {
      "concept": "reference",
      "head": "span",
      "src": "native drawing part parameter"
+    },
+    "rotation": {
+     "concept": "rotation",
+     "head": "number",
+     "src": "Native parameter: drawing.part.change.rotation"
+    },
+    "turn": {
+     "concept": "turn",
+     "head": "candidate+number",
+     "src": "Native parameter: drawing.part.change.turn ; values: k.styles (catalog b89b4541)",
+     "values": [
+      "rotate_right",
+      "rotate_left",
+      "upside_down",
+      "upright",
+      "tilt",
+      "tilt_left",
+      "half",
+      "full"
+     ]
     },
     "width": {
      "concept": "width",

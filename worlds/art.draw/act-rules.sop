@@ -500,6 +500,39 @@
 @make.colour.req app.act.request operation="drawing.object.make" color=?v
 @make.colour.arg app.act.arg call=new.object attr=colour value=?v
 @make.colour core.rule when=$make.colour.req then=$make.colour.arg
+# Facing (render-projection.sop): a made object (a drawn kind or a catalog drawing) faces the side the command gives
+# (facing: left or right), or the side an object on the page is on (toward: its code), from where the new object goes.
+@make.facing.req app.act.request operation="drawing.object.make" facing=?v
+@make.facing.cat app.act.request operation="drawing.catalog.make" facing=?v
+@make.facing.arg app.act.arg call=new.object attr=art.draw.facing value=?v
+@make.facing core.rule when=$make.facing.req then=$make.facing.arg
+@make.facing.catalog core.rule when=$make.facing.cat then=$make.facing.arg
+@draw.newx.type core.type of=ui.draw.newx
+@draw.towardnew.type core.type of=ui.draw.towardnew
+@fnx.req app.act.request x=?x
+@fnx.any app.act.request x=?anyx
+@fnx.t ui.draw.target x=?x
+@fnx.out ui.draw.newx x=?x
+@facing.newx.given core.rule when=$fnx.req then=$fnx.out
+@facing.newx.placed core.rule when=$fnx.t not=$fnx.any then=$fnx.out
+@fmt.make app.act.request operation="drawing.object.make" toward=?tid
+@fmt.cat app.act.request operation="drawing.catalog.make" toward=?tid
+@fmt.out ui.draw.towardnew object=?tid
+@facing.toward.make core.rule when=$fmt.make then=$fmt.out
+@facing.toward.catalog core.rule when=$fmt.cat then=$fmt.out
+@fmn.t ui.draw.towardnew object=?tid
+@fmn.given app.act.request facing=?anyf
+@fmn.x ui.draw.newx x=?x
+@fmn.o w.drawing.object code=?tid x=?ox
+@fmn.right core.check fn=gt args=?ox args=?x
+@fmn.left core.check fn=lt args=?ox args=?x
+@fmn.r.arg app.act.arg call=new.object attr=art.draw.facing value=right
+@fmn.l.arg app.act.arg call=new.object attr=art.draw.facing value=left
+@make.toward.right core.rule when=$fmn.t not=$fmn.given when=$fmn.x when=$fmn.o if=$fmn.right then=$fmn.r.arg
+@make.toward.left core.rule when=$fmn.t not=$fmn.given when=$fmn.x when=$fmn.o if=$fmn.left then=$fmn.l.arg
+@fmn.none app.act.refuse reason=facing-target-not-on-page
+@fmn.code w.drawing.object code=?tid
+@make.toward.unknown core.rule when=$fmn.t not=$fmn.code then=$fmn.none
 
 # Change, place or remove listed objects.
 @obj.item app.act.item param="ids" value=?id
@@ -528,6 +561,32 @@
 @chg.colour.req app.act.request operation="drawing.object.change" color=?v
 @chg.colour.call app.act.call act=change thing=$obj.thing attr=colour value=?v order=1
 @change.colour core.rule when=$chg.colour.req when=$obj.item when=$obj.thing then=$chg.colour.call
+# Facing: a change turns the listed objects to the side it gives, or to the side an object on the page is on (toward:
+# its code; an object right above or below it keeps its facing); flipping one turns it to the other side.
+@chg.facing.req app.act.request operation="drawing.object.change" facing=?v
+@chg.facing.call app.act.call act=change thing=$obj.thing attr=art.draw.facing value=?v order=1
+@change.facing core.rule when=$chg.facing.req when=$obj.item when=$obj.thing then=$chg.facing.call
+@fct.req app.act.request operation="drawing.object.change" toward=?tid
+@fct.given app.act.request operation="drawing.object.change" facing=?anyf
+@fct.self w.drawing.object code=?id x=?x
+@fct.o w.drawing.object code=?tid x=?ox
+@fct.right core.check fn=gt args=?ox args=?x
+@fct.left core.check fn=lt args=?ox args=?x
+@fct.r.call app.act.call act=change thing=$obj.thing attr=art.draw.facing value=right order=1
+@fct.l.call app.act.call act=change thing=$obj.thing attr=art.draw.facing value=left order=1
+@change.toward.right core.rule when=$fct.req not=$fct.given when=$obj.item when=$obj.thing when=$fct.self when=$fct.o if=$fct.right then=$fct.r.call
+@change.toward.left core.rule when=$fct.req not=$fct.given when=$obj.item when=$obj.thing when=$fct.self when=$fct.o if=$fct.left then=$fct.l.call
+@fct.code w.drawing.object code=?tid
+@fct.none app.act.refuse reason=facing-target-not-on-page
+@change.toward.unknown core.rule when=$fct.req not=$fct.code then=$fct.none
+@flp.req app.act.request operation="drawing.object.flip"
+@flp.f ui.draw.facing object=?id facing=?f
+@flp.other ui.draw.opposite side=?f other=?g
+@flp.call app.act.call act=change thing=$obj.thing attr=art.draw.facing value=?g order=1
+@flip core.rule when=$flp.req when=$obj.item when=$obj.thing when=$flp.f when=$flp.other then=$flp.call
+@flp.opposite.type core.type of=ui.draw.opposite
+@flp.opposite.left ui.draw.opposite side=left other=right
+@flp.opposite.right ui.draw.opposite side=right other=left
 @place.req app.act.request operation="drawing.object.place" x=?x y=?y
 @place.x app.act.call act=change thing=$obj.thing attr=x value=?x order=1
 @place.y app.act.call act=change thing=$obj.thing attr=y value=?y order=2
@@ -598,12 +657,13 @@
 @pgt.sy core.calc out=?sy fn=div args=?oh args=100
 @pgt.x app.act.request operation="drawing.part.place" x=?nx
 @pgt.ux core.calc out=?ux fn=sub args=?nx args=?ox
-@pgt.fx core.calc out=?fx fn=div args=?ux args=?sx
+@pgt.sc ui.draw.boxscale object=?id sx=?ssx
+@pgt.fx core.calc out=?fx fn=div args=?ux args=?ssx
 @pgt.gx core.calc out=?gx fn=add args=?fx args=50
 @pgt.dx core.calc out=?dx fn=sub args=?gx args=?cx
 @pgt.kdx core.calc out=?dx fn=sub args=?ex args=?cx
 @pgt.dx.o ui.draw.partdx object=?id index=?i dx=?dx
-@part.dx.given core.rule when=$pgt.e when=$pgt.g when=$pgt.o when=$pgt.ext when=$pgt.x with=$pgt.sx with=$pgt.ux with=$pgt.fx with=$pgt.gx with=$pgt.dx then=$pgt.dx.o
+@part.dx.given core.rule when=$pgt.e when=$pgt.g when=$pgt.o when=$pgt.ext when=$pgt.sc when=$pgt.x with=$pgt.sx with=$pgt.ux with=$pgt.fx with=$pgt.gx with=$pgt.dx then=$pgt.dx.o
 @part.dx.kept core.rule when=$pgt.e when=$pgt.g not=$pgt.x with=$pgt.kdx then=$pgt.dx.o
 @pgt.y app.act.request operation="drawing.part.place" y=?ny
 @pgt.uy core.calc out=?uy fn=sub args=?ny args=?oy
@@ -658,7 +718,8 @@
 @px.sy core.calc out=?sy fn=div args=?oh args=100
 @px.ux core.calc out=?ux fn=sub args=?ex args=50
 @px.uy core.calc out=?uy fn=sub args=?ey args=50
-@px.vx core.calc out=?vx fn=mul args=?ux args=?sx
+@px.sc ui.draw.boxscale object=?id sx=?ssx
+@px.vx core.calc out=?vx fn=mul args=?ux args=?ssx
 @px.vy core.calc out=?vy fn=mul args=?uy args=?sy
 @px.nx core.calc out=?nx fn=add args=?ox args=?vx
 @px.ny core.calc out=?ny fn=add args=?oy args=?vy
@@ -666,7 +727,7 @@
 @px.nh core.calc out=?nh fn=mul args=?fh args=?sy
 @px.ns core.calc out=?ns fn=max args=?nw args=?nh
 @px.make app.act.call act=make kind=w.drawing.object code=?code drawing=?shape x=?nx y=?ny size=?ns width=?nw height=?nh colour=?rgb z=?nz order=1 ref=new.object
-@part.extract core.rule when=$px.req when=$px.o when=$px.kp when=$px.g when=$px.basic not=$px.pt when=$px.ext when=$px.fill when=$next.n with=$px.sx with=$px.sy with=$px.ux with=$px.uy with=$px.vx with=$px.vy with=$px.nx with=$px.ny with=$px.nw with=$px.nh with=$px.ns with=$next.z with=$next.code then=$px.make
+@part.extract core.rule when=$px.req when=$px.o when=$px.kp when=$px.g when=$px.basic not=$px.pt when=$px.ext when=$px.sc when=$px.fill when=$next.n with=$px.sx with=$px.sy with=$px.ux with=$px.uy with=$px.vx with=$px.vy with=$px.nx with=$px.ny with=$px.nw with=$px.nh with=$px.ns with=$next.z with=$next.code then=$px.make
 @px.edit w.drawing.part object=$px.o index=?i
 @px.rm.new app.act.call act=make kind=w.drawing.part object=$px.o index=?i removed=true order=2
 @px.rm.chg app.act.call act=change thing=$px.edit attr=removed value=true order=2
@@ -789,6 +850,10 @@
 @ob.in.height.o app.observe.input id=?id key=height value=?h
 @draw.observe.width core.rule when=$ob.in.extent then=$ob.in.width.o
 @draw.observe.height core.rule when=$ob.in.extent then=$ob.in.height.o
+# Facing is observed for every object: the side it faces now (its own facing, else its drawing's; render-projection.sop).
+@ob.in.facing ui.draw.facing object=?id facing=?f
+@ob.in.facing.o app.observe.input id=?id key=facing value=?f
+@draw.observe.facing core.rule when=$ob.in.facing then=$ob.in.facing.o
 # Each drawn part of an object is observed under it (id <code>.<index>, its k.objects name as kind), so a reader can
 # name "the roof" of the house; a removed part is not observed.
 @obp.o w.drawing.object code=?id
@@ -869,7 +934,8 @@
 @opg.sy core.calc out=?sy fn=div args=?oh args=100
 @opg.ux core.calc out=?ux fn=sub args=?ex args=50
 @opg.uy core.calc out=?uy fn=sub args=?ey args=50
-@opg.vx core.calc out=?vx fn=mul args=?ux args=?sx
+@opg.sc ui.draw.boxscale object=?id sx=?ssx
+@opg.vx core.calc out=?vx fn=mul args=?ux args=?ssx
 @opg.vy core.calc out=?vy fn=mul args=?uy args=?sy
 @opg.px core.calc out=?px fn=add args=?x args=?vx
 @opg.py core.calc out=?py fn=add args=?y args=?vy
@@ -880,7 +946,7 @@
 @opg.y.o app.observe.input id=?pid key=y value=?py
 @opg.w.o app.observe.input id=?pid key=width value=?pw
 @opg.h.o app.observe.input id=?pid key=height value=?ph
-@draw.observe.part.x core.rule when=$opg.o when=$opg.g not=$opg.removed when=$opg.ext with=$opg.sx with=$opg.ux with=$opg.vx with=$opg.px with=$opg.pid then=$opg.x.o
+@draw.observe.part.x core.rule when=$opg.o when=$opg.g not=$opg.removed when=$opg.ext when=$opg.sc with=$opg.sx with=$opg.ux with=$opg.vx with=$opg.px with=$opg.pid then=$opg.x.o
 @draw.observe.part.y core.rule when=$opg.o when=$opg.g not=$opg.removed when=$opg.ext with=$opg.sy with=$opg.uy with=$opg.vy with=$opg.py with=$opg.pid then=$opg.y.o
 @draw.observe.part.width core.rule when=$opg.o when=$opg.g not=$opg.removed when=$opg.ext with=$opg.sx with=$opg.pw with=$opg.pid then=$opg.w.o
 @draw.observe.part.height core.rule when=$opg.o when=$opg.g not=$opg.removed when=$opg.ext with=$opg.sy with=$opg.ph with=$opg.pid then=$opg.h.o
@@ -1045,7 +1111,8 @@
 @lp.geo.y app.observe.input id=?pid key=y value=?py
 @lp.xy w.face.part face=$lp.face kind=?kind x=?fx y=?fy
 @lp.f core.calc out=?f fn=div args=?ms args=100
-@lp.fx core.calc out=?fxs fn=mul args=?ow args=?f
+@lp.sc ui.draw.xsign object=?id k=?lk
+@lp.fx core.calc out=?fxs fn=mul args=?ow args=?f args=?lk
 @lp.fy core.calc out=?fys fn=mul args=?oh args=?f
 @lp.ddx core.calc out=?ddx fn=sub args=?nx args=?px
 @lp.ddy core.calc out=?ddy fn=sub args=?ny args=?py
@@ -1061,7 +1128,7 @@
 @lp.rfy core.calc out=?nfy fn=round args=?nfy1
 @lp.x.o ui.face.edit face=$lp.face slot=?slot x=?nfx
 @lp.y.o ui.face.edit face=$lp.face slot=?slot y=?nfy
-@look.edit.place.x core.rule when=$lp.pl.req when=$lp.face when=$lp.lp when=$lp.m when=$lp.ext with=$lp.pid when=$lp.geo.x when=$lp.kind when=$lp.xy with=$lp.f with=$lp.fx with=$lp.ddx with=$lp.qx with=$lp.qx100 with=$lp.nfx with=$lp.cfx with=$lp.rfx then=$lp.x.o
+@look.edit.place.x core.rule when=$lp.pl.req when=$lp.face when=$lp.lp when=$lp.m when=$lp.ext with=$lp.pid when=$lp.geo.x when=$lp.kind when=$lp.xy when=$lp.sc with=$lp.f with=$lp.fx with=$lp.ddx with=$lp.qx with=$lp.qx100 with=$lp.nfx with=$lp.cfx with=$lp.rfx then=$lp.x.o
 @look.edit.place.y core.rule when=$lp.pl.req when=$lp.face when=$lp.lp when=$lp.m when=$lp.ext with=$lp.pid when=$lp.geo.y when=$lp.kind when=$lp.xy with=$lp.f with=$lp.fy with=$lp.ddy with=$lp.qy with=$lp.qy100 with=$lp.nfy with=$lp.cfy with=$lp.rfy then=$lp.y.o
 
 # Add a part to an object by the word for it (drawing.part.add kind=: "a hat", "eyes", "a red t-shirt", "the chimney"):
@@ -1223,7 +1290,8 @@
 @og.uy core.calc out=?uy fn=sub args=?dy args=50
 @og.osx core.calc out=?osx fn=div args=?ow args=100
 @og.osy core.calc out=?osy fn=div args=?oh args=100
-@og.vx core.calc out=?vx fn=mul args=?ux args=?osx
+@og.sc ui.draw.boxscale object=?id sx=?ssx
+@og.vx core.calc out=?vx fn=mul args=?ux args=?ssx
 @og.vy core.calc out=?vy fn=mul args=?uy args=?osy
 @og.px core.calc out=?px fn=add args=?vx args=?X
 @og.py core.calc out=?py fn=add args=?vy args=?Y
@@ -1235,7 +1303,7 @@
 @og.y.o app.observe.input id=?pid key=y value=?py
 @og.w.o app.observe.input id=?pid key=width value=?pw
 @og.h.o app.observe.input id=?pid key=height value=?ph
-@draw.observe.look.x core.rule when=$ol.face when=$og.lp when=$og.ks when=$og.m when=$og.o when=$og.ext with=$ol.pid with=$og.f with=$og.hw with=$og.cx with=$og.dx0 with=$og.dx with=$og.ux with=$og.osx with=$og.vx with=$og.px then=$og.x.o
+@draw.observe.look.x core.rule when=$ol.face when=$og.lp when=$og.ks when=$og.m when=$og.o when=$og.ext when=$og.sc with=$ol.pid with=$og.f with=$og.hw with=$og.cx with=$og.dx0 with=$og.dx with=$og.ux with=$og.osx with=$og.vx with=$og.px then=$og.x.o
 @draw.observe.look.y core.rule when=$ol.face when=$og.lp when=$og.ks when=$og.m when=$og.o when=$og.ext with=$ol.pid with=$og.f with=$og.hh with=$og.cy with=$og.dy0 with=$og.dy with=$og.uy with=$og.osy with=$og.vy with=$og.py then=$og.y.o
 @draw.observe.look.width core.rule when=$ol.face when=$og.lp when=$og.ks when=$og.m when=$og.ext with=$ol.pid with=$og.f with=$og.pw0 with=$og.osx with=$og.pw then=$og.w.o
 @draw.observe.look.height core.rule when=$ol.face when=$og.lp when=$og.ks when=$og.m when=$og.ext with=$ol.pid with=$og.f with=$og.ph0 with=$og.osy with=$og.ph then=$og.h.o

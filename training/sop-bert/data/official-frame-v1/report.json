@@ -1,0 +1,73 @@
+{
+ "format": "psys2.frame-conversion-report/1",
+ "rows": 63038,
+ "requests": 69431,
+ "constraints": 106025,
+ "rowsComplete": 61796,
+ "rowsPartial": 1242,
+ "perWorld": {
+  "avatar": {
+   "rows": 3171,
+   "complete": 3104
+  },
+  "calendar": {
+   "rows": 4588,
+   "complete": 4588
+  },
+  "diagram": {
+   "rows": 21766,
+   "complete": 21348
+  },
+  "document": {
+   "rows": 9242,
+   "complete": 8600
+  },
+  "drawing": {
+   "rows": 24271,
+   "complete": 24156
+  }
+ },
+ "roles": {
+  "attribute": 63686,
+  "goal": 553,
+  "manner": 31,
+  "motion.direction": 69,
+  "possessor": 166,
+  "spatial.distance": 39,
+  "spatial.landmark": 9871,
+  "spatial.region": 671,
+  "spatial.relation": 10220,
+  "theme.code": 9173,
+  "theme.ordinal": 411,
+  "theme.quantity": 631,
+  "time.day": 3182,
+  "time.duration": 2198,
+  "time.end": 28,
+  "time.shift": 27,
+  "time.start": 2959
+ },
+ "unconverted": {
+  "tool-parameter:document.block.rows": 475,
+  "tool-parameter:document.block.items": 270,
+  "tool-parameter:diagram.sketch.nodes": 136,
+  "tool-parameter:diagram.node.edges": 129,
+  "tool-parameter:document.block.mark": 127,
+  "tool-parameter:drawing.page.mode": 115,
+  "tool-parameter:diagram.sketch.links": 110,
+  "tool-parameter:document.block.header": 100,
+  "tool-parameter:diagram.page.mode": 99,
+  "tool-parameter:document.section.mark": 75,
+  "tool-parameter:document.block.to": 73,
+  "tool-parameter:avatar.face.mode": 67,
+  "tool-parameter:document.block.checked": 61,
+  "tool-parameter:diagram.point.chart": 58,
+  "tool-parameter:document.inline.from": 42,
+  "tool-parameter:document.inline.to": 42,
+  "tool-parameter:document.block.from": 39,
+  "tool-parameter:document.section.to": 31,
+  "tool-parameter:document.block.at": 31,
+  "tool-parameter:document.block.attrs": 30,
+  "act:repeat": 7,
+  "act:disconnect": 1
+ }
+}

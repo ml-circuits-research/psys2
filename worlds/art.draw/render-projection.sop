@@ -32,6 +32,59 @@
 @extent.height core.rule when=$ext.o not=$ext.w when=$ext.h then=$ext.sh.o
 @extent.size core.rule when=$ext.o not=$ext.w not=$ext.h then=$ext.ss.o
 
+# Facing. An object faces left or right: the facing it was given (art.draw.facing, a key of this application's own
+# namespace on the shared w.drawing object), else the facing its drawing has (ui.draw.natural of its drawing, else the
+# default below: a drawing whose orientation is not declared is taken to face right). An object whose facing differs
+# from its drawing's is drawn mirrored about its own vertical middle: every part of it, its looks (a person's face and
+# figure) and its side faces, through the signed horizontal scale (ui.draw.boxscale sx < 0); its label and its ground
+# shadow stay as they are.
+@d.natural.type core.type of=ui.draw.natural
+@d.drawnfacing.type core.type of=ui.draw.drawnfacing
+@d.facing.type core.type of=ui.draw.facing
+@d.xsign.type core.type of=ui.draw.xsign
+@d.boxscale.type core.type of=ui.draw.boxscale
+@art.draw.keys core.namespace prefix=art.draw. open=true
+@art.draw.object.facing core.slot of=w.drawing.object key=art.draw.facing kind=atom enum=left enum=right
+@natural.default ui.draw.natural default=true facing=right
+# The drawings of the hand-made catalog that look to one side (the others look at the viewer or have no front).
+@natural.cat ui.draw.natural drawing=cat facing=left
+@natural.dog ui.draw.natural drawing=dog facing=left
+@natural.fish ui.draw.natural drawing=fish facing=left
+@natural.bird ui.draw.natural drawing=bird facing=right
+@natural.car ui.draw.natural drawing=car facing=right
+@natural.arrow ui.draw.natural drawing=arrow facing=right
+@nf.o w.drawing.object code=?id drawing=?k
+@nf.decl ui.draw.natural drawing=?k facing=?n
+@nf.decl.any ui.draw.natural drawing=?k facing=?anyn
+@nf.def ui.draw.natural default=true facing=?n
+@nf.out ui.draw.drawnfacing object=?id facing=?n
+@facing.drawn.declared core.rule when=$nf.o when=$nf.decl then=$nf.out
+@facing.drawn.default core.rule when=$nf.o not=$nf.decl.any when=$nf.def then=$nf.out
+@ef.own w.drawing.object code=?id art.draw.facing=?f
+@ef.own.o ui.draw.facing object=?id facing=?f
+@facing.given core.rule when=$ef.own then=$ef.own.o
+@ef.o w.drawing.object code=?id
+@ef.any w.drawing.object code=?id art.draw.facing=?any
+@ef.nat ui.draw.drawnfacing object=?id facing=?n
+@ef.nat.o ui.draw.facing object=?id facing=?n
+@facing.natural core.rule when=$ef.o not=$ef.any when=$ef.nat then=$ef.nat.o
+@xs.f ui.draw.facing object=?id facing=?f
+@xs.n ui.draw.drawnfacing object=?id facing=?n
+@xs.diff core.check fn=neq args=?f args=?n
+@xs.same core.check fn=eq args=?f args=?n
+@xs.m ui.draw.xsign object=?id k=-1
+@xs.p ui.draw.xsign object=?id k=1
+@facing.mirrored core.rule when=$xs.f when=$xs.n if=$xs.diff then=$xs.m
+@facing.kept core.rule when=$xs.f when=$xs.n if=$xs.same then=$xs.p
+# The scale of the 0..100 frame onto the object's box, negative across when the object is mirrored.
+@sc.e ui.draw.extent object=?id w=?ow h=?oh
+@sc.k ui.draw.xsign object=?id k=?k
+@sc.a core.calc out=?a fn=div args=?ow args=100
+@sc.sx core.calc out=?sx fn=mul args=?a args=?k
+@sc.sy core.calc out=?sy fn=div args=?oh args=100
+@sc.out ui.draw.boxscale object=?id sx=?sx sy=?sy
+@project.scale core.rule when=$sc.e when=$sc.k with=$sc.a with=$sc.sx with=$sc.sy then=$sc.out
+
 # Basic shapes: one primitive filling the object's box.
 @shape.circle ui.draw.shape drawing=circle shape=circle
 @shape.oval ui.draw.shape drawing=oval shape=oval
@@ -76,11 +129,9 @@
 @pr.hidden ui.draw.hidden object=?id source=$pr.kp
 @pr.shaped w.drawing.part object=$pr.o index=?i shape=?anyShape
 @pr.k core.calc out=?scale fn=div args=?s args=100
-@pr.ext ui.draw.extent object=?id w=?ow h=?oh
-@pr.sx core.calc out=?sx fn=div args=?ow args=100
-@pr.sy core.calc out=?sy fn=div args=?oh args=100
+@pr.ext ui.draw.boxscale object=?id sx=?sx sy=?sy
 @pr.out ui.draw.draw part=?id source=$pr.kp slot=?id order=?layer z=?pz shape=?shape x=?px y=?py w=?pw h=?ph cx=50 cy=50 tx=?x ty=?y scale=?scale sx=?sx sy=?sy side=left
-@project.parts core.rule when=$pr.o when=$pr.f when=$pr.kp when=$pr.ix not=$pr.removed not=$pr.moved not=$pr.hidden not=$pr.shaped when=$pr.ext with=$pr.k with=$pr.sx with=$pr.sy then=$pr.out
+@project.parts core.rule when=$pr.o when=$pr.f when=$pr.kp when=$pr.ix not=$pr.removed not=$pr.moved not=$pr.hidden not=$pr.shaped when=$pr.ext with=$pr.k then=$pr.out
 
 # The geometry of each part in the drawing's 0..100 frame: its own centre (cx, cy) and size (pw, ph), and where it is
 # drawn: its centre moved by its edit (ex, ey) and its size as edited (fw, fh). A geometry edit stores dx, dy, width
@@ -111,16 +162,14 @@
 @pe.removed w.drawing.part object=$pe.o index=?i removed=true
 @pe.shaped w.drawing.part object=$pe.o index=?i shape=?anyShape
 @pe.pt k.objects.point part=$pe.kp
-@pe.ext ui.draw.extent object=?id w=?ow h=?oh
+@pe.ext ui.draw.boxscale object=?id sx=?sx sy=?sy
 @pe.k core.calc out=?scale fn=div args=?s args=100
-@pe.sx core.calc out=?sx fn=div args=?ow args=100
-@pe.sy core.calc out=?sy fn=div args=?oh args=100
 @pe.hw core.calc out=?hw fn=div args=?fw args=2
 @pe.hh core.calc out=?hh fn=div args=?fh args=2
 @pe.bx core.calc out=?bx fn=sub args=?ex args=?hw
 @pe.by core.calc out=?by fn=sub args=?ey args=?hh
 @pe.box.out ui.draw.draw part=?id source=$pe.kp slot=?id order=?layer z=?pz shape=?shape x=?bx y=?by w=?fw h=?fh cx=50 cy=50 tx=?x ty=?y scale=?scale sx=?sx sy=?sy side=left
-@project.parts.edited.box core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed not=$pe.shaped not=$pe.pt when=$pe.ext with=$pe.k with=$pe.sx with=$pe.sy with=$pe.hw with=$pe.hh with=$pe.bx with=$pe.by then=$pe.box.out
+@project.parts.edited.box core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed not=$pe.shaped not=$pe.pt when=$pe.ext with=$pe.k with=$pe.hw with=$pe.hh with=$pe.bx with=$pe.by then=$pe.box.out
 @pe.fwm core.calc out=?fwm fn=max args=?fw args=0.01
 @pe.fhm core.calc out=?fhm fn=max args=?fh args=0.01
 @pe.pwm core.calc out=?pwm fn=max args=?pw args=0.01
@@ -136,7 +185,7 @@
 @pe.tx core.calc out=?tx fn=add args=?x args=?vx
 @pe.ty core.calc out=?ty fn=add args=?y args=?vy
 @pe.pts.out ui.draw.draw part=?id source=$pe.kp slot=?id order=?layer z=?pz shape=?shape x=?px y=?py w=?pw h=?ph cx=?cx cy=?cy tx=?tx ty=?ty scale=?scale sx=?sx2 sy=?sy2 side=left
-@project.parts.edited.points core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed not=$pe.shaped when=$pe.pt when=$pe.ext with=$pe.k with=$pe.sx with=$pe.sy with=$pe.fwm with=$pe.fhm with=$pe.pwm with=$pe.phm with=$pe.kx with=$pe.ky with=$pe.sx2 with=$pe.sy2 with=$pe.ux with=$pe.uy with=$pe.vx with=$pe.vy with=$pe.tx with=$pe.ty then=$pe.pts.out
+@project.parts.edited.points core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed not=$pe.shaped when=$pe.pt when=$pe.ext with=$pe.k with=$pe.fwm with=$pe.fhm with=$pe.pwm with=$pe.phm with=$pe.kx with=$pe.ky with=$pe.sx2 with=$pe.sy2 with=$pe.ux with=$pe.uy with=$pe.vx with=$pe.vy with=$pe.tx with=$pe.ty then=$pe.pts.out
 
 @pp.draw ui.draw.draw source=?src
 @pp.k k.objects.point part=?src n=?n x=?x y=?y
@@ -151,11 +200,9 @@
 @ps.o w.drawing.object code=?id drawing=?k x=?x y=?y size=?s z=?layer
 @ps.shape ui.draw.shape drawing=?k shape=?shape
 @ps.k core.calc out=?scale fn=div args=?s args=100
-@ps.ext ui.draw.extent object=?id w=?ow h=?oh
-@ps.sx core.calc out=?sx fn=div args=?ow args=100
-@ps.sy core.calc out=?sy fn=div args=?oh args=100
+@ps.ext ui.draw.boxscale object=?id sx=?sx sy=?sy
 @ps.out ui.draw.draw part=?id source=?id slot=?id order=?layer z=0 shape=?shape x=0 y=0 w=100 h=100 cx=50 cy=50 tx=?x ty=?y scale=?scale sx=?sx sy=?sy side=left
-@project.shape core.rule when=$ps.o when=$ps.shape when=$ps.ext with=$ps.k with=$ps.sx with=$ps.sy then=$ps.out
+@project.shape core.rule when=$ps.o when=$ps.shape when=$ps.ext with=$ps.k then=$ps.out
 
 # A colour value is a k.colours name or an #rrggbb value, which is its own RGB.
 @rgb.name k.colours.colour name=?c rgb=?rgb
@@ -369,10 +416,8 @@
 @ld.draw ui.avatar.draw part=$ld.wp source=?src order=?ao z=?z shape=?shape x=?x y=?y w=?w h=?h cx=?cx cy=?cy tx=?tx ty=?ty scale=?k side=?side
 @ld.m ui.draw.mount object=?id face=$ld.face x=?mx y=?my size=?ms
 @ld.o w.drawing.object code=?id x=?X y=?Y z=?layer
-@ld.ext ui.draw.extent object=?id w=?ow h=?oh
+@ld.ext ui.draw.boxscale object=?id sx=?osx sy=?osy
 @ld.ord ui.draw.lookorder style=?st n=?n
-@ld.osx core.calc out=?osx fn=div args=?ow args=100
-@ld.osy core.calc out=?osy fn=div args=?oh args=100
 @ld.f core.calc out=?f fn=div args=?ms args=100
 @ld.kf core.calc out=?kf fn=mul args=?k args=?f
 @ld.psx core.calc out=?psx fn=mul args=?kf args=?osx
@@ -396,7 +441,7 @@
 @ld.o2 core.calc out=?o2 fn=mul args=?ao args=0.01
 @ld.po core.calc out=?po fn=add args=?layer args=?o1 args=?o2
 @ld.out ui.draw.draw part=$ld.wp source=?src slot=?id order=?po z=?z shape=?shape x=?x y=?y w=?w h=?h cx=?cx cy=?cy tx=?ptx ty=?pty scale=?psx sx=?psx sy=?psy side=?side axis=?axis
-@project.looks core.rule when=$ld.face when=$ld.wp when=$ld.draw when=$ld.m when=$ld.o when=$ld.ext when=$ld.ord with=$ld.osx with=$ld.osy with=$ld.f with=$ld.kf with=$ld.psx with=$ld.psy with=$ld.txf with=$ld.tyf with=$ld.dx with=$ld.dy with=$ld.ux with=$ld.uy with=$ld.vx with=$ld.vy with=$ld.ptx with=$ld.pty with=$ld.hf with=$ld.ax0 with=$ld.ax1 with=$ld.ax2 with=$ld.axis with=$ld.o1 with=$ld.o2 with=$ld.po then=$ld.out
+@project.looks core.rule when=$ld.face when=$ld.wp when=$ld.draw when=$ld.m when=$ld.o when=$ld.ext when=$ld.ord with=$ld.f with=$ld.kf with=$ld.psx with=$ld.psy with=$ld.txf with=$ld.tyf with=$ld.dx with=$ld.dy with=$ld.ux with=$ld.uy with=$ld.vx with=$ld.vy with=$ld.ptx with=$ld.pty with=$ld.hf with=$ld.ax0 with=$ld.ax1 with=$ld.ax2 with=$ld.axis with=$ld.o1 with=$ld.o2 with=$ld.po then=$ld.out
 @lf.fill ui.avatar.fill source=?src part=?p fill=?fl
 @lf.draw ui.draw.draw source=?src part=?p
 @lf.out ui.draw.fill source=?src part=?p fill=?fl
@@ -419,19 +464,17 @@
 @sh.e w.drawing.part object=$sh.o index=?i shape=?shape
 @sh.removed w.drawing.part object=$sh.o index=?i removed=true
 @sh.hidden ui.draw.hidden object=?id source=$sh.kp
-@sh.ext ui.draw.extent object=?id w=?ow h=?oh
-@sh.sx core.calc out=?sx fn=div args=?ow args=100
-@sh.sy core.calc out=?sy fn=div args=?oh args=100
+@sh.ext ui.draw.boxscale object=?id sx=?sx sy=?sy
 @sh.hw core.calc out=?hw fn=div args=?fw args=2
 @sh.hh core.calc out=?hh fn=div args=?fh args=2
 @sh.bx core.calc out=?bx fn=sub args=?ex args=?hw
 @sh.by core.calc out=?by fn=sub args=?ey args=?hh
 @sh.basic ui.draw.shape drawing=?shape shape=?prim
 @sh.basic.o ui.draw.draw part=?id source=$sh.kp slot=?id order=?layer z=?pz shape=?prim x=?bx y=?by w=?fw h=?fh cx=50 cy=50 tx=?x ty=?y scale=?sx sx=?sx sy=?sy side=left
-@project.parts.shaped.basic core.rule when=$sh.o when=$sh.kp when=$sh.g when=$sh.e not=$sh.removed not=$sh.hidden when=$sh.basic when=$sh.ext with=$sh.sx with=$sh.sy with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by then=$sh.basic.o
+@project.parts.shaped.basic core.rule when=$sh.o when=$sh.kp when=$sh.g when=$sh.e not=$sh.removed not=$sh.hidden when=$sh.basic when=$sh.ext with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by then=$sh.basic.o
 @sh.outline k.layouts.outline name=?shape
 @sh.outline.o ui.draw.draw part=?id source=$sh.kp slot=?id order=?layer z=?pz shape=polygon x=?bx y=?by w=?fw h=?fh cx=50 cy=50 tx=?x ty=?y scale=?sx sx=?sx sy=?sy side=left
-@project.parts.shaped.outline core.rule when=$sh.o when=$sh.kp when=$sh.g when=$sh.e not=$sh.removed not=$sh.hidden not=$sh.basic when=$sh.outline when=$sh.ext with=$sh.sx with=$sh.sy with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by then=$sh.outline.o
+@project.parts.shaped.outline core.rule when=$sh.o when=$sh.kp when=$sh.g when=$sh.e not=$sh.removed not=$sh.hidden not=$sh.basic when=$sh.outline when=$sh.ext with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by then=$sh.outline.o
 @sp2.pt k.layouts.outline_point outline=?shape n=?n x=?ox y=?oy
 @sp2.kx core.calc out=?kx fn=mul args=?ox args=?fw
 @sp2.ky core.calc out=?ky fn=mul args=?oy args=?fh
