@@ -114,22 +114,22 @@ No issue found.
 | warning:value-span-ambiguous | 2 |
 | warning:target-description_span-ambiguous | 1 |
 
-### data-drop-v1 (95,260 rows)
+### data-drop-v1 (100,254 rows)
 
 | issue | rows |
 | --- | ---: |
-| warning:bank-extension-needed | 34,833 |
-| warning:determiner-kept-open | 13,301 |
-| warning:selector-not-in-context | 9,313 |
-| warning:value-span-ambiguous | 2,077 |
-| trigger-not-in-span-removed | 2,034 |
-| warning:target-kind_span-ambiguous | 1,981 |
-| warning:target-kind-without-source-span | 547 |
+| warning:bank-extension-needed | 35,534 |
+| warning:determiner-kept-open | 13,584 |
+| warning:selector-not-in-context | 9,380 |
+| warning:value-span-ambiguous | 2,143 |
+| trigger-not-in-span-removed | 2,086 |
+| warning:target-kind_span-ambiguous | 2,017 |
+| warning:target-kind-without-source-span | 1,470 |
 | constraint-with-span-outside-request-removed | 480 |
 | warning:numeric-value-not-in-surface | 247 |
 | warning:target-description_span-ambiguous | 90 |
 | warning:selector-with-empty-context | 50 |
-| warning:target-name_span-ambiguous | 22 |
+| warning:target-name_span-ambiguous | 23 |
 | warning:target-count_span-ambiguous | 16 |
 
 ### human-adapted-v1-diagram (538 rows)
@@ -165,6 +165,16 @@ No issue found.
 | act-not-in-bank | 1,229 |
 | numeric-value-not-in-surface | 293 |
 | avatar-slot-id-written-in-text | 173 |
+
+### ui-systematic-v1 (3,536 rows)
+
+| issue | rows |
+| --- | ---: |
+| warning:value-span-ambiguous | 183 |
+| warning:bank-extension-needed | 80 |
+| warning:selector-not-in-context | 33 |
+| warning:target-kind_span-ambiguous | 9 |
+| warning:target-name_span-ambiguous | 8 |
 
 ## What the build did
 
@@ -376,16 +386,16 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 2 |
 | target-description_span-ambiguous | 1 |
 
-### data-drop-v1: 95,260 in, 95,259 kept
+### data-drop-v1: 100,254 in, 100,253 kept
 
 Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| anchor-span-as-anchor-mention | 37,734 |
-| trigger-not-in-span-removed | 2,034 |
+| anchor-span-as-anchor-mention | 37,785 |
+| trigger-not-in-span-removed | 2,086 |
+| comparative-as-delta-step | 492 |
 | constraint-with-span-outside-request-removed | 480 |
-| comparative-as-delta-step | 456 |
 | absolute-degree-word-as-degree | 12 |
 
 Dropped:
@@ -398,16 +408,16 @@ Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| bank-extension-needed | 34,826 |
-| selector-not-in-context | 19,636 |
-| determiner-kept-open | 13,301 |
-| value-span-ambiguous | 2,444 |
-| target-kind_span-ambiguous | 1,981 |
-| target-kind-without-source-span | 547 |
+| bank-extension-needed | 35,527 |
+| selector-not-in-context | 19,703 |
+| determiner-kept-open | 13,584 |
+| value-span-ambiguous | 2,510 |
+| target-kind_span-ambiguous | 2,017 |
+| target-kind-without-source-span | 1,470 |
 | numeric-value-not-in-surface | 246 |
 | target-description_span-ambiguous | 90 |
 | selector-with-empty-context | 81 |
-| target-name_span-ambiguous | 22 |
+| target-name_span-ambiguous | 23 |
 | target-count_span-ambiguous | 16 |
 
 ### human-adapted-v1-diagram: 538 in, 538 kept
@@ -514,8 +524,29 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 3 |
 | target-name_span-ambiguous | 2 |
 
+### ui-systematic-v1: 3,536 in, 3,536 kept
+
+Fixed or converted:
+
+| fix | rows |
+| --- | ---: |
+| absolute-degree-word-as-degree | 55 |
+| key-drawn.color-as-drawn.colour | 12 |
+| key-part.color-as-part.colour | 12 |
+| avatar-length-value-as-part.length | 10 |
+
+Kept with a warning (not an error; see README):
+
+| warning | rows |
+| --- | ---: |
+| value-span-ambiguous | 183 |
+| bank-extension-needed | 80 |
+| selector-not-in-context | 33 |
+| target-kind_span-ambiguous | 9 |
+| target-name_span-ambiguous | 8 |
+
 ## Final check of the written splits
 
 - unresolved errors: **0**
-- families present in more than one split: **3330**
+- families present in more than one split: **3475**
 - label conflicts between identical texts, resolved by source priority: {'main-synthetic<-main-synthetic': 4}

@@ -721,14 +721,14 @@ def main():
             print(f'{name}: needs upgraded to keys {dict(upgraded)}', file=sys.stderr)
     # A frozen batch is not re-read unless the worker re-signed it (a DONE marker newer than the import): then its rows are
     # replaced by the re-signed files, or, for a residual marker, the residual rows are added beside the consumed bulk.
-    resigned = {}
+    resigned, replaced = {}, {}
     for name in list(frozen):
         batch = DROP / name
         stamp = marker_stamp(batch) if batch.is_dir() else None
         if stamp and stamp != metas.get(name, {}).get('marker') and signed(batch)[0]:
             resigned[name] = 'residual' if residual_marker(batch) else 'replace'
             if resigned[name] == 'replace':
-                del frozen[name]
+                replaced[name] = frozen.pop(name)
     candidates = sorted(p for p in DROP.iterdir() if p.is_dir() and not p.name.startswith(('_', '.')) and (p.name not in frozen or resigned.get(p.name) == 'residual')) if DROP.exists() else []
     # Coordinator exception (2026-11-21): the worker signed these batches (DONE markers) but could not move them out of
     # management/staging/; they are read there, through the same checks, and their feedback says so.
@@ -859,7 +859,12 @@ def main():
                   '- Diagram conventions: psys2/training/sop-bert/data/ui-diagram-v2/README.md (populations, connect patterns, charts, '
                   'improvement intent, container words).', '']
         (batch / 'FEEDBACK.md').write_text('\n'.join(lines))
-        if len(sys.argv) == 1:
+        if len(sys.argv) == 1 and held:
+            # A held batch is not consumed: nothing is frozen for it, so it is checked again on every run. A held re-signed
+            # batch keeps the rows of its earlier import (its frozen files are left as they are).
+            if batch.name in replaced:
+                frozen[batch.name] = replaced[batch.name]
+        elif len(sys.argv) == 1:
             mine = [r for r in accepted if r['cohort']['recipeFamily'].split(':')[1] == batch.name]
             suffix = '.residual' if resigned.get(batch.name) == 'residual' else ''
             (FROZEN / f'{batch.name}{suffix}.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in mine))
