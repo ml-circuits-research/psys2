@@ -1411,6 +1411,34 @@
      "concept": "colour_by",
      "head": "span",
      "src": "Reader key (no native parameter yet): the field whose values colour the marks (coloured by region)"
+    },
+    "compare": {
+     "concept": "compare",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): how two series or periods are shown against each other (\"2024 next to 2023\", \"in two panels\")",
+     "values": [
+      "side_by_side",
+      "panels",
+      "versus",
+      "overlay"
+     ]
+    },
+    "period": {
+     "concept": "period",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): the period values are grouped by (\"totals by week\")",
+     "values": [
+      "day",
+      "week",
+      "month",
+      "quarter",
+      "year"
+     ]
+    },
+    "dateRange": {
+     "concept": "dateRange",
+     "head": "span",
+     "src": "Reader key (no native parameter yet): the dates the chart covers (\"2021 through 2024\")"
     }
    }
   },
@@ -1575,6 +1603,11 @@
       "print",
       "flowchart"
      ]
+    },
+    "about": {
+     "concept": "about",
+     "head": "span",
+     "src": "Reader key (no native parameter yet): what the diagram is about (\"a flowchart for the refund flow\")"
     }
    }
   },
@@ -2219,6 +2252,33 @@
      "concept": "y",
      "head": "number",
      "src": "Native parameter: diagram.node.make.y"
+    },
+    "ordinal": {
+     "concept": "ordinal",
+     "head": "span",
+     "src": "Reader key (no native parameter yet): the positions of nodes in a row the request picks (\"the middle pair\", \"the first and third\")"
+    },
+    "restore": {
+     "concept": "restore",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): the earlier place or state a node goes back to (\"back where it started\")",
+     "values": [
+      "previous",
+      "start",
+      "original"
+     ]
+    },
+    "gap": {
+     "concept": "gap",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): the room left around a node (\"a small gap around it\")",
+     "values": [
+      "none",
+      "small",
+      "medium",
+      "large",
+      "equal"
+     ]
     }
    }
   },
@@ -2356,6 +2416,46 @@
      "concept": "nodes",
      "head": "candidate",
      "src": "Native parameter: diagram.selection.remove.nodes"
+    }
+   }
+  },
+  "step": {
+   "doc": "a step of the edit history a request points to (target fill=journal_step): \"the last swap\", \"step 2\"",
+   "keys": {
+    "index": {
+     "concept": "index",
+     "head": "number",
+     "src": "Reader key (no native parameter yet): the number of a step (\"step 2\", \"the third step\")"
+    },
+    "which": {
+     "concept": "which",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): which step, counted from now (\"the last step\", \"the previous swap\", \"since the start\")",
+     "values": [
+      "last",
+      "previous",
+      "first",
+      "next",
+      "start",
+      "last_turn"
+     ]
+    },
+    "kind": {
+     "concept": "kind",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): what the step did (\"the swap\", \"the deleted figure\": a delete)",
+     "values": [
+      "move",
+      "swap",
+      "delete",
+      "add",
+      "reset",
+      "rebuild",
+      "repeat",
+      "rename",
+      "recolour",
+      "resize"
+     ]
     }
    }
   }
@@ -3498,6 +3598,49 @@
      "concept": "action",
      "head": "span",
      "src": "Reader key (no native parameter yet): what a drawn figure does (chase the cat, ride the boat)"
+    },
+    "restore": {
+     "concept": "restore",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): the earlier place or state a thing goes back to (\"back where it was\", \"to its first spot\")",
+     "values": [
+      "previous",
+      "start",
+      "original"
+     ]
+    },
+    "keep": {
+     "concept": "keep",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): what of the things stays as it is (\"leave it where it is\": place; \"the same size\": size; \"as it is\": all)",
+     "values": [
+      "place",
+      "size",
+      "look",
+      "all"
+     ]
+    },
+    "rows": {
+     "concept": "rows",
+     "head": "number",
+     "src": "Reader key (no native parameter yet): how many rows things are set in (\"two rows of three\")"
+    },
+    "columns": {
+     "concept": "columns",
+     "head": "number",
+     "src": "Reader key (no native parameter yet): how many in each row or how many columns (\"two rows of three\": 3)"
+    },
+    "cover": {
+     "concept": "cover",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): how much of a thing is hidden or cut off (\"half behind the tent\", \"mostly hidden by the girl\")",
+     "values": [
+      "half",
+      "partly",
+      "mostly",
+      "almost",
+      "fully"
+     ]
     }
    }
   },
@@ -3597,6 +3740,11 @@
      "concept": "style",
      "head": "span",
      "src": "Reader key (no native parameter yet): the art style the whole picture is drawn in (a pencil sketch, an anime cartoon)"
+    },
+    "composition": {
+     "concept": "composition",
+     "head": "span",
+     "src": "Reader key (no native parameter yet): the composition the page is built around (\"a travel-poster composition\")"
     }
    }
   },
@@ -4091,6 +4239,46 @@
      "concept": "value",
      "head": "span",
      "src": "drawing.preference.state/reset {value} (standing preferences)"
+    }
+   }
+  },
+  "step": {
+   "doc": "a step of the edit history a request points to (target fill=journal_step): \"the last swap\", \"step 2\"",
+   "keys": {
+    "index": {
+     "concept": "index",
+     "head": "number",
+     "src": "Reader key (no native parameter yet): the number of a step (\"step 2\", \"the third step\")"
+    },
+    "which": {
+     "concept": "which",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): which step, counted from now (\"the last step\", \"the previous swap\", \"since the start\")",
+     "values": [
+      "last",
+      "previous",
+      "first",
+      "next",
+      "start",
+      "last_turn"
+     ]
+    },
+    "kind": {
+     "concept": "kind",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): what the step did (\"the swap\", \"the deleted figure\": a delete)",
+     "values": [
+      "move",
+      "swap",
+      "delete",
+      "add",
+      "reset",
+      "rebuild",
+      "repeat",
+      "rename",
+      "recolour",
+      "resize"
+     ]
     }
    }
   }
