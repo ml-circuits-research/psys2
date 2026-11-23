@@ -162,8 +162,8 @@ def normalized(r):
                 nd['value'] = v if len(v) > 1 else v[0] if v else None
             elif invented(v, r['text']):
                 nd['value'] = None
-            if nd['value'] is None:
-                del nd['value']
+            if nd.get('value') is None:
+                nd.pop('value', None)
         add_key_words(q, r['text'])
         where = needs_lookup(q, r['context'].get('previous'))
         q.pop('lookup', None)
@@ -226,7 +226,7 @@ def lexicon():
 def evidence(q, text):
     """The phrases of the text a request's wires were read from."""
     t = q.get('target') or {}
-    out = [q.get('trigger')] + [t.get(k) for k in ('kind_span', 'name_span', 'description_span', 'count_span', 'code_span')]
+    out = [q.get('trigger')] + q.get('asked_words', []) + t.get('name_words', []) + [t.get(k) for k in ('kind_span', 'name_span', 'description_span', 'count_span', 'code_span')]
     out += t.get('ids', []) + t.get('family_words', []) + ([t['kind']] if t.get('kind') and says(t['kind'], text) else [])
     for c in q.get('constraints') or []:
         out += [c.get('value_span'), c.get('measure_span')] + c.get('key_words', []) + ([str(c['value'])] if isinstance(c.get('value'), (str, int)) and not isinstance(c.get('value'), bool) else [])
@@ -282,14 +282,49 @@ def coverage(r):
     return runs, [t[3] for t in tokens if t[2] == 'content']
 
 
+_KEY_WORDS = None
+
+
+def key_words_of(segment):
+    """The words the knowledge worlds give for a key named `segment` (core.word facts of every words.sop whose `means` is
+    a slot of that name that is not an id slot: w.diagram.node.label -> label, text, says, called; k.colours.colour ->
+    colour, color, coloured)."""
+    global _KEY_WORDS
+    if _KEY_WORDS is None:
+        idslots, _KEY_WORDS = set(), collections.defaultdict(set)
+        worlds = KNOWLEDGE / 'docs' / 'worlds'
+        for path in worlds.glob('*/schema.sop'):
+            for line in path.read_text().splitlines():
+                if ' core.slot ' in line and re.search(r'\bid=true\b', line):
+                    idslots.add(line.split(' ', 1)[0][1:])
+        for path in worlds.glob('*/shards/words.sop'):
+            for line in path.read_text().splitlines():
+                m = re.search(r'\bmeans=(\S+)', line) if ' core.word ' in line else None
+                if not m or m.group(1) in idslots:
+                    continue
+                for t in re.findall(r'\btext=("(?:[^"\\]|\\.)*"|\S+)', line):
+                    _KEY_WORDS[m.group(1).rsplit('.', 1)[-1]].add((json.loads(t) if t.startswith('"') else t).lower())
+    return _KEY_WORDS.get(segment, set())
+
+
 def name_words(name):
     """The words of a key or family name: drawn.fontSize -> font, size; chart.show_values -> show, values; colour also
     spelt color."""
-    words = set()
+    words = set(key_words_of(name.rsplit('.', 1)[-1]))
     for part in re.split(r'[._]', name):
         for w in re.findall(r'[A-Z]?[a-z]+', part):
             words.add(w.lower())
     return words | ({'color'} if 'colour' in words else set()) | ({'colour'} if 'color' in words else set())
+
+
+def found_in(span, candidates, held, grammar):
+    out = []
+    for w in sorted(candidates, key=lambda x: (-len(x), x)):
+        if len(w) > 2 and w not in held and w not in grammar:
+            m = re.search(r'(?<![\w])' + re.escape(w) + r'(?:e?s|e?d|led|ing|ling)?(?![\w])', span, re.I)  # inflected: labelled, colours
+            if m and not any(m.group(0).lower() in x.lower() for x in out):
+                out.append(m.group(0))
+    return out
 
 
 def add_key_words(q, text):
@@ -299,16 +334,26 @@ def add_key_words(q, text):
     grammar = lexicon()[0]
     held = ' '.join(str(x) for x in evidence(q, text)).lower()
     for c in q.get('constraints') or []:
-        found = [m.group(0) for w in sorted(name_words(c['key'].split('.', 1)[-1]), key=lambda x: (-len(x), x)) if len(w) > 2 and w not in held and w not in grammar
-                 for m in [re.search(r'(?<![\w])' + re.escape(w) + r'(?:e?s)?(?![\w])', span, re.I)] if m]
+        found = found_in(span, name_words(c['key'].split('.', 1)[-1]), held, grammar)
         if found:
             c['key_words'] = found
+            held += ' ' + ' '.join(found).lower()
     t = q.get('target') or {}
     if t.get('type') and not t.get('kind'):
-        found = [m.group(0) for w in sorted(name_words(t['type']), key=lambda x: (-len(x), x)) if len(w) > 2 and w not in held and w not in grammar
-                 for m in [re.search(r'(?<![\w])' + re.escape(w) + r'(?:e?s)?(?![\w])', span, re.I)] if m]
+        found = found_in(span, name_words(t['type']), held, grammar)
         if found:
             t['family_words'] = found
+            held += ' ' + ' '.join(found).lower()
+    if t.get('name_span'):  # the words that introduce the name: "called", "labelled", "titled"
+        found = found_in(span, key_words_of('label') | key_words_of('title') | key_words_of('name'), held + ' ' + t['name_span'].lower(), grammar)
+        if found:
+            t['name_words'] = found
+            held += ' ' + ' '.join(found).lower()
+    asked = (q.get('question') or {}).get('asked_key')
+    if asked:
+        found = found_in(span, name_words(asked.split('.', 1)[-1]), held, grammar)
+        if found:
+            q['asked_words'] = found
 
 
 def needs_lookup(q, previous):
@@ -357,6 +402,7 @@ def render(r):
             s.append(('question', q['question']['ask']))
             if q['question'].get('asked_key'):
                 s.append(('asked', q['question']['asked_key']))
+            s += [('asked_words', x) for x in q.get('asked_words', [])]
         if q.get('spanOrigin'):
             assert q['spanOrigin'] == 'surface-hull', q['spanOrigin']
             s.append(('words_origin', 'hull'))
@@ -365,7 +411,7 @@ def render(r):
         assert t.get('det') is None or t.get('determiner') is not None
         ts = [('request', f'${rid}')] + [(b, int(t[a]) if a == 'count' else t[a]) for a, b in TARGET_FIELDS
                                         if t.get(a) is not None and not (a == 'kind_span' and t[a] == t.get('kind'))]
-        ts += [('ids', x) for x in t.get('ids', [])] + [('family_words', x) for x in t.get('family_words', [])]
+        ts += [('ids', x) for x in t.get('ids', [])] + [('family_words', x) for x in t.get('family_words', [])] + [('name_words', x) for x in t.get('name_words', [])]
         out.append(f'@{rid}.t w.request.target ' + slots(ts))
         for j, lk in enumerate(q.get('lookup') or [], 1):
             out.append(f'@{rid}.l{j} w.request.lookup ' + slots([('request', f'${rid}'), ('target', f'${rid}.t'), ('key', lk['key']), ('from', lk['from'])]))
@@ -452,6 +498,8 @@ def parse(text, sop, tab):
             q['target'], q['constraints'] = {}, []
             if 'question' in one:
                 q['question'] = {'ask': one['question'], **({'asked_key': one['asked']} if 'asked' in one else {})}
+            if 'asked_words' in d:
+                q['asked_words'] = [str(x) for x in d['asked_words']]
             if 'words_origin' in one:
                 q['spanOrigin'] = {'hull': 'surface-hull'}[one['words_origin']]
             requests[wid] = q
@@ -460,7 +508,7 @@ def parse(text, sop, tab):
             for k, v in one.items():
                 if k in ('request', 'thing'):
                     continue
-                if k in ('ids', 'family_words'):
+                if k in ('ids', 'family_words', 'name_words'):
                     q['target'][k] = [str(x) for x in d[k]]
                 elif k == 'determiner':
                     q['target']['determiner'] = str(v)
