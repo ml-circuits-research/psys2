@@ -7,18 +7,17 @@ Layout of the dataset repository (sibling checkout `webmeet-dataset/`, or $WEBME
 
 The `sop` cell is the circuit of the message, one wire per line:
 
-    @o1 w.request.context sort=house name=House                   an object of the page the message names
     @prev w.request.previous text="..."                           the previous message
     @r1 w.request.request act=place mood=do words="move the house left" predicate=move      (words: when not the whole text)
-    @r1.t w.request.target request=$r1 family=drawn mode=existing determiner=definite fill=description sort=house thing=$o1
+    @r1.t w.request.target request=$r1 family=drawn mode=existing determiner=definite fill=description sort=house
     @r1.c1 w.request.constraint request=$r1 on=place attribute=drawn.relation value=left_of words=left operator=relation phase=result
     @r1.u1 w.request.unread request=$r1 text="on the end" note=point.position value=end      a meaning with no reader key yet
 
 `act` is a k.actions act (checked by name). The reader's finer acts are written as the k.actions act whose verb of the
 same name k.actions has, with `mode` naming the finer act (ACTS below); answer and select are k.actions' ask and pick.
 
-Only what the message says is written: context objects the text names and a wire links to (thing=$oN), no goes_to (the
-tab is the folder), no key repeating another. The rules and the checker are in webmeet-dataset (README.md, tools/check.mjs).
+Only what the message says is written: no objects of the page (the text's own words about an object are on the target),
+no goes_to (the tab is the folder), no key repeating another; the previous message is kept, it is text. The rules and the checker are in webmeet-dataset (README.md, tools/check.mjs).
 
 Usage:
     python3 official-dataset/sop_dataset.py export OUTDIR    # official-dataset JSONL -> <tab>/<source>.csv
@@ -128,12 +127,14 @@ def links(r):
             phrases.append(t['kind'])
         target_things.append([i for i, e in enumerate(existing) if t.get('mode') != 'new' and any(names(e, p, r['text']) for p in phrases)])
         constraint_things.append([[i for i, e in enumerate(existing) if names(e, c['value_span'], r['text'])] for c in q.get('constraints') or []])
-    kept = sorted({i for x in target_things for i in x} | {i for xs in constraint_things for x in xs for i in x})
-    return kept, target_things, constraint_things
+    # No object of the page is written: whatever the text says of an object is already on the target or constraint
+    # (its kind, name, code words), and anything more (another name, an id, a size) is a page state the text does not
+    # give. Each example stands alone; the links are kept empty.
+    return [], [[] for _ in target_things], [[[] for _ in xs] for xs in constraint_things]
 
 
 def normalized(r):
-    """The row as the CSV keeps it: only the named objects of the page; a target's kind words equal to its kind are kept
+    """The row as the CSV keeps it: no objects of the page; a target's kind words equal to its kind are kept
     exactly when the request's words say the kind."""
     r = copy.deepcopy(r)
     kept, _, _ = links(r)
