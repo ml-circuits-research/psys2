@@ -24,7 +24,7 @@ export async function refreshBrowserReaderDeployment(outDir){
    'lib/dialog/history-tool.mjs','lib/dialog/history-journal.mjs','lib/dialog/history-execution.mjs','worlds/app.project/history-policy-source.mjs','worlds/app.project/history-schema-source.mjs',
    'lib/dialog/native-intent-reader.mjs','lib/dialog/native-binding-candidates.mjs','lib/dialog/native-tool-controls.mjs',
    'worlds/native-tool-host.mjs','worlds/native-tool-arguments.mjs','lib/vendor/sopworld/capability-call.mjs','worlds/native-spatial-interface.mjs',
-   'worlds/app.project/reader-admission-policy-source.mjs','worlds/app.project/reader-admission-schema-source.mjs','worlds/app.project/spatial-profile.mjs','worlds/art.draw/sop-drawing.mjs','worlds/diagram.sketch/sop-diagram.mjs',
+   'worlds/app.project/reader-admission-policy-source.mjs','worlds/app.project/reader-admission-schema-source.mjs','worlds/app.project/spatial-profile.mjs','worlds/app.project/spatial-feedback-source.mjs','worlds/app.project/spatial-feedback-schema-source.mjs','worlds/art.draw/sop-drawing.mjs','worlds/diagram.sketch/sop-diagram.mjs',
    'worlds/ui.avatar/sop-avatar.mjs','worlds/sop-area.mjs','worlds/sop-world-host.mjs','worlds/catalog-world.mjs','worlds/sop-primitives.mjs','worlds/docs.editor/sop-document.mjs',
    'worlds/sop-area-adapter.mjs','worlds/art.draw/area-sources.mjs','worlds/time.calendar/sop-calendar.mjs','worlds/time.calendar/area-sources.mjs',
    'worlds/diagram.sketch/area-sources.mjs',

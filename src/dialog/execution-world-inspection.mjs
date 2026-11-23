@@ -5,6 +5,7 @@ import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs';
 import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs';
 import{inspectHistoryPolicy}from'./history-policy.mjs';
 import{inspectHistoryJournal}from'./history-journal.mjs';
+import{inspectSpatialFeedback}from'../../worlds/app.project/spatial-profile.mjs';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs';
 import{sceneDefaultInspection}from'./scene-placement-defaults.mjs';
 import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs';
@@ -155,6 +156,16 @@ export async function inspectExecutionWorlds(session){
   link('execution:module:declared-execution',ids.policy,'compiles relation placement');
   link(ids.policy,ids.geometry,'uses spatial policies');
   link(ids.geometry,ids.schema,'imports schema and rules');
+  const feedback=inspectSpatialFeedback();
+  nodes.push({id:'execution:spatial-feedback',label:'Placement correction policy',kind:'knowledge',implementation:'Operational SOP Lang World',
+   description:'Admits comparable corrections against observed source identities and measured clearance.',wires:feedback.policy,
+   details:{source:'worlds/app.project/spatial-feedback.sop',loaded:feedback.loaded}});
+  nodes.push({id:'execution:spatial-feedback-schema',label:'app.spatialFeedback',kind:'schema',implementation:'SOP Lang schema module',
+   description:'Defines the geometry evidence and approved clearance of a correction.',wires:feedback.schema,schemaView:inspectSchemaSource(feedback.schema),
+   details:{source:'worlds/app.project/spatial-feedback-schema.sop',loaded:feedback.loaded}});
+  link('execution:spatial-feedback','execution:spatial-feedback-schema','imports schema');
+  link('execution:spatial-feedback',ids.geometry,'measures observed clearance');
+  link(ids.policy,'execution:spatial-feedback','uses admitted correction evidence');
  }
  const composition=inspectRequestCompositionPolicy(),compositionWires=composition.facts;
  nodes.push({id:'execution:composition-policy',label:'Request composition',kind:'knowledge',implementation:'Operational SOP Lang World',description:'Schedules independent request cuts in source order and chooses what follows an unresolved result.',wires:compositionWires,details:{loaded:composition.loaded,source:'worlds/app.project/request-composition-policy.sop',dependencies:composition.dependencies}});

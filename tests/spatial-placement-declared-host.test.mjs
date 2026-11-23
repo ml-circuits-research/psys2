@@ -4,6 +4,8 @@ import {drawingObjects} from './drawing-state.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parse,str} from '../src/vendor/sopworld/sopworld.mjs';
+import {identityRegistryFor,instanceIdFor} from '../src/dialog/instance-identity.mjs';
+import {observePlacementCorrection} from '../worlds/app.project/spatial-profile.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {performGesture} from './fixtures/editor-gesture.mjs';
 import {createDrawingArea,emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
@@ -45,10 +47,11 @@ function sessionFor(view,world,state,read) {
  return {session,activities,control:(operation,args)=>performGesture(session,{view,operation,args}),run:()=>routeNewEngine(session,text,{view})};
 }
 
-for(const editor of [
+const editors=[
  {view:'draw',area:'drawing',world:'art.draw',make:'drawing.object.make',place:'drawing.object.place',initial:emptyDrawingState,host:createDrawingArea,anchor:'house',target:'fish'},
  {view:'diagram',area:'diagram',world:'diagram.sketch',make:'diagram.node.make',place:'diagram.node.place',initial:initialDiagramState,host:createDiagramHost,anchor:'rectangle',target:'circle'},
-])test(editor.area+' compiles the same owned request after a manual anchor move, applies exact geometry and undoes both creations',async()=>{
+];
+for(const editor of editors)test(editor.area+' compiles the same owned request after a manual anchor move, applies exact geometry and undoes both creations',async()=>{
  const {view,area,world,make,place,initial,host,anchor,target}=editor;
  const candidate=graph(area,target,anchor),{session,activities,control,run}=sessionFor(view,world,initial(),candidate);
  const placed=await control(make,{kind:anchor,x:275,y:300});
@@ -161,4 +164,32 @@ test('Diagram projects group membership and moving rendered link endpoints with 
  assert.deepEqual(other.boxes.map(box=>box.entity),[other.viewport]);
 });
 
-
+// The correction policy is authored SOP: a stricter threshold in the same rules refuses the same 8-unit move.
+for(const editor of editors)test(editor.area+' learns only corrections admitted by the authored feedback threshold',async()=>{
+ const {view,area,world,make,place,initial,host,anchor,target}=editor;
+ const feedback=readFileSync(new URL('../worlds/app.project/spatial-feedback.sop',import.meta.url),'utf8');
+ const moreSelective=feedback.replace('minimum=0','minimum=10');
+ assert.notEqual(moreSelective,feedback);
+ const runProfile=async(policy,admitted)=>{
+  const {session,control,run}=sessionFor(view,world,initial(),graph(area,target,anchor));
+  const anchorId=createdBy((await control(make,{kind:anchor,x:275,y:300})).receipt);
+  const first=await run();
+  assert.equal(first.statuses[0],'supported',first.trace.error??first.trace.reason);
+  const targetId=createdBy(first.trace.receipt);
+  const observeHost=()=>host({state:session.isession.state[world],instanceId:instanceIdFor(session,world),identityRegistry:identityRegistryFor(session,world)});
+  const placeNear=()=>routeNewEngine(session,graph(area,target,anchor,'place').wires,{view});
+  const gap=native=>observedBox(native,targetId).min_x-observedBox(native,anchorId).max_x;
+  for(let index=0;index<2;index++){
+   const native=await observeHost();
+   assert.equal(gap(native),12);
+   const before=native.observeSpatial(),box=observedBox(native,targetId);
+   assert.equal(makeCall(native,place,{ids:[targetId],x:(box.min_x+box.max_x)/2+8,y:(box.min_y+box.max_y)/2}).status,'changed');
+   const correction=observePlacementCorrection(session,before,native.observeSpatial(),targetId,'correction.'+index,policy);
+   assert.equal(correction?.clearance??null,admitted?20:null);
+   assert.equal((await placeNear()).statuses[0],'supported');
+  }
+  return gap(await observeHost());
+ };
+ assert.equal(await runProfile(feedback,true),20);
+ assert.equal(await runProfile(moreSelective,false),12);
+});

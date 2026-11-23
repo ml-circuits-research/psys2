@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { World, parse, quote, str } from '../../src/vendor/sopworld/sopworld.mjs';
 import SOURCE from '../../src/dialog/new-engine-source.mjs';
+import FEEDBACK from './spatial-feedback-source.mjs';
+import FEEDBACK_SCHEMA from './spatial-feedback-schema-source.mjs';
 import { nativeIdentitySnapshot, restoreNativeIdentitySnapshot } from '../../src/dialog/instance-identity.mjs';
 import { spatialWire } from '../native-spatial-interface.mjs';
 
@@ -12,14 +14,17 @@ const stores = new WeakMap();
 const scopeFields = ['frame', 'scope'];
 let base;
 
-function model() {
+function model(policy = FEEDBACK) {
   if (!SOURCE.spatial) return null;
-  if (!base) {
-    const world = new World({ library: { [namespace]: SOURCE.spatial.schema } });
-    if (!world.use(namespace).ok || !world.tell(SOURCE.spatial.facts, { factsOnly: true }).ok) return null;
-    base = world;
-  }
-  return base;
+  if (policy === FEEDBACK && base) return base;
+  const world = new World({ library: { [namespace]: SOURCE.spatial.schema, 'app.spatialFeedback': FEEDBACK_SCHEMA } });
+  if (!world.use(namespace).ok || !world.tell(SOURCE.spatial.facts, { factsOnly: true }).ok || !world.tell(policy).ok) return null;
+  if (policy === FEEDBACK) base = world;
+  return world;
+}
+
+export function inspectSpatialFeedback() {
+  return { loaded: !!base, policy: FEEDBACK, schema: FEEDBACK_SCHEMA };
 }
 
 const stateOf = session => {
@@ -90,9 +95,8 @@ export function placementProfileSop(session, spatial, sop) {
     message: kind === 'set' ? 'Spacing preference saved.' : kind === 'undo' ? previous ? 'Undid the last spacing setting.' : 'There is no spacing setting to undo.' : '' };
 }
 
-const coordinates = box => ['min_x','min_y','max_x','max_y'].map(key => box[key]);
-const extent = box => [box.max_x - box.min_x, box.max_y - box.min_y];
-const same = (a,b) => a.length === b.length && a.every((value, index) => value === b[index]);
+const coordinateKeys = ['min_x','min_y','max_x','max_y'];
+const coordinates = box => coordinateKeys.map(key => box[key]);
 
 function readPair(spatial, subjectId, anchorId) {
   if (subjectId === anchorId || !spatial?.observation?.complete) return null;
@@ -106,16 +110,20 @@ function readPair(spatial, subjectId, anchorId) {
   return { subject:rows[0], anchor:rows[1] };
 }
 
-function observedGap(spatial, pair, relation) {
-  const tree = model()?.fork();
-  if (!tree) return null;
+function gapWires(spatial, pair, relation) {
   const tags = tagsOf(spatial), id = label => quote(pair[label].box.entity);
   const box = label => spatialWire('profile.box.' + label, namespace + '.box', {
     ...tags, entity:id(label), evidence:pair[label].box.evidence,
-    ...Object.fromEntries(['min_x','min_y','max_x','max_y'].map(key=>[key,pair[label].box[key]])),
+    ...Object.fromEntries(coordinateKeys.map(key=>[key,pair[label].box[key]])),
   });
-  const result = tree.tell([box('subject'),box('anchor'),spatialWire('profile.relation', namespace + '.relation',
-    { ...tags, subject:id('subject'), object:id('anchor'), kind:relation })].join('\n'), { factsOnly:true });
+  return [box('subject'),box('anchor'),spatialWire('profile.relation', namespace + '.relation',
+    { ...tags, subject:id('subject'), object:id('anchor'), kind:relation })];
+}
+
+function observedGap(spatial, pair, relation) {
+  const tree = model()?.fork();
+  if (!tree) return null;
+  const result = tree.tell(gapWires(spatial,pair,relation).join('\n'), { factsOnly:true });
   if (!result.ok) return null;
   const rows = tree.ofType(namespace + '.pair_geometry');
   const gap = Number(rows.length === 1 ? value(rows[0], 'separation') : undefined);
@@ -134,18 +142,37 @@ export function rememberPlacement(session, spatial, subjectId, anchorId, relatio
   });
 }
 
-export function observePlacementCorrection(session, before, after, movedId, invocation) {
-  if (!before || !after || before.revision === after.revision) return null;
+function measuredCorrection(link, before, after, prior, current, policy) {
+  const tree = model(policy)?.fork();
+  if (!tree) return null;
+  const observation = (stage, role, source, values) => spatialWire('profile.sample.' + stage + '.' + role,
+    'app.spatialFeedback.geometry', {stage, role, source:quote(source),
+      ...Object.fromEntries(coordinateKeys.map((key, index)=>[key,values[index]]))});
+  const samples = ['subject','anchor'].flatMap(role => [
+    observation('remembered',role,link[role],link[role+'Box']),
+    observation('prior',role,prior[role].source,coordinates(prior[role].box)),
+    observation('current',role,current[role].source,coordinates(current[role].box)),
+  ]);
+  const change = spatialWire('profile.change','app.spatialFeedback.change',{
+    subject:quote(link.subjectId), anchor:quote(link.anchorId), relation:link.relation, before:link.before,
+    frame:quote(link.frame), scope:quote(link.scope), instance:quote(link.instance),
+    prior:quote(before.revision), current:quote(after.revision),
+  });
+  if (!tree.tell([...gapWires(after,current,link.relation),change,...samples].join('\n'),{factsOnly:true}).ok) return null;
+  const rows = tree.ofType('app.spatialFeedback.accepted');
+  const clearance = Number(rows.length === 1 ? value(rows[0],'clearance') : undefined);
+  return Number.isFinite(clearance) ? clearance : null;
+}
+
+export function observePlacementCorrection(session, before, after, movedId, invocation, policy = FEEDBACK) {
+  if (!before || !after) return null;
   const state = stateOf(session), scope = scopeOf(before);
-  if (!inScope(scopeOf(after), scope)) return null;
   const link = state.links.find(item => inScope(item, scope) && item.subjectId === movedId);
   if (!link || link.corrected) return null;
   const prior = readPair(before, movedId, link.anchorId), current = readPair(after, movedId, link.anchorId);
-  if (!prior || !current || [prior,current].some(pair => pair.subject.source !== link.subject || pair.anchor.source !== link.anchor ||
-    !same(coordinates(pair.anchor.box), link.anchorBox)) || !same(coordinates(prior.subject.box), link.subjectBox) ||
-    !same(extent(prior.subject.box), extent(current.subject.box))) return null;
-  const clearance = observedGap(after, current, link.relation);
-  if (clearance === null || clearance === link.before) return null;
+  if (!prior || !current) return null;
+  const clearance = measuredCorrection(link, before, after, prior, current, policy);
+  if (clearance === null) return null;
   const event = {
     ...scope, id:invocation, relation:link.relation, metric:link.metric, before:link.before, clearance, subject:link.subject,
     anchor:link.anchor, beforeRevision:before.revision, afterRevision:after.revision,

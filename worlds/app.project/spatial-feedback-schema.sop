@@ -1,0 +1,23 @@
+@feedback.module core.module name=app.spatialFeedback exports=app.spatialFeedback.change exports=app.spatialFeedback.geometry exports=app.spatialFeedback.accepted
+@feedback.threshold.type core.type of=app.spatialFeedback.threshold closed=true
+@feedback.threshold.minimum core.slot of=app.spatialFeedback.threshold key=minimum kind=number min=0 present=true
+@feedback.change.type core.type of=app.spatialFeedback.change closed=true
+@feedback.change.subject core.slot of=app.spatialFeedback.change key=subject kind=string present=true
+@feedback.change.anchor core.slot of=app.spatialFeedback.change key=anchor kind=string present=true
+@feedback.change.relation core.slot of=app.spatialFeedback.change key=relation kind=atom present=true
+@feedback.change.gap core.slot of=app.spatialFeedback.change key=before kind=number min=0 present=true
+@feedback.change.frame core.slot of=app.spatialFeedback.change key=frame kind=string present=true
+@feedback.change.instance core.slot of=app.spatialFeedback.change key=instance kind=string present=true
+@feedback.change.scope core.slot of=app.spatialFeedback.change key=scope kind=string present=true
+@feedback.change.prior core.slot of=app.spatialFeedback.change key=prior kind=string present=true
+@feedback.change.current core.slot of=app.spatialFeedback.change key=current kind=string present=true
+@feedback.geometry.type core.type of=app.spatialFeedback.geometry closed=true
+@feedback.geometry.stage core.slot of=app.spatialFeedback.geometry key=stage kind=atom enum=remembered enum=prior enum=current present=true
+@feedback.geometry.role core.slot of=app.spatialFeedback.geometry key=role kind=atom enum=subject enum=anchor present=true
+@feedback.geometry.source core.slot of=app.spatialFeedback.geometry key=source kind=string present=true
+@feedback.geometry.minX core.slot of=app.spatialFeedback.geometry key=min_x kind=number present=true
+@feedback.geometry.minY core.slot of=app.spatialFeedback.geometry key=min_y kind=number present=true
+@feedback.geometry.maxX core.slot of=app.spatialFeedback.geometry key=max_x kind=number present=true
+@feedback.geometry.maxY core.slot of=app.spatialFeedback.geometry key=max_y kind=number present=true
+@feedback.result.type core.type of=app.spatialFeedback.accepted closed=true
+@feedback.result.gap core.slot of=app.spatialFeedback.accepted key=clearance kind=number min=0 present=true
