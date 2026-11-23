@@ -114,20 +114,20 @@ No issue found.
 | warning:value-span-ambiguous | 2 |
 | warning:target-description_span-ambiguous | 1 |
 
-### data-drop-v1 (100,254 rows)
+### data-drop-v1 (104,501 rows)
 
 | issue | rows |
 | --- | ---: |
-| warning:bank-extension-needed | 35,534 |
+| warning:bank-extension-needed | 39,323 |
 | warning:determiner-kept-open | 13,584 |
-| warning:selector-not-in-context | 9,380 |
-| warning:value-span-ambiguous | 2,143 |
+| warning:selector-not-in-context | 13,145 |
+| warning:target-kind_span-ambiguous | 4,389 |
+| warning:value-span-ambiguous | 2,862 |
 | trigger-not-in-span-removed | 2,086 |
-| warning:target-kind_span-ambiguous | 2,017 |
 | warning:target-kind-without-source-span | 1,470 |
-| constraint-with-span-outside-request-removed | 480 |
+| constraint-with-span-outside-request-removed | 561 |
 | warning:numeric-value-not-in-surface | 247 |
-| warning:target-description_span-ambiguous | 90 |
+| warning:target-description_span-ambiguous | 187 |
 | warning:selector-with-empty-context | 50 |
 | warning:target-name_span-ambiguous | 23 |
 | warning:target-count_span-ambiguous | 16 |
@@ -386,16 +386,16 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 2 |
 | target-description_span-ambiguous | 1 |
 
-### data-drop-v1: 100,254 in, 100,253 kept
+### data-drop-v1: 104,501 in, 104,500 kept
 
 Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| anchor-span-as-anchor-mention | 37,785 |
+| anchor-span-as-anchor-mention | 41,652 |
 | trigger-not-in-span-removed | 2,086 |
+| constraint-with-span-outside-request-removed | 561 |
 | comparative-as-delta-step | 492 |
-| constraint-with-span-outside-request-removed | 480 |
 | absolute-degree-word-as-degree | 12 |
 
 Dropped:
@@ -408,14 +408,14 @@ Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| bank-extension-needed | 35,527 |
-| selector-not-in-context | 19,703 |
+| bank-extension-needed | 39,316 |
+| selector-not-in-context | 23,493 |
 | determiner-kept-open | 13,584 |
-| value-span-ambiguous | 2,510 |
-| target-kind_span-ambiguous | 2,017 |
+| target-kind_span-ambiguous | 4,389 |
+| value-span-ambiguous | 3,330 |
 | target-kind-without-source-span | 1,470 |
 | numeric-value-not-in-surface | 246 |
-| target-description_span-ambiguous | 90 |
+| target-description_span-ambiguous | 187 |
 | selector-with-empty-context | 81 |
 | target-name_span-ambiguous | 23 |
 | target-count_span-ambiguous | 16 |
