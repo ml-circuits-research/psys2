@@ -91,7 +91,7 @@ def prepare(out, ui_weight=3, max_length=256):
     inventory_path = OFFICIAL / 'inventory.json'
     inventory = json.loads(inventory_path.read_text())
     registry = shared.registry(inventory)
-    old_coverage = set(shared.registry(json.loads((ROOT / 'data/demo-tool-profile/inventory.json').read_text())))
+    old_coverage = set(shared.registry(json.loads((ROOT / 'inventories/demo-tool-profile-labels.json').read_text())))
     splits = official_files()
     out.mkdir(parents=True, exist_ok=False)
     counts, diagnostics = collections.Counter(), collections.Counter()

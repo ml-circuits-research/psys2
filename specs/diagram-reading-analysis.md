@@ -56,7 +56,7 @@ The exporter now binds every Diagram and Drawing inventory key a declared operat
 distanceGrade`, `group.members`, `part.owner`. `tests/binding-coverage-declared-host.test.mjs` fails when an interface
 gains a parameter the deployed bindings do not bind.
 
-Human benchmark (training/sop-bert/data/human-benchmark-v1, run-benchmark.mjs + score.py, reader v7 with the
+Human benchmark (training/sop-bert/benchmarks/human-benchmark-v1, run-benchmark.mjs + score.py, reader v7 with the
 regenerated bindings, PSys2 HEAD worlds without part B's new operations): Diagram 25/333 pass (baseline 18, measured
 with reader v6), Drawing 38/329 (baseline 36; 3 items regressed, two of them reader parses). The remaining Diagram
 failures are reader-layer (273): inconsistent heads; 19 bindings-layer failures are kind words — "shape(s)" (catalog

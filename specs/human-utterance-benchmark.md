@@ -1,7 +1,7 @@
 # Human-utterance benchmark and a domain-general reader representation
 
 Status: measured, 2026-11-20. Deployed reader `b8b1a4dd…`, PSys2 `dede8b3b`, app route `routeNewEngine`. The data is
-in `training/sop-bert/data/human-benchmark-v1/`.
+in `training/sop-bert/benchmarks/human-benchmark-v1/`.
 
 ## 1. The question and the short answer
 
@@ -74,7 +74,7 @@ No public human corpus of node/edge diagram *editing* exists. FlowLearn and text
 and link editing therefore comes from the owner's logs, TeX.SE titles, WildChat and SCONE, and should be collected from
 our own users through the phrase log.
 
-## 3. The benchmark (`training/sop-bert/data/human-benchmark-v1/`)
+## 3. The benchmark (`training/sop-bert/benchmarks/human-benchmark-v1/`)
 
 **Items.** Each item is one JSON line with these fields:
 - `text`: the adapted human phrasing. Typos, hedges, fragments and politeness are kept.
@@ -104,7 +104,7 @@ better"). The Diagram session appears both as a session and with the owner's 5-n
 **Run.**
 
 ```
-node training/sop-bert/data/human-benchmark-v1/run-benchmark.mjs <bundle> <node_modules> items/<tab>.jsonl > out.jsonl
+node training/sop-bert/benchmarks/human-benchmark-v1/run-benchmark.mjs <bundle> <node_modules> items/<tab>.jsonl > out.jsonl
 python3 score.py items.jsonl out.jsonl scored.jsonl
 python3 layers.py <bindings.json> official-dataset/inventory.json tab:items:out:scored …
 python3 taxonomy.py items scored

@@ -1,6 +1,7 @@
 """C1 mechanical projection of supplied annotation structure, never runtime inference."""
 import argparse,collections,hashlib,json,re
 from pathlib import Path
+PROMPT=Path(__file__).resolve().parent/'specs'/'INSTRUCTIONS-v2.md'  # the V2 annotation contract the conjunction policy cites
 
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def split_for(source,row_id):return 'calibration'if int(hashlib.sha256((source+':'+row_id).encode()).hexdigest()[:8],16)%10==0 else 'train'
@@ -114,7 +115,7 @@ def prepare(root,exclusions,out,binding_path=None):
     excluded=set(ids);found=set();binding_data=json.loads(binding_path.read_text())if binding_path else {};sources=[];counts=collections.Counter();reasons=collections.Counter();out.mkdir(parents=True,exist_ok=False)
     if binding_path and binding_data.get('format')!='sop.structural-bindings/1':raise ValueError('unsupported binding export format')
     policy=binding_data.get('projectionPolicy',{})
-    if policy.get('unmarkedConditions')=='and'and policy.get('sourcePromptSha256')!=sha(root/'data/haiku-v2/INSTRUCTIONS-v2.md'):raise ValueError('conjunction policy must cite exact annotation contract')
+    if policy.get('unmarkedConditions')=='and'and policy.get('sourcePromptSha256')!=sha(PROMPT):raise ValueError('conjunction policy must cite exact annotation contract')
     for family in ['kinds','properties','units']:
         for record in binding_data.get(family,[]):
             if not all(isinstance(record.get(key),str)and record[key]for key in ['canonical','sourceWire','sourceWorld','moduleVersion']):raise ValueError('binding requires canonical identity and full declaration provenance')
@@ -134,7 +135,7 @@ def prepare(root,exclusions,out,binding_path=None):
                     handles[split].write(json.dumps(record,ensure_ascii=False)+'\n');counts[split+':rows']+=1;counts[split+':requests']+=len(row['requests']);counts[split+':completeRows']+=projected['complete'];counts[split+':emptyRows']+=not bool(row['requests']);counts[split+':completeNonemptyRows']+=projected['complete']and bool(row['requests']);reasons.update(d['reason']for d in projected['diagnostics'])
     finally:
         for handle in handles.values():handle.close()
-    manifest={'format':'sop.projected-structural-gold','version':1,'executable':False,'sourceAnnotationsRetained':True,'rawSupervisionField':'annotations','canonicalUnresolvedIsDistinctFromAbsence':True,'sources':sources,'exclusion':{'sha256':sha(exclusions),'requestedIds':len(excluded),'foundIds':len(found),'missingIds':sorted(excluded-found),'beforeProjection':True},'bindingsSha256':sha(binding_path)if binding_path else None,'annotationContract':{'promptPath':'data/haiku-v2/INSTRUCTIONS-v2.md','promptSha256':sha(root/'data/haiku-v2/INSTRUCTIONS-v2.md')if(root/'data/haiku-v2/INSTRUCTIONS-v2.md').exists()else None,'inventorySha256':sha(root/'data/haiku-v2/inventory.json')if(root/'data/haiku-v2/inventory.json').exists()else None},'scriptSha256':sha(Path(__file__)),'counts':dict(counts),'unresolved':dict(reasons),'outputs':{split:sha(out/(split+'.jsonl'))for split in handles},'boundary':'C1 teacher structure, not model inference or confidence. No missing semantic bindings, goals, group/binder edges or dependencies are guessed.'};(out/'manifest.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n');return manifest
+    manifest={'format':'sop.projected-structural-gold','version':1,'executable':False,'sourceAnnotationsRetained':True,'rawSupervisionField':'annotations','canonicalUnresolvedIsDistinctFromAbsence':True,'sources':sources,'exclusion':{'sha256':sha(exclusions),'requestedIds':len(excluded),'foundIds':len(found),'missingIds':sorted(excluded-found),'beforeProjection':True},'bindingsSha256':sha(binding_path)if binding_path else None,'annotationContract':{'promptPath':'training/sop-bert/specs/INSTRUCTIONS-v2.md','promptSha256':sha(PROMPT),'inventorySha256':sha(root/'data/haiku-v2/inventory.json')if(root/'data/haiku-v2/inventory.json').exists()else None},'scriptSha256':sha(Path(__file__)),'counts':dict(counts),'unresolved':dict(reasons),'outputs':{split:sha(out/(split+'.jsonl'))for split in handles},'boundary':'C1 teacher structure, not model inference or confidence. No missing semantic bindings, goals, group/binder edges or dependencies are guessed.'};(out/'manifest.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n');return manifest
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--exclude-ids',type=Path,required=True);p.add_argument('--bindings',type=Path);p.add_argument('--out',type=Path,required=True);args=p.parse_args();print(json.dumps(prepare(args.root,args.exclude_ids,args.out,args.bindings),indent=2))

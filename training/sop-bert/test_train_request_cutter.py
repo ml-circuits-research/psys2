@@ -164,26 +164,27 @@ class CutterTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "cohort-group-mismatch"):
                 m.load_corpus(data, source, excluded)
 
-    def test_complete_union_cutter_preparation_keeps_context_outside_model_inputs(self):
-        path = Path(__file__).with_name("prepare-ui-cutter-union.py")
-        spec = importlib.util.spec_from_file_location("cutter_union", path)
+    def test_official_cutter_preparation_loads_and_keeps_context_outside_model_inputs(self):
+        path = Path(__file__).with_name("prepare-official.py")
+        spec = importlib.util.spec_from_file_location("official_preparation", path)
         preparation = importlib.util.module_from_spec(spec); spec.loader.exec_module(preparation)
+        import gzip
         with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            old = {"source_path": "old.jsonl", "source_id": "old", "world": "drawing", "text": "please draw a house", "requests": [{"span": "draw a house"}], "context": {"hidden": "never input"}}
-            new = {"source_path": "ui-natural-v1", "source_id": "new", "world": "drawing", "text": "a house", "requests": [{"span": "a house"}], "context": {"hidden": "never input"}, "cohort": {"recipeFamily": "house"}}
-            old_path = root / "old.jsonl"; old_path.write_text(json.dumps(old) + "\n")
-            new_path = root / "new.jsonl"; new_path.write_text(json.dumps(new) + "\n")
-            out = root / "prepared"; manifest = preparation.prepare(old_path, new_path, out)
+            root = Path(temporary); official = root / "official"; official.mkdir()
+            row = lambda rid, text, span: {"id": rid, "world": "drawing", "text": text, "requests": [{"span": span}], "context": {"hidden": "never input"}, "family": rid, "source": "ui-natural"}
+            train, dev, test = row("a:1", "please draw a house", "draw a house"), row("b:2", "a tree", "a tree"), row("c:3", "a sun", "a sun")
+            with gzip.open(official / "train.jsonl.gz", "wt") as stream: stream.write(json.dumps(train) + "\n")
+            (official / "dev.jsonl").write_text(json.dumps(dev) + "\n"); (official / "test.jsonl").write_text(json.dumps(test) + "\n")
+            preparation.OFFICIAL = official
+            out = root / "prepared"; manifest = preparation.prepare_cutter(out)
+            self.assertEqual(manifest["counts"], {"train": 1, "calibration": 1, "reservedTest": 1})
             splits, provenance = m.load_corpus(out, out / "raw", out / "exclusions.json")
             self.assertEqual(sum(map(len, splits.values())), 2)
-            self.assertEqual(provenance["exclusionCount"], 0)
+            self.assertEqual(provenance["exclusionCount"], 1)
             for rows in splits.values():
-                for row in rows:
-                    self.assertNotIn("context", row)
-                    self.assertIn(row["text"], [old["text"], new["text"]])
-            for line in (out / "benchmark-source.jsonl").read_text().splitlines():
-                self.assertEqual(set(json.loads(line)), {"id", "text"})
+                for item in rows:
+                    self.assertNotIn("context", item)
+                    self.assertIn(item["text"], [train["text"], dev["text"]])
 
     def test_weights_only_supplied_train_rows(self):
         weights, counts = m.class_weights([{"labels": [-100, 0, 0, 1, 2]}])

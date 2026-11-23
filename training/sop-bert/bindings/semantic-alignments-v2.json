@@ -6,7 +6,7 @@
     "sha256": "9b3dcb17d623f3e3974c88ffb8d3952386a8f65670a676c7f199ec3fbf4481b2"
   },
   "prompt": {
-    "path": "training/sop-bert/data/haiku-v2/INSTRUCTIONS-v2.md",
+    "path": "training/sop-bert/specs/INSTRUCTIONS-v2.md",
     "sha256": "9b6632f011da5ccc1088aad1377fa63a0ac4a532cdf307006d2cfc2d609212e1"
   },
   "authority": "Owner-authorized C1 authorial alignment; complete inventory status, independent from native capability and evaluation rows. v2: re-pinned to the PSys2 catalog pin over the official-dataset inventory (the label space of the deployed reader).",

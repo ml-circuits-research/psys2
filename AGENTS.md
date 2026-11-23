@@ -46,7 +46,7 @@
 
 Step-by-step delivery with a test gate per stage is a software habit and is not the method here. Work from both ends at once, in parallel lanes, each with its own agent:
 
-- Bottom-up: train SOP-BERT now on the generated data (`psys2/training/sop-bert/data/haiku-v1`, `haiku-v2`, heads from `heads/inventory.json`); the tools of the four areas largely exist already, so bind them to the declared acts directly.
+- Bottom-up: train SOP-BERT now on the reader dataset (sibling repository `webmeet-dataset`, loaded by `official-dataset/sop_dataset.py load`; label inventory `official-dataset/inventory.json`); the tools of the four areas largely exist already, so bind them to the declared acts directly.
 - Top-down: the library tries to bind complex commands (several requests, selectors and results, quantifiers, relations, follow-ups) end to end and publishes the general mechanisms they need.
 - Simple commands (draw, add, move, recolour, remove, schedule, write) must work in all four areas from the first round, in parallel, as soon as the reader recognises them. Do not widen one construction at a time and do not wait for one area before starting another.
 - Tests stay, but they accompany each lane; they are not a sequence of stages that blocks the other lanes. Where a lane needs a mechanism that is not published yet, it lands what it can and says honestly what is not yet verified.

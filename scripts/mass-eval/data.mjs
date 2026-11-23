@@ -32,7 +32,7 @@ export function loadRows({root,managementRoot,drops=true,human=true}){
    lines(readFileSync(f,'utf8')).forEach((r,i)=>push({...r,world:r.world??world,id:r.id??`data-drop:${b}:${world}:${i}`,source:'data-drop:'+b,operation:r.operation??(r.classes??[]).join('+'),context:r.context??{existing:[],previous:null}},'data-drop:'+b));
   }
  }
- if(human){const dir=path.join(root,'training/sop-bert/data/human-benchmark-v1/items');
+ if(human){const dir=path.join(root,'training/sop-bert/benchmarks/human-benchmark-v1/items');
   for(const world of ['drawing','diagram','document','calendar','avatar']){const f=path.join(dir,world+'.jsonl');if(!existsSync(f))continue;
    for(const item of lines(readFileSync(f,'utf8'))){if(item.session?.length){sources['human-benchmark-v1:session-skipped']=(sources['human-benchmark-v1:session-skipped']??0)+1;continue;}
     push({id:'human-benchmark-v1:'+item.id,world,text:item.text,context:{existing:item.context?.existing??[],previous:null},requests:expectRequests(world,item.expect),source:'human-benchmark-v1',operation:(item.construction??[]).join('+')||'-',

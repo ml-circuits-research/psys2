@@ -131,11 +131,13 @@ def prepare_authored(source,inventory_path,out,exclude_ids=None,phase="direct",s
 
 if __name__=='__main__':
     root=Path(__file__).resolve().parent
-    p=argparse.ArgumentParser();p.add_argument('--corpus',type=Path);p.add_argument('--inventory',type=Path,default=root/'data/demo-tool-profile/inventory.json');p.add_argument('--aliases',type=Path,default=root/'heads/coverage_v1.py');p.add_argument('--out',type=Path,required=True)
-    p.add_argument('--phase',choices=['direct','world-inference','all'],default='direct');p.add_argument('--authored-corpus',type=Path,default=root/'data/demo-tool-profile/active.jsonl.gz');p.add_argument('--exclude-ids',type=Path,default=root/'data/demo-tool-profile/revised-exclusions.json');p.add_argument('--supplement-train-ids',type=Path);p.add_argument('--all-annotations',action='store_true',help='explicit historical preparation from --corpus, not the active authored demo corpus')
+    p=argparse.ArgumentParser();p.add_argument('--corpus',type=Path);p.add_argument('--inventory',type=Path,default=root.parents[1]/'official-dataset'/'inventory.json');p.add_argument('--aliases',type=Path,default=root/'heads/coverage_v1.py');p.add_argument('--out',type=Path,required=True)
+    p.add_argument('--phase',choices=['direct','world-inference','all'],default='direct');p.add_argument('--authored-corpus',type=Path,help='authored JSONL(.gz) rows; official training uses prepare-official.py');p.add_argument('--exclude-ids',type=Path);p.add_argument('--supplement-train-ids',type=Path);p.add_argument('--all-annotations',action='store_true',help='explicit historical preparation from --corpus, not the active authored demo corpus')
     args=p.parse_args()
     if args.all_annotations:
         if args.corpus is None:p.error('--all-annotations requires --corpus')
         result=prepare(args.corpus,args.inventory,args.aliases,args.out)
-    else:result=prepare_authored(args.authored_corpus,args.inventory,args.out,args.exclude_ids,args.phase,args.supplement_train_ids)
+    else:
+        if args.authored_corpus is None:p.error('--authored-corpus is required (official training uses prepare-official.py)')
+        result=prepare_authored(args.authored_corpus,args.inventory,args.out,args.exclude_ids,args.phase,args.supplement_train_ids)
     print(json.dumps({key:value for key,value in result.items()if key not in ['registry']},indent=2))

@@ -174,7 +174,7 @@ horizon and the foot of the page, `art.draw/act-rules.sop` region step 0).
 ## 6. Mechanical label conversion
 
 `training/sop-bert/frame/convert_official.py` converts `official-dataset/` (unchanged) to
-`training/sop-bert/data/official-frame-v1/` (generated, not committed), with `REPORT.md`/`report.json`. Roles come from
+`training/runs/official-frame-v1/` (generated, not committed), with `REPORT.md`/`report.json`. Roles come from
 the inventory concept of each key. `check-frames.mjs` validates every converted frame with the library and compiles it
 to request batches. Measured on the v8 build (2026-11-20): 60,373 rows, 97.9% converted completely, 2.0% of
 constraints unconverted, all of them tool parameters with no meaning of their own (block id ranges, attrs records,
