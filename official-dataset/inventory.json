@@ -1500,6 +1500,135 @@
       "horizontal",
       "vertical"
      ]
+    },
+    "markerType": {
+     "concept": "markerType",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): the shape of the markers ('diamond markers')",
+     "values": [
+      "circle",
+      "square",
+      "triangle",
+      "diamond",
+      "star",
+      "cross",
+      "plus"
+     ]
+    },
+    "markerInterval": {
+     "concept": "markerInterval",
+     "head": "number",
+     "src": "Reader key (no native parameter yet): a marker every n points ('every fifth point' -> 5)"
+    },
+    "markerFill": {
+     "concept": "markerFill",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): whether markers are filled ('hollow markers')",
+     "values": [
+      "solid",
+      "hollow",
+      "outline"
+     ]
+    },
+    "gridWidth": {
+     "concept": "gridWidth",
+     "head": "class+step",
+     "src": "Reader key (no native parameter yet): the thickness of the grid lines ('thinner grid lines')",
+     "values": [
+      "thin",
+      "medium",
+      "thick"
+     ]
+    },
+    "gridAxis": {
+     "concept": "gridAxis",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): which grid lines are drawn ('horizontal gridlines only')",
+     "values": [
+      "horizontal",
+      "vertical",
+      "both"
+     ]
+    },
+    "axesSync": {
+     "concept": "axesSync",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): whether panels or series share one axis ('on a shared y axis')",
+     "values": [
+      "shared",
+      "separate"
+     ]
+    },
+    "axisLabelPosition": {
+     "concept": "axisLabelPosition",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): where an axis label sits ('y axis label on the right')",
+     "values": [
+      "left",
+      "right",
+      "top",
+      "bottom"
+     ]
+    },
+    "barEdgeWidth": {
+     "concept": "barEdgeWidth",
+     "head": "class+step",
+     "src": "Reader key (no native parameter yet): the thickness of the bar borders ('bar borders thicker')",
+     "values": [
+      "thin",
+      "medium",
+      "thick"
+     ]
+    },
+    "barEdgeColour": {
+     "concept": "barEdgeColour",
+     "head": "candidate",
+     "src": "Reader key (no native parameter yet): the colour of the bar borders ('bar edges red')"
+    },
+    "pieExplode": {
+     "concept": "pieExplode",
+     "head": "class+step",
+     "src": "Reader key (no native parameter yet): how far a slice is pulled out ('explode the ops slice a little')",
+     "values": [
+      "slight",
+      "medium",
+      "far"
+     ]
+    },
+    "pieLabelDistance": {
+     "concept": "pieLabelDistance",
+     "head": "class+step",
+     "src": "Reader key (no native parameter yet): how far the pie labels sit from the centre ('labels closer to the rim')",
+     "values": [
+      "near",
+      "medium",
+      "far"
+     ]
+    },
+    "contourLevels": {
+     "concept": "contourLevels",
+     "head": "number",
+     "src": "Reader key (no native parameter yet): how many contour levels ('ten contour levels')"
+    },
+    "surfaceFill": {
+     "concept": "surfaceFill",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): how a surface or area is filled ('gradient fill')",
+     "values": [
+      "solid",
+      "gradient",
+      "none"
+     ]
+    },
+    "paletteMode": {
+     "concept": "paletteMode",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): the kind of colour scale ('like a heat map', 'diverging colours')",
+     "values": [
+      "heatmap",
+      "sequential",
+      "diverging"
+     ]
     }
    }
   },
