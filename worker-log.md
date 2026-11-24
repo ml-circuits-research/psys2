@@ -453,3 +453,5 @@ Real use suite A (node, 1031 rows, inherit goal2-base-202d34f16): L0 421 / L1 16
 Gate: npm test 773 pass, 0 fail; lib npm test 1094 pass; webchat and system map rebuilt.
 
 2026-11-24 — Synchronized the two chart share reader keys from knowledge. Inventory --check and binding coverage passed (2/2). npm test 768 pass, 0 fail, 3 skipped, 5 todo. Reader vocabulary only.
+
+2026-11-24 — Synchronized chart.ties and drawn.relation=clear_of from knowledge. Inventory --check and binding coverage passed (2/2). npm test 768 pass, 0 fail, 3 skipped, 5 todo. Reader vocabulary only.

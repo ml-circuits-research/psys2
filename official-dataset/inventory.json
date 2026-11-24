@@ -1678,6 +1678,15 @@
      "concept": "share.base",
      "head": "span",
      "src": "the stated total used as the denominator of a chart share"
+    },
+    "ties": {
+     "concept": "ties",
+     "head": "class",
+     "src": "whether categories tied at a chart ranking cutoff are included beyond the requested count",
+     "values": [
+      "include",
+      "exclude"
+     ]
     }
    }
   },
@@ -3637,7 +3646,8 @@
       "around",
       "inside",
       "outside",
-      "along"
+      "along",
+      "clear_of"
      ]
     },
     "rotation": {
