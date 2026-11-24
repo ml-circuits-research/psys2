@@ -1439,6 +1439,67 @@
      "concept": "dateRange",
      "head": "span",
      "src": "Reader key (no native parameter yet): the dates the chart covers (\"2021 through 2024\")"
+    },
+    "colourBar": {
+     "concept": "colourBar",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): whether the chart's colour bar is shown ('hide the colour bar')",
+     "values": [
+      "show",
+      "hide"
+     ]
+    },
+    "colourBarLabel": {
+     "concept": "colourBarLabel",
+     "head": "span",
+     "src": "Reader key (no native parameter yet): the colour bar's label ('colour bar label to Temperature')"
+    },
+    "colourBarTicks": {
+     "concept": "colourBarTicks",
+     "head": "number",
+     "src": "Reader key (no native parameter yet): how many numbers the colour bar shows ('colour bar six numbers')"
+    },
+    "colourBarScale": {
+     "concept": "colourBarScale",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): the colour bar's scale ('colour bar scale logarithmic')",
+     "values": [
+      "linear",
+      "log"
+     ]
+    },
+    "colourBarWidth": {
+     "concept": "colourBarWidth",
+     "head": "class+step",
+     "src": "Reader key (no native parameter yet): the colour bar's thickness ('very thin', 'thicker')",
+     "values": [
+      "thin",
+      "medium",
+      "thick"
+     ]
+    },
+    "colourBarLength": {
+     "concept": "colourBarLength",
+     "head": "class+step",
+     "src": "Reader key (no native parameter yet): the colour bar's length ('short', 'one step longer')",
+     "values": [
+      "short",
+      "medium",
+      "long"
+     ]
+    },
+    "colourBarPosition": {
+     "concept": "colourBarPosition",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): where the colour bar stands and which way it runs ('on the right-hand side', 'horizontal at the bottom')",
+     "values": [
+      "left",
+      "right",
+      "top",
+      "bottom",
+      "horizontal",
+      "vertical"
+     ]
     }
    }
   },
