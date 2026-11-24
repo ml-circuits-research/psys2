@@ -8,7 +8,8 @@ run its checker (`node tools/check.mjs`). This folder holds no data rows.
 | File | Contents |
 | --- | --- |
 | `sop_dataset.py` | reads webmeet-dataset and writes the trainer's row files (below); `check <dir>` compares CSVs with the current rows |
-| `inventory.json` | the reader's label inventory: areas, target types, keys, heads and class banks (read by the preparers, the exporters and tests) |
+| `inventory.json` | the reader's label inventory: areas, target types, keys, heads and class banks (read by the preparers, the exporters and tests). The keys of the drawing, diagram, document and calendar tabs follow the SOP facts of `sop-knowledge-worlds` `w.request/shards/keys.sop`: change a key there, then run `python3 official-dataset/keys_from_sop.py` (`--check` reports a difference) |
+| `keys_from_sop.py` | brings the inventory's keys in line with the w.request.key facts |
 | `train.jsonl.gz`, `dev.jsonl`, `test.jsonl` | **generated, not in git**: the rows in the trainer's format |
 
 ## Generating the rows
