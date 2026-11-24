@@ -1664,6 +1664,20 @@
       "show",
       "hide"
      ]
+    },
+    "share": {
+     "concept": "share",
+     "head": "class",
+     "src": "whether shares of a total determine the plotted values or are printed on the marks",
+     "values": [
+      "value",
+      "label"
+     ]
+    },
+    "share.base": {
+     "concept": "share.base",
+     "head": "span",
+     "src": "the stated total used as the denominator of a chart share"
     }
    }
   },

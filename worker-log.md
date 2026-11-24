@@ -451,3 +451,5 @@ Gate: npm test 772 pass, 0 fail, 3 skipped, 5 todo; webchat rebuilt.
 Declared: app.compose.kindless ("draw something random" read as a kindless node composes, no rectangle), raw-reading implicit counts + codeHead, person-view.sop rows, app.grounded.nameShape/limit, app.history.gesture, app.creation.stepPhrase, app.placement.verification, app.execution.actOutcome; reply outcome from statuses/reason.
 Real use suite A (node, 1031 rows, inherit goal2-base-202d34f16): L0 421 / L1 168 / L2+ 336 -> L0 421 / L1 167 / L2+ 337 (106 rows await Stage B judging in both); only changed outcome: ui-relations-00554 improved.
 Gate: npm test 773 pass, 0 fail; lib npm test 1094 pass; webchat and system map rebuilt.
+
+2026-11-24 — Synchronized the two chart share reader keys from knowledge. Inventory --check and binding coverage passed (2/2). npm test 768 pass, 0 fail, 3 skipped, 5 todo. Reader vocabulary only.
