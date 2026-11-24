@@ -636,6 +636,18 @@
      "concept": "name",
      "head": "span",
      "src": "calendar.calendar.add/change label"
+    },
+    "kind": {
+     "concept": "kind",
+     "head": "class",
+     "src": "what kind of calendar it is (\"a personal calendar named Work 3\": personal; the name stays calendar.name)",
+     "values": [
+      "personal",
+      "work",
+      "family",
+      "team",
+      "shared"
+     ]
     }
    }
   },
