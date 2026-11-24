@@ -1641,6 +1641,29 @@
       "sequential",
       "diverging"
      ]
+    },
+    "highlight": {
+     "concept": "highlight",
+     "head": "class",
+     "src": "the extreme a chart should mark (\"the strongest region\", \"the largest bar\": max; \"the weakest month\": min)",
+     "values": [
+      "max",
+      "min"
+     ]
+    },
+    "bottom": {
+     "concept": "bottom",
+     "head": "number",
+     "src": "keep only the lowest n (\"the bottom five regions\": 5), the counterpart of chart.top"
+    },
+    "trendLine": {
+     "concept": "trendLine",
+     "head": "class",
+     "src": "a fitted trend or regression line over the data (\"with a fitted regression line\": show)",
+     "values": [
+      "show",
+      "hide"
+     ]
     }
    }
   },
@@ -2359,7 +2382,11 @@
       "around",
       "inside",
       "outside",
-      "along"
+      "along",
+      "above_right",
+      "above_left",
+      "below_right",
+      "below_left"
      ]
     },
     "relation": {
@@ -2490,6 +2517,22 @@
       "normal",
       "italic"
      ]
+    },
+    "fontFamily": {
+     "concept": "fontFamily",
+     "head": "span",
+     "src": "the font family of a node's text (\"Calibri at 36 points\": Calibri)"
+    },
+    "keep": {
+     "concept": "keep",
+     "head": "class",
+     "src": "what of the nodes stays as it is (\"leave Kettle where it is\": place), on a request of its own",
+     "values": [
+      "place",
+      "size",
+      "look",
+      "all"
+     ]
     }
    }
   },
@@ -2520,6 +2563,17 @@
      "concept": "name",
      "head": "span",
      "src": "the page title of the Diagram tab (diagram.page.change {title}; data drops page.title)"
+    },
+    "fit": {
+     "concept": "fit",
+     "head": "class",
+     "src": "what the whole diagram must fit on (\"so it still fits on a single slide\": slide; \"fit it to the page width\": width)",
+     "values": [
+      "page",
+      "slide",
+      "width",
+      "height"
+     ]
     }
    }
   },
@@ -3956,6 +4010,22 @@
      "concept": "composition",
      "head": "span",
      "src": "Reader key (no native parameter yet): the composition the page is built around (\"a travel-poster composition\")"
+    },
+    "empty": {
+     "concept": "empty",
+     "head": "class",
+     "src": "a part of the picture to leave empty (\"leave room on the left\", \"keep the top right clear\")",
+     "values": [
+      "left",
+      "right",
+      "top",
+      "bottom",
+      "center",
+      "top_left",
+      "top_right",
+      "bottom_left",
+      "bottom_right"
+     ]
     }
    }
   },
