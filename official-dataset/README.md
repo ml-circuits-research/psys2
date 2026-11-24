@@ -34,3 +34,8 @@ webmeet-dataset changes; scripts that read these files print this command when t
 
 `prepare-official.py` weights sources by name at training time (no row is dropped); its outputs are derived and not
 committed. The dev split is for model selection, the test split for reporting only.
+
+An answer lookup preserves its source and evidence in a request’s `lookup` list. A same-message
+lookup has `key: "answer"`, `from: "request"`, `words`, and a zero-based `antecedent` index into
+the row’s `requests`. An answer from the previous message has `from: "previous"` and `words`.
+The index is a dataset reference that is converted back to a request wire ID on export.

@@ -166,9 +166,10 @@ def normalized(r):
                 nd.pop('value', None)
         add_key_words(q, r['text'])
         where = needs_lookup(q, r['context'].get('previous'))
-        q.pop('lookup', None)
-        if where:
-            q['lookup'] = [{'key': 'thing', 'from': where}]
+        answers = [lk for lk in (q.pop('lookup', None) or []) if lk['key'] == 'answer']
+        lookups = ([{'key': 'thing', 'from': where}] if where else []) + answers
+        if lookups:
+            q['lookup'] = lookups
     r['filler'] = coverage(r)[0]
     return r
 
@@ -231,6 +232,7 @@ def evidence(q, text):
     for c in q.get('constraints') or []:
         out += [c.get('value_span'), c.get('measure_span')] + c.get('key_words', []) + ([str(c['value'])] if isinstance(c.get('value'), (str, int)) and not isinstance(c.get('value'), bool) else [])
     out += [nd.get('span') for nd in q.get('needs') or []]
+    out += [lk.get('words') for lk in q.get('lookup') or []]
     return [x for x in out if x]
 
 
@@ -414,7 +416,14 @@ def render(r):
         ts += [('ids', x) for x in t.get('ids', [])] + [('family_words', x) for x in t.get('family_words', [])] + [('name_words', x) for x in t.get('name_words', [])]
         out.append(f'@{rid}.t w.request.target ' + slots(ts))
         for j, lk in enumerate(q.get('lookup') or [], 1):
-            out.append(f'@{rid}.l{j} w.request.lookup ' + slots([('request', f'${rid}'), ('target', f'${rid}.t'), ('key', lk['key']), ('from', lk['from'])]))
+            ls = [('request', f'${rid}'), ('key', lk['key']), ('from', lk['from'])]
+            if lk['key'] == 'answer':
+                if 'antecedent' in lk:
+                    ls.append(('antecedent', f"$r{lk['antecedent'] + 1}"))
+                ls.append(('words', lk['words']))
+            else:
+                ls.insert(1, ('target', f'${rid}.t'))
+            out.append(f'@{rid}.l{j} w.request.lookup ' + slots(ls))
         for j, c in enumerate(q.get('constraints') or [], 1):
             cs = [('request', f'${rid}'), ('on', on_of(c)), ('attribute', c['key'])]
             v = c.get('value')
@@ -457,6 +466,7 @@ def parse_value(raw):
 def parse_wires(text):
     wires = []
     for line in text.split('\n'):
+        line = line.removesuffix('\r')
         if not line.strip() or line.lstrip().startswith('#'):
             continue
         head, _, rest = line.partition(' ')
@@ -479,7 +489,9 @@ def parse(text, sop, tab):
     back_c = {b: a for a, b in CONTEXT_FIELDS}
     back_t = {b: a for a, b in TARGET_FIELDS}
     back_k = {b: a for a, b in CONSTRAINT_FIELDS}
-    for wid, typ, attrs in parse_wires(sop):
+    wires = parse_wires(sop)
+    request_positions = {wid: i for i, wid in enumerate(wid for wid, typ, _ in wires if typ == 'w.request.request')}
+    for wid, typ, attrs in wires:
         d = collections.defaultdict(list)
         for k, v in attrs:
             d[k].append(v)
@@ -539,7 +551,12 @@ def parse(text, sop, tab):
                 nd['value'] = v if len(v) > 1 else v[0]
             q.setdefault('needs', []).append(nd)
         elif typ == 'w.request.lookup':
-            requests[one['request'][1:]].setdefault('lookup', []).append({'key': one['key'], 'from': one.get('from', 'any')})
+            lookup = {'key': one['key'], 'from': one.get('from', 'any')}
+            if 'words' in one:
+                lookup['words'] = str(one['words'])
+            if 'antecedent' in one:
+                lookup['antecedent'] = request_positions[one['antecedent'][1:]]
+            requests[one['request'][1:]].setdefault('lookup', []).append(lookup)
         elif typ == 'w.request.filler':
             filler.append(str(one['text']))
     for q in requests.values():  # kind words left out: the kind itself, when the request's words say it
@@ -578,6 +595,9 @@ def previous_message_copies(rows):
             if r['source'] == 'demo-tool-profile' or r['context'].get('previous') is not None or not r['requests']:
                 continue
             if any((q.get('target') or {}).get('fill') in ('journal_step', 'context', 'previous_reply') for q in r['requests']):
+                continue
+            if any(lk['key'] == 'answer' and lk['from'] == 'previous'
+                   for q in r['requests'] for lk in q.get('lookup', [])):
                 continue
             if int(sha('prev:' + r['id']), 16) % 4:
                 continue

@@ -455,3 +455,6 @@ Gate: npm test 773 pass, 0 fail; lib npm test 1094 pass; webchat and system map 
 2026-11-24 — Synchronized the two chart share reader keys from knowledge. Inventory --check and binding coverage passed (2/2). npm test 768 pass, 0 fail, 3 skipped, 5 todo. Reader vocabulary only.
 
 2026-11-24 — Synchronized chart.ties and drawn.relation=clear_of from knowledge. Inventory --check and binding coverage passed (2/2). npm test 768 pass, 0 fail, 3 skipped, 5 todo. Reader vocabulary only.
+
+2026-11-24 — The dataset loader preserves the answer lookup’s source, antecedent request index and evidence through export, including five chart source rows. It accepts CRLF and terminal CR in circuit cells.
+Checks: inventory and binding coverage 2/2, npm test 768 pass, 3 skipped, 5 todo, and Python regressions 2/2. Full corpus load reaches charts-01 row 2939 and stops at a pre-existing constraint with neither value nor words.
