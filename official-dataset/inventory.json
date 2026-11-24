@@ -2279,6 +2279,15 @@
       "large",
       "equal"
      ]
+    },
+    "slant": {
+     "concept": "slant",
+     "head": "class",
+     "src": "Reader key (no native parameter yet): whether a node's text is set upright or in italics (\"italic\", \"in italics\"); drawing has drawn.slant",
+     "values": [
+      "normal",
+      "italic"
+     ]
     }
    }
   },
