@@ -39,3 +39,16 @@ An answer lookup preserves its source and evidence in a request’s `lookup` lis
 lookup has `key: "answer"`, `from: "request"`, `words`, and a zero-based `antecedent` index into
 the row’s `requests`. An answer from the previous message has `from: "previous"` and `words`.
 The index is a dataset reference that is converted back to a request wire ID on export.
+
+An intent (`w.request.intent`) is a fact of the request it belongs to, not a target or a constraint: what the result is
+for (`role: "purpose"`) or where it goes (`role: "destination"`). A request row keeps them in `intents`, in wire order,
+each `{ role, value, words, polarity }` where `words` is the exact evidence and `polarity` is `positive` or `negative`
+(the wire's `want=no`). Render writes them back as typed wires by the request reference (`request=$rN`); a wire whose
+owner is missing or is not a request of the circuit is refused with an explicit error, never attached to the nearest
+request. The owner is one unquoted reference: `request="$r1"` is quoted text that only looks like a reference, and
+`request=$r1 request=$r2` names two owners; both are refused, never resolved to the first token. `value` and `words`
+are written text, not references and not numbers: a blank or a number is refused where it is read (not later in
+render), a bare `$r1` there is refused as a reference, and a written value that looks like one (`value="$r1"`) is
+quoted again on render so it reads back as the same string. Each intent states one `role`, `value`, `words` and
+`want`: a second one is refused, never merged or silently dropped. Rows and circuits without intents are unchanged,
+and an intent's `words` are evidence of their request for the coverage pass.

@@ -53,6 +53,15 @@ TARGET_FIELDS = [('type', 'family'), ('mode', 'mode'), ('determiner', 'determine
 CONSTRAINT_FIELDS = [('operator', 'operator'), ('phase', 'phase'), ('character', 'character'), ('step', 'step'), ('unit', 'unit'),
                      ('measure', 'measure'), ('measure_span', 'measure_words'), ('scope', 'scope'), ('open_value', 'open_value')]
 DEFAULTS = {'polarity': 'positive', 'character': 'requirement'}
+# An intent is a fact of its request (w.request.intent): what the result is for (purpose) or where it goes
+# (destination). The role set is closed; a wire naming any other role is refused rather than guessed.
+INTENT_ROLES = ('purpose', 'destination')
+
+
+class Quoted(str):
+    """A quoted SOP value whose text starts with `$` (`request="$r1"`): written text that looks like a reference,
+    kept apart from a typed reference (`request=$r1`), which is the only thing an owner slot accepts."""
+INTENT_POLARITY = {'yes': 'positive', 'no': 'negative'}
 # The reader's act -> (k.actions act, mode). Each k.actions act is the one its verb of the same name means in k.actions
 # (verbs-*.sop: arrange... align/line up -> place, merge -> group, ungroup/split/disconnect -> take apart, reverse/set ->
 # change, repeat -> copy, select -> pick, tell/answer -> ask). Acts not listed are k.actions acts as they are.
@@ -231,6 +240,7 @@ def evidence(q, text):
     out += t.get('ids', []) + t.get('family_words', []) + ([t['kind']] if t.get('kind') and says(t['kind'], text) else [])
     for c in q.get('constraints') or []:
         out += [c.get('value_span'), c.get('measure_span')] + c.get('key_words', []) + ([str(c['value'])] if isinstance(c.get('value'), (str, int)) and not isinstance(c.get('value'), bool) else [])
+    out += [it.get('words') for it in q.get('intents') or []]  # each intent holds its own evidence ("for social media")
     out += [nd.get('span') for nd in q.get('needs') or []]
     out += [lk.get('words') for lk in q.get('lookup') or []]
     return [x for x in out if x]
@@ -415,6 +425,25 @@ def render(r):
                                         if t.get(a) is not None and not (a == 'kind_span' and t[a] == t.get('kind'))]
         ts += [('ids', x) for x in t.get('ids', [])] + [('family_words', x) for x in t.get('family_words', [])] + [('name_words', x) for x in t.get('name_words', [])]
         out.append(f'@{rid}.t w.request.target ' + slots(ts))
+        for j, it in enumerate(q.get('intents') or [], 1):
+            if not isinstance(it, dict):
+                raise ValueError(f'request {rid}: intent {j} is not a fact')
+            role, value, words = it.get('role'), it.get('value'), it.get('words')
+            polarity = it.get('polarity', 'positive')
+            if role not in INTENT_ROLES:
+                raise ValueError(f'request {rid}: intent {j}: role {role!r} is not one of {", ".join(INTENT_ROLES)}')
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(f'request {rid}: intent {j}: no value')
+            if not isinstance(words, str) or not words.strip():
+                raise ValueError(f'request {rid}: intent {j}: no evidence (words are missing or blank)')
+            if polarity not in ('positive', 'negative'):
+                raise ValueError(f'request {rid}: intent {j}: polarity {polarity!r} is not positive or negative')
+            # `value` and `words` are written text, never references: written with `fmt`, so a value that looks like a
+            # reference ("$r1") or a number is quoted and reads back as the same string, not as another wire type.
+            ins = f'@{rid}.i{j} w.request.intent request=${rid} role={fmt(role)} value={fmt(value)} words={fmt(words)}'
+            if polarity == 'negative':
+                ins += ' want=no'
+            out.append(ins)
         for j, lk in enumerate(q.get('lookup') or [], 1):
             ls = [('request', f'${rid}'), ('key', lk['key']), ('from', lk['from'])]
             if lk['key'] == 'answer':
@@ -477,7 +506,14 @@ def parse_wires(text):
             m = TOKEN.match(rest, pos)
             if not m:
                 raise ValueError(f'cannot read {rest[pos:]!r} in {line!r}')
-            attrs.append((m.group(1), m.group(2) if m.group(2).startswith('$') else parse_value(m.group(2))))
+            raw = m.group(2)
+            if raw.startswith('$'):  # a typed reference, kept as written
+                value = raw
+            else:
+                value = parse_value(raw)
+                if raw.startswith('"') and isinstance(value, str) and value.startswith('$'):
+                    value = Quoted(value)  # quoted text that looks like a reference: text, not a reference
+            attrs.append((m.group(1), value))
             pos = m.end()
         wires.append((head[1:], typ, attrs))
     return wires
@@ -485,7 +521,7 @@ def parse_wires(text):
 
 def parse(text, sop, tab):
     context = {'existing': [], 'previous': None}
-    requests, world, filler = {}, None, []
+    requests, world, filler, intents = {}, None, [], []
     back_c = {b: a for a, b in CONTEXT_FIELDS}
     back_t = {b: a for a, b in TARGET_FIELDS}
     back_k = {b: a for a, b in CONSTRAINT_FIELDS}
@@ -557,8 +593,48 @@ def parse(text, sop, tab):
             if 'antecedent' in one:
                 lookup['antecedent'] = request_positions[one['antecedent'][1:]]
             requests[one['request'][1:]].setdefault('lookup', []).append(lookup)
+        elif typ == 'w.request.intent':
+            if 'request' not in one:
+                raise ValueError(f'intent {wid}: no owner (request= is missing)')
+            if len(d['request']) > 1:  # an intent belongs to exactly one request, never to the first of several
+                raise ValueError(f'intent {wid}: more than one owner ({", ".join(str(x) for x in d["request"])}): '
+                                 f'an intent belongs to one request (write one request=$rN)')
+            owner = one['request']
+            if not (isinstance(owner, str) and not isinstance(owner, Quoted) and owner.startswith('$')):
+                raise ValueError(f'intent {wid}: owner {owner!r} is not a request reference (write request=$rN, unquoted)')
+            for k in ('role', 'value', 'words', 'want'):  # each of these holds one fact, never the first of several
+                if len(d.get(k, [])) > 1:
+                    raise ValueError(f'intent {wid}: {k} is given more than once ({", ".join(str(x) for x in d[k])}): '
+                                     f'an intent states one {k}')
+            role = one.get('role')
+            if role not in INTENT_ROLES:
+                raise ValueError(f'intent {wid}: role {role!r} is not one of {", ".join(INTENT_ROLES)}')
+            if 'value' not in one or (isinstance(one['value'], str) and not one['value'].strip()):
+                raise ValueError(f'intent {wid}: no value')
+            if not isinstance(one['value'], str):
+                raise ValueError(f'intent {wid}: value {one["value"]!r} is not a string (a purpose or destination is text)')
+            if 'words' not in one or (isinstance(one['words'], str) and not one['words'].strip()):
+                raise ValueError(f'intent {wid}: no evidence (words= is missing or blank)')
+            if not isinstance(one['words'], str):
+                raise ValueError(f'intent {wid}: evidence {one["words"]!r} is not a string (write the exact words as text)')
+            for k, what in (('value', 'value'), ('words', 'evidence')):  # a bare $rN is a reference, not called text
+                v = one[k]
+                if isinstance(v, str) and v.startswith('$') and not isinstance(v, Quoted):
+                    raise ValueError(f'intent {wid}: {what} {v!r} is a bare reference: {what} is the written text '
+                                     f'(write {k}="{v}" to keep it as text)')
+            want = one.get('want', 'yes')
+            if want not in INTENT_POLARITY:
+                raise ValueError(f'intent {wid}: want {want!r} is not yes or no')
+            intents.append((wid, owner[1:], {'role': role, 'value': str(one['value']), 'words': str(one['words']),
+                                             'polarity': INTENT_POLARITY[want]}))
         elif typ == 'w.request.filler':
             filler.append(str(one['text']))
+    # An intent belongs to the request it names, never to the nearest wire or to a wire whose name looks like it: the
+    # owner must be a request of this circuit, else the circuit is refused (nothing is dropped or attached silently).
+    for wid, owner, intent in intents:
+        if owner not in requests:
+            raise ValueError(f'intent {wid}: request ${owner} is not a request of this circuit (the owner must be a w.request.request wire)')
+        requests[owner].setdefault('intents', []).append(intent)
     for q in requests.values():  # kind words left out: the kind itself, when the request's words say it
         t = q['target']
         if t.get('kind') and 'kind_span' not in t and says(t['kind'], q['span'], case=True) and t['kind'] in q['span']:
