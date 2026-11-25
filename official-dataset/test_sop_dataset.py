@@ -255,5 +255,32 @@ class SopDatasetTest(unittest.TestCase):
         self.assertNotIn('intents', restored['requests'][0])
 
 
+    # The reported loss (Q-NL-018): one request naming a door and a window, one blue result. Before this guard the
+    # parse kept only the last target wire and redirected the lookups, with no diagnostic. The codec cannot hold two
+    # targets on one request, so it refuses instead of returning a silently reduced request.
+    def test_two_targets_on_one_request_are_refused(self):
+        circuit = '''@r1 w.request.request act=make mood=do
+@r1.t1 w.request.target request=$r1 family=drawn mode=existing sort=door
+@r1.l1 w.request.lookup request=$r1 target=$r1.t1 key=thing from=page
+@r1.t2 w.request.target request=$r1 family=drawn mode=existing sort=window
+@r1.l2 w.request.lookup request=$r1 target=$r1.t2 key=thing from=page
+@r1.c1 w.request.constraint request=$r1 on=attribute attribute=drawn.colour value=blue operator=eq'''
+        with self.assertRaisesRegex(ValueError, r'one target per request'):
+            parse('make the door and the window blue', circuit, 'drawing')
+        with self.assertRaisesRegex(ValueError, r'r1\.t2.*r1\.t1|r1\.t1.*r1\.t2'):
+            parse('make the door and the window blue', circuit, 'drawing')
+
+    def test_a_repeated_target_wire_is_one_target(self):
+        circuit = '''@r1 w.request.request act=make mood=do
+@r1.t w.request.target request=$r1 family=drawn mode=existing sort=door
+@r1.t w.request.target request=$r1 family=drawn mode=existing sort=door
+@r1.c1 w.request.constraint request=$r1 on=attribute attribute=drawn.colour value=blue operator=eq'''
+        row, _ = parse('make the door blue', circuit, 'drawing')
+
+        self.assertEqual(row['requests'][0]['target']['kind'], 'door')
+        self.assertEqual(len(row['requests']), 1)
+        self.assertEqual(render(row).count('w.request.target'), 1)
+
+
 if __name__ == '__main__':
     unittest.main()

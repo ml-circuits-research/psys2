@@ -23,6 +23,19 @@ Each row gets the id `<source>:<hash of text and circuit>`, where `source` is th
 and some single-turn rows also appear with an unrelated previous message (labels unchanged). Rerun `load` whenever
 webmeet-dataset changes; scripts that read these files print this command when they are missing.
 
+## One target per request
+
+A request in `w.request` may carry several `w.request.target` wires, but a trainer row holds one target
+per request. `sop_dataset.parse` therefore refuses a second distinct target wire on the same request
+(`target r1.t2 and target r1.t1 both belong to request $r1: this codec keeps one target per request ...`)
+rather than projecting it away; a wire declared twice with the same id is one target and stays accepted.
+Fifteen of the current CSVs still contain such circuits (`1,125` of `189,119` rows), so `load` stops at
+the first of them and names its file, row and text. The lossless form for separable effects is one request
+per target with `words_origin=hull`; collective effects over several things have no supported lossless
+projection in this codec yet. These counts identify unsupported projections, not proof that every
+source circuit is semantically valid. The existing 54 unrelated parse failures also remain unresolved;
+a successful full dataset load or training export has not been established.
+
 ## Training
 
 ```sh

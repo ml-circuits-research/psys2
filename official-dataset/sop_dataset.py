@@ -527,6 +527,10 @@ def parse(text, sop, tab):
     back_k = {b: a for a, b in CONSTRAINT_FIELDS}
     wires = parse_wires(sop)
     request_positions = {wid: i for i, wid in enumerate(wid for wid, typ, _ in wires if typ == 'w.request.request')}
+    # One request keeps one target: a second target wire on the same request would be projected away (its own sort,
+    # name and lookup silently replaced by the later wire's), so the codec refuses it instead of losing data. A wire
+    # declared twice with the same id is one target written twice, not two objects. See README "One target per request".
+    target_of_request = {}
     for wid, typ, attrs in wires:
         d = collections.defaultdict(list)
         for k, v in attrs:
@@ -552,7 +556,14 @@ def parse(text, sop, tab):
                 q['spanOrigin'] = {'hull': 'surface-hull'}[one['words_origin']]
             requests[wid] = q
         elif typ == 'w.request.target':
-            q = requests[one['request'][1:]]
+            owner = one['request'][1:]
+            held = target_of_request.get(owner)
+            if held is not None and held != wid:
+                raise ValueError(f'target {wid} and target {held} both belong to request ${owner}: this codec keeps one '
+                                 f'target per request and cannot retain both (unsupported singleton projection; '
+                                 f'write the separable effects as one request per target)')
+            target_of_request[owner] = wid
+            q = requests[owner]
             for k, v in one.items():
                 if k in ('request', 'thing'):
                     continue
@@ -740,7 +751,10 @@ def load(folder=DATASET):
     """CSV -> the trainer's rows: id from source and text, split drawn from the id (94/4/2), previous-message copies."""
     rows = []
     for tab, source, i, o in read_dataset(folder):
-        row, _ = parse(o['text'], o['sop'], tab)
+        try:
+            row, _ = parse(o['text'], o['sop'], tab)
+        except ValueError as e:
+            raise ValueError(f'{source} row {i} ({o["text"]!r}): {e}') from None
         rid = f'{source}:{hashlib.sha256((o["text"] + chr(0) + o["sop"]).encode()).hexdigest()[:16]}'
         bucket = int(hashlib.sha256(('split:' + rid).encode()).hexdigest(), 16) % 100
         split = 'train' if bucket < 94 else 'dev' if bucket < 98 else 'test'
