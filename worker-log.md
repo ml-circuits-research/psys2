@@ -458,3 +458,6 @@ Gate: npm test 773 pass, 0 fail; lib npm test 1094 pass; webchat and system map 
 
 2026-11-24 — The dataset loader preserves the answer lookup’s source, antecedent request index and evidence through export, including five chart source rows. It accepts CRLF and terminal CR in circuit cells.
 Checks: inventory and binding coverage 2/2, npm test 768 pass, 3 skipped, 5 todo, and Python regressions 2/2. Full corpus load reaches charts-01 row 2939 and stops at a pre-existing constraint with neither value nor words.
+
+- 2026-11-25 — INTEGRATE-2: synchronized the three canonical chart span keys from sop-knowledge-worlds f48e08f7 into official-dataset/inventory.json using keys_from_sop.py; no other labels changed.
+- Checks: inventory --check passes; binding coverage 2/2; required npm test exits 0 with 768 pass, 3 skipped and 5 TODO (776 total, 82 s). Native/raw conversion evidence is recorded in the shared reviewer handover; data-field resolution and rendering are separate.

@@ -1687,6 +1687,21 @@
       "include",
       "exclude"
      ]
+    },
+    "seriesDimension": {
+     "concept": "seriesDimension",
+     "head": "span",
+     "src": "the categorical data field that defines a chart's series, beside the primary grouping (\"sales by month, split by category\": category)"
+    },
+    "xField": {
+     "concept": "xField",
+     "head": "span",
+     "src": "the data field plotted along a chart's x axis (\"scatter of salary against tenure\": tenure), not the axis title"
+    },
+    "yField": {
+     "concept": "yField",
+     "head": "span",
+     "src": "the data field plotted along a chart's y axis (\"scatter of salary against tenure\": salary), not the axis title"
     }
    }
   },
